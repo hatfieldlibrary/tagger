@@ -13,8 +13,11 @@ module.exports =  function(sequelize, DataTypes) {
                 allowNull: false
             }
         },  {
-            getterMethods: {},
-
+            getterMethods: {
+                getTagObject: function() {
+                    return {'id': this.getDataValue('id'), 'name': this.getDataValue('name')};
+                }
+            },
             setterMethods: {
                 name: function(val) {
                     this.setDataValue('name', val);
@@ -23,7 +26,7 @@ module.exports =  function(sequelize, DataTypes) {
         },  {
             classMethods: {
                 associate: function(models) {
-                    Tag.hasMany(models.TagTarget, { onDelete: 'cascade' })
+                    Tag.hasMany(models.TagTarget)
                 }
             }
         });

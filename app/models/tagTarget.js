@@ -13,7 +13,8 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                     TagTarget.belongsTo(models.Tag)
+                TagTarget.belongsTo(models.Tag, { onDelete: 'cascade' }) ;
+                TagTarget.belongsTo(models.Collection);
             }
         }
     });

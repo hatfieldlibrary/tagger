@@ -11,9 +11,9 @@ var fs = require('fs')
     , path      = require('path')
     , Sequelize = require('sequelize')
     , lodash    = require('lodash')
-    , config    = require('../../config/config')
+    , config    = require('../../config/environment')
     , sequelize = new Sequelize(config.db, 'mspalti', 'coffee')
-    , db        = {}
+    , db        = {};
 
 fs
     .readdirSync(__dirname)
@@ -23,15 +23,15 @@ fs
     .forEach(function(file) {
         var model = sequelize.import(path.join(__dirname, file))
         db[model.name] = model
-    })
+    });
 
 Object.keys(db).forEach(function(modelName) {
     if ('associate' in db[modelName]) {
         db[modelName].associate(db)
     }
-})
+});
 
 module.exports = lodash.extend({
     sequelize: sequelize,
     Sequelize: Sequelize
-}, db)
+}, db);

@@ -4,11 +4,12 @@
 
 exports.create = function(req, res){
 
-   db.Tag.create({name: 'tag one'})
+   var tagName =  req.body.name;
+   db.Tag.create({name: tagName})
     .success(function(tags) {
         res.render('index', {
-            title: 'Express',
-            users: tags
+            title: 'Tag Added',
+            tags: tags.getTagObject.name
         })
     })
 
@@ -16,10 +17,10 @@ exports.create = function(req, res){
 
 exports.index = function(req, res){
 
-    db.Tag.findAll({include: [db.Tag]}).success(function(tags) {
+    db.Tag.findAll({attributes: 'name'}).success(function(tags) {
         res.render('index', {
             title: 'Express',
-            users: tags
+            tags: tags.getTagObject
         })
     })
 };

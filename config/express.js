@@ -5,12 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-
 module.exports = function(app, config) {
 
-
- // app.configure(function () {
-//    app.use(express.compress());
     app.use(express.static(config.root + '/public'));
     app.set('port', config.port);
     app.set('views', config.root + '/app/views');
@@ -19,7 +15,6 @@ module.exports = function(app, config) {
     app.use(logger('dev'));
     app.use(bodyParser());
     app.use(cookieParser());
-   // app.use(methodOverride());
-    //app.use(app.router);
-//  });
+
+
 };
