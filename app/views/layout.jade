@@ -2,6 +2,26 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/stylesheets/foundation.min.css')
+    link(rel='stylesheet', href='/stylesheets/foundation.css')
+    link(rel='stylesheet', href='/stylesheets/normalize.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript', src='/javascripts/vendor/modernizr.js')
+    script(type='text/javascript', src='/javascripts/vendor/jquery.js')
+    script(type='text/javascript', src='/javascripts/foundation.min.js')
+    script(type='text/javascript', src='/javascripts/foundation/foundation.js')
+    script(type='text/javascript', src='/javascripts/foundation/foundation.reveal.js')
   body
-    block content
+      .contain-to-grid.fixed
+        nav.top-bar('data-topbar')
+            ul.title-area
+                li.name: a(href="/")
+                    img(src="/images/tagger.png")
+            section.top-bar-section
+            ul.left
+                li: a(href="/form/collection/create", class="button") Create Collection
+            ul.left
+                li: a(href="/tag/view", class="button") Manage Tags
+      p  &nbsp;
+      p  &nbsp;
+      block content

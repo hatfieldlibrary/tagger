@@ -12,12 +12,12 @@ module.exports = function(sequelize, DataTypes) {
     },  {
         getterMethods: {
             getCollectionObject: function() {
-                return {'id': this.getDataValue('id'), 'name': this.getDataValue('title'),'url': this.getDataValue('url'), 'desc': this.getDataValue('description')};
+                return {'id': this.getDataValue('id'), 'title': this.getDataValue('title'),'url': this.getDataValue('url'), 'desc': this.getDataValue('description')};
             }
         },
         setterMethods: {
             name: function(val) {
-                this.setDataValue('name', val);
+                this.setDataValue('title', val);
             }
         }
     },

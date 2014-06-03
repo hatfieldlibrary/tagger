@@ -1,7 +1,8 @@
 extends layout
-        h2. Create a new tag.
-        form(method="post", enctype='application/x-www-form-urlencoded' action="/tag/create")
-            p  Tag Name
-            input(type="text", size=60 name="name")
-            p
-            input(type='submit', value='Submit')
+block content
+    h2. Create a new tag.
+    form(method="post", enctype='application/x-www-form-urlencoded' action="/tag/create")
+        p  Tag Name
+        input(type="text", size=60 name="name")
+        p
+        input(type='submit', value='Submit')

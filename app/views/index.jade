@@ -1,6 +1,18 @@
 extends layout
 
+mixin collectionLink(col)
+    .small-4.columns
+        a(href='/form/collection/update/'+col.id)=col.title
+    .small-4.columns
+        p= col.description
+
+
 block content
-  h1= title
-  p Welcome to #{title}
-  p Added: #{tags}
+    .row
+        h1= title
+        p Click on the title link to edit a collection.
+        each col in collections
+            .row.result-row: +collectionLink(col)
+
+
+

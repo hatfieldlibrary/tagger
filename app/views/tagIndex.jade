@@ -1,0 +1,17 @@
+extends layout
+
+mixin tagLink(tag)
+    .small-4.columns
+        a(href='/form/tag/update/'+tag.id)=tag.name
+    .small-2.columns
+        label Tag ID:&nbsp;
+            =tag.id
+
+block content
+    .row
+        h1= title
+        p Click on the link to edit a tag.
+        each tag in tags
+            .row.result-row: +tagLink(tag)
+
+

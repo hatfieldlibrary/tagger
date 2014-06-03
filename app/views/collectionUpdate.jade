@@ -1,0 +1,69 @@
+extends layout
+block content
+
+
+    .row
+        .small-2.columns
+        .small-10.columns
+            a.button.small.alert.radius.right(href="#" data-reveal-id="deleteModal") Delete Collection
+            h1.left= title
+
+
+
+    .row
+        .small-2.columns
+            p
+            img(src="/images/no_image.gif")
+        .small-10.columns
+            form(method="post", enctype='application/x-www-form-urlencoded', action="/collection/update")
+            .row
+                .small-12.columns
+                    label Collection Name
+
+
+            .row
+                .small-10.columns
+                    input(type="text", class="small-8" name="name", value=collName)
+                .small-2.columns
+            p
+            .row
+                .small-12.columns
+                    label Collection URL
+            .row
+                .small-10.columns
+                    input(type="text", class="small-10 columns", name="url", value=collUrl)
+                .small-2.columns
+            p
+            .row
+                .small-12.columns
+                    label Collection Description
+            .row
+                .small-10.columns
+                    textarea(rows=7, class="small-10 columns", name="description")=collDesc
+                .small-2.columns
+            input(type="hidden" name="id" value=collId)
+            p
+            .row
+                .small-10.columns
+                    input(type="submit" value="Update Collection Description")
+
+            p &nbsp;
+
+            .row
+                .small-10.columns
+                    label Tags
+                    p
+                        .row
+                        each tag in tags
+                            .small-2.columns.end
+                                a.button.tiny.radius(href="#")=tag.selectedValues.name
+
+
+        #deleteModal.reveal-modal.small(data-reveal)
+            h3 Delete Collection
+            p Are you sure you want to delete this collection?
+            a(href="/collection/delete/"+collId) Yes, delete this collection
+            a(class="close-reveal-modal") &#215;
+
+        script
+            $(document).foundation();
