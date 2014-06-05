@@ -10,6 +10,8 @@ exports.create = function(req, res){
                 title: 'Express',
                 users: tags
             })
+        }).error(function(err) {
+            console.log(err);
         })
 
 };

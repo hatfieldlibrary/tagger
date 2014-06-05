@@ -5,12 +5,16 @@ html
     link(rel='stylesheet', href='/stylesheets/foundation.min.css')
     link(rel='stylesheet', href='/stylesheets/foundation.css')
     link(rel='stylesheet', href='/stylesheets/normalize.css')
+    link(rel='stylesheet', href='/stylesheets/jquery-ui-1.10.4.custom.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript', src='/javascripts/local.js')
     script(type='text/javascript', src='/javascripts/vendor/modernizr.js')
     script(type='text/javascript', src='/javascripts/vendor/jquery.js')
+    script(type='text/javascript', src='/javascripts/vendor/jquery-ui-1.10.4.custom.js')
     script(type='text/javascript', src='/javascripts/foundation.min.js')
     script(type='text/javascript', src='/javascripts/foundation/foundation.js')
     script(type='text/javascript', src='/javascripts/foundation/foundation.reveal.js')
+    script(type='text/javascript', src='/javascripts/foundation/foundation.dropdown.js')
   body
       .contain-to-grid.fixed
         nav.top-bar('data-topbar')
@@ -19,7 +23,7 @@ html
                     img(src="/images/tagger.png")
             section.top-bar-section
             ul.left
-                li: a(href="/form/collection/create", class="button") Create Collection
+                li: a(href="/", class="button") Manage Collections
             ul.left
                 li: a(href="/tag/view", class="button") Manage Tags
       p  &nbsp;

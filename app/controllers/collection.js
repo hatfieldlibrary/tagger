@@ -16,6 +16,9 @@ exports.create = function(req, res){
                     url: collUrl,
                     description: collDesc
                 }).complete(callback)
+                    .error(function(err) {
+                        console.log(err);
+                    })
             },
             home: function (callback) {
                 db.Collection.findAll(
@@ -24,6 +27,9 @@ exports.create = function(req, res){
                         order: [['title', 'ASC']]
                     }
                 ).complete(callback)
+                    .error(function(err) {
+                        console.log(err);
+                    })
             }
         },
         function(err, result) {
@@ -67,6 +73,7 @@ exports.update = function(req, res) {
             }
         },
         function(err, result) {
+            if (err) console.log(err);
             res.render('index', {
                 title: 'Collections',
                 collections: result.home
@@ -82,12 +89,15 @@ exports.delete = function(req, res) {
     // collection list and pass it to the view.
     async.series (
         {
-            update: function(callback) {
+            delete: function(callback) {
                 db.Collection.destroy({
                     id: {
                         eq: collId
                     }
                 }).complete(callback)
+                    .error(function(err) {
+                        console.log(err);
+                    })
             },
             home: function(callback) {
                 db.Collection.findAll(
@@ -95,9 +105,13 @@ exports.delete = function(req, res) {
                         attributes: ['id','title', 'url', 'description'],
                         order: [['title', 'ASC']]
                     }
-                ).complete(callback);
+                ).complete(callback)
+                    .error(function(err) {
+                        console.log(err);
+                    });
             }
         }, function(err, result) {
+            if (err) console.log(err);
             res.render('index', {
                 title: 'Collections',
                 collections: result.home
@@ -107,3 +121,138 @@ exports.delete = function(req, res) {
 };
 
 
+exports.updateImage = function (req, res, config) {
+
+    // file upload requires ...
+    var fs = require('fs'),
+        multiparty = require('multiparty'),
+        magick = require('imagemagick');
+
+
+
+    var form = new multiparty.Form();
+    var imageName;
+    var id;
+
+
+    form.parse(req, function (err, fields, files) {
+        console.log(files.image);
+
+        fs.readFile(files.image[0].path, function (err, data) {
+
+            imageName = files.image[0].originalFilename;
+            id = fields.id;
+            console.log(imageName);
+            /// If there's an error
+            if (!imageName) {
+                console.log("There was an error")
+                res.redirect("/");
+                res.end();
+
+            } else {
+
+                var newPath = config.root + "/public/images/full/" + imageName;
+                var thumbPath = config.root + "/public/images/thumb/" + imageName;
+                console.log(newPath);
+                /// write file to uploads/fullsize folder
+                fs.writeFile(newPath, data, function (err) {
+                    if (err) {
+                        console.log(err);
+                        res.redirect("/");
+                    }
+                    else {
+                        magick.resize({
+                            srcPath: newPath,
+                            dstPath: thumbPath,
+                            width:   140
+                        }, function(err, stdout, stderr){
+                            if (err) console.log(err);
+                            updateDb();
+                        });
+                    }
+
+
+                });
+            }
+        });
+    })
+
+    function updateDb() {
+
+        db.Collection.update({
+                image: imageName
+            },
+            {
+                id: {
+                    eq: id
+                }
+            }
+        ).success(function(err, result) {
+                res.redirect("/form/collection/update/"+id)
+            }
+        ).error(function(err) {
+                console.log(err);
+            }
+        )
+
+    }
+};
+
+exports.addTag = function(req, res) {
+
+    var tagId = req.body.tagid;
+    var collId = req.body.collid;
+    // only add tag if not already attached to the collection
+    db.TagTarget.find(
+        {
+            where: {
+                CollectionId: {
+                    eq: collId
+                },
+                TagId: {
+                    eq: tagId
+                }
+            }
+        }
+    ).success(function(result)
+        {
+            console.log(result);
+            if (result === null) {
+                db.TagTarget.create({
+                    CollectionId: collId,
+                    TagId: tagId
+                }).success(function (result) {
+                        res.redirect("/form/collection/update/" + collId)
+                    }
+                ).error(function(err) {
+                        console.log(err);
+                    }
+                )
+            }
+            else {
+                res.redirect("/form/collection/update/" + collId)
+            }
+        }
+    ).error(function(err) {
+            console.log(err);
+        }
+    )
+};
+
+exports.removeTag = function(req, res) {
+    var collId = req.params.collid;
+    var tagId = req.params.tagid;
+    db.TagTarget.destroy({
+        CollectionId: {
+            eq: collId
+        },
+        TagId: {
+            eq: tagId
+        }
+    }).success(function(err,result) {
+        if (err) console.log(err);
+        res.redirect("/form/collection/update/"+collId)
+    }).error(function(err) {
+        console.log(err);
+    })
+};

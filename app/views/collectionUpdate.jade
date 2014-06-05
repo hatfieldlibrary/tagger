@@ -1,62 +1,91 @@
 extends layout
 block content
 
+    script var idValue;
+    script jQuery(function() { var availableTags; getTags(function(data) { availableTags = data; jQuery( "#tagNames" ).autocomplete({ source: availableTags, select: function (event, ui) {  jQuery("#tagNames").val(ui.item.label); idValue = ui.item.id;  } }); });  });
 
     .row
         .small-2.columns
-        .small-10.columns
-            a.button.small.alert.radius.right(href="#" data-reveal-id="deleteModal") Delete Collection
+        .small-10.columns(style="padding-left: 0;")
+
             h1.left= title
-
-
+            a.button.small.alert.radius.right(href="#" data-reveal-id="deleteModal") Delete this Collection
 
     .row
         .small-2.columns
             p
-            img(src="/images/no_image.gif")
+            a(class="th radius", href="/images/full/"+collImg)
+                img(src="/images/full/"+collImg)
+            .small-text-center
+                a(href="#" data-reveal-id="uploadModal") Upload Image
+                p
+
+                .label.secondary(style="white-space:normal;") Recommended image size is 300px wide x 350px high
+
         .small-10.columns
             form(method="post", enctype='application/x-www-form-urlencoded', action="/collection/update")
-            .row
-                .small-12.columns
+                .row
+                    .small-12.columns
                     label Collection Name
 
 
-            .row
-                .small-10.columns
+                .row
+                    .small-10.columns
                     input(type="text", class="small-8" name="name", value=collName)
-                .small-2.columns
-            p
-            .row
-                .small-12.columns
+                    .small-2.columns
+                p
+                .row
+                    .small-12.columns
                     label Collection URL
-            .row
-                .small-10.columns
+                .row
+                    .small-10.columns
                     input(type="text", class="small-10 columns", name="url", value=collUrl)
-                .small-2.columns
-            p
-            .row
-                .small-12.columns
+                    .small-2.columns
+                p
+                .row
+                    .small-12.columns
                     label Collection Description
-            .row
-                .small-10.columns
-                    textarea(rows=7, class="small-10 columns", name="description")=collDesc
-                .small-2.columns
-            input(type="hidden" name="id" value=collId)
-            p
-            .row
-                .small-10.columns
-                    input(type="submit" value="Update Collection Description")
+                .row
+                    .small-10.columns
+                    textarea(rows=7, class="small-12 columns", name="description")=collDesc
+                    .small-2.columns
+                    input(type="hidden" name="id" value=collId)
+                p
+                .row
+                    .small-10.columns
+                    input(type="submit" value="Update Collection")
 
-            p &nbsp;
+                p &nbsp;
+    .row
+        .small-2.columns  &nbsp;
+        .small-10.columns(style="padding-left: 0;padding-right:0;")
+            .panel
 
-            .row
-                .small-10.columns
-                    label Tags
-                    p
+
+                .label.medium.success.radius Current Tags &nbsp;&nbsp;(click "x" to remove)
+                p
+                .row
+                each tag in tags
+                        label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
+                            a(href="/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
+                p &nbsp;
+                p
+                .ui-widget
+                form(method="post" enctype='application/x-www-form-urlencoded', action="/collection/tag", id="tagForm")
+
+                        .small-12.columns
+                        label(for="tagNames") Add Tag Here
                         .row
-                        each tag in tags
-                            .small-2.columns.end
-                                a.button.tiny.radius(href="#")=tag.selectedValues.name
+                        .small-10.columns
+                        input(type="text" id="tagNames" name='tagName')
+                        input(type="hidden" name='collid' value=collId)
+                        input(type="hidden" id="tagId" name='tagid')
+                        p
+                        input(type="submit", value="Add tag to this collection")
+            p
+
+
+
 
 
         #deleteModal.reveal-modal.small(data-reveal)
@@ -65,5 +94,15 @@ block content
             a(href="/collection/delete/"+collId) Yes, delete this collection
             a(class="close-reveal-modal") &#215;
 
-        script
-            $(document).foundation();
+        #uploadModal.reveal-modal.small(data-reveal)
+            form(action="/collection/image", method="post", enctype="multipart/form-data")
+                input(type="hidden", name="id", value=collId)
+                input(type="file", name="image")
+                input(type="submit" value="upload")
+            a(class="close-reveal-modal") &#215;
+
+
+
+    script $(document).foundation()
+    script jQuery(document).ready( function() { jQuery("#tagForm").submit(  function(event) { if (idValue === undefined) { event.preventDefault(); } else { jQuery('#tagId').val(idValue); } } )} )
+

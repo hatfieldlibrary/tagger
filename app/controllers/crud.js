@@ -13,6 +13,8 @@ exports.index = function(req, res){
             title: 'Collections',
             collections: cols
         })
+    }).error(function(err) {
+            console.log(err);
     })
 };
 
@@ -44,7 +46,10 @@ exports.collUpdate = function(req, res) {
                         }
                         // Using complete: it takes a callback with signature (err,res).
                         // This is compatible with async.
-                    }).complete(callback);
+                    }).complete(callback)
+                    .error(function(err) {
+                        console.log(err);
+                    });
             },
             tagData: function(callback)
             {
@@ -57,18 +62,21 @@ exports.collUpdate = function(req, res) {
                         },
                         include : [db.Tag],
                         attributes: ['Tag.name','Tag.id']
-                    }).complete(callback);
+                    }).complete(callback)
+                    .error(function(err) {
+                        console.log(err);
+                    });
             }
         },
         function(err, rd){
             var collectionData = rd.collectionData;
             var tags = rd.tagData;
-            console.log(tags);
             res.render('collectionUpdate', {
                 title: 'Update Collection',
                 collName: collectionData.title,
                 collUrl: collectionData.getCollectionObject.url,
                 collDesc: collectionData.getCollectionObject.desc,
+                collImg: collectionData.getCollectionObject.image,
                 collId: collectionData.id,
                 tags: tags
             })
@@ -99,6 +107,9 @@ exports.tagUpdate = function (req, res) {
                 title: 'Update Tag',
                 tag: tag
             })
+        }
+    ).error(function(err) {
+            console.log(err);
         });
 };
 
@@ -123,6 +134,9 @@ exports.collUp  = function(req, res) {
                 collName: c.name,
                 collUrl: c.url,
                 collDesc: c.desc
-            })
-    })
+            }
+        )
+    }).error(function(err) {
+            console.log(err);
+        })
 };
