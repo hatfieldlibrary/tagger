@@ -1,7 +1,39 @@
 
 
+exports.collectionByTagId = function(req, res) {
 
-exports.create = function(req, res){
+    var tagId = req.params.id;
+
+    db.TagTarget.findAll({
+        where:
+        {
+            TagId: {
+                eq: tagId
+            }
+        },
+        order: [['title', 'ASC']],
+        include: [db.Collection]
+
+    }).success( function(coll) {
+
+        console.log(coll[0].collection.getCollectionObject)
+        if (coll !== null) {
+
+        var arr = new Array();
+
+        for (var i = 0; i < coll.length; i++) {
+            var tmp = coll[i].collection.getCollectionObject;
+            arr[i] = { id: tmp.id, name: tmp.title, description: tmp.desc, url: tmp.url, image: tmp.image }
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.end(JSON.stringify(arr))
+        }
+    }).error(function(err) {
+        console.log(err);
+    })
+};
+
+exports.create = function(req, res) {
 
     var collName = req.body.name;
     var collUrl = req.body.url;
@@ -249,8 +281,7 @@ exports.removeTag = function(req, res) {
         TagId: {
             eq: tagId
         }
-    }).success(function(err,result) {
-        if (err) console.log(err);
+    }).success(function(result) {
         res.redirect("/form/collection/update/"+collId)
     }).error(function(err) {
         console.log(err);

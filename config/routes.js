@@ -6,6 +6,7 @@ module.exports = function(app,config){
     var target = require('../app/controllers/target');
 
     app.get('/rest/taglist', tag.tagList);
+    app.get('/rest/collection/bytag/:id', collection.collectionByTagId);
     app.get('/', crud.index);
     app.get('/form/collection', crud.index);
     app.get('/form/collection/create', crud.collCreate);

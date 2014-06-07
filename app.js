@@ -1,8 +1,9 @@
 process.env.NODE_ENV = 'development';
 
 var express = require('express'),
-   config = require('./config/environment');
-   db = require('./app/models');
+    http = require('http'),
+    config = require('./config/environment');
+    db = require('./app/models');
     async = require('async');
 
 
@@ -40,6 +41,7 @@ app.use(function(err, req, res, next) {
     });
 });
 
+
 db
     .sequelize
     .sync({ force: false })
@@ -47,12 +49,14 @@ db
         if (err) {
             throw err[0]
         } else {
-         //   http.createServer(app).listen(app.get('port'), function(){
-         //       console.log('Express server listening on port ' + app.get('port'))
-         //   })
+            // Uncomment the following lines when not running the server
+            // from within the IDE.
+           // http.createServer(app).listen(config.port, function(){
+           //     console.log('Express server listening on port ' + config.port)
+           // })
         }
     });
 
-//app.listen(config.port);
+// This is needed when running from IDE
 module.exports = app;
 

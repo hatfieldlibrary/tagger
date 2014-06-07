@@ -9,7 +9,7 @@ module.exports = function(sequelize, DataTypes) {
         title: {type: DataTypes.STRING(60), allowNull: false},
         image: {type: DataTypes.STRING(80), allowNull: false, defaultValue: "no_image.gif"},
         url: {type: DataTypes.STRING(255), allowNull: false},
-        description: {type: DataTypes.BLOB, allowNull: false}
+        description: {type: DataTypes.STRING(4096), allowNull: false}
     },  {
         getterMethods: {
             getCollectionObject: function() {

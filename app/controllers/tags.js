@@ -26,7 +26,6 @@ exports.create = function(req, res) {
 
         }, function (err, result) {
             if (err) console.log(err);
-            console.log(result);
             if (result.check === null) {
                 db.Tag.create(
                     {
