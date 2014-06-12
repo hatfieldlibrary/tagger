@@ -2,8 +2,11 @@
 
 exports.collectionByTagId = function(req, res) {
 
-    var tagId = req.params.id;
+    var tagId = req.params.id,
+        collList = new Array(),
+        chainer = new db.Sequelize.Utils.QueryChainer;
 
+    // retrieve collections with matching TagId
     db.TagTarget.findAll({
         where:
         {
@@ -16,21 +19,42 @@ exports.collectionByTagId = function(req, res) {
 
     }).success( function(coll) {
 
-        console.log(coll[0].collection.getCollectionObject)
-        if (coll !== null) {
+        // chain queries to retrieve other tags associated with each collection
+        coll.forEach(function(entry) {
+            var collId = entry.CollectionId;
+            chainer.add(
+                db.TagTarget.findAll({
+                    where: {
+                        CollectionId: {
+                            eq: collId
+                        }
+                    },
+                    order: [['name', 'ASC']],
+                    include: [db.Tag]
+                }).success(function(tags) {
+                    // add result to global collList array
+                    var tmpColl = entry.collection.getCollectionObject;
+                    collList.push( { id: tmpColl.id, name: tmpColl.title, description: tmpColl.desc, url: tmpColl.url, image: tmpColl.image, tags: tags } );
+                }).error(function(err) {
+                    console.log(err)
+                })
+            )
+        });
+        chainer.run()
+            .success(function() {
+                // JSON response
+                res.setHeader('Content-Type', 'application/json');
+                res.setHeader('Access-Control-Allow-Origin','*');
+                res.end(JSON.stringify(collList))
+            })
+            .error(function(err) {
+                console.log(err);
+            })
 
-        var arr = new Array();
-
-        for (var i = 0; i < coll.length; i++) {
-            var tmp = coll[i].collection.getCollectionObject;
-            arr[i] = { id: tmp.id, name: tmp.title, description: tmp.desc, url: tmp.url, image: tmp.image }
-        }
-        res.setHeader('Content-Type', 'application/json');
-        res.end(JSON.stringify(arr))
-        }
     }).error(function(err) {
         console.log(err);
     })
+
 };
 
 exports.create = function(req, res) {

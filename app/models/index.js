@@ -1,8 +1,4 @@
 /**
- * This is borrowed from the Sequelize article:
- * Usage with Express.JS. Reads models from the
- * models directory. Added config.
- * Look into how to pass config.db param into model.
  * Created by mspalti on 5/23/14.
  */
 

@@ -51,7 +51,7 @@ db
         } else {
             // Uncomment the following lines when not running the server
             // from within the IDE.
-           // http.createServer(app).listen(config.port, function(){
+            //http.createServer(app).listen(config.port, function(){
            //     console.log('Express server listening on port ' + config.port)
            // })
         }
