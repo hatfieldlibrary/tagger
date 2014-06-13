@@ -57,6 +57,42 @@ exports.collectionByTagId = function(req, res) {
 
 };
 
+exports.getEadBySubject = function(req, res) {
+
+    var http = require('http');
+    var field = req.params.fld;
+    var sub = req.params.id;
+    var options = {
+        host:  "condm.willamette.edu",
+        port:  "81",
+        path:  "/dmwebservices/index.php?q=dmQuery/eads/" + sub + "^" + field + "^exact^and!/descri!bdate!title!creato/nosort/75/1/1/0/0/geogra!bdate!/json",
+        method: "GET"
+    };
+
+    var callback = function(response) {
+        var str = '';
+
+        response.on('data', function (chunk) {
+            str += chunk;
+        });
+
+        response.on('end', function () {
+            var json = JSON.parse(str);
+            // JSON response
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(JSON.stringify(json.records));
+        });
+    };
+
+    var request = http.request(options, callback);
+    request.on('error', function(e) {
+        console.log('problem with request: ' + e.message);
+    });
+    request.end();
+};
+
+
 exports.create = function(req, res) {
 
     var collName = req.body.name;
