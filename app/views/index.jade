@@ -1,10 +1,13 @@
 extends layout
 
 mixin collectionLink(col)
-    .small-4.columns
+    .small-3.columns
         a(href='/form/collection/update/'+col.id)=col.title
-    .small-4.columns
+    .small-8.columns
         p= col.description
+    .small-1.columns
+        label ID:&nbsp;
+            =col.id
 
 
 block content

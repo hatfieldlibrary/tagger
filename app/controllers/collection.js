@@ -57,15 +57,51 @@ exports.collectionByTagId = function(req, res) {
 
 };
 
+exports.getDspaceCollections = function (req, res ) {
+
+    var http = require('http');
+
+    var options = {
+        headers: {
+            accept: "application/json"
+        },
+        host: "libmedia.willamette.edu",
+        port: 80,
+        path: "/rest/communities",
+        method: 'GET'
+    }
+
+    var callback = function(response) {
+
+        var str = '';
+        response.on('data', function(chunk) {
+            str += chunk;
+        });
+        response.on('end', function() {
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(str);
+        });
+    };
+    var request = http.request(options, callback);
+    request.on('error', function (e) {
+        console.log('Problem with request: ' + e)
+    });
+    request.end();
+
+};
+
+
 exports.getEadBySubject = function(req, res) {
 
     var http = require('http');
     var field = req.params.fld;
     var sub = req.params.id;
+
     var options = {
         host:  "condm.willamette.edu",
         port:  "81",
-        path:  "/dmwebservices/index.php?q=dmQuery/eads/" + sub + "^" + field + "^exact^and!/descri!bdate!title!creato/nosort/75/1/1/0/0/geogra!bdate!/json",
+        path:  "/dmwebservices/index.php?q=dmQuery/eads/" + field + "^" + sub + "^exact^and!/descri!bdate!title!creato/nosort/75/1/1/0/0/geogra!bdate!/json",
         method: "GET"
     };
 

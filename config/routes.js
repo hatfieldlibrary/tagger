@@ -7,7 +7,8 @@ module.exports = function(app,config){
 
     app.get('/rest/taglist', tag.tagList);
     app.get('/rest/collection/bytag/:id', collection.collectionByTagId);
-    app.get('/rest/getEad/:id/:fld', collection.getEadBySubject)
+    app.get('/rest/getEad/:id/:fld', collection.getEadBySubject);
+    app.get('/rest/getDspaceCollections', collection.getDspaceCollections);
     app.get('/', crud.index);
     app.get('/form/collection', crud.index);
     app.get('/form/collection/create', crud.collCreate);
