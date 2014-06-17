@@ -256,7 +256,8 @@ exports.updateImage = function (req, res, config) {
         multiparty = require('multiparty'),
         magick = require('imagemagick');
 
-
+    magick.identify.path = '/opt/local/bin/identify'
+    magick.convert.path = '/opt/local/bin/convert';
 
     var form = new multiparty.Form();
     var imageName;
@@ -264,8 +265,10 @@ exports.updateImage = function (req, res, config) {
 
 
     form.parse(req, function (err, fields, files) {
+
         console.log(files.image);
 
+        // read in the temp file from the upload
         fs.readFile(files.image[0].path, function (err, data) {
 
             imageName = files.image[0].originalFilename;
@@ -278,19 +281,21 @@ exports.updateImage = function (req, res, config) {
                 res.end();
 
             } else {
-
-                var newPath = config.root + "/public/images/full/" + imageName;
+                // use imagemagick to transform the full image to thumbnail.
+                // write to thumb directory
+                var fullPath = config.root + "/public/images/full/" + imageName;
                 var thumbPath = config.root + "/public/images/thumb/" + imageName;
-                console.log(newPath);
-                /// write file to uploads/fullsize folder
-                fs.writeFile(newPath, data, function (err) {
+                console.log(fullPath);
+
+                fs.writeFile(fullPath, data, function (err) {
                     if (err) {
                         console.log(err);
                         res.redirect("/");
                     }
                     else {
+                        console.log("ImageMagick");
                         magick.resize({
-                            srcPath: newPath,
+                            srcPath: fullPath,
                             dstPath: thumbPath,
                             width:   140
                         }, function(err, stdout, stderr){
@@ -298,8 +303,6 @@ exports.updateImage = function (req, res, config) {
                             updateDb();
                         });
                     }
-
-
                 });
             }
         });

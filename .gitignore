@@ -1,5 +1,6 @@
 node_modules
-public
+public/images/full
+public/images/thumb
 .tmp
 .sass-cache
 app/bower_components
