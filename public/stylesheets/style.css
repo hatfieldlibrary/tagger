@@ -1,0 +1,25 @@
+
+
+a {
+  color: #00B7FF;
+}
+
+.result-row  {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #ccc;
+}
+
+.title {
+    float: left;
+    width: 30%;
+}
+
+.desc {
+    float: left;
+    width: 60%;
+}
+
+form .row label {
+    color: #748099;
+}
