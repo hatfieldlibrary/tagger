@@ -17,8 +17,8 @@ describe('GET /rest/collection/bytag/1', function() {
             .expect('Content-Type', /json/)
             .end(function (err, res) {
                 should.not.exist(err);
-                console.log(res)
-                res.text.should.have.string('Test One')
+                console.log(res);
+                res.text.should.have.string('Test One');
                 done();
             })
     })
