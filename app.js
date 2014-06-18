@@ -1,5 +1,5 @@
 
-
+var server;
 var express = require('express'),
     http = require('http'),
     config = require('./config/environment');
@@ -41,7 +41,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
-
 db
     .sequelize
     .sync({ force: false })
@@ -49,11 +48,15 @@ db
         if (err) {
             throw err[0]
         } else {
+            // avoids annoying error message when testing.
+            if (server !== undefined) {
+                server.close();
+            }
             // Uncomment the following lines when not running the server
             // from within the IDE.
-            //http.createServer(app).listen(config.port, function(){
-           //     console.log('Express server listening on port ' + config.port)
-           // })
+            server = http.createServer(app).listen(config.port, function(){
+                console.log('Express server listening on port ' + config.port)
+            })
         }
     });
 

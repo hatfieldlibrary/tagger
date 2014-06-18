@@ -8,8 +8,7 @@ var chai = require('chai'),
 
 var app = require('../app');
 
-
-describe('GET /rest/collection/bytag/1', function() {
+describe('Tagger REST API responses', function() {
     it("should return json response with one collection object name Test One", function (done) {
         request(app)
             .get('/rest/collection/bytag/1')

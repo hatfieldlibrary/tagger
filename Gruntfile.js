@@ -8,19 +8,16 @@ module.exports = function (grunt) {
     // load all grunt tasks
    require('load-grunt-tasks')(grunt);
 
-   // var reloadPort = 35729, files;
+   var reloadPort = 35732, files;
   //  require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
     //grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-    //    develop: {
-    //        server: {
-    //            file: 'app.js'
-    //        }
-   //     },
+        app: 'app',
+        dist: 'dist',
         express: {
             options: {
-                port: process.env.PORT || 9000
+                port: process.env.PORT || 3000
             },
             dev: {
                 options: {
@@ -33,83 +30,87 @@ module.exports = function (grunt) {
                     script: 'dist/app.js',
                     node_env: 'production'
                 }
+            },
+            test: {
+                options: {
+                    script: 'app.js',
+                    node_env: 'test',
+                    debug: true
+                }
+            }
+        },
+        open: {
+            server: {
+                url: 'http://localhost:<%= express.options.port %>'
             }
         },
         watch: {
-    //        options: {
-    //            nospawn: true,
-    //            livereload: reloadPort
-    //        },
-         //   server: {
-         //       files: [
-         //           'app.js',
-         //           'config/routes/*.js'
-         //       ],
-         //       tasks: ['develop', 'delayed-livereload']
-         //   },
-         //   mochaTest: {
-          //      files: ['test/{,*/}*.js'],
-          //      tasks: ['env:test', 'mochaTest']
-          //  },
-          //  gruntfile: {
-         //       files: ['Gruntfile.js']
-         //   },
+            mochaTest: {
+                files: ['test/*.js'],
+               // tasks: ['env:test', 'mochaTest']
+            },
             js: {
                 files: [
                     'public/js/*.js',
-                    'app/**/*.js',
+                    '<%= app %>/**/*.js',
                     'config/*.js'
                 ],
                 tasks: [ 'delayed-livereload']
             },
             jade: {
-                files: ['app/views/**/*.jade'],
+                files: ['<%= app %>/views/**/*.jade'],
                 options: { livereload: reloadPort }
-            }//,
-         //   express: {
-         //       files: [
-         //           'app.js',
-         //           'app/**/*.js'
-         //       ],
-         //       tasks: [ 'express:dev', 'wait']
-             //   options: {
-             //       livereload: true,
-             //       nospawn: true //Without this option specified express won't be reloaded
-              //  }
-       //     }
-        }//,
-       // jshint: {
-      //      options: {
-       //         jshintrc: '.jshintrc',
-       ////         reporter: require('jshint-stylish')
-       //     },
-       //     server: {
-       //         options: {
-       //             jshintrc: 'lib/.jshintrc'
-      //          },
-       //    //     src: [ 'lib/{,*/}*.js']
-       //     },
-        //    all: [
-        //        '<%= yeoman.app %>/scripts/{,*/}*.js'
-        //    ],
-        //    test: {
-        //        options: {
-         //           jshintrc: 'test/client/.jshintrc'
-        //        },
-        //        src: ['test/client/spec/{,*/}*.js']
-        //    }
-       // }*/,
-    //    mochaTest: {
-   //         src: ['test/**/*.js']
-   //     },
+            }
+        },
+        jshint: {
+            options: {
+                jshintrc: '.jshintrc',
+                reporter: require('jshint-stylish')
+            },
+            server: {
+                options: {
+                    jshintrc: '.jshintrc'
+                },
+                src: [ '<%= app %>/*.js']
+            },
+
+            test: {
+                options: {
+                    jshintrc: 'test/.jshintrc'
+                },
+                src: ['test/*.js']
+            }
+        },
+        mochaTest: {
+            options: {
+                reporter: 'dot',
+                ui: 'bdd',
+                clearRequireCache: true
+            },
+            src: ['test/{,*/}*.js']
+        },
 
 
-   //     env: {
-   //         test: {
-  //              NODE_ENV: 'test'
-   //         }
-   //     }
+        env: {
+            test: {
+                NODE_ENV: 'test'
+            }
+        }
     });
+
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-usemin');
+    grunt.loadNpmTasks('grunt-bower-install');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
+    grunt.loadNpmTasks('grunt-newer');
+    grunt.loadNpmTasks('grunt-express-server');
 
     grunt.config.requires('watch.js.files');
     files = grunt.config('watch.js.files');
@@ -127,6 +128,7 @@ module.exports = function (grunt) {
     });
 
 
+
     grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
         var done = this.async();
         setTimeout(function () {
@@ -141,13 +143,14 @@ module.exports = function (grunt) {
         }, 500);
     });
 
-   // grunt.registerTask('express', ['express','watch'])
+
 
     grunt.registerTask('test', function() {
         return grunt.task.run([
             'env:test',
-            'watch',
+            'express:test',
             'mochaTest'
+
         ]);
     });
 
@@ -166,16 +169,20 @@ module.exports = function (grunt) {
       //      ]);
       //  }
 
-        grunt.task.run(
+        grunt.task.run([
           //  'clean:server',
          //   'bower-install',
          //   'concurrent:server',
          //   'autoprefixer',
-            'express:dev'
-          //  'open',
-          //  'watch'
-        );
+            'express:test',
+            'open',
+            'watch'
+        ]);
     });
+    /*
    // grunt.registerTask('watch', ['watch']);
-   // grunt.registerTask('default', ['serve']);
+   // grunt.registerTask('default', ['serve']);      */
+
+
+
 };
