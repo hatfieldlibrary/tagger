@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'development';
+
 
 var express = require('express'),
     http = require('http'),
