@@ -2,8 +2,8 @@
 
 exports.collectionByTagId = function(req, res) {
 
-    var tagId = req.params.id,
-        collList = new Array(),
+    var tagId = req.params.id;
+    var    collList = new Array(),
         chainer = new db.Sequelize.Utils.QueryChainer;
 
     // retrieve collections with matching TagId
