@@ -171,9 +171,8 @@ module.exports = function (grunt) {
         ]);
     });
 
-    grunt.registerTask('serve', function (target) {
+    grunt.registerTask('develop', function () {
 
-        // development
         grunt.task.run([
             'clean:server',
             'express:dev',
