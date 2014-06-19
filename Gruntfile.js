@@ -22,6 +22,7 @@ module.exports = function (grunt) {
             dev: {
                 options: {
                     script: 'app.js',
+                    node_env: 'development',
                     debug: true
                 }
             },
@@ -127,7 +128,16 @@ module.exports = function (grunt) {
         }, 500);
     });
 
+    grunt.registerTask('db-wait', function () {
+        grunt.log.ok('Waiting for db server reload...');
 
+        var done = this.async();
+
+        setTimeout(function () {
+            grunt.log.writeln('Done waiting!');
+            done();
+        }, 2000);
+    });
 
     grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
         var done = this.async();
@@ -149,6 +159,7 @@ module.exports = function (grunt) {
         return grunt.task.run([
             'env:test',
             'express:test',
+            'db-wait',
             'mochaTest'
 
         ]);
@@ -174,7 +185,7 @@ module.exports = function (grunt) {
          //   'bower-install',
          //   'concurrent:server',
          //   'autoprefixer',
-            'express:test',
+            'express:dev',
             'open',
             'watch'
         ]);

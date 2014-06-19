@@ -162,6 +162,7 @@ exports.create = function(req, res) {
             }
         },
         function(err, result) {
+            if (err) console.log(err);
             res.render('index', {
                 title: 'Collections',
                 collections: result.home

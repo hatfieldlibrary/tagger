@@ -1,10 +1,9 @@
-
 var server;
 var express = require('express'),
     http = require('http'),
     config = require('./config/environment');
-    db = require('./app/models');
-    async = require('async');
+db = require('./app/models');
+async = require('async');
 
 
 var app = express();
@@ -41,25 +40,48 @@ app.use(function(err, req, res, next) {
     });
 });
 
-db
-    .sequelize
-    .sync({ force: false })
-    .complete(function(err) {
-        if (err) {
-            throw err[0]
-        } else {
-            // avoids annoying error message when testing.
-            if (server !== undefined) {
-                server.close();
+// Snyc database and initialize server.
+if (config.nodeEnv !== 'test') {
+    db
+        .sequelize
+        .sync(config.sync)
+        .complete(function(err) {
+            if (err) {
+                throw err[0]
+            } else {
+                initServer();
             }
-            // Uncomment the following lines when not running the server
-            // from within the IDE.
-            server = http.createServer(app).listen(config.port, function(){
-                console.log('Express server listening on port ' + config.port)
-            })
-        }
-    });
+        });
+}
+// Tests require a fresh database.  We cannot drop tables
+// without removing the foreign key constraints.
+else {
+    db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+        .then(function(){
+            return db.sequelize.sync(config.sync);
+        })
+        .then(function(){
+            return db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
+        })
+        .then(function(){
+            console.log('Database synchronised.');
+            initServer();
+        }, function(err){
+            console.log(err);
+        });
+}
 
+function initServer() {
+    // avoids annoying error message when testing.
+    if (server !== undefined) {
+        server.close();
+    }
+    // Uncomment the following lines when not running the server
+    // from within the IDE.
+    server = http.createServer(app).listen(config.port, function(){
+        console.log('Express server listening on port ' + config.port)
+    })
+
+}
 // This is needed when running from IDE
 module.exports = app;
-
