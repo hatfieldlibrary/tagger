@@ -2,9 +2,8 @@ var server;
 var express = require('express'),
     http = require('http'),
     config = require('./config/environment');
-db = require('./app/models');
-async = require('async');
-
+    db = require('./app/models');
+    async = require('async');
 
 var app = express();
 // configure app
@@ -40,7 +39,7 @@ app.use(function(err, req, res, next) {
     });
 });
 
-// Snyc database and initialize server.
+// Snyc database if not in test mode then start server
 if (config.nodeEnv !== 'test') {
     db
         .sequelize
@@ -49,39 +48,27 @@ if (config.nodeEnv !== 'test') {
             if (err) {
                 throw err[0]
             } else {
-                initServer();
+                startServer();
             }
         });
 }
-// Tests require a fresh database.  We cannot drop tables
-// without removing the foreign key constraints.
+// Doing integration tests.  These drop database tables
+// before they run. For now, just start the server.
 else {
-    db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
-        .then(function(){
-            return db.sequelize.sync(config.sync);
-        })
-        .then(function(){
-            return db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1')
-        })
-        .then(function(){
-            console.log('Database synchronised.');
-            initServer();
-        }, function(err){
-            console.log(err);
-        });
+   startServer();
 }
 
-function initServer() {
+function startServer() {
+
     // avoids annoying error message when testing.
     if (server !== undefined) {
         server.close();
     }
-    // Uncomment the following lines when not running the server
-    // from within the IDE.
     server = http.createServer(app).listen(config.port, function(){
         console.log('Express server listening on port ' + config.port)
     })
 
 }
+
 // This is needed when running from IDE
 module.exports = app;

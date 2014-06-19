@@ -8,13 +8,13 @@ module.exports = function (grunt) {
     // load all grunt tasks
    require('load-grunt-tasks')(grunt);
 
-   var reloadPort = 35732, files;
-  //  require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
-    //grunt.loadNpmTasks('grunt-contrib-watch');
+    var files;
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         app: 'app',
         dist: 'dist',
+        public: 'public',
         express: {
             options: {
                 port: process.env.PORT || 3000
@@ -48,20 +48,45 @@ module.exports = function (grunt) {
         watch: {
             mochaTest: {
                 files: ['test/*.js'],
-               // tasks: ['env:test', 'mochaTest']
+                tasks: ['env:test', 'mochaTest']
             },
             js: {
                 files: [
                     'public/js/*.js',
-                    '<%= app %>/**/*.js',
-                    'config/*.js'
                 ],
-                tasks: [ 'delayed-livereload']
+                options: {
+                    livereload: true
+                }
             },
             jade: {
                 files: ['<%= app %>/views/**/*.jade'],
-                options: { livereload: reloadPort }
+                options: {
+                    livereload: true
+                }
+            },
+            livereload: {
+                files: [
+
+                    '<%= public %>/stylesheets/{,*//*}*.css',
+                    '<%= public %>/javascripts/{,*//*}*.js'
+                ],
+                options: {
+                    livereload: true
+                }
+            },
+            express: {
+                files: [
+                    '<%= app %>/**/*.js',
+                    'config/*.js',
+                    'app.js'
+                ],
+                tasks: ['newer:jshint:server', 'express:dev', 'wait'],
+                options: {
+                    livereload: true,
+                    nospawn: true //Without this option specified express won't be reloaded
+                }
             }
+
         },
         jshint: {
             options: {
@@ -82,23 +107,36 @@ module.exports = function (grunt) {
                 src: ['test/*.js']
             }
         },
+        htmlmin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '.tmp',
+                    src: '*.html',
+                    dest: '<%= dist %>'
+                }]
+            }
+        },
         mochaTest: {
             options: {
-                reporter: 'dot',
+                reporter: 'spec',
                 ui: 'bdd',
-                clearRequireCache: true
+                slow: true
             },
             src: ['test/{,*/}*.js']
         },
-
-
         env: {
             test: {
                 NODE_ENV: 'test'
             }
+        } ,
+        clean: {
+            server: '.tmp'
         }
+
     });
 
+    //  require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -119,81 +157,30 @@ module.exports = function (grunt) {
 
     grunt.registerTask('wait', function () {
         grunt.log.ok('Waiting for server reload...');
-
         var done = this.async();
-
         setTimeout(function () {
             grunt.log.writeln('Done waiting!');
             done();
         }, 500);
     });
-
-    grunt.registerTask('db-wait', function () {
-        grunt.log.ok('Waiting for db server reload...');
-
-        var done = this.async();
-
-        setTimeout(function () {
-            grunt.log.writeln('Done waiting!');
-            done();
-        }, 2000);
-    });
-
-    grunt.registerTask('delayed-livereload', 'Live reload after the node server has restarted.', function () {
-        var done = this.async();
-        setTimeout(function () {
-            request.get('http://localhost:' + reloadPort + '/changed?files=' + files.join(','),  function(err, res) {
-                var reloaded = !err && res.statusCode === 200;
-                if (reloaded)
-                    grunt.log.ok('Delayed live reload successful.');
-                else
-                    grunt.log.error('Unable to make a delayed live reload.');
-                done(reloaded);
-            });
-        }, 500);
-    });
-
-
 
     grunt.registerTask('test', function() {
         return grunt.task.run([
             'env:test',
-            'express:test',
-            'db-wait',
             'mochaTest'
-
         ]);
     });
 
     grunt.registerTask('serve', function (target) {
-      //  if (target === 'dist') {
-         //   return grunt.task.run(['build', 'express:prod', 'open', 'express-keepalive']);
-      //  }
 
-     //   if (target === 'debug') {
-      //      return grunt.task.run([
-             //   'clean:server',
-             //   'bower-install',
-             //   'concurrent:server',
-             //   'autoprefixer',
-             //   'concurrent:debug'
-      //      ]);
-      //  }
-
+        // development
         grunt.task.run([
-          //  'clean:server',
-         //   'bower-install',
-         //   'concurrent:server',
-         //   'autoprefixer',
+            'clean:server',
             'express:dev',
             'open',
             'watch'
         ]);
     });
-    /*
-   // grunt.registerTask('watch', ['watch']);
-   // grunt.registerTask('default', ['serve']);      */
-
 
 
 };

@@ -23,7 +23,6 @@ exports.create = function(req, res) {
                         console.log(err);
                     });
             }
-
         }, function (err, result) {
             if (err) console.log(err);
             if (result.check === null) {

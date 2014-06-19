@@ -70,7 +70,6 @@ exports.getDspaceCollections = function (req, res ) {
         path: "/rest/communities",
         method: 'GET'
     }
-
     var callback = function(response) {
 
         var str = '';
