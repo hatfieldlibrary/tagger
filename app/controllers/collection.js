@@ -1,4 +1,7 @@
 
+// imagemagick paths
+var convert = '/opt/local/bin/convert',
+    identify = '/opt/local/bin/identify';
 
 exports.collectionByTagId = function(req, res) {
 
@@ -257,8 +260,9 @@ exports.updateImage = function (req, res, config) {
         multiparty = require('multiparty'),
         magick = require('imagemagick');
 
-    magick.identify.path = '/opt/local/bin/identify'
-    magick.convert.path = '/opt/local/bin/convert';
+
+    magick.identify.path = identify;
+    magick.convert.path = convert;
 
     var form = new multiparty.Form();
     var imageName;

@@ -3,7 +3,7 @@
  */
 
 var should = require('chai').should(),
-    request = require('supertest')
+    request = require('supertest');
 
 var app = require('../app');
 

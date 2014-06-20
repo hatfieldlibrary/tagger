@@ -8,7 +8,9 @@ module.exports = function (grunt) {
     // load all grunt tasks
    require('load-grunt-tasks')(grunt);
 
-    var files;
+    // define reload port here to avoid conflict with
+    // client applications
+    var ReloadPort = 35642, files;
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -55,13 +57,13 @@ module.exports = function (grunt) {
                     'public/js/*.js',
                 ],
                 options: {
-                    livereload: true
+                    livereload: ReloadPort
                 }
             },
             jade: {
                 files: ['<%= app %>/views/**/*.jade'],
                 options: {
-                    livereload: true
+                    livereload: ReloadPort
                 }
             },
             livereload: {
@@ -71,7 +73,7 @@ module.exports = function (grunt) {
                     '<%= public %>/javascripts/{,*//*}*.js'
                 ],
                 options: {
-                    livereload: true
+                    livereload: ReloadPort
                 }
             },
             express: {
@@ -82,7 +84,7 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['newer:jshint:server', 'express:dev', 'wait'],
                 options: {
-                    livereload: true,
+                    livereload: ReloadPort,
                     nospawn: true //Without this option specified express won't be reloaded
                 }
             }
@@ -139,15 +141,14 @@ module.exports = function (grunt) {
     //  require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-concat');
+   // grunt.loadNpmTasks('grunt-contrib-copy');
+   // grunt.loadNpmTasks('grunt-contrib-cssmin');
+   // grunt.loadNpmTasks('grunt-contrib-uglify');
+   // grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-usemin');
-    grunt.loadNpmTasks('grunt-bower-install');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
+  //  grunt.loadNpmTasks('grunt-usemin');
+   // grunt.loadNpmTasks('grunt-bower-install');
+  //  grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-express-server');
 
