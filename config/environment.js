@@ -10,6 +10,8 @@ var config = {
         },
         port: 3000,
         db: 'acomtags_development',
+        user: 'mspalti',
+        password: 'coffee',
         sync: { force: false },
         nodeEnv: env
     },
@@ -21,6 +23,8 @@ var config = {
         },
         port: 3000,
         db: 'acomtags_test',
+        user: 'mspalti',
+        password: 'coffee',
         sync: { force: true },
         nodeEnv: env
     },
@@ -32,6 +36,8 @@ var config = {
         },
         port: 3000,
         db: 'acomtags',
+        user: 'mspalti',
+        password: 'coffee',
         sync: { force: false },
         nodeEnv: env
     }

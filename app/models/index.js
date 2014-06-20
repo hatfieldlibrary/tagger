@@ -8,7 +8,7 @@ var fs = require('fs')
     , Sequelize = require('sequelize')
     , lodash    = require('lodash')
     , config    = require('../../config/environment')
-    , sequelize = new Sequelize(config.db, 'mspalti', 'coffee')
+    , sequelize = new Sequelize(config.db, config.user, config.password)
     , db        = {};
 
 fs

@@ -23,13 +23,23 @@ The application requires mysql.  When in development, you need to install mysql 
 
 Assign permissions to these databases. Since this is your own test mysql instance, you might want use a shortcut by assigning all privileges on all databases to yourself.
 
-The application uses Sequelize as the ORM.  Database tables are defined in the application as models (think Express MVC). When you first start the application, Sequelize will create
- tables for you in the database. To access your development mysql databases, you need to provide Sequelize with the new user name and password you created for the local mysql database.
- To do this, open `app/models/index.js` and edit the Sequelize constructor:
+The application uses Sequelize as the ORM.  Database tables are defined in the application models (think Express MVC). To access your mysql databases, you need to provide Sequelize with your mysql user name and password.
+ To do this, open `config/environment.js` and edit the `user` and `password` for each of the three databases, or minimally for the development and test databases.  Example:
 
-    sequelize = new Sequelize(config.db, 'yourmysqlusername', 'yourmysqlpassword')
+        development: {
+            root: rootPath,
+            app: {
+                name: 'acomtags'
+            },
+            port: 3000,
+            db: 'acomtags_development',
+            user: 'mspalti',
+            password: 'coffee',
+            sync: { force: false },
+            nodeEnv: env
+        },
 
-You're now ready to start the application.
+You're now ready to start the application. When you first run the application, Sequelize will create tables for you in the `acomtags_development` database.
 
 When started in development mode, the Express service runs on the port configured in `config/environment.js` (3000).  A browser window is opened on start and the watch service restarts things as needed when files are updated.  This
 application uses Jade templates. Updating the browser window automatically with file edits doesn't appear possible without additional effort.
