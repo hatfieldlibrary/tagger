@@ -1,6 +1,5 @@
 'use strict';
 
-//var request = require('request');
 
 module.exports = function (grunt) {
     // show elapsed time at the end
@@ -138,20 +137,11 @@ module.exports = function (grunt) {
 
     });
 
-    //  require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
-   // grunt.loadNpmTasks('grunt-contrib-copy');
-   // grunt.loadNpmTasks('grunt-contrib-cssmin');
-   // grunt.loadNpmTasks('grunt-contrib-uglify');
-   // grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-  //  grunt.loadNpmTasks('grunt-usemin');
-   // grunt.loadNpmTasks('grunt-bower-install');
-  //  grunt.loadNpmTasks('grunt-contrib-imagemin');
     grunt.loadNpmTasks('grunt-newer');
     grunt.loadNpmTasks('grunt-express-server');
-
     grunt.config.requires('watch.js.files');
     files = grunt.config('watch.js.files');
     files = grunt.file.expand(files);
