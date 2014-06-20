@@ -8,18 +8,18 @@ Currently, two additional REST services are included: one for retrieving items f
 
 To get started with development, first clone the project into your working directory. For example:
 
-`git init
-git pull https://mspalti@stash.app.willamette.edu/scm/ac/backend.git`
+    git init
+    git pull https://mspalti@stash.app.willamette.edu/scm/ac/backend.git
 
 Next, install the dependencies:
 
-`npm install`
+    npm install
 
 The application requires mysql.  When in development, you need to install mysql on your machine and create the following empty databases:
 
-`acomtags_development`
-`acomtags_test`
-`acomtags`
+    acomtags_development
+    acomtags_test
+    acomtags
 
 Assign permissions to these databases. Since this is your own test mysql instance, you might want use a shortcut by assigning all privileges on all databases to yourself.
 
@@ -27,7 +27,7 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
  tables for you in the database. To access your development mysql databases, you need to provide Sequelize with the new user name and password you created for the local mysql database.
  To do this, open `app/models/index.js` and edit the Sequelize constructor:
 
-` sequelize = new Sequelize(config.db, 'yourmysqlusername', 'yourmysqlpassword')`
+    sequelize = new Sequelize(config.db, 'yourmysqlusername', 'yourmysqlpassword')
 
 You're now ready to start the application.
 
@@ -37,7 +37,7 @@ E.g.: my attempt to use livereload with the Jade templates ran into a problem wi
 
 To start development mode:
 
-`grunt develop`
+    grunt develop
 
 
 ### Testing
@@ -46,4 +46,4 @@ The test environment runs a series of integration tests against mysql database. 
 
 To start test mode:
 
-`grunt test`
+    grunt test
