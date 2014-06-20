@@ -52,7 +52,7 @@ To start development mode:
 
 ### Testing
 
-The test environment runs a series of integration tests against mysql database.  It uses the `acomtags_test` database.  Before each test run, Sequelize will drop the existing tables and create new ones.
+The test environment runs a series of integration tests against the `acomtags_test` database. Before each test run, Sequelize will drop the existing tables and create new ones.
 
 To start test mode:
 
