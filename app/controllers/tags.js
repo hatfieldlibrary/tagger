@@ -5,6 +5,7 @@
 exports.create = function(req, res) {
 
     var tagName = req.body.name;
+    var tagUrl = req.body.url;
 
     // async not really required here
     async.parallel (
@@ -28,7 +29,8 @@ exports.create = function(req, res) {
             if (result.check === null) {
                 db.Tag.create(
                     {
-                        name: tagName
+                        name: tagName,
+                        url: tagUrl
 
                     }).success(function (items) {
                         db.Tag.findAll()
@@ -65,6 +67,27 @@ exports.create = function(req, res) {
 
 };
 
+exports.getTagInfo = function(req, res) {
+
+    var tagId = req.params.id;
+    db.Tag.find({
+        where: {
+            id: {
+                eq: tagId
+
+            }
+        }
+    }).success(function(result) {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.end(JSON.stringify(result.getTagObject))
+    }).error(function(err) {
+        console.log(err);
+    })
+
+};
+
 exports.tagIndex = function(req, res) {
 
     db.Tag.findAll().success(function(tags) {
@@ -81,12 +104,14 @@ exports.tagUpdate = function (req, res) {
 
     var tagId = req.body.id;
     var tagName = req.body.name;
+    var tagUrl = req.body.url;
     async.series (
         {
             update: function (callback) {
                 db.Tag.update(
                     {
-                        name: tagName
+                        name: tagName,
+                        url: tagUrl
                     },
                     {
                         id: {
@@ -161,7 +186,7 @@ exports.tagList = function(req, res) {
             var arr = new Array();
             for  (var i = 0; i < result.length; i++) {
                 var tmp =  result[i].getTagObject;
-                arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id }
+                arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id, url: tmp.url }
             }
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify(arr))

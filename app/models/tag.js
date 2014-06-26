@@ -14,11 +14,15 @@ module.exports =  function(sequelize, DataTypes) {
             name: {
                 type: DataTypes.STRING(40),
                 allowNull: false
+            },
+            url: {
+                type: DataTypes.STRING(255),
+                allowNull: true
             }
         },  {
             getterMethods: {
                 getTagObject: function() {
-                    return {'id': this.getDataValue('id'), 'name': this.getDataValue('name')};
+                    return {'id': this.getDataValue('id'), 'name': this.getDataValue('name'), 'url': this.getDataValue('url')};
                 }
             },
             setterMethods: {

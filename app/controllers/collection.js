@@ -1,7 +1,7 @@
 
 // imagemagick paths
-var convert = '/opt/local/bin/convert',
-    identify = '/opt/local/bin/identify';
+var convert = '/usr/local/bin/convert',
+    identify = '/usr/local/bin/identify';
 
 exports.collectionByTagId = function(req, res) {
 
@@ -214,6 +214,7 @@ exports.update = function(req, res) {
     )
 };
 
+
 exports.delete = function(req, res) {
 
     var collId = req.params.id;
@@ -255,7 +256,6 @@ exports.delete = function(req, res) {
 
 exports.updateImage = function (req, res, config) {
 
-    // file upload requires ...
     var fs = require('fs'),
         multiparty = require('multiparty'),
         magick = require('imagemagick');
@@ -267,8 +267,6 @@ exports.updateImage = function (req, res, config) {
     var form = new multiparty.Form();
     var imageName;
     var id;
-
-
     form.parse(req, function (err, fields, files) {
 
         console.log(files.image);
@@ -279,9 +277,8 @@ exports.updateImage = function (req, res, config) {
             imageName = files.image[0].originalFilename;
             id = fields.id;
             console.log(imageName);
-            /// If there's an error
             if (!imageName) {
-                console.log("There was an error")
+                console.log("Image name not defined")
                 res.redirect("/");
                 res.end();
 
@@ -298,23 +295,23 @@ exports.updateImage = function (req, res, config) {
                         res.redirect("/");
                     }
                     else {
-                        console.log("ImageMagick");
+                        console.log("ImageMagick at work");
                         magick.resize({
                             srcPath: fullPath,
                             dstPath: thumbPath,
                             width:   140
                         }, function(err, stdout, stderr){
                             if (err) console.log(err);
+                            // update database even if the conversion fails
                             updateDb();
                         });
                     }
                 });
             }
         });
-    })
+    });
 
     function updateDb() {
-
         db.Collection.update({
                 image: imageName
             },
