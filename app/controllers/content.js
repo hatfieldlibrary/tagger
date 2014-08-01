@@ -1,21 +1,20 @@
 /**
- * Created by mspalti on 5/23/14.
+ * Created by mspalti on 8/1/14.
  */
 
 exports.create = function(req, res) {
 
-    var tagName = req.body.name;
-    var tagUrl = req.body.url;
+    var cName = req.body.name;
 
     // async not really required here
     async.parallel (
         {
             check: function (callback) {
-                db.Tag.find(
+                db.ItemContent.find(
                     {
                         where: {
                             name: {
-                                eq: tagName
+                                eq: cName
                             }
                         }
                     }
@@ -27,17 +26,15 @@ exports.create = function(req, res) {
         }, function (err, result) {
             if (err) console.log(err);
             if (result.check === null) {
-                db.Tag.create(
+                db.ItemContent.create(
                     {
-                        name: tagName,
-                        url: tagUrl
-
+                        name: cName
                     }).success(function (items) {
-                        db.Tag.findAll()
-                            .success(function (tags) {
-                                res.render('tagIndex', {
-                                    title: 'Tags',
-                                    tags: tags,
+                        db.ItemContent.findAll()
+                            .success(function (ctypes) {
+                                res.render('contentIndex', {
+                                    title: 'Content Types',
+                                    tags: ctypes,
                                     exists: false
 
                                 })
@@ -49,11 +46,11 @@ exports.create = function(req, res) {
                         console.log(err);
                     });
             } else {
-                db.Tag.findAll()
-                    .success(function (tags) {
-                        res.render('tagIndex', {
-                            title: 'Tags',
-                            tags: tags,
+                db.ItemContent.findAll()
+                    .success(function (ctypes) {
+                        res.render('contentIndex', {
+                            title: 'Content Types',
+                            tags: ctypes,
                             exists: true
                         })
                     }).error(function (err) {
@@ -64,63 +61,40 @@ exports.create = function(req, res) {
         }
 
     )
-
 };
 
-exports.getTagInfo = function(req, res) {
 
-    var tagId = req.params.id;
-    db.Tag.find({
-        where: {
-            id: {
-                eq: tagId
+exports.contentIndex = function(req, res) {
 
-            }
-        }
-    }).success(function(result) {
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin','*');
-        res.end(JSON.stringify(result.getContentObject))
-    }).error(function(err) {
-        console.log(err);
-    })
-
-};
-
-exports.tagIndex = function(req, res) {
-
-    db.Tag.findAll().success(function(tags) {
-        res.render('tagIndex', {
-            title: 'Tags',
-            tags: tags
+    db.ItemContent.findAll().success(function(ctypes) {
+        res.render('contentIndex', {
+            title: 'Content Types',
+            tags: ctypes
         })
     }).error(function(err) {
         console.log(err);
     })
 };
 
-exports.tagUpdate = function (req, res) {
+exports.contentUpdate = function (req, res) {
 
-    var tagId = req.body.id;
-    var tagName = req.body.name;
-    var tagUrl = req.body.url;
+    var contentId = req.body.id;
+    var contentName = req.body.name;
     async.series (
         {
             update: function (callback) {
-                db.Tag.update(
+                db.ItemContent.update(
                     {
-                        name: tagName,
-                        url: tagUrl
+                        name: contentName
                     },
                     {
                         id: {
-                            eq: tagId
+                            eq: contentId
                         }
                     }).complete(callback)
             },
-            tags: function(callback) {
-                db.Tag.findAll(
+            ctypes: function(callback) {
+                db.ItemContent.findAll(
                     {
                         order: [['name', 'ASC']]
                     }
@@ -131,9 +105,9 @@ exports.tagUpdate = function (req, res) {
             }
         },
         function (err, result) {
-            res.render('tagIndex', {
-                title: 'Tags',
-                tags: result.tags
+            res.render('contentIndex', {
+                title: 'Content Types',
+                tags: result.ctypes
             })
         }
     )
@@ -141,14 +115,14 @@ exports.tagUpdate = function (req, res) {
 
 exports.delete = function (req, res) {
 
-    var tagId = req.params.id;
+    var contentId = req.params.id;
     async.series (
         {
             delete: function(callback)  {
-                db.Tag.destroy(
+                db.ItemContent.destroy(
                     {
                         id: {
-                            eq: tagId
+                            eq: contentId
                         }
                     }
                 ).complete(callback)
@@ -157,7 +131,7 @@ exports.delete = function (req, res) {
                     })
             },
             home: function(callback) {
-                db.Tag.findAll(
+                db.ItemContent.findAll(
                     {
                         order: [
                             ['name', 'ASC']
@@ -170,23 +144,22 @@ exports.delete = function (req, res) {
             }
         },
         function (err, result) {
-            res.render('tagIndex', {
-                title: 'Tags',
+            res.render('contentIndex', {
+                title: 'Content Types',
                 tags: result.home
             })
         }
     )
 };
 
-exports.tagList = function(req, res) {
+exports.contentList = function(req, res) {
 
-    db.Tag.findAll()
+    db.ItemContent.findAll()
         .success(function(result) {
-
             var arr = new Array();
             for  (var i = 0; i < result.length; i++) {
                 var tmp =  result[i].getContentObject;
-                arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id, url: tmp.url }
+                arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id}
             }
             res.setHeader('Content-Type', 'application/json');
             res.end(JSON.stringify(arr))

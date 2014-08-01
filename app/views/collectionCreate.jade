@@ -26,4 +26,27 @@ block content
             p
             .row
                 .large-10.columns
+                    label Coverage Dates
+            .row
+                .large-10.columns
+                    textarea(rows=7, class="large-10 ", name="dates")=collDates
+            p
+            .row
+                .large-10.columns
+                    label Number of Items
+            .row
+                .large-10.columns
+                    textarea(rows=7, class="large-10 ", name="items")=collItems
+            p
+            .row
+                .large-10.columns
+                    label Type
+            .row
+                .large-10.columns
+                    select(name="ctype")
+                        option(value="dig") Digital Collection
+                        option(value="ead") Finding Aid
+            p
+            .row
+                .large-10.columns
                     input(type="submit" value="Create Collection")

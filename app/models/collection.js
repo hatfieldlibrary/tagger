@@ -22,11 +22,24 @@ module.exports = function(sequelize, DataTypes) {
                 allowNull: false},
             description: {
                 type: DataTypes.STRING(4096),
-                allowNull: false}
+                allowNull: false
+            },
+            dates: {
+                type: DataTypes.STRING(60),
+                allowNull: true
+            },
+            items: {
+                type: DataTypes.STRING(60),
+                allowNull: true
+            },
+            ctype: {
+                type: DataTypes.STRING(3),
+                allowNull: true
+            }
         },  {
             getterMethods: {
                 getCollectionObject: function() {
-                    return {'id': this.getDataValue('id'), 'title': this.getDataValue('title'),'url': this.getDataValue('url'), 'image': this.getDataValue('image'),'desc': this.getDataValue('description')};
+                    return {'id': this.getDataValue('id'), 'title': this.getDataValue('title'),'url': this.getDataValue('url'), 'image': this.getDataValue('image'),'desc': this.getDataValue('description'),'dates': this.getDataValue('dates'), 'items': this.getDataValue('items'),'ctype':this.getDataValue('ctype')};
                 }
             },
             setterMethods: {
@@ -38,7 +51,8 @@ module.exports = function(sequelize, DataTypes) {
         {
             classMethods: {
                 associate: function(models) {
-                    Collection.hasMany(models.TagTarget)
+                    Collection.hasMany(models.TagTarget);
+                    Collection.hasMany(models.ItemContentTarget);
                 }
             }
         });

@@ -26,42 +26,64 @@ block content
             form(method="post", enctype='application/x-www-form-urlencoded', action="/collection/update")
                 .row
                     .small-12.columns
-                    label Collection Name
+                        label Collection Name
 
 
                 .row
                     .small-10.columns
-                    input(type="text", class="small-8" name="name", value=collName)
+                        input(type="text", class="small-8" name="name", value=collName)
                     .small-2.columns
                 p
                 .row
                     .small-12.columns
-                    label Collection URL
+                        label Collection URL
                 .row
                     .small-10.columns
-                    input(type="text", class="small-10 columns", name="url", value=collUrl)
+                        input(type="text", class="small-10 columns", name="url", value=collUrl)
                     .small-2.columns
                 p
                 .row
                     .small-12.columns
-                    label Collection Description
+                        label Collection Description
                 .row
                     .small-10.columns
-                    textarea(rows=7, class="small-12 columns", name="description")=collDesc
+                        textarea(rows=7, class="small-12 columns", name="description")=collDesc
                     .small-2.columns
+                p
+                .row
+                    .small-12.columns
+                        label Coverage Dates
+                    .small-8.columns
+                        input(type="text", class="small-12", name="dates" value=collDates)
+                    .small-4.columns
+                p
+                .row
+                    .small-12.columns
+                        label Number of Items
+                .row
+                    .small-8.columns
+                        input(type="text", class="small-12 columns", name="items" value=collItems)
+                    .small-4.columns
+                p
+                .row
+                    .small-10.columns
+                        input(type="radio", name="ctype", value="ead" checked=collType=='ead')
+                        | <label>Finding Aid &nbsp;&nbsp;</label>
+
+                        input(type="radio", name="ctype", value="dig" checked=collType=='dig')
+                        | <label>Digital Collection </label>
+                    .small-2.columns
+
                     input(type="hidden" name="id" value=collId)
                 p
                 .row
                     .small-10.columns
-                    input(type="submit" value="Update Collection")
-
+                        input(type="submit" value="Update Collection")
                 p &nbsp;
     .row
         .small-2.columns  &nbsp;
         .small-10.columns(style="padding-left: 0;padding-right:0;")
             .panel
-
-
                 .label.medium.success.radius Current Tags &nbsp;&nbsp;(click "x" to remove)
                 p
                 .row

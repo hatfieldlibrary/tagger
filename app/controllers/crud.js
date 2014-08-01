@@ -77,6 +77,9 @@ exports.collUpdate = function(req, res) {
                 collUrl: collectionData.getCollectionObject.url,
                 collDesc: collectionData.getCollectionObject.desc,
                 collImg: collectionData.getCollectionObject.image,
+                collItems: collectionData.getCollectionObject.items,
+                collDates: collectionData.getCollectionObject.dates,
+                collType: collectionData.getCollectionObject.ctype,
                 collId: collectionData.id,
                 tags: tags
             })
@@ -106,6 +109,35 @@ exports.tagUpdate = function (req, res) {
             res.render('tagUpdate', {
                 title: 'Update Tag',
                 tag: tag
+            })
+        }
+    ).error(function(err) {
+            console.log(err);
+        });
+};
+
+
+exports.contentCreate = function(req, res) {
+    res.render('contentCreate', {
+        title: 'Create Content Type'
+    })
+};
+
+exports.contentUpdate = function (req, res) {
+    var contentId = req.params.id;
+    db.ItemContent.find(
+        {
+            where: {
+                id: {
+                    eq: contentId
+                }
+            },
+            attributes: ['id','name']
+        }
+    ).success(function(ctype) {
+            res.render('contentUpdate', {
+                title: 'Update ContentType',
+                type: ctype
             })
         }
     ).error(function(err) {

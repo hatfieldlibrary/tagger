@@ -1,0 +1,38 @@
+extends layout
+.small-4.columns
+    a(href='/form/content/update/'+content.id)=tag.name
+.small-2.columns
+    label Tag ID:&nbsp;
+        =content.id
+block content
+.row
+    a.button.small.radius.right.success(href="#" data-reveal-id="createModal") Create Tag
+    h1= title
+    p Click on title link to edit the content type.
+        if exists
+            .label.alert A tag with this name already exists
+        each tag in tags
+            .row.result-row: +tagLink(tag)
+            #createModal.reveal-modal.small(data-reveal)
+    h3 Create Tag
+    form(method="post", enctype='application/x-www-form-urlencoded' action="/tag/create")
+            .row
+                .large-10.columns
+                    label Tag Name
+            .row
+                .large-10.columns
+                    input(type="text", size=60 name="name")
+                .row
+                .large-10.columns
+                    label Tag URL
+                .row
+                .large-10.columns
+                    input(type="text", size=60 name="url")
+                p
+            .row
+                .large-10.columns
+                    input(type='submit', value='Create Tag')
+            a(class="close-reveal-modal") &#215;
+        a(class="close-reveal-modal") &#215;
+        script $(document).foundation();
+

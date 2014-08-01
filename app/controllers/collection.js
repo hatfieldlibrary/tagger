@@ -6,7 +6,7 @@ var convert = '/usr/local/bin/convert',
 exports.collectionByTagId = function(req, res) {
 
     var tagId = req.params.id;
-    var    collList = new Array(),
+    var collList = new Array(),
         chainer = new db.Sequelize.Utils.QueryChainer;
 
     // retrieve collections with matching TagId
@@ -21,10 +21,11 @@ exports.collectionByTagId = function(req, res) {
         include: [db.Collection]
 
     }).success( function(coll) {
-
         // chain queries to retrieve other tags associated with each collection
         coll.forEach(function(entry) {
+            var tmpColl = entry.collection.getCollectionObject;
             var collId = entry.CollectionId;
+            var temp = {};
             chainer.add(
                 db.TagTarget.findAll({
                     where: {
@@ -35,13 +36,36 @@ exports.collectionByTagId = function(req, res) {
                     order: [['name', 'ASC']],
                     include: [db.Tag]
                 }).success(function(tags) {
-                    // add result to global collList array
-                    var tmpColl = entry.collection.getCollectionObject;
-                    collList.push( { id: tmpColl.id, name: tmpColl.title, description: tmpColl.desc, url: tmpColl.url, image: tmpColl.image, tags: tags } );
+                    temp.id = tmpColl.id;
+                    temp.name = tmpColl.title;
+                    temp.description = tmpColl.desc;
+                    temp.url = tmpColl.url;
+                    temp.image = tmpColl.image;
+                    temp.dates = tmpColl.dates;
+                    temp.items = tmpColl.items;
+                    temp.ctype = tmpColl.ctype;
+                    temp.tags = tags;
                 }).error(function(err) {
                     console.log(err)
                 })
-            )
+            ),
+                chainer.add(
+                    db.ItemContentTarget.findAll({
+                        where: {
+                            CollectionId: {
+                                eq: collId
+                            }
+                        },
+                        order: [['name', 'ASC']],
+                        include: [db.ItemContent]
+
+                    }).success(function(media) {
+                        temp.media = media;
+                        collList.push(temp );
+                    }).error(function(err) {
+                        console.log(err)
+                    })
+                )
         });
         chainer.run()
             .success(function() {
@@ -72,7 +96,7 @@ exports.getDspaceCollections = function (req, res ) {
         port: 80,
         path: "/rest/communities",
         method: 'GET'
-    }
+    };
     var callback = function(response) {
 
         var str = '';
@@ -137,6 +161,9 @@ exports.create = function(req, res) {
     var collName = req.body.name;
     var collUrl = req.body.url;
     var collDesc = req.body.description;
+    var collDates = req.body.dates;
+    var collItems = req.body.items;
+    var collType = req.body.ctype;
     // First create the new collection. Then retrieve the
     // updated collection list and pass it to the view.
     async.series (
@@ -145,7 +172,10 @@ exports.create = function(req, res) {
                 db.Collection.create({
                     title: collName,
                     url: collUrl,
-                    description: collDesc
+                    description: collDesc,
+                    dates: collDates,
+                    items: collItems,
+                    ctype: collType
                 }).complete(callback)
                     .error(function(err) {
                         console.log(err);
@@ -179,6 +209,10 @@ exports.update = function(req, res) {
     var collUrl = req.body.url;
     var collDesc = req.body.description;
     var collId = req.body.id;
+    var collDates = req.body.dates;
+    var collItems = req.body.items;
+    var collType = req.body.ctype;
+
     // First update the collection. Then retrieve the updated
     // collection list and pass it to the view.
     async.series (
@@ -187,7 +221,10 @@ exports.update = function(req, res) {
                 db.Collection.update({
                         title: collName,
                         url: collUrl,
-                        description: collDesc
+                        description: collDesc,
+                        dates: collDates,
+                        items: collItems,
+                        ctype: collType
                     },
                     {
                         id: {

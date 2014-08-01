@@ -2,10 +2,12 @@ module.exports = function(app,config){
 
     var crud = require('../app/controllers/crud');
     var tag = require('../app/controllers/tags');
+    var content = require('../app/controllers/content');
     var collection = require('../app/controllers/collection');
     var target = require('../app/controllers/target');
 
     app.get('/rest/taglist', tag.tagList);
+    app.get('/rest/contentlist', content.contentList);
     app.get('/rest/collection/bytag/:id', collection.collectionByTagId);
     app.get('/rest/getEad/:id/:fld', collection.getEadBySubject);
     app.get('/rest/getDspaceCollections', collection.getDspaceCollections);
@@ -32,6 +34,8 @@ module.exports = function(app,config){
     app.use('/tag/view', tag.tagIndex);
     app.post('/tag/update', tag.tagUpdate);
     app.use('/target/create', target.create);
-
+    app.use('/content/view', content.contentIndex);
+    app.post('/content/create', content.create);
+    app.post('/content/update', content.contentUpdate);
 
 };

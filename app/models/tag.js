@@ -21,7 +21,7 @@ module.exports =  function(sequelize, DataTypes) {
             }
         },  {
             getterMethods: {
-                getTagObject: function() {
+                getContentObject: function() {
                     return {'id': this.getDataValue('id'), 'name': this.getDataValue('name'), 'url': this.getDataValue('url')};
                 }
             },
