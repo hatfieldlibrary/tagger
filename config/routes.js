@@ -7,11 +7,12 @@ module.exports = function(app,config){
     var target = require('../app/controllers/target');
 
     app.get('/rest/taglist', tag.tagList);
-    app.get('/rest/contentlist', content.contentList);
+    app.get('/rest/contentlist', content.typeList);
     app.get('/rest/collection/bytag/:id', collection.collectionByTagId);
     app.get('/rest/getEad/:id/:fld', collection.getEadBySubject);
     app.get('/rest/getDspaceCollections', collection.getDspaceCollections);
     app.use('/rest/tag/getInfo/:id', tag.getTagInfo);
+    app.use('/rest/type/getInfo/:id', content.getTypeInfo);
 
     app.get('/', crud.index);
     app.get('/form/collection', crud.index);
@@ -19,6 +20,7 @@ module.exports = function(app,config){
     app.get('/form/collection/update/:id', crud.collUpdate);
     app.get('/form/tag/create', crud.tagCreate);
     app.get('/form/tag/update/:id', crud.tagUpdate);
+    app.get('/form/content/update/:id', crud.contentUpdate);
 
     // passing application configuration to imageUpdate controller.
     app.post('/collection/image', function (res, req) {
@@ -27,6 +29,7 @@ module.exports = function(app,config){
     app.get('/collection/remove/tag/:collid/:tagid', collection.removeTag);
     app.get('/collection/delete/:id', collection.delete);
     app.post('/collection/tag', collection.addTag);
+    app.post('/collection/type', collection.addType);
     app.post('/collection/create', collection.create);
     app.post('/collection/update', collection.update);
     app.get('/tag/delete/:id', tag.delete);
@@ -37,5 +40,6 @@ module.exports = function(app,config){
     app.use('/content/view', content.contentIndex);
     app.post('/content/create', content.create);
     app.post('/content/update', content.contentUpdate);
+    app.get('/content/delete/:id', content.delete);
 
 };

@@ -2,8 +2,7 @@ extends layout
 block content
 
     script var idValue;
-    script jQuery(function() { var availableTags; getTags(function(data) { availableTags = data; jQuery( "#tagNames" ).autocomplete({ source: availableTags, select: function (event, ui) {  jQuery("#tagNames").val(ui.item.label); idValue = ui.item.id;  } }); });  });
-
+    script jQuery(function() { var availableTags; var availableTypes; getTags(function(data) {availableTags = data;jQuery( "#tagNames" ).autocomplete({source: availableTags,select: function (event, ui) {jQuery("#tagNames").val(ui.item.label);idValue = ui.item.id;}});});getTypes(function(data) { availableTypes = data;jQuery( "#typeNames" ).autocomplete({source: availableTypes,select: function (event, ui) {jQuery("#typeNames").val(ui.item.label); idValue = ui.item.id;}});});});
     .row
         .small-2.columns
         .small-10.columns(style="padding-left: 0;")
@@ -88,25 +87,48 @@ block content
                 p
                 .row
                 each tag in tags
-                        label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
-                            a(href="/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
+                    label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
+                        a(href="/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
                 p &nbsp;
                 p
                 .ui-widget
                 form(method="post" enctype='application/x-www-form-urlencoded', action="/collection/tag", id="tagForm")
 
-                        .small-12.columns
-                        label(for="tagNames") Add Tag Here
-                        .row
-                        .small-10.columns
-                        input(type="text" id="tagNames" name='tagName')
-                        input(type="hidden" name='collid' value=collId)
-                        input(type="hidden" id="tagId" name='tagid')
-                        p
-                        input(type="submit", value="Add tag to this collection")
+                    .small-12.columns
+                    label(for="tagNames") Add Tag Here
+                    .row
+                    .small-10.columns
+                    input(type="text" id="tagNames" name='tagName')
+                    input(type="hidden" name='collid' value=collId)
+                    input(type="hidden" id="tagId" name='tagid')
+                    p
+                    input(type="submit", value="Add tag to this collection")
+
+            p &nbsp;
+    .row
+        .small-2.columns  &nbsp;
+        .small-10.columns(style="padding-left: 0;padding-right:0;")
+            .panel
+                .label.medium.success.radius Current Content Types &nbsp;&nbsp;(click "x" to remove)
+                p
+                .row
+                each type in types
+                    label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
+                        a(href="/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
+                p &nbsp;
+                p
+                .ui-widget
+                form(method="post" enctype='application/x-www-form-urlencoded', action="/collection/type", id="typeForm")
+                    .small-12.columns
+                    label(for="typeNames") Add Content Type Here
+                    .row
+                    .small-10.columns
+                    input(type="text" id="typeNames" name='typeName')
+                    input(type="hidden" name='collid' value=collId)
+                    input(type="hidden" id="typeId" name='typeid')
+                    p
+                    input(type="submit", value="Add type to this collection")
             p
-
-
 
 
 
@@ -126,5 +148,4 @@ block content
 
 
     script $(document).foundation()
-    script jQuery(document).ready( function() { jQuery("#tagForm").submit(  function(event) { if (idValue === undefined) { event.preventDefault(); } else { jQuery('#tagId').val(idValue); } } )} )
-
+    script jQuery(document).ready( function() { jQuery("#tagForm").submit( function (event) { if (idValue === undefined) { event.preventDefault(); } else { jQuery('#tagId').val(idValue); } }); jQuery("#typeForm").submit(function (event) { if (idValue === undefined) { event.preventDefault(); } else { jQuery('#typeId').val(idValue); } }); });

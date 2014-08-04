@@ -43,7 +43,7 @@ exports.collectionByTagId = function(req, res) {
                     temp.image = tmpColl.image;
                     temp.dates = tmpColl.dates;
                     temp.items = tmpColl.items;
-                    temp.ctype = tmpColl.ctype;
+                   // temp.ctype = tmpColl.ctype;
                     temp.tags = tags;
                 }).error(function(err) {
                     console.log(err)
@@ -60,7 +60,7 @@ exports.collectionByTagId = function(req, res) {
                         include: [db.ItemContent]
 
                     }).success(function(media) {
-                        temp.media = media;
+                        temp.ctypes = media;
                         collList.push(temp );
                     }).error(function(err) {
                         console.log(err)
@@ -391,6 +391,64 @@ exports.addTag = function(req, res) {
                 db.TagTarget.create({
                     CollectionId: collId,
                     TagId: tagId
+                }).success(function (result) {
+                        res.redirect("/form/collection/update/" + collId)
+                    }
+                ).error(function(err) {
+                        console.log(err);
+                    }
+                )
+            }
+            else {
+                res.redirect("/form/collection/update/" + collId)
+            }
+        }
+    ).error(function(err) {
+            console.log(err);
+        }
+    )
+};
+
+exports.removeTag = function(req, res) {
+    var collId = req.params.collid;
+    var tagId = req.params.tagid;
+    db.TagTarget.destroy({
+        CollectionId: {
+            eq: collId
+        },
+        TagId: {
+            eq: tagId
+        }
+    }).success(function(result) {
+        res.redirect("/form/collection/update/"+collId)
+    }).error(function(err) {
+        console.log(err);
+    })
+};
+
+exports.addType = function(req, res) {
+
+    var typeId = req.body.typeid;
+    var collId = req.body.collid;
+    // only add tag if not already attached to the collection
+    db.ItemContentTarget.find(
+        {
+            where: {
+                CollectionId: {
+                    eq: collId
+                },
+                ItemContentId: {
+                    eq: typeId
+                }
+            }
+        }
+    ).success(function(result)
+        {
+            console.log(result);
+            if (result === null) {
+                db.ItemContentTarget.create({
+                    CollectionId: collId,
+                    ItemContentId: typeId
                 }).success(function (result) {
                         res.redirect("/form/collection/update/" + collId)
                     }

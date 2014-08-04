@@ -13,4 +13,14 @@ function getTags(tagCallback) {
 
 }
 
+function getTypes(typeCallback) {
+    $.ajax({
+        url: "/rest/contentlist"
+    }).success(function(data) {
+
+        typeCallback(data)
+    });
+
+}
+
 

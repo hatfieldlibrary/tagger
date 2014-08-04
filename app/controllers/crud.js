@@ -66,11 +66,28 @@ exports.collUpdate = function(req, res) {
                     .error(function(err) {
                         console.log(err);
                     });
+            },
+            typeData: function(callback)
+            {
+                db.ItemContentTarget.findAll(
+                    {
+                        where: {
+                            CollectionId: {
+                                eq: collId
+                            }
+                        },
+                        include : [db.ItemContent],
+                        attributes: ['ItemContent.name','ItemContent.id']
+                    }).complete(callback)
+                    .error(function(err) {
+                        console.log(err);
+                    });
             }
         },
         function(err, rd){
             var collectionData = rd.collectionData;
             var tags = rd.tagData;
+            var types = rd.typeData;
             res.render('collectionUpdate', {
                 title: 'Update Collection',
                 collName: collectionData.title,
@@ -81,7 +98,8 @@ exports.collUpdate = function(req, res) {
                 collDates: collectionData.getCollectionObject.dates,
                 collType: collectionData.getCollectionObject.ctype,
                 collId: collectionData.id,
-                tags: tags
+                tags: tags,
+                types: types
             })
         }
     );
@@ -136,7 +154,7 @@ exports.contentUpdate = function (req, res) {
         }
     ).success(function(ctype) {
             res.render('contentUpdate', {
-                title: 'Update ContentType',
+                title: 'Update Content Type',
                 type: ctype
             })
         }

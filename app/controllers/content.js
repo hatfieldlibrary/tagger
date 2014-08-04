@@ -152,7 +152,7 @@ exports.delete = function (req, res) {
     )
 };
 
-exports.contentList = function(req, res) {
+exports.typeList = function(req, res) {
 
     db.ItemContent.findAll()
         .success(function(result) {
@@ -166,5 +166,26 @@ exports.contentList = function(req, res) {
         }).error(function(err) {
             console.log(err);
         });
+
+};
+
+exports.getTypeInfo = function(req, res) {
+
+    var typeId = req.params.id;
+    db.ItemContent.find({
+        where: {
+            id: {
+                eq: typeId
+
+            }
+        }
+    }).success(function(result) {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.end(JSON.stringify(result.getContentObject))
+    }).error(function(err) {
+        console.log(err);
+    })
 
 };
