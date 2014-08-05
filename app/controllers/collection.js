@@ -5,12 +5,13 @@ var convert = '/usr/local/bin/convert',
 
 exports.collectionByTagId = function(req, res) {
 
+    var count;
     var tagId = req.params.id;
     var collList = new Array(),
         chainer = new db.Sequelize.Utils.QueryChainer;
 
     // retrieve collections with matching TagId
-    db.TagTarget.findAll({
+    db.TagTarget.findAndCountAll({
         where:
         {
             TagId: {
@@ -21,8 +22,10 @@ exports.collectionByTagId = function(req, res) {
         include: [db.Collection]
 
     }).success( function(coll) {
+        count = coll.count;
         // chain queries to retrieve other tags associated with each collection
-        coll.forEach(function(entry) {
+        coll.rows.forEach(function(entry) {
+
             var tmpColl = entry.collection.getCollectionObject;
             var collId = entry.CollectionId;
             var temp = {};
@@ -43,7 +46,6 @@ exports.collectionByTagId = function(req, res) {
                     temp.image = tmpColl.image;
                     temp.dates = tmpColl.dates;
                     temp.items = tmpColl.items;
-                   // temp.ctype = tmpColl.ctype;
                     temp.tags = tags;
                 }).error(function(err) {
                     console.log(err)
@@ -69,10 +71,14 @@ exports.collectionByTagId = function(req, res) {
         });
         chainer.run()
             .success(function() {
+
+                var result = [];
+                result[0] = count;
+                result[1] = collList;
                 // JSON response
                 res.setHeader('Content-Type', 'application/json');
                 res.setHeader('Access-Control-Allow-Origin','*');
-                res.end(JSON.stringify(collList))
+                res.end(JSON.stringify(result))
             })
             .error(function(err) {
                 console.log(err);
