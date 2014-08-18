@@ -1,7 +1,7 @@
 
 // imagemagick paths
-var convert = '/usr/local/bin/convert',
-    identify = '/usr/local/bin/identify';
+var convert = '/usr/bin/convert',
+    identify = '/usr/bin/identify';
 
 exports.collectionByTagId = function(req, res) {
 
