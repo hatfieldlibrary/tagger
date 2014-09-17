@@ -46,6 +46,7 @@ exports.collectionByTagId = function(req, res) {
                     temp.image = tmpColl.image;
                     temp.dates = tmpColl.dates;
                     temp.items = tmpColl.items;
+                    temp.collType = tmpColl.ctype;
                     temp.tags = tags;
                 }).error(function(err) {
                     console.log(err)
@@ -62,7 +63,7 @@ exports.collectionByTagId = function(req, res) {
                         include: [db.ItemContent]
 
                     }).success(function(media) {
-                        temp.ctypes = media;
+                        temp.itemTypes = media;
                         collList.push(temp );
                     }).error(function(err) {
                         console.log(err)
@@ -98,8 +99,10 @@ exports.getDspaceCollections = function (req, res ) {
         headers: {
             accept: "application/json"
         },
-        host: "libmedia.willamette.edu",
-        port: 80,
+        // since this Node app is already serving as proxy, there
+        // is no need to proxy again through libmedia
+        host: "http://dspace.willamette.edu",
+        port: 8080,
         path: "/rest/communities",
         method: 'GET'
     };
@@ -342,7 +345,7 @@ exports.updateImage = function (req, res, config) {
                         magick.resize({
                             srcPath: fullPath,
                             dstPath: thumbPath,
-                            width:   140
+                            width:   200
                         }, function(err, stdout, stderr){
                             if (err) console.log(err);
                             // update database even if the conversion fails
