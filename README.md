@@ -29,12 +29,13 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
         development: {
             root: rootPath,
             app: {
-                name: 'acomtags'
+                name: 'myapp'
             },
             port: 3000,
-            db: 'acomtags_development',
-            user: 'mspalti',
-            password: 'coffee',
+            db: 'myapp_development',
+            user: 'username',
+            password: 'password',
+            host: 'localhost',
             sync: { force: false },
             nodeEnv: env
         },
@@ -57,3 +58,33 @@ The test environment runs a series of integration tests against the `acomtags_te
 To start test mode:
 
     grunt test
+
+
+### Production
+
+First, copy or clone the application to the server.  There is no need to copy node_modules since these will be installed using npm once on the server.
+
+Next, make sure nodejs is installed on the server.  It can be installed in a number of ways.  RHEL package manager includes nodejs in extra packages, so the simplest option may be this:
+
+    sudo yum install nodejs npm --enablerepo=epel
+
+Once node is installed, run:
+
+    npm install
+
+Currently, we are using the forever CLI to launch and keep the nodejs script running, so install forever globally as follows:
+
+    sudo npm install forever -g
+
+Now we need to account for differences between the development and production environments. For now, this involves a manual edit.  Change the default environment by editing app/config/environment.js as follows:
+
+    env = process.env.NODE_ENV || 'production';
+
+The production environment is similar to the development example above.  Make changes to mysql connection parameters and app configuration (e.g. port) there.
+
+Finally, to start the server from the command line, type the following:
+
+    forever app.js &
+
+
+

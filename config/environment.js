@@ -12,6 +12,7 @@ var config = {
         db: 'acomtags_development',
         user: 'mspalti',
         password: 'coffee',
+        host: 'localhost',
         sync: { force: false },
         nodeEnv: env
     },
@@ -25,6 +26,7 @@ var config = {
         db: 'acomtags_test',
         user: 'mspalti',
         password: 'coffee',
+        host: 'localhost',
         sync: { force: true },
         nodeEnv: env
     },
@@ -36,8 +38,9 @@ var config = {
         },
         port: 3000,
         db: 'acomtags',
-        user: 'mspalti',
-        password: 'coffee',
+        user: 'tagger',
+        password: 'c0fFee12',
+        host: 'libdb.willamette.edu',
         sync: { force: false },
         nodeEnv: env
     }
