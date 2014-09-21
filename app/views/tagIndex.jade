@@ -1,11 +1,19 @@
 extends layout
 
 mixin tagLink(tag)
-    .small-4.columns
+    .small-10.columns
         a(href='/form/tag/update/'+tag.id)=tag.name
-    .small-2.columns
-        label Tag ID:&nbsp;
+    .small-1.columns
+        label ID:&nbsp;
             =tag.id
+    if tag.type === 'sub'
+        .small-1.columns.type-color
+            label Type:&nbsp
+                =tag.type
+    else
+        .small-1.columns.id-color
+            label Type:&nbsp
+                =tag.type
 
 block content
     .row

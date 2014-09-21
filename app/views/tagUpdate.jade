@@ -23,6 +23,13 @@ block content
 
                 .row
                     .large-10.columns
+                        input(type="radio", name="type", value="adm" checked=tag.type=='adm')
+                        | <label>Administrative Area &nbsp;&nbsp;</label>
+                        input(type="radio", name="type", value="sub" checked=tag.type=='sub')
+                        | <label>Subject </label>
+
+                .row
+                    .large-10.columns
                         label Tag ID:
                             =tag.id
                 input(type="hidden", name="id" value=tag.id)
@@ -38,4 +45,4 @@ block content
             a(class="close-reveal-modal") &#215;
 
             script
-                $(document).foundation();
+                $(document).foundation()

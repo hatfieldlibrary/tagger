@@ -6,13 +6,14 @@ module.exports = function(app,config){
     var collection = require('../app/controllers/collection');
     var target = require('../app/controllers/target');
 
-    app.get('/rest/taglist', tag.tagList);
+    //app.get('/rest/taglist', tag.tagList);
     app.get('/rest/contentlist', content.typeList);
     app.get('/rest/collection/bytag/:id', collection.collectionByTagId);
     app.get('/rest/getEad/:id/:fld', collection.getEadBySubject);
     app.get('/rest/getDspaceCollections', collection.getDspaceCollections);
     app.use('/rest/tag/getInfo/:id', tag.getTagInfo);
     app.use('/rest/type/getInfo/:id', content.getTypeInfo);
+    app.use('/rest/subjects', tag.getSubjects);
 
     app.get('/', crud.index);
     app.get('/form/collection', crud.index);

@@ -6,6 +6,7 @@ exports.create = function(req, res) {
 
     var tagName = req.body.name;
     var tagUrl = req.body.url;
+    var tagType = req.body.type;
 
     // async not really required here
     async.parallel (
@@ -30,7 +31,8 @@ exports.create = function(req, res) {
                 db.Tag.create(
                     {
                         name: tagName,
-                        url: tagUrl
+                        url: tagUrl,
+                        type: tagType
 
                     }).success(function (items) {
                         db.Tag.findAll()
@@ -64,8 +66,9 @@ exports.create = function(req, res) {
         }
 
     )
-
 };
+
+
 
 exports.getTagInfo = function(req, res) {
 
@@ -105,13 +108,15 @@ exports.tagUpdate = function (req, res) {
     var tagId = req.body.id;
     var tagName = req.body.name;
     var tagUrl = req.body.url;
+    var tagType = req.body.type;
     async.series (
         {
             update: function (callback) {
                 db.Tag.update(
                     {
                         name: tagName,
-                        url: tagUrl
+                        url: tagUrl,
+                        type: tagType
                     },
                     {
                         id: {
@@ -178,9 +183,14 @@ exports.delete = function (req, res) {
     )
 };
 
-exports.tagList = function(req, res) {
+exports.getSubjects = function(req, res) {
 
-    db.Tag.findAll()
+    db.Tag.findAll(
+        {
+            where: "type = 'sub'",
+            order: 'name ASC'
+        }
+    )
         .success(function(result) {
 
             var arr = new Array();
@@ -189,7 +199,9 @@ exports.tagList = function(req, res) {
                 arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id, url: tmp.url }
             }
             res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
             res.end(JSON.stringify(arr))
+
         }).error(function(err) {
             console.log(err);
         });

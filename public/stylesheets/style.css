@@ -23,3 +23,10 @@ a {
 form .row label {
     color: #748099;
 }
+
+.id-color label {
+    color: #ac2c2c;
+}
+.type-color label {
+    color: #54BD69;
+}

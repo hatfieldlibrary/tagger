@@ -121,7 +121,7 @@ exports.tagUpdate = function (req, res) {
                     eq: tagId
                 }
             },
-            attributes: ['id','name','url']
+            attributes: ['id','name','url','type']
         }
     ).success(function(tag) {
             res.render('tagUpdate', {

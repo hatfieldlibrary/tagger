@@ -18,6 +18,14 @@ block content
                     .large-10.columns
                         input(type="text", size=60 name="url")
 
+                .row
+                    .large-10.columns
+                        input(type="radio", name="type", value="adm" checked=collType=='adm')
+                        | <label>Administrative Area &nbsp;&nbsp;</label>
+                        input(type="radio", name="type", value="sub" checked=collType=='sub')
+                        | <label>Subject </label>
+
+
                 p
                 .row
                     .large-10.columns

@@ -3,3 +3,5 @@ public/images/full
 public/images/thumb
 .tmp
 .sass-cache
+.idea/workspace.xml
+.idea/misc.xml
