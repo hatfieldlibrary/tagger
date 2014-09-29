@@ -152,7 +152,7 @@ exports.delete = function (req, res) {
     )
 };
 
-exports.typeList = function(req, res) {
+exports.getTypeList = function(req, res) {
 
     db.ItemContent.findAll()
         .success(function(result) {
@@ -162,6 +162,7 @@ exports.typeList = function(req, res) {
                 arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id}
             }
             res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
             res.end(JSON.stringify(arr))
         }).error(function(err) {
             console.log(err);

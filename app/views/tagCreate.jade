@@ -25,6 +25,12 @@ block content
                         input(type="radio", name="type", value="sub" checked=collType=='sub')
                         | <label>Subject </label>
 
+                .row
+                    .large-10.columns
+                        input(type="radio", name="type", value="adm" checked=tag.type=='adm')
+                        | <label>Administrative Area &nbsp;&nbsp;</label>
+                        input(type="radio", name="type", value="sub" checked=tag.type=='sub')
+                        | <label>Subject </label>
 
                 p
                 .row

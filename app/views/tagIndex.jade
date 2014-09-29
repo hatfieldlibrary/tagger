@@ -44,6 +44,12 @@ block content
             .row
                 .large-10.columns
                     input(type="text", size=60 name="url")
+            .row
+                .large-10.columns
+                    input(type="radio", name="type", value="adm" )
+                    | <label>Administrative Area &nbsp;&nbsp;</label>
+                    input(type="radio", name="type", value="sub")
+                    | <label>Subject </label>
 
             p
             .row
