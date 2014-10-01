@@ -210,3 +210,21 @@ exports.getSubjects = function(req, res) {
         });
 
 };
+
+exports.tagList = function(req, res) {
+
+    db.Tag.findAll()
+        .success(function(result) {
+
+            var arr = new Array();
+            for  (var i = 0; i < result.length; i++) {
+                var tmp =  result[i].getContentObject;
+                arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id, url: tmp.url }
+            }
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(arr))
+        }).error(function(err) {
+            console.log(err);
+        });
+
+};

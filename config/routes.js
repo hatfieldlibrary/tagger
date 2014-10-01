@@ -6,8 +6,8 @@ module.exports = function(app,config){
     var collection = require('../app/controllers/collection');
     var target = require('../app/controllers/target');
 
-    //app.get('/rest/taglist', tag.tagList);
-   // app.get('/rest/contentlist', content.typeList);
+    app.get('/rest/taglist', tag.tagList);
+    app.get('/rest/contentlist', content.getTypeList);
     app.get('/rest/collection/bytag/:id', collection.collectionByTagId);
     app.get('/rest/getEad/:id/:fld', collection.getEadBySubject);
     app.get('/rest/getDspaceCollections', collection.getDspaceCollections);
