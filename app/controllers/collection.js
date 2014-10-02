@@ -100,15 +100,12 @@ exports.getDspaceCollections = function (req, res ) {
         headers: {
             accept: "application/json"
         },
-        // since this Node app is already serving as proxy, there
-        // is no need to proxy again through libmedia
-        host: "http://dspace.willamette.edu",
+        host: "dspace.willamette.edu",
         port: 8080,
         path: "/rest/communities",
         method: 'GET'
     };
     var callback = function(response) {
-
         var str = '';
         response.on('data', function(chunk) {
             str += chunk;
