@@ -92,6 +92,7 @@ exports.collUpdate = function(req, res) {
                 title: 'Update Collection',
                 collName: collectionData.title,
                 collUrl: collectionData.getCollectionObject.url,
+                collBrowseType: collectionData.getCollectionObject.browseType,
                 collDesc: collectionData.getCollectionObject.desc,
                 collImg: collectionData.getCollectionObject.image,
                 collItems: collectionData.getCollectionObject.items,

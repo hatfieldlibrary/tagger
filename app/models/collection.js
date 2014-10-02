@@ -19,7 +19,12 @@ module.exports = function(sequelize, DataTypes) {
                 defaultValue: "no_image.gif"},
             url: {
                 type: DataTypes.STRING(255),
-                allowNull: false},
+                allowNull: false
+            },
+            browseType: {
+                type: DataTypes.STRING(4),
+                allowNull: false
+            },
             description: {
                 type: DataTypes.STRING(4096),
                 allowNull: false
@@ -39,7 +44,16 @@ module.exports = function(sequelize, DataTypes) {
         },  {
             getterMethods: {
                 getCollectionObject: function() {
-                    return {'id': this.getDataValue('id'), 'title': this.getDataValue('title'),'url': this.getDataValue('url'), 'image': this.getDataValue('image'),'desc': this.getDataValue('description'),'dates': this.getDataValue('dates'), 'items': this.getDataValue('items'),'ctype':this.getDataValue('ctype')};
+                    return {
+                        'id': this.getDataValue('id'),
+                        'title': this.getDataValue('title'),
+                        'url': this.getDataValue('url'),
+                        'browseType': this.getDataValue('browseType'),
+                        'image': this.getDataValue('image'),
+                        'desc': this.getDataValue('description'),
+                        'dates': this.getDataValue('dates'),
+                        'items': this.getDataValue('items'),
+                        'ctype':this.getDataValue('ctype')};
                 }
             },
             setterMethods: {

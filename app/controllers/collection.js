@@ -43,6 +43,7 @@ exports.collectionByTagId = function(req, res) {
                     temp.name = tmpColl.title;
                     temp.description = tmpColl.desc;
                     temp.url = tmpColl.url;
+                    temp.browseType = tmpColl.browseType;
                     temp.image = tmpColl.image;
                     temp.dates = tmpColl.dates;
                     temp.items = tmpColl.items;
@@ -169,6 +170,7 @@ exports.create = function(req, res) {
 
     var collName = req.body.name;
     var collUrl = req.body.url;
+    var collBrowseType = req.body.browseType;
     var collDesc = req.body.description;
     var collDates = req.body.dates;
     var collItems = req.body.items;
@@ -181,6 +183,7 @@ exports.create = function(req, res) {
                 db.Collection.create({
                     title: collName,
                     url: collUrl,
+                    browseType: collBrowseType,
                     description: collDesc,
                     dates: collDates,
                     items: collItems,
@@ -216,6 +219,7 @@ exports.update = function(req, res) {
 
     var collName = req.body.name;
     var collUrl = req.body.url;
+    var collBrowseType = req.body.browseType;
     var collDesc = req.body.description;
     var collId = req.body.id;
     var collDates = req.body.dates;
@@ -230,6 +234,7 @@ exports.update = function(req, res) {
                 db.Collection.update({
                         title: collName,
                         url: collUrl,
+                        browseType: collBrowseType,
                         description: collDesc,
                         dates: collDates,
                         items: collItems,
@@ -491,4 +496,38 @@ exports.removeTag = function(req, res) {
     }).error(function(err) {
         console.log(err);
     })
+};
+
+exports.browseList = function(req, res) {
+
+    var http = require('http');
+
+    var options = {
+        headers: {
+            accept: "application/json"
+        },
+        // since this Node app is already serving as proxy, there
+        // is no need to proxy again through libmedia
+        host: "exist.willamette.edu",
+        port: 8080,
+        path: "/exist/apps/METSALTO/api/BrowseList.xquery",
+        method: 'GET'
+    };
+    var callback = function(response) {
+
+        var str = '';
+        response.on('data', function(chunk) {
+            str += chunk;
+        });
+        response.on('end', function() {
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(str);
+        });
+    };
+    var request = http.request(options, callback);
+    request.on('error', function (e) {
+        console.log('Problem with request: ' + e)
+    });
+    request.end();
 };

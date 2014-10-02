@@ -43,6 +43,17 @@ block content
                 p
                 .row
                     .small-12.columns
+                        label Collection Browse Type (static link or list pulldown)
+                .row
+                    .small-10.columns
+                        input(type="radio", name="browseType", value="link" checked=collBrowseType=='link')
+                        | <label>Link &nbsp;&nbsp;</label>
+                        input(type="radio", name="browseType", value="list" checked=collBrowseType=='list')
+                        | <label>List </label>
+                        .small-2.columns
+                p
+                .row
+                    .small-12.columns
                         label Collection Description
                 .row
                     .small-10.columns
