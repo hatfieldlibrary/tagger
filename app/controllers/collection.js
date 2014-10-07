@@ -1,7 +1,22 @@
 
 // imagemagick paths
-var convert = '/opt/local/bin/convert',
-    identify = '/opt/local/bin/identify';
+var convert = '/usr/local/bin/convert',
+    identify = '/usr/local/bin/identify';
+
+exports.collectionById = function(req, res) {
+    var collId = req.params.id;
+    db.Collection.find( {
+        where: {
+            id: {
+                eq:id
+            }
+        },
+        include: [db.TagTarget]
+    }).success( function(coll) {
+
+
+    })
+};
 
 exports.collectionByTagId = function(req, res) {
 
@@ -351,7 +366,7 @@ exports.updateImage = function (req, res, config) {
                         }, function(err, stdout, stderr){
                             if (err) console.log(err);
                             // update database even if the conversion fails
-                            updateDb();
+                            updateDb(id);
                         });
                     }
                 });

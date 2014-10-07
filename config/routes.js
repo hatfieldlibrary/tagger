@@ -16,6 +16,7 @@ module.exports = function(app,config){
     app.use('/rest/subjects', tag.getSubjects);
     app.use('/rest/types', content.getTypeList);
     app.use('/rest/getBrowseList', collection.browseList);
+    app.use('/rest/collection/:id', collection.collectionById);
 
     app.get('/', crud.index);
     app.get('/form/collection', crud.index);
