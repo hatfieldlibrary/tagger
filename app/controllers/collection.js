@@ -4,26 +4,25 @@ var convert = '/usr/local/bin/convert',
     identify = '/usr/local/bin/identify';
 
 exports.collectionById = function(req, res) {
+
     var collId = req.params.id;
+
     db.Collection.find( {
         where: {
             id: {
-                eq:id
+                eq: collId
             }
         },
         include: [db.TagTarget]
     }).success( function(coll) {
-
+        processCollectionResult(coll, res);
 
     })
 };
 
 exports.collectionByTagId = function(req, res) {
 
-    var count;
     var tagId = req.params.id;
-    var collList = new Array(),
-        chainer = new db.Sequelize.Utils.QueryChainer;
 
     // retrieve collections with matching TagId
     db.TagTarget.findAndCountAll({
@@ -37,74 +36,82 @@ exports.collectionByTagId = function(req, res) {
         include: [db.Collection]
 
     }).success( function(coll) {
-        count = coll.count;
-        // chain queries to retrieve other tags associated with each collection
-        coll.rows.forEach(function(entry) {
+       processCollectionResult(coll, res);
 
-            var tmpColl = entry.collection.getCollectionObject;
-            var collId = entry.CollectionId;
-            var temp = {};
+    }).error(function(err) {
+        console.log(err);
+    })
+
+};
+
+processCollectionResult = function(coll, res) {
+
+    var count = coll.count;
+    var collList = new Array(),
+        chainer = new db.Sequelize.Utils.QueryChainer;
+
+    // chain queries to retrieve other tags associated with each collection
+    coll.rows.forEach(function(entry) {
+
+        var tmpColl = entry.collection.getCollectionObject;
+        var collId = entry.CollectionId;
+        var temp = {};
+        chainer.add(
+            db.TagTarget.findAll({
+                where: {
+                    CollectionId: {
+                        eq: collId
+                    }
+                },
+                order: [['name', 'ASC']],
+                include: [db.Tag]
+            }).success(function(tags) {
+                temp.id = tmpColl.id;
+                temp.name = tmpColl.title;
+                temp.description = tmpColl.desc;
+                temp.url = tmpColl.url;
+                temp.browseType = tmpColl.browseType;
+                temp.image = tmpColl.image;
+                temp.dates = tmpColl.dates;
+                temp.items = tmpColl.items;
+                temp.collType = tmpColl.ctype;
+                temp.tags = tags;
+            }).error(function(err) {
+                console.log(err)
+            })
+        ),
             chainer.add(
-                db.TagTarget.findAll({
+                db.ItemContentTarget.findAll({
                     where: {
                         CollectionId: {
                             eq: collId
                         }
                     },
                     order: [['name', 'ASC']],
-                    include: [db.Tag]
-                }).success(function(tags) {
-                    temp.id = tmpColl.id;
-                    temp.name = tmpColl.title;
-                    temp.description = tmpColl.desc;
-                    temp.url = tmpColl.url;
-                    temp.browseType = tmpColl.browseType;
-                    temp.image = tmpColl.image;
-                    temp.dates = tmpColl.dates;
-                    temp.items = tmpColl.items;
-                    temp.collType = tmpColl.ctype;
-                    temp.tags = tags;
+                    include: [db.ItemContent]
+
+                }).success(function(media) {
+                    temp.itemTypes = media;
+                    collList.push(temp );
                 }).error(function(err) {
                     console.log(err)
                 })
-            ),
-                chainer.add(
-                    db.ItemContentTarget.findAll({
-                        where: {
-                            CollectionId: {
-                                eq: collId
-                            }
-                        },
-                        order: [['name', 'ASC']],
-                        include: [db.ItemContent]
+            )
+    });
+    chainer.run()
+        .success(function() {
 
-                    }).success(function(media) {
-                        temp.itemTypes = media;
-                        collList.push(temp );
-                    }).error(function(err) {
-                        console.log(err)
-                    })
-                )
-        });
-        chainer.run()
-            .success(function() {
-
-                var result = [];
-                result[0] = count;
-                result[1] = collList;
-                // JSON response
-                res.setHeader('Content-Type', 'application/json');
-                res.setHeader('Access-Control-Allow-Origin','*');
-                res.end(JSON.stringify(result))
-            })
-            .error(function(err) {
-                console.log(err);
-            })
-
-    }).error(function(err) {
-        console.log(err);
-    })
-
+            var result = [];
+            result[0] = count;
+            result[1] = collList;
+            // JSON response
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(JSON.stringify(result))
+        })
+        .error(function(err) {
+            console.log(err);
+        })
 };
 
 exports.getDspaceCollections = function (req, res ) {
