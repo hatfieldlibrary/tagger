@@ -1,10 +1,12 @@
-module.exports = function(app,config){
+module.exports = function(app,config,passport){
 
     var crud = require('../app/controllers/crud');
     var tag = require('../app/controllers/tags');
     var content = require('../app/controllers/content');
     var collection = require('../app/controllers/collection');
     var target = require('../app/controllers/target');
+
+    var ensureAuthenticated = app.ensureAuthenticated;
 
     app.get('/rest/taglist', tag.tagList);
     app.get('/rest/contentlist', content.getTypeList);
@@ -18,7 +20,7 @@ module.exports = function(app,config){
     app.use('/rest/getBrowseList', collection.browseList);
     app.use('/rest/collection/byId/:id', collection.collectionById);
 
-    app.get('/', crud.index);
+    app.get('/', ensureAuthenticated, crud.index);
     app.get('/form/collection', crud.index);
     app.get('/form/collection/create', crud.collCreate);
     app.get('/form/collection/update/:id', crud.collUpdate);
@@ -45,5 +47,33 @@ module.exports = function(app,config){
     app.post('/content/create', content.create);
     app.post('/content/update', content.contentUpdate);
     app.get('/content/delete/:id', content.delete);
+
+    app.get('/login',crud.login);
+
+
+    // GET /auth/google
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  The first step in Google authentication will involve
+//   redirecting the user to google.com.  After authorization, Google
+//   will redirect the user back to this application at /auth/google/callback
+    app.get('/auth/google',
+        passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
+            'https://www.googleapis.com/auth/userinfo.email'] }),
+        function(req, res){
+            // The request will be redirected to Google for authentication, so this
+            // function will not be called.
+        });
+
+// GET /auth/google/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+    app.get('/auth/google/callback',
+        passport.authenticate('google', { failureRedirect: '/login' }),
+        function(req, res) {
+            res.redirect('/');
+        });
+
 
 };
