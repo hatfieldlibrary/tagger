@@ -2,6 +2,10 @@
  * Created by mspalti on 5/30/14.
  */
 
+exports.login = function(req,res) {
+    res.render('login',"Login");
+};
+
 exports.index = function(req, res){
 
     db.Collection.findAll(
@@ -15,6 +19,34 @@ exports.index = function(req, res){
         })
     }).error(function(err) {
             console.log(err);
+    })
+};
+
+
+exports.tagIndex = function(req, res) {
+
+    db.Tag.findAll({
+        order: [['name', 'ASC']]
+    })
+        .success(function(tags) {
+            res.render('tagIndex', {
+                title: 'Tags',
+                tags: tags
+            })
+        }).error(function(err) {
+            console.log(err);
+        })
+};
+
+exports.contentIndex = function(req, res) {
+
+    db.ItemContent.findAll().success(function(ctypes) {
+        res.render('contentIndex', {
+            title: 'Content Types',
+            tags: ctypes
+        })
+    }).error(function(err) {
+        console.log(err);
     })
 };
 

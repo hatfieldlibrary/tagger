@@ -63,19 +63,6 @@ exports.create = function(req, res) {
     )
 };
 
-
-exports.contentIndex = function(req, res) {
-
-    db.ItemContent.findAll().success(function(ctypes) {
-        res.render('contentIndex', {
-            title: 'Content Types',
-            tags: ctypes
-        })
-    }).error(function(err) {
-        console.log(err);
-    })
-};
-
 exports.contentUpdate = function (req, res) {
 
     var contentId = req.body.id;
