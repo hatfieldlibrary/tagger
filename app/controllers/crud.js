@@ -22,6 +22,34 @@ exports.index = function(req, res){
     })
 };
 
+
+exports.tagIndex = function(req, res) {
+
+    db.Tag.findAll({
+        order: [['name', 'ASC']]
+    })
+        .success(function(tags) {
+            res.render('tagIndex', {
+                title: 'Tags',
+                tags: tags
+            })
+        }).error(function(err) {
+            console.log(err);
+        })
+};
+
+exports.contentIndex = function(req, res) {
+
+    db.ItemContent.findAll().success(function(ctypes) {
+        res.render('contentIndex', {
+            title: 'Content Types',
+            tags: ctypes
+        })
+    }).error(function(err) {
+        console.log(err);
+    })
+};
+
 exports.collCreate = function(req, res){
 
     res.render('collectionCreate', {

@@ -5,7 +5,6 @@ module.exports = function(app,config,passport){
     var content = require('../app/controllers/content');
     var collection = require('../app/controllers/collection');
     var target = require('../app/controllers/target');
-
     var ensureAuthenticated = app.ensureAuthenticated;
 
     app.get('/rest/taglist', tag.tagList);
@@ -21,34 +20,35 @@ module.exports = function(app,config,passport){
     app.use('/rest/collection/byId/:id', collection.collectionById);
 
     app.get('/', ensureAuthenticated, crud.index);
-    app.get('/form/collection', crud.index);
-    app.get('/form/collection/create', crud.collCreate);
-    app.get('/form/collection/update/:id', crud.collUpdate);
-    app.get('/form/tag/create', crud.tagCreate);
-    app.get('/form/tag/update/:id', crud.tagUpdate);
-    app.get('/form/content/update/:id', crud.contentUpdate);
+    app.get('/tag/view', ensureAuthenticated, crud.tagIndex);
+    app.get('/content/view', ensureAuthenticated, crud.contentIndex);
+    app.get('/form/collection', ensureAuthenticated, crud.index);
+    app.get('/form/collection/create', ensureAuthenticated, crud.collCreate);
+    app.get('/form/collection/update/:id', ensureAuthenticated, crud.collUpdate);
+    app.get('/form/tag/create', ensureAuthenticated,  crud.tagCreate);
+    app.get('/form/tag/update/:id', ensureAuthenticated, crud.tagUpdate);
+    app.get('/form/content/update/:id', ensureAuthenticated,  crud.contentUpdate);
 
     // passing application configuration to imageUpdate controller.
-    app.post('/collection/image', function (res, req) {
+    app.post('/collection/image', ensureAuthenticated, function (res, req) {
         collection.updateImage(res, req, config)
     });
-    app.get('/collection/remove/tag/:collid/:tagid', collection.removeTag);
-    app.get('/collection/delete/:id', collection.delete);
-    app.post('/collection/tag', collection.addTag);
-    app.post('/collection/type', collection.addType);
-    app.post('/collection/create', collection.create);
-    app.post('/collection/update', collection.update);
-    app.get('/tag/delete/:id', tag.delete);
-    app.post('/tag/create', tag.create);
-    app.use('/tag/view', tag.tagIndex);
-    app.post('/tag/update', tag.tagUpdate);
-    app.use('/target/create', target.create);
-    app.use('/content/view', content.contentIndex);
+    app.get('/collection/remove/tag/:collid/:tagid', ensureAuthenticated, collection.removeTag);
+    app.get('/collection/delete/:id', ensureAuthenticated, collection.delete);
+    app.post('/collection/tag', ensureAuthenticated, collection.addTag);
+    app.post('/collection/type', ensureAuthenticated, collection.addType);
+    app.post('/collection/create', ensureAuthenticated, collection.create);
+    app.post('/collection/update', ensureAuthenticated, collection.update);
+    app.get('/tag/delete/:id', ensureAuthenticated, tag.delete);
+    app.post('/tag/create', ensureAuthenticated, tag.create);c
+    app.post('/tag/update', ensureAuthenticated, tag.tagUpdate);
+    app.get('/target/create', target.create);
     app.post('/content/create', content.create);
-    app.post('/content/update', content.contentUpdate);
-    app.get('/content/delete/:id', content.delete);
+    app.post('/content/update', ensureAuthenticated, content.contentUpdate);
+    app.get('/content/delete/:id', ensureAuthenticated, content.delete);
 
     app.get('/login',crud.login);
+
 
 
     // GET /auth/google
@@ -70,10 +70,8 @@ module.exports = function(app,config,passport){
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
     app.get('/auth/google/callback',
-        passport.authenticate('google', { failureRedirect: '/login' }),
-        function(req, res) {
-            res.redirect('/');
-        });
+        passport.authenticate('google', { successRedirect: '/',
+            failureRedirect: '/login' }));
 
 
 };

@@ -91,20 +91,6 @@ exports.getTagInfo = function(req, res) {
 
 };
 
-exports.tagIndex = function(req, res) {
-
-    db.Tag.findAll({
-        order: [['name', 'ASC']]
-    })
-        .success(function(tags) {
-        res.render('tagIndex', {
-            title: 'Tags',
-            tags: tags
-        })
-    }).error(function(err) {
-        console.log(err);
-    })
-};
 
 exports.tagUpdate = function (req, res) {
 
