@@ -40,7 +40,7 @@ module.exports = function(app,config,passport){
     app.post('/collection/create', ensureAuthenticated, collection.create);
     app.post('/collection/update', ensureAuthenticated, collection.update);
     app.get('/tag/delete/:id', ensureAuthenticated, tag.delete);
-    app.post('/tag/create', ensureAuthenticated, tag.create);c
+    app.post('/tag/create', ensureAuthenticated, tag.create);
     app.post('/tag/update', ensureAuthenticated, tag.tagUpdate);
     app.get('/target/create', target.create);
     app.post('/content/create', content.create);

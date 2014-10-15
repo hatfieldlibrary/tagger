@@ -14,6 +14,9 @@ var config = {
         password: 'coffee',
         host: 'localhost',
         sync: { force: false },
+        googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
+        googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+        googleCallback: 'http://localhost:3000/auth/google/callback',
         nodeEnv: env
     },
 
@@ -28,6 +31,9 @@ var config = {
         password: 'coffee',
         host: 'localhost',
         sync: { force: true },
+        googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
+        googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+        googleCallback: 'http://localhost:3000/auth/google/callback',
         nodeEnv: env
     },
 
@@ -42,6 +48,9 @@ var config = {
         password: 'c0fFee12',
         host: 'libdb.willamette.edu',
         sync: { force: false },
+        googleClientId: '85240803633-rqnjpf9qt2129irc52flfofnu9les0r9.apps.googleusercontent.com',
+        googleClientSecret: 'uHqX6CXvjNejGd80bnjiiqD9',
+        googleCallback: 'http://libapps.willamette.edu:3000/auth/google/callback',
         nodeEnv: env
     }
 };

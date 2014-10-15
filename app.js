@@ -11,8 +11,9 @@ db = require('./app/models');
 async = require('async');
 
 
-var GOOGLE_CLIENT_ID = "85240803633-rqnjpf9qt2129irc52flfofnu9les0r9.apps.googleusercontent.com";
-var GOOGLE_CLIENT_SECRET = "uHqX6CXvjNejGd80bnjiiqD9";
+var GOOGLE_CLIENT_ID = config.googleClientId;
+var GOOGLE_CLIENT_SECRET = config.googleClientSecret;
+var GOOGLE_CALLBACK = config.googleCallback;
 
 var app = express();
 
@@ -35,7 +36,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: "http://libapps.willamette.edu:3000/auth/google/callback"
+        callbackURL: GOOGLE_CALLBACK
     },
     function(accessToken, refreshToken, profile, done) {
         // asynchronous verification
