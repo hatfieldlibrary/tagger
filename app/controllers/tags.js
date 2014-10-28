@@ -69,7 +69,6 @@ exports.create = function(req, res) {
 };
 
 
-
 exports.getTagInfo = function(req, res) {
 
     var tagId = req.params.id;

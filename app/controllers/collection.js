@@ -44,6 +44,23 @@ exports.collectionByTagId = function(req, res) {
 
 };
 
+exports.collectionByTypeId = function (req, res) {
+
+    var mediaId = req.params.id;
+    db.ItemContentTarget.findAndCountAll({
+        where: {
+            ItemContentId: {
+                eq: mediaId
+            }
+        },
+        include: [db.Collection]
+    }).success (function(coll) {
+        processCollectionResult(coll,res);
+    }).error(function(err){
+        console.log(err);
+    });
+};
+
 processCollectionResult = function(coll, res) {
 
     var count = coll.count;
