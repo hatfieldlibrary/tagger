@@ -1,0 +1,121 @@
+ /*------------------------------------------------------
+  * Foundation 5 topbar.scss doesn't allow us to style
+  * all of the elements required to match the current WU
+  * menu (as of 7/2014).  We can't hack the scss file, so
+  * placing overrides here.
+  *
+  * Whenever possible, it's better to use mixins and
+  * custom.scss.
+  -------------------------------------------------------*/
+ @media only screen and (min-width: 40.063em) {
+
+     .nav-bar .top-bar-section li:not(.has-form) a:not(.button) {
+         line-height: 38px !important;
+     }
+     .nav-bar .top-bar-section .has-dropdown > a {
+         padding-right: 31.8px !important;
+
+     }
+     .nav-bar .top-bar-section li:not(.has-form) a:not(.button) {
+         padding: 0 31.8px;
+     }
+     .nav-bar .top-bar-section .dropdown li:not(.has-form) label a:not(.button) {
+         background: #5f0d0a;
+     }
+     .nav-bar .top-bar-section .has-dropdown > a:after {
+         top: 16px;
+         border-color: rgb(173, 158, 108) transparent transparent transparent;
+         display: none;
+     }
+     .nav-bar .top-bar-section > ul {
+         margin: 1px auto;
+     }
+ }
+ .nav-bar .top-bar .name, .top-bar .name h1 {
+     margin-left: 5px;
+     color: #fff;
+ }
+ .nav-bar .top-bar.expanded .toggle-topbar a {
+     color: #fff;
+ }
+ .tablet.top-bar {
+     height: 40px;
+ }
+ .indent {
+     padding-left: 20px;
+ }
+ .simple-content .breadcrumbs {
+     padding: 10px 0 0 10px;
+ }
+ .breadcrumbs {
+     padding: 0;
+ }
+ @media only screen and (min-width: 725px) {
+     a.tablet-hide {
+         display: none;
+     }
+ }
+
+ /*-------------------------------------------------------
+  * Foundation 5 tabs customization
+  *-------------------------------------------------------*/
+ ul.tabs.mobile {
+     min-width: 40rem;
+     margin-top: 23px;
+ }
+ .tabs.mobile .tab-title a {
+     /*  padding: 0.875rem 2.594rem;      */
+ }
+ .tabs.mobile .tab-title.active a {
+     background: #396966;
+     color: #fff490;
+ }
+ .tabs li:first-child a {
+     -moz-border-radius-bottomleft: 3px;
+     -moz-border-radius-topleft: 3px;
+     -webkit-border-bottom-left-radius: 3px;
+     -webkit-border-top-left-radius: 3px;
+     border-bottom-left-radius: 3px;
+     border-top-left-radius: 3px;
+ }
+ .tabs li:last-child a {
+     -moz-border-radius-topright: 3px;
+     -moz-border-radius-bottomright: 3px;
+     -webkit-border-top-right-radius: 3px;
+     -webkit-border-bottom-right-radius: 3px;
+     border-top-right-radius: 3px;
+     border-bottom-right-radius: 3px;
+ }
+ .mobile.tabs-content    {
+     background: rgba(233, 233, 233, 0.75);
+     width: 99%;
+     padding: 4px;
+     min-height: 11rem;
+     border-bottom-right-radius: 5px;
+     border-bottom-left-radius: 5px;
+     border-top-right-radius: 5px;
+ }
+
+ /*----------------------------------------------------------
+  * Reveal modal
+  *---------------------------------------------------------*/
+ .reveal-modal-bg {
+     display: none;
+ }
+
+ /*---------------------------------------------------------
+  * Fieldset
+  *--------------------------------------------------------*/
+ fieldset legend {
+     color: #2C7D85;
+     font-size: 1.2rem;
+
+ }
+ /*----------------------------------------------------------
+  * Headings
+  *---------------------------------------------------------*/
+ .panel h1,h2,h3,h4,h5,h6 {
+     font-family: 'Lato', Arial, sans-serif;
+ }
+
+

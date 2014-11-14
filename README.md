@@ -84,7 +84,7 @@ The production environment is similar to the development example above.  Make ch
 
 Finally, to start the server from the command line, type the following:
 
-    forever app.js &
+    forever server.js &
 
 
 

@@ -1,0 +1,54 @@
+
+<div ng-controller="CollectionByIdCtrl">
+    <div class="row">
+        <div class="large-12 columns page-header">
+            <div class="row ">
+                <div class="large-12 columns">
+                    <h3>{{tagInfo.name}}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row  show-for-large-up">
+        <div class="small-8 columns">
+            <ul class="breadcrumbs">
+                <li><i class="fa fa-home"></i> <a href="http://library.willamette.edu/archives">University archives</a></li>
+                <li><a href="/#/archives">Archives Collections</a></li>
+                <li class="current">{{tagInfo.name}}</li>
+            </ul>
+        </div>
+        <div class="small-4 columns text-right" style="margin-bottom: 11px;">
+            <a href="/#/home"><img src="../images/academiccommons_lg.png"></a>
+        </div>
+        <div class="row">
+            <div class="small-12 column"  >
+                <search-form name="{{tagInfo.name}}" query-scope="{{tagInfo.name}}" url="{{tagInfo.url}}"  ></search-form>
+            </div>
+        </div>
+
+    </div>
+
+        <div class="small-12 medium-10 large-10 columns">
+
+
+            <div ng-repeat="collection in filtered = (collections[1] | collectionFilter:collectionType)" class="view-frame">
+                <div class="row" ng-if="isCollection(collection.collType) || isSingleItem(collection.collType)">
+                    <div class="small-12 panel columns" ng-if="isTagged()" >
+                        <tagged-collection name="{{collection.name}}" url="{{collection.url}}" browse-type="{{collection.browseType}}" description="{{collection.description}}" image="{{collection.image}}" coll-type="{{collection.collType}}" dates="{{collection.dates}}" items="{{collection.items}}" item-types="collection.itemTypes"></tagged-collection>
+                        <div class="row">
+                            <div class="small-12 column">
+                                <tag name="{{tagger.tag.name}}" id="{{tagger.tag.id}}" update-items="updateItems(tagger.tag.id)" ng-repeat="tagger in collection.tags"></tag>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" ng-if="isFindingAid(collection.collType)">
+                    <findingaid name="{{collection.name}}" url="{{collection.url}}" description="{{collection.description}}"></findingaid>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+

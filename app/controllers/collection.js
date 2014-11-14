@@ -1,7 +1,9 @@
 
+var config = require('../../config/environment');
+
 // imagemagick paths
-var convert = '/usr/local/bin/convert',
-    identify = '/usr/local/bin/identify';
+var convert = config.convert,
+    identify = config.identify;
 
 exports.collectionById = function(req, res) {
 
@@ -23,7 +25,6 @@ exports.collectionById = function(req, res) {
 exports.collectionByTagId = function(req, res) {
 
     var tagId = req.params.id;
-
     // retrieve collections with matching TagId
     db.TagTarget.findAndCountAll({
         where:
@@ -46,11 +47,11 @@ exports.collectionByTagId = function(req, res) {
 
 exports.collectionByTypeId = function (req, res) {
 
-    var mediaId = req.params.id;
+    var typeId = req.params.id;
     db.ItemContentTarget.findAndCountAll({
         where: {
             ItemContentId: {
-                eq: mediaId
+                eq: typeId
             }
         },
         include: [db.Collection]
@@ -131,6 +132,8 @@ processCollectionResult = function(coll, res) {
         })
 };
 
+// Returns a JSON representation of the DSpace API communities
+// response.
 exports.getDspaceCollections = function (req, res ) {
 
     var http = require('http');
@@ -164,7 +167,8 @@ exports.getDspaceCollections = function (req, res ) {
 };
 
 
-
+// This is not currently in use.  The fuction returns
+// a JSON representation fo the contentdm api response.
 exports.getEadBySubject = function(req, res) {
 
     var http = require('http');
@@ -528,7 +532,7 @@ exports.removeTag = function(req, res) {
             eq: tagId
         }
     }).success(function(result) {
-        res.redirect("/form/collection/update/"+collId)
+        res.redirect('/form/collection/update/'+collId)
     }).error(function(err) {
         console.log(err);
     })
@@ -537,16 +541,17 @@ exports.removeTag = function(req, res) {
 exports.browseList = function(req, res) {
 
     var http = require('http');
+    var collection = req.params.collection;
 
     var options = {
         headers: {
-            accept: "application/json"
+            accept: 'application/json'
         },
         // since this Node app is already serving as proxy, there
         // is no need to proxy again through libmedia
-        host: "exist.willamette.edu",
+        host: 'exist.willamette.edu',
         port: 8080,
-        path: "/exist/apps/METSALTO/api/BrowseList.xquery",
+        path: '/exist/apps/METSALTO/api/BrowseList.xquery',
         method: 'GET'
     };
     var callback = function(response) {

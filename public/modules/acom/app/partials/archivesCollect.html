@@ -1,0 +1,36 @@
+
+<div class="row">
+    <div class="small-12 columns">
+        <h2>University Archives and Records</h2>
+        <p>Publications, images, administrative records, research materials, and scrapbooks dating from Willamette’s beginnings. Also available are materials relating to Freshman Glee, one of Willamette’s longest running – and most beloved – traditions.</p>
+    </div>
+</div>
+        <p>&nbsp;</p>
+<div class="row" ng-controller="EadCtrl" >
+    <div class="small-12 columns">
+        <h3>Finding Aids</h3>
+    </div>
+    <div class="small-12 columns collection" ng-repeat='ead in eads' >
+        <div >
+            <h5>{{ead.title}}</h5>
+            <p class="small">{{ead.descri}}</p>
+
+        </div>
+    </div>
+</div>
+
+<p>&nbsp;</p>
+
+<div class="row" ng-controller="SubPageCollectionsCtrl" >
+    <div class="small-12 columns">
+        <h3>Digital Collections</h3>
+    </div>
+    <div class="small-6 columns collection" ng-repeat='collection in subCollections' >
+        <div class="panel">
+            <img class="th radius" style="width: 200px" src="http://libmedia.willamette.edu/acomimages/images/full/{{collection.image}}" >
+            <h4>{{collection.name}}</h4>
+            <p>{{collection.description}}</p>
+            <a class="button success tiny radius" style="margin-right: 3px;" href="#/collections/{{tagger.tag.id}}" ng-repeat="tagger in collection.tags">{{tagger.tag.name}}</a>
+        </div>
+    </div>
+</div>

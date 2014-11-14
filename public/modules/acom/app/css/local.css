@@ -1,0 +1,409 @@
+.findingaid .button.secondary,
+.coll-background .button.secondary {
+    background: #70777A;
+}
+
+.coll-background {
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(-45deg,  #ffffff 0%, #ffffff 37%, #ffffff 37%, #efefef 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%,#ffffff), color-stop(37%,#ffffff), color-stop(37%,#ffffff), color-stop(100%,#efefef)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(-45deg,  #ffffff 0%,#ffffff 37%,#ffffff 37%,#efefef 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(-45deg,  #ffffff 0%,#ffffff 37%,#ffffff 37%,#efefef 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(-45deg,  #ffffff 0%,#ffffff 37%,#ffffff 37%,#efefef 100%); /* IE10+ */
+    background: linear-gradient(135deg,  #ffffff 0%,#ffffff 37%,#ffffff 37%,#efefef 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#efefef',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+
+}
+ul.vertical-list {
+    list-style-type: none;
+}
+
+/*--------------------------------------------------------
+ * Breadcrumbs
+ *-------------------------------------------------------*/
+.breadcrumbs {
+    margin-top: 10px;
+}
+/*--------------------------------------------------------
+ * Local app css.
+ *--------------------------------------------------------*/
+.card {
+    box-shadow: rgba(0, 0, 0, 0.258824) 0px 2px 5px 0px;
+}
+a.collection-link {
+    font-weight: 800;
+    font-family:helvetica, arial;
+}
+a.active-panel {
+    display:block;
+    color: #fff;
+    background: #889EA3;
+
+}
+a.active-panel h6 {
+    color: #eee;
+}
+a.active-panel:hover {
+    background: #37474b;
+    transition: background-color 600ms ease-out;
+    opacity: 0.8;
+}
+a.active-panel:hover h6 {
+    color: #eee;
+}
+a.active-panel:hover .clear-panel {
+
+    transition: border 500ms ease-out;
+}
+body span.text-light {
+    color: #666;
+}
+.justify {
+    text-align: justify;
+}
+p a {
+    text-decoration: underline;
+}
+.line-label {
+    font-weight: normal;
+    font-size: 0.9em;
+    color: #999;
+    margin-right: 10px;
+}
+.fixed  fieldset{
+      border: 0;
+}
+.fancy {
+    font-family: 'Lato', Arial, sans-serif;
+}
+.medium-thumb {
+    background: #fff;
+    padding: 6px;
+    border: 1px solid #ccc;
+    margin-right: 20px;
+    max-width: 40%;
+}
+.card {
+    box-shadow: rgba(0, 0, 0, 0.258824) 0px 2px 5px 0px;
+}
+.content-justify {
+    margin-top: 25px;
+    text-align: justify;
+    color: #3F3732;
+}
+.content-justify p a {
+    text-decoration: underline;
+}
+.side-adjust {
+    margin-top: 35px;
+}
+.head-color {
+    background: #eee;
+    font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+}
+h5.search-form {
+    margin-top: 0.2rem;
+    margin-bottom: 1.2rem;
+    color: #000;
+}
+h5.search-form-medium {
+    color: #eee;
+    margin-top: 0.2rem;
+    margin-bottom: 1.2rem;
+}
+dl.search-form-medium {
+    margin-left: 20px;
+}
+.search-form-medium dd {
+    margin-right: 0;
+    margin-left: 0;
+}
+.search-form-medium dd a {
+    color: #eee;
+    padding: 10px;
+    padding-right: 20px;
+    background-color:rgba(0, 0, 0, 0.7);
+}
+.dark-column {
+    background: #CF8A68;
+}
+.dark-area {
+    background: #849BB8;
+}
+.sm-text {
+    font-size: 0.8em;
+}
+.highlight-text {
+    color: #726451;
+}
+.icon-text {
+    color: #726451
+}
+.db-axn-label {
+    color: #91897B;
+}
+
+#dialog {
+    display: none;
+    width: 20em;
+}
+#dialog button {
+    margin: 0;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-right: 1px;
+    background: transparent;
+    border: none;
+
+}
+.ui-widget-header {
+    background: #ccc;
+    border: 1px solid #aaa;
+}
+
+/*replace the content value with the
+corresponding value from the list below*/
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: #dadada;
+    color: #666;
+}
+
+.ui-state-default .ui-icon,
+.ui-widget-header .ui-icon,
+.ui-icon,
+.ui-widget-content .ui-icon {
+
+    background-image: url('/images/jquery-ui/ui-icons_3d80b3_256x240.png');
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+    border: 1px solid #8D9397;
+    background: #eee url('images/ui-bg_glass_80_d7ebf9_1x400.png') 50% 50% repeat-x;
+    font-weight: bold;
+}
+
+.ui-corner-all {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+
+
+
+
+/*-----------------------------------------------------
+ * Footer
+ *----------------------------------------------------*/
+.footer {
+    margin-top: 60px;
+    padding-top: 40px;
+}
+.footer ul {
+    list-style: none;
+    padding-left: 0;
+}
+.footer ul li a {
+    color: #fff;
+}
+.footer ul li label {
+    text-transform: uppercase;
+    color: #333;
+}
+#address {
+    margin-top: 10px;
+    color: #103b52;
+    line-height: 1.28em;
+}
+#address .library-name {
+    margin-bottom: 10px;
+    font-size: 1.3em;
+}
+
+/*-----------------------------------------------------
+ * WU Header
+ *----------------------------------------------------*/
+/* my id */
+.nav-bar {
+    background-color: #81291D;
+
+}
+#homelink, #search {
+    padding-top:10px;
+}
+#homelink .logo {
+    margin: 8px 0 0 0;
+    float: left;
+    display: inline-block;
+    width: 256px;
+    height: 79px;
+    vertical-align: middle;
+    background: transparent url('/acom/images/wu_sig.png') no-repeat left top;
+}
+#homelink .local_logo {
+    margin: 8px 0 0 0;
+    float: left;
+    display: inline-block;
+    width: 255px;
+    height: 65px;
+    vertical-align: middle;
+    transition-property: opacity;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    background: transparent url('/acom/images/hatfield_sig.png') no-repeat left top;
+}
+div#search {
+    display: block;
+    float: right;
+    margin: 8px 0 0 0;
+    padding: 0;
+    width: 360px;
+}
+div#search_nav {
+    margin-top: 10px;
+    padding: 0;
+    height: 26px;
+    width: auto;
+}
+
+div#search form {
+    float: right;
+    position: relative;
+}
+
+#search input {
+    float: left;
+    background-color: #efefef;
+    color: #675a4e;
+    margin: 0;
+    padding: 0 2px;
+    border: none;
+    height: 20px;
+    width: 160px;
+    -webkit-box-shadow: inset 0 0 5px #ddd;
+    -moz-box-shadow: inset 0 0 5px #ddd;
+    box-shadow: inset 0 0 5px #ddd;
+}
+
+#search input.submit {
+    margin: 0;
+    padding: 0;
+    border: none;
+    height: 20px;
+    width: auto;
+}
+
+div#search_nav ul {
+    float: right;
+    list-style: none;
+    padding: 0;
+    margin: 2px 0;
+}
+
+div#search_nav ul li {
+    float: left;
+    padding: 0;
+    margin: 0;
+    font-size: 75%;
+}
+
+div#search_nav ul li a {
+    text-decoration: none;
+    display: block;
+    color: #3a352b;
+    font: 93% Futura, "Trebuchet MS", Arial, sans-serif;
+    padding: 0 8px 0 8px;
+    margin: 0;
+    border-bottom: none;
+}
+
+div#search_nav ul li:first-child a {
+    color: #907f46;
+    border-right: 1px solid #999;
+}
+
+div#service_nav ul {
+    float: right;
+    list-style: none;
+    position: relative;
+    padding: 4px 6px;
+    margin: 0;
+    background-color: #efefef;
+    border: 1px solid #BEB8B8;
+}
+
+div#service_nav ul li {
+    float: left;
+    padding: 0;
+    margin: 0;
+    border-left: 1px solid #cccccc;
+}
+
+div#service_nav ul li:first-child {
+    float: left;
+    padding: 0;
+    margin: 0;
+    border-left: none;
+}
+
+div#service_nav ul li a {
+    text-decoration: none;
+    display: block;
+    float: left;
+    color: #690a0a;
+    font-size: 75%;
+    padding: 0 10px 0 10px;
+}
+
+.img-border {
+    border: 3px solid #ADA290;
+    background-color: #CDC6BC;
+    position: relative;
+}
+/*----------------------------------------------
+* Archives
+*---------------------------------------------*/
+.man-hole-cover {
+    background: #fff url('/images/seal_bg.png') no-repeat bottom right;
+}
+
+/*----------------------------------------------
+ * Hacks
+ *---------------------------------------------*/
+
+/* fixes select option bug in firefox */
+select {
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+}
+
+/* fixes firefox text alignment within select */
+.prefix, .postfix {
+    text-align: left;
+}
+
+/* try to make foundation behave OK with IE 7-8 */
+.lt-ie9 body .large-1  { width: 8%;   }
+.lt-ie9 body .large-2  { width: 16%;  }
+.lt-ie9 body .large-3  { width: 25%;  }
+.lt-ie9 body .large-4  { width: 33%;  }
+.lt-ie9 body .large-5  { width: 41%;  }
+.lt-ie9 body .large-6  { width: 49%;  }
+.lt-ie9 body .large-7  { width: 58%;  }
+.lt-ie9 body .large-8  { width: 66%;  }
+.lt-ie9 body .large-9  { width: 74%;  }
+.lt-ie9 body .large-10 { width: 83%;  }
+.lt-ie9 body .large-11 { width: 91%;  }
+.lt-ie9 body .large-12 { width: 100%; }
+.lt-ie9 body .columns
+{
+    float: left !important;
+}
