@@ -5,9 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-
 module.exports = function(app, config) {
-
 
   // admin ui resources
   app.use('/images', express.static(config.root + '/public/images'));

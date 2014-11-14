@@ -140,12 +140,13 @@ collectionControllers.controller('CollectionsCtrl', ['$scope', '$location', '$an
         var path = $location.path();
         var components = path.split('/');
 
-        if (components.length < 3) {
+        if (components.length < 4) {
             // unit test
             id = 5;
         } else {
-            id = components[2];
+            id = components[3];
         }
+
         $scope.getTagInfo(id);
         $scope.activeIndex = 0;
         $scope.test = '';

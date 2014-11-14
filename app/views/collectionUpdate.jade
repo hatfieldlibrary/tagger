@@ -22,7 +22,7 @@ block content
                 .label.secondary(style="white-space:normal;") Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
 
         .small-10.columns
-            form(method="post", enctype='application/x-www-form-urlencoded', action="/collection/update")
+            form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/collection/update")
                 .row
                     .small-12.columns
                         label Collection Name
@@ -105,7 +105,7 @@ block content
                 p &nbsp;
                 p
                 .ui-widget
-                form(method="post" enctype='application/x-www-form-urlencoded', action="/collection/tag", id="tagForm")
+                form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/tag", id="tagForm")
 
                     .small-12.columns
                     label(for="tagNames") Add Tag Here
@@ -131,7 +131,7 @@ block content
                 p &nbsp;
                 p
                 .ui-widget
-                form(method="post" enctype='application/x-www-form-urlencoded', action="/collection/type", id="typeForm")
+                form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/type", id="typeForm")
                     .small-12.columns
                     label(for="typeNames") Add Content Type Here
                     .row

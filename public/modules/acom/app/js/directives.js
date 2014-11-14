@@ -12,7 +12,7 @@ collectionDirectives.directive('collectionsView', function() {
         scope: {},
         controller: 'CollectionsCtrl',
         transclude: true,
-        templateUrl: '/components/collections.html'
+        templateUrl: '/commons/components/collections.html'
     };
 
 });
@@ -37,7 +37,7 @@ collectionDirectives.directive('taggedCollection', function() {
         restrict: 'E',
         controller: 'TaggedCollectionCtrl',
         transclude: false,
-        templateUrl: '/components/modTaggedCollection.html'
+        templateUrl: '/commons/components/modTaggedCollection.html'
     };
 });
 
@@ -49,7 +49,7 @@ collectionDirectives.directive('tag', function() {
             id: '@',
             updateItems: '&'
         },
-        templateUrl: '/components/tagButton.html'
+        templateUrl: '/commons/components/tagButton.html'
     };
 
 
@@ -68,7 +68,7 @@ collectionDirectives.directive('findingaid', function() {
         restrict: 'E',
         controller: 'TaggedCollectionCtrl',
         transclude: false,
-        templateUrl: '/components/modFindingAid.html'
+        templateUrl: '/commons/components/modFindingAid.html'
     };
 
 });
@@ -81,7 +81,7 @@ collectionDirectives.directive('simpleLink', function() {
             },
             restrict: 'E',
             transclude: false,
-            templateUrl: '/components/simpleLink.html'
+            templateUrl: '/commons/components/simpleLink.html'
         };
 });
 
@@ -99,7 +99,7 @@ collectionDirectives.directive('simpleTaggedCollection', function() {
         },
         restrict: 'E',
         transclude: true,
-        templateUrl: '/components/simpleTaggedCollection.html'
+        templateUrl: '/commons/components/simpleTaggedCollection.html'
     };
 });
 
@@ -113,7 +113,7 @@ collectionDirectives.directive('unTaggedCollection', function() {
             url: '@'
         },
         restrict: 'E',
-        templateUrl: '/components/unTaggedCollection.html'
+        templateUrl: '/commons/components/unTaggedCollection.html'
     };
 });
 
@@ -126,7 +126,7 @@ collectionDirectives.directive('searchForm', function() {
         },
         controller: 'ScopedSearchCtrl',
         restrict: 'E',
-        templateUrl: '/components/searchForm.html'
+        templateUrl: '/commons/components/searchForm.html'
     };
 });
 
@@ -138,7 +138,7 @@ collectionDirectives.directive('searchFormSimple', function() {
         },
         controller: 'SimpleSearchCtrl',
         restrict: 'E',
-        templateUrl: '/components/searchFormSimple.html'
+        templateUrl: '/commons/components/searchFormSimple.html'
 
     };
 });

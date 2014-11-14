@@ -244,7 +244,7 @@ corresponding value from the list below*/
     width: 256px;
     height: 79px;
     vertical-align: middle;
-    background: transparent url('/acom/images/wu_sig.png') no-repeat left top;
+    background: transparent url('/commons/images/wu_sig.png') no-repeat left top;
 }
 #homelink .local_logo {
     margin: 8px 0 0 0;
@@ -257,7 +257,7 @@ corresponding value from the list below*/
     transition-duration: 0.25s;
     transition-timing-function: ease;
     transition-delay: 0s;
-    background: transparent url('/acom/images/hatfield_sig.png') no-repeat left top;
+    background: transparent url('/commons/images/hatfield_sig.png') no-repeat left top;
 }
 div#search {
     display: block;

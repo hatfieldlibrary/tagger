@@ -2,7 +2,7 @@ extends layout
 
 mixin tagLink(tag)
     .small-4.columns
-        a(href='/form/content/update/'+tag.id)=tag.name
+        a(href='/admin/form/content/update/'+tag.id)=tag.name
     .small-2.columns
         label Content ID:&nbsp;
             =tag.id
@@ -17,7 +17,7 @@ block content
 
     #createModal.reveal-modal.small(data-reveal)
         h3 Create Content Type
-        form(method="post", enctype='application/x-www-form-urlencoded' action="/content/create")
+        form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/content/create")
             .row
                 .large-10.columns
                     label Content Type

@@ -2,11 +2,14 @@
  * Created by mspalti on 5/23/14.
  */
 
+var async = require('async');
+
 exports.create = function(req, res) {
 
     var tagName = req.body.name;
     var tagUrl = req.body.url;
     var tagType = req.body.type;
+
 
     // async not really required here
     async.parallel (
@@ -83,7 +86,12 @@ exports.getTagInfo = function(req, res) {
         // JSON response
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin','*');
+      // if query yields null result return this in response
+      if (result !== null) {
         res.end(JSON.stringify(result.getContentObject))
+      } else {
+        res.end(JSON.stringify(result))
+      }
     }).error(function(err) {
         console.log(err);
     })

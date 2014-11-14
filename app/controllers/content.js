@@ -2,6 +2,8 @@
  * Created by mspalti on 8/1/14.
  */
 
+var async = require('async');
+
 exports.create = function(req, res) {
 
     var cName = req.body.name;
@@ -164,14 +166,17 @@ exports.getTypeInfo = function(req, res) {
         where: {
             id: {
                 eq: typeId
-
             }
         }
     }).success(function(result) {
         // JSON response
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin','*');
+      if (result !== null) {
         res.end(JSON.stringify(result.getContentObject))
+      } else {
+        res.end(JSON.stringify(result));
+      }
     }).error(function(err) {
         console.log(err);
     })

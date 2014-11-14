@@ -140,7 +140,7 @@ collectionsApp.config(['$routeProvider','$locationProvider',
                 templateUrl: 'commons/partials/home'
             });
 
-      $locationProvider.html5Mode(true);
+      $locationProvider.html5Mode(true).hashPrefix('!');
 
     }]);
 

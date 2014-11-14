@@ -1,3 +1,5 @@
+"use strict";
+
 var server;
 
 var express = require('express'),
@@ -6,33 +8,30 @@ var express = require('express'),
     passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-config = require('./config/environment');
-db = require('./app/models');
-async = require('async');
-
-
-var GOOGLE_CLIENT_ID = config.googleClientId;
-var GOOGLE_CLIENT_SECRET = config.googleClientSecret;
-var GOOGLE_CALLBACK = config.googleCallback;
+var config = require('./config/environment');
+global.db = require('./app/models');
+//global.async = require('async');
 
 var app = express();
-
 // configure app
 app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+// Google OAUTH2.
+var GOOGLE_CLIENT_ID = config.googleClientId;
+var GOOGLE_CLIENT_SECRET = config.googleClientSecret;
+var GOOGLE_CALLBACK = config.googleCallback;
 // passport used for Google OAuth2
 // define serializer and deserializer
 passport.serializeUser(function(user, done) {
     done(null, user);
 });
-
 passport.deserializeUser(function(user, done) {
     done(null, user);
 });
-
-// Configure Google authentication
+// Configure Google authentication for this application
 passport.use(new GoogleStrategy({
         clientID: GOOGLE_CLIENT_ID,
         clientSecret: GOOGLE_CLIENT_SECRET,
@@ -41,7 +40,8 @@ passport.use(new GoogleStrategy({
     function(accessToken, refreshToken, profile, done) {
         // asynchronous verification
         process.nextTick(function () {
-            // look up user by Google profile email
+            // attempt to retrieve user by their Google profile
+            // email address
             db.Users.find({ attributes: ['id'],
                 where: {
                     email: {
@@ -49,7 +49,7 @@ passport.use(new GoogleStrategy({
                     }
                 }
             }).success( function (user, err) {
-                // if email lookup succeeded, pass the user id to the passport callback
+                // if email lookup succeeded, pass the user id to passport callback
                 if (user) {
                     console.log(user);
                     return done(err, user.dataValues.id);
@@ -61,18 +61,17 @@ passport.use(new GoogleStrategy({
     }
 ));
 
-// Simple route middleware to ensure user is authenticated.
-//   Use this route middleware on any resource that needs to be protected.  If
-//   the request is authenticated (typically via a persistent login session),
-//   the request will proceed.  Otherwise, the user will be redirected to the
-//   login page.
+// Route middleware ensures user is authenticated.
+// Use this middleware on any resource that needs to be protected.  If
+// the request is authenticated (typically via a persistent login session),
+// the request will proceed.  Otherwise, the user will be redirected to the
+// login page.
 app.ensureAuthenticated = function(req, res, next) {
     if (req.isAuthenticated()) { return next(); }
     res.redirect('/login');
 };
 
 require('./config/express')(app, config);
-// routes
 require('./config/routes')(app, config, passport);
 
 /// catch 404 and forward to error handler
@@ -137,3 +136,4 @@ function startServer() {
 
 // This is needed when running from IDE
 module.exports = app;
+

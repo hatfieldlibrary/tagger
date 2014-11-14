@@ -1,5 +1,6 @@
 
-var config = require('../../config/environment');
+var config = require('../../config/environment'),
+  async = require('async');
 
 // imagemagick paths
 var convert = config.convert,
@@ -412,7 +413,7 @@ exports.updateImage = function (req, res, config) {
                 }
             }
         ).success(function(err, result) {
-                res.redirect("/form/collection/update/"+id)
+                res.redirect("/admin/form/collection/update/"+id)
             }
         ).error(function(err) {
                 console.log(err);
@@ -446,7 +447,7 @@ exports.addTag = function(req, res) {
                     CollectionId: collId,
                     TagId: tagId
                 }).success(function (result) {
-                        res.redirect("/form/collection/update/" + collId)
+                        res.redirect("/admin/form/collection/update/" + collId)
                     }
                 ).error(function(err) {
                         console.log(err);
@@ -454,7 +455,7 @@ exports.addTag = function(req, res) {
                 )
             }
             else {
-                res.redirect("/form/collection/update/" + collId)
+                res.redirect("/admin/form/collection/update/" + collId)
             }
         }
     ).error(function(err) {
@@ -474,7 +475,7 @@ exports.removeTag = function(req, res) {
             eq: tagId
         }
     }).success(function(result) {
-        res.redirect("/form/collection/update/"+collId)
+        res.redirect("/admin/form/collection/update/"+collId)
     }).error(function(err) {
         console.log(err);
     })
@@ -504,7 +505,7 @@ exports.addType = function(req, res) {
                     CollectionId: collId,
                     ItemContentId: typeId
                 }).success(function (result) {
-                        res.redirect("/form/collection/update/" + collId)
+                        res.redirect("/admin/form/collection/update/" + collId)
                     }
                 ).error(function(err) {
                         console.log(err);
@@ -512,7 +513,7 @@ exports.addType = function(req, res) {
                 )
             }
             else {
-                res.redirect("/form/collection/update/" + collId)
+                res.redirect("/admin/form/collection/update/" + collId)
             }
         }
     ).error(function(err) {
@@ -532,7 +533,7 @@ exports.removeTag = function(req, res) {
             eq: tagId
         }
     }).success(function(result) {
-        res.redirect('/form/collection/update/'+collId)
+        res.redirect('/admin/form/collection/update/'+collId)
     }).error(function(err) {
         console.log(err);
     })

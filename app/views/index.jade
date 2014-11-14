@@ -2,7 +2,7 @@ extends layout
 
 mixin collectionLink(col)
     .small-3.columns
-        a(href='/form/collection/update/'+col.id)=col.title
+        a(href='/admin/form/collection/update/'+col.id)=col.title
     .small-8.columns
         p= col.description
     .small-1.columns
