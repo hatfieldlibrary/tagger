@@ -1,8 +1,8 @@
 node_modules
 resources/images/full
 resources/images/thumb
-public/modules/acom/bower_components/
-public/modules/acom/css/app.css
+public/modules/acom/app/bower_components/
+public/modules/acom/app/css/app.css
 .tmp
 .sass-cache
 .idea/workspace.xml
