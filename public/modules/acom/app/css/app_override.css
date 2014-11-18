@@ -31,6 +31,25 @@
          margin: 1px auto;
      }
  }
+ .top-bar {
+   height: 36px;
+ }
+ .nav-bar .top-bar,
+ .top-bar-section ul li,
+ .top-bar-section li:not(.has-form) a:not(.button),
+ .nav-bar .top-bar-section li:not(.has-form) a:not(.button),
+ .nav-bar .top-bar-section .dropdown li:not(.has-form):not(.active) > a:not(.button)
+ {
+   background: #81291D;
+ }
+ .nav-bar .top-bar-section li:not(.has-form) a:not(.button):hover,
+ .top-bar-section .dropdown li label {
+   background: #5f0d0a;
+ }
+ .top-bar-section .dropdown li:not(.has-form):not(.active):hover>a:not(.button){color:#FFF;background:#661612;}
+ .top-bar-section ul {
+   background: #81291D;
+ }
  .nav-bar .top-bar .name, .top-bar .name h1 {
      margin-left: 5px;
      color: #fff;
@@ -41,7 +60,8 @@
  .tablet.top-bar {
      height: 40px;
  }
- .indent {
+ .indent>a{
+
      padding-left: 20px;
  }
  .simple-content .breadcrumbs {
@@ -55,6 +75,41 @@
          display: none;
      }
  }
+
+ .nav-panel>:last-child {
+   margin-bottom: 0;
+ }
+ .nav-panel>:first-child {
+   margin-top: 0;
+ }
+ .nav-panel a {
+   padding: 20px 0;
+   width: 100%;
+   display: block;
+   font-family: Lato,Arial,sans-serif;
+   background-color: #A34D23;
+   color: #F8F5EF;
+ }
+ .nav-panel a:hover {
+   background: #c4663a;
+   color: #f8f5ef;
+ }
+ .nav-panel {
+   border-style: solid;
+   border-color: #9b4821;
+   padding: 0;
+   background: #A34D23;
+   color: #FFF;
+   border-width: 0;
+   margin-top: 0;
+   margin-bottom: 0;
+   border-left: 1px solid #77480B;
+   text-transform: uppercase;
+   font-size: .9em;
+ }
+
+
+
 
  /*-------------------------------------------------------
   * Foundation 5 tabs customization

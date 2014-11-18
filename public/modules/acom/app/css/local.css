@@ -183,7 +183,7 @@ corresponding value from the list below*/
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
     border: 1px solid #8D9397;
-    background: #eee url('images/ui-bg_glass_80_d7ebf9_1x400.png') 50% 50% repeat-x;
+    background: #eee url('/images/ui-bg_glass_80_d7ebf9_1x400.png') 50% 50% repeat-x;
     font-weight: bold;
 }
 
@@ -195,8 +195,25 @@ corresponding value from the list below*/
 }
 
 
+.acom-side-nav li a:not(.button) {
+  display: block;
+  color: #27827C;
+  margin: 0;
+  padding: .4375rem .875rem;
+}
 
-
+.acom-side-nav {
+  display: block;
+  list-style-type: none;
+  list-style-position: outside;
+  font-family: "Helvetica Neue",Helvetica,Roboto,Arial,sans-serif;
+  padding: 0;
+  margin: 0;
+  line-height: 2em;
+}
+.acom-side-nav li a:not(.button):hover {
+  background: #efefef;
+}
 
 /*-----------------------------------------------------
  * Footer
@@ -244,7 +261,7 @@ corresponding value from the list below*/
     width: 256px;
     height: 79px;
     vertical-align: middle;
-    background: transparent url('/commons/images/wu_sig.png') no-repeat left top;
+    background: transparent url('/images/wu_sig.png') no-repeat left top;
 }
 #homelink .local_logo {
     margin: 8px 0 0 0;
@@ -257,7 +274,7 @@ corresponding value from the list below*/
     transition-duration: 0.25s;
     transition-timing-function: ease;
     transition-delay: 0s;
-    background: transparent url('/commons/images/hatfield_sig.png') no-repeat left top;
+    background: transparent url('/images/hatfield_sig.png') no-repeat left top;
 }
 div#search {
     display: block;

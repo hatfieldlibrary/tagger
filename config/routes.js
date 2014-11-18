@@ -69,6 +69,8 @@ module.exports = function(app,config,passport){
   app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
   app.get('/admin/content/delete/:id', ensureAuthenticated, content.delete);
 
+
+
   // Public angularjs module routes
   app.get("/commons/", function(req, res) {
     res.sendFile(config.root + config.modulePath + '/index.html' )
@@ -78,6 +80,7 @@ module.exports = function(app,config,passport){
     var name = req.params.name;
     res.sendFile(config.root + config.modulePath + '/partials/' +name + '.html');
   });
+
   // request for a directive templateUrl.
   app.get('/commons/components/:name', function(req, res) {
     var name = req.params.name;

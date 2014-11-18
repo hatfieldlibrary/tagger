@@ -17,7 +17,9 @@ module.exports = function (grunt) {
     app: 'app',
     client: 'public/modules/acom',
     dist: 'public/modules/acom/dist',
+    config: 'config',
     public: 'public',
+
     express: {
       options: {
         port: process.env.PORT || 3000
@@ -26,6 +28,13 @@ module.exports = function (grunt) {
         options: {
           script: 'server.js',
           node_env: 'development',
+          debug: true
+        }
+      },
+      runlocal: {
+        options: {
+          script:'server.js',
+          node_env: 'runlocal',
           debug: true
         }
       },
@@ -45,7 +54,7 @@ module.exports = function (grunt) {
     },
     open: {
       server: {
-        url: 'http://localhost:<%= express.options.port %>'
+        url: 'http://localhost:<%= express.options.port %>/commons'
       }
     },
     watch: {
@@ -110,29 +119,23 @@ module.exports = function (grunt) {
         all: [
           'Gruntfile.js',
           '<%= app %>/js/**/*.js',
-          '<%= client %>/js/**/*.js'
+          '<%= config %>/js/**/*.js',
+          '<%= client %>/app/js/**/*.js',
+          './server.js'
         ]
       },
-      server: {
-        options: {
-          jshintrc: '.jshintrc'
-        },
-        src: [ '<%= app %>/*.js']
-      },
-
       test: {
         options: {
-          jshintrc: 'test/.jshintrc'
+          jshintrc: '<%= client %>/test/.jshintrc'
         },
-        src: ['test/*.js']
+        src: ['<%= client %>/test/*.js']
       }
     },
     htmlmin: {
       dist: {
         files: [{
           expand: true,
-          cwd: '.tmp',
-          src: '*.html',
+          src: '<%= client %>/app/**/*.html',
           dest: '<%= dist %>'
         }]
       }
@@ -179,44 +182,6 @@ module.exports = function (grunt) {
           filter: 'isFile'
 
         } ]
-      },
-      server: {
-        files: [{
-          expand: true,
-          cwd: '<%= app %>',
-          src: ['**/*.js'],
-          dest: '<%= dist %>/server'
-        }]
-      },
-      config: {
-        files: [{
-          expand: true,
-          cwd: 'config',
-          src: ['**/*.js'],
-          dest: '<%= dist %>/server'
-        }]
-      },
-      public: {
-        files: [{
-          expand: true,
-          cwd: 'public',
-          src: ['**/*'],
-          dest: '<%= dist %>/server'
-        }]
-      },
-      main: {
-        files: [{
-          src: ['server.js'],
-          dest: '<%= dist %>/server'
-        }]
-      },
-      node: {
-        files: [{
-          expand: true,
-          cwd: 'node_modules',
-          src: ['*'],
-          dest: '<%= dist %>/server'
-        }]
       }
     }, concat: {
       libraries: {
@@ -232,32 +197,86 @@ module.exports = function (grunt) {
           '<%= client %>/app/bower_components/foundation/js/vendor/fastclick.js',
           '<%= client %>/app/bower_components/rem-unit-polyfill/js/rem.js',
           '<%= client %>/app/bower_components/slick-carousel/slick/slick.js'],
-        dest: '<%= dist %>/js/vendor/libraries.js'
+        dest: '<%= dist %>/js/vendor/libraries.min.js'
       },
       foundation: {
         flatten: true,
-        src: [ '<%= app %>/bower_components/foundation/js/foundation/foundation.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.accordian.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.dropdown.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.offcanvas.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.tab.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.topbar.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.tooltip.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
-        dest: '<%= dist %>/js/vendor/foundation.js'
+        src: [
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.accordian.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.dropdown.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.offcanvas.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.tab.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.topbar.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.tooltip.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.equalizer.js',
+          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.magellan.js'],
+        dest: '<%= dist %>/js/vendor/foundation.min.js'
       },
       css: {
         flatten: true,
-        src: ['<%= app %>/css/*.css', '!*.min.css'],
+        src: ['<%= client %>/app/css/*.css', '!*.min.css'],
         dest: '<%= dist %>/css/app.css'
+      }
+    },
+
+    imagemin: {
+      target: {
+        files: [{
+          expand: true,
+          cwd: '<%= client %>/app/images/',
+          src: ['**/*.{jpg,gif,svg,jpeg,png}'],
+          dest: '<%= dist %>/images/'
+
+        }]
+      }
+    },
+
+    cssmin: {
+      minify: {
+        expand: true,
+        cwd:  '<%= dist %>/css',
+        src: ['*.css','!*.min.css'],
+        dest: '<%= dist %>/css',
+        ext: '.min.css'
+      }
+    },
+
+    uglify: {
+      options: {
+        preserveComments: 'some',
+        mangle: false
+      },
+      target:
+      {
+        files: [{
+          expand: true,
+          cwd: '<%= dist %>/js/vendor',
+          src: '*.min.js'
+          //dest: '<%= dist %>/js/vendor'
+        }]
+      }
+    },
+
+    useminPrepare: {
+      html: ['<%= client %>/app/index.html'],
+      options: {
+        dest: '<%= dist %>'
+      }
+    },
+
+    usemin: {
+      html: ['<%= dist %>/**/*.html', '!<%= app %>/bower_components/**'],
+      css: ['<%= dist %>/css/**/*.css'],
+      options: {
+        dirs: ['<%= dist %>']
       }
     },
 
     bowerInstall: {
       target: {
         src: [
-          '<%= client %>app/**/*.html'
+          'public/modules/acom/app/index.html'
         ],
         exclude: [
           'modernizr',
@@ -270,20 +289,49 @@ module.exports = function (grunt) {
     },
     karma: {
       unit: {
-        configFile: '<%= client %>test/karma.conf.js'
+        configFile: '<%= client %>/test/karma.conf.js'
+      }
+    },
+    sass: {
+      options: {
+        includePaths: [
+          '<%= client %>/app/bower_components/foundation/scss',
+          '<%= client %>/app/scss/**/*.scss']
+      },
+      dist: {
+        options: {
+          outputStyle: 'compressed'
+        },
+        files: {
+          '<%= client %>/app/css/app.css': '<%= client %>/app/scss/app.scss'
+        }
       }
     }
 
   });
 
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
+
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-express-server');
   grunt.config.requires('watch.js.files');
+  grunt.loadNpmTasks('grunt-sass');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-bower-install');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-newer');
   files = grunt.config('watch.js.files');
   files = grunt.file.expand(files);
+  grunt.loadNpmTasks('grunt-karma');
+
 
   grunt.registerTask('wait', function () {
     grunt.log.ok('Waiting for server reload...');
@@ -294,7 +342,7 @@ module.exports = function (grunt) {
     }, 500);
   });
 
-  grunt.registerTask('test', function() {
+  grunt.registerTask('serverTest', function() {
     return grunt.task.run([
       'env:test',
       'mochaTest'
@@ -307,9 +355,25 @@ module.exports = function (grunt) {
       'clean:server',
       'express:dev',
       'open',
+      'compile-sass',
+      'bower-install',
       'watch'
     ]);
   });
+
+  grunt.registerTask('runlocal', function() {
+    grunt.task.run([
+      'clean:server',
+      'express:runlocal',
+      'open',
+      'watch'
+    ]);
+  });
+  grunt.registerTask('bower-install', ['bowerInstall']);
+  grunt.registerTask('validate-js', ['jshint']);
+  grunt.registerTask('test', ['karma']);
+  grunt.registerTask('compile-sass', ['sass']);
+  grunt.registerTask('publish', ['compile-sass', 'clean:dist', 'validate-js', 'useminPrepare', 'copy:client', 'concat', 'newer:imagemin', 'cssmin', 'uglify', 'usemin']);
 
 
 };

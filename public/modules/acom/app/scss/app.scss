@@ -1,5 +1,5 @@
-@import "scss/settings";
-//@import "foundation";
+@import "./settings";
+//@import "/foundation/scss";
 
  @import
 //   "foundation/components/accordion",
@@ -38,4 +38,4 @@
  //  "foundation/components/offcanvas";
    "foundation/components/visibility";
 
-@import "scss/custom";
+@import "./custom";

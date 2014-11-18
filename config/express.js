@@ -7,15 +7,18 @@ var bodyParser = require('body-parser');
 
 module.exports = function(app, config) {
 
-  // admin ui resources
-  app.use('/images', express.static(config.root + '/public/images'));
+  // admin ui and image resource
+  app.use('/img', express.static(config.root + '/public/images'));
   app.use('/javascripts', express.static(config.root + '/public/javascripts'));
   app.use('/stylesheets', express.static( config.root + '/public/stylesheets'));
-  // public ui resources
+  app.use('/resources/img', express.static(config.taggerImageDir));
+  // public ui
+  app.use('/js', express.static(config.root + config.modulePath + '/js'));
+  app.use('/css', express.static(config.root + config.modulePath + '/css'));
+  app.use('/images', express.static(config.root + config.modulePath + '/images'));
+  // development
+  app.use('/bower_components', express.static(config.root + config.modulePath + '/bower_components'));
   app.use('/commons/bower_components', express.static(config.root + config.modulePath + '/bower_components'));
-  app.use('/commons/js', express.static(config.root + config.modulePath + '/js'));
-  app.use('/commons/css', express.static(config.root + config.modulePath + '/css'));
-  app.use('/commons/images', express.static(config.root + config.modulePath + '/images'));
 
   app.set('port', config.port);
   app.set('views', config.root + '/app/views');

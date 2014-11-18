@@ -14,7 +14,7 @@ block content
         .small-2.columns
             p
             a(class="th radius", href="/images/full/"+collImg)
-                img(src="/images/full/"+collImg)
+                img(src="/resources/img/full/"+collImg)
             .small-text-center
                 a(href="#" data-reveal-id="uploadModal") Upload Image
                 p
@@ -101,7 +101,7 @@ block content
                 .row
                 each tag in tags
                     label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
-                        a(href="/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
+                        a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
                 p &nbsp;
                 p
                 .ui-widget
@@ -127,7 +127,7 @@ block content
                 .row
                 each type in types
                     label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
-                        a(href="/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
+                        a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
                 p &nbsp;
                 p
                 .ui-widget
@@ -148,11 +148,11 @@ block content
         #deleteModal.reveal-modal.small(data-reveal)
             h3 Delete Collection
             p Are you sure you want to delete this collection?
-            a(href="/collection/delete/"+collId) Yes, delete this collection
+            a(href="/admin/collection/delete/"+collId) Yes, delete this collection
             a(class="close-reveal-modal") &#215;
 
         #uploadModal.reveal-modal.small(data-reveal)
-            form(action="/collection/image", method="post", enctype="multipart/form-data")
+            form(action="/admin/collection/image", method="post", enctype="multipart/form-data")
                 input(type="hidden", name="id", value=collId)
                 input(type="file", name="image")
                 input(type="submit" value="upload")
