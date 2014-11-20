@@ -11,28 +11,25 @@
   <meta name="copyright" content="Willamette University Copyright (c) 2014" />
   <link href="http://library.willamette.edu/favicon.ico" rel="icon" type="image/x-icon">
   <link href="http://library.willamette.edu/favicon.ico" rel="shortcut icon" type="image/x-icon">
-  <!-- build:css /css/libraries.min.css -->
-  <link rel="stylesheet" href="/commons/bower_components/font-awesome/css/font-awesome.css">
-  <link rel="stylesheet" href="/commons/bower_components/foundation/css/foundation.css">
-  <link rel="stylesheet" href="/commons/bower_components/foundation/css/normalize.css">
 
+  <!-- build:css /css/libraries.min.css -->
+  <link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="/bower_components/foundation/css/normalize.css">
   <!-- bower:css -->
-  <link rel="stylesheet" href="bower_components/slick-carousel/slick/slick.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css /css/app.min.css -->
-  <link rel="stylesheet" href="/commons/css/app.css">
+  <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/app_override.css">
   <link rel="stylesheet" href="/css/icons.css">
   <link rel="stylesheet" href="/css/local.css">
   <link rel="stylesheet" href="/css/animations.css">
-
   <!-- endbuild -->
-  <!-- build:js /js/modernizr.min.js -->
+  <!-- build:js /js/vendor/modernizr.min.js -->
   <script src="/bower_components/modernizr/modernizr.js"></script>
   <!-- endbuild -->
-  <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
+  <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 </head>
 
 <body class="{{ bodyClass }}" ng-cloak>
@@ -47,12 +44,10 @@
       </div>
       <div id="search"  class="show-for-medium-up">
         <div id="search_nav">
-
           <form action="http://www.willamette.edu/search/search.cgi" id="cse-search-box">
             <input name="cx" type="hidden" value="002243651875800469265:z4sq7mhvzqe">
             <input name="cof" type="hidden" value="FORID:10">
             <input name="ie" type="hidden" value="UTF-8">
-
             <input maxlength="255" name="q" type="text" title="type search term here" label="" for="search box">
             <input alt="Go" class="submit" name="sa" src="http://www.willamette.edu/images/new/design/icons/go_button.png" title="Go" type="image" value="Search">
           </form>
@@ -72,7 +67,6 @@
             <li><a href="http://www.willamette.edu/alumni/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Alumni']);">Alumni</a></li>
             <li><a href="http://www.willamette.edu/parents/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Parents']);">Parents</a></li>
             <!--li><a href="/www.willamette.edu/parents/index">&#187;Visitors</a></li-->
-
           </ul>
         </div>
       </div>
@@ -89,7 +83,6 @@
           <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
         </ul>
         <section class="top-bar-section" >
-
           <!-- Right Nav Section -->
           <ul class="left" style="margin-left: 70px;">
             <li class="has-dropdown show-for-small-down">
@@ -116,7 +109,6 @@
                 <li><a href="http://libmedia.willamette.edu/#/community" onclick="_gaq.push(['_trackEvent', 'Header', 'Internal Link', 'Directions']);">Community Collections</a></li>
               </ul>
             </li>
-
             <li class="has-dropdown">
               <a href="http://www.willamette.edu/about/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'About WU']);">About Willamette</a>
               <ul class="dropdown">
@@ -132,16 +124,13 @@
                 <li><a href="http://www.willamette.edu/about/sustainability/index.html">Sustainability</a></li>
                 <li> <a href="http://www.willamette.edu/dept/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Admin Offices']);">Administrative Offices</a></li>
                 <li class="last"> <a href="http://www.willamette.edu/about/visit/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Visiting WU']);">Visiting Willamette</a></li>
-
                 <li class="last"><a href="http://www.willamette.edu/virtual_tour/index.html">Virtual Tour</a></li>
               </ul>
             </li>
-
             <li class="has-dropdown show-for-medium-up">
               <a href="http://www.willamette.edu/about/academics/index.html">Academics</a>
               <ul class="dropdown">
                 <li><label> <a href="http://www.willamette.edu/cla/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'CLA']);">College of Liberal Arts</a></label></li>
-
                 <li class="indent"> <a href="http://www.willamette.edu/about/academics/majors.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Majors']);">Majors &amp; Minors</a></li>
                 <li class="indent"> <a href="http://www.willamette.edu/cla/catalog/index.php" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Catalog']);">Catalog</a></li>
                 <li class="indent"> <a href="http://www.willamette.edu/dept/oie/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'International Education']);">International Education</a></li>
@@ -157,7 +146,6 @@
                 <li class="last"> <a href="http://www.willamette.edu/dept/registrar/calendar/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Academic Calendar']);">Academic Calendar</a></li>
               </ul>
             </li>
-
             <li class="has-dropdown show-for-medium-up">
               <a href="http://www.willamette.edu/about/campus_life/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Campus Life']);">Campus Life</a>
               <ul class="dropdown">
@@ -183,7 +171,6 @@
                 <li> <a href="http://www.willamette.edu/agsm/index.html">Willamette MBA (Atkinson School)</a></li>
 
               </ul>
-
             </li>
             <li class="has-dropdown show-for-medium-up">
               <a href="http://www.willamette.edu/arts/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Arts']);">Arts</a>
@@ -197,7 +184,6 @@
                 <li> <a href="http://www.willamette.edu/cla/music/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Department of Music']);">Department of Music</a></li>
                 <li> <a href="http://www.willamette.edu/cla/theatre/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Department of Theatre']);">Department of Theatre</a></li>
                 <li class="last"> <a href="http://www.willamette.edu/arts/goudyartistseries/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Goudy']);">Goudy Distinguished Artists Series</a></li>
-
               </ul>
             </li>
             <!--
@@ -209,7 +195,6 @@
                     <li><a href="http://library.willamette.edu/about/staff/" onclick="_gaq.push(['_trackEvent', 'Header', 'Internal Link', 'Contact Us']);">Contact Us / Staff</a></li>
                     <li><a href="http://library.willamette.edu/about/giving/">Giving to the Library</a></li>
                     <li><a href="http://library.willamette.edu/about/" onclick="_gaq.push(['_trackEvent', 'Header', 'Internal Link', 'Description &amp; Mission']);">Description &amp; Mission</a></li>
-
                 </ul>
             </li>
             -->
@@ -224,12 +209,8 @@
             </li>
           </ul>
         </section>
-
       </nav>
-
     </div>
-
-
     <div class="row collapse">
       <div class="medium-1 columns">
         <a href="http://www.willamette.edu"><img src="/images/wuicon-mobile.png" style="margin-top: -34px;top:7px;left:10px;z-index:20;display: block;"></a>
@@ -238,12 +219,7 @@
         <a href="http://www.willamette.edu"><img  align="left" src="/images/wu_sig_mobile.png"></a>
       </div>
     </div>
-
-
-
-
   </div>
-
   <!-- Navigation menu: desktop and phone -->
   <div class="row collapse" style="width: 100%;margin-left: 0; margin-right: 0;max-width: 100%;">
     <div class="small-12 contain-to-grid columns hide-for-medium-only nav-bar" >
@@ -280,7 +256,6 @@
               <ul class="dropdown">
               </ul>
             </li>
-
             <li class="has-dropdown">
               <a href="http://www.willamette.edu/about/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'About WU']);">About Willamette</a>
               <ul class="dropdown">
@@ -296,11 +271,9 @@
                 <li><a href="http://www.willamette.edu/about/sustainability/index.html">Sustainability</a></li>
                 <li> <a href="http://www.willamette.edu/dept/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Admin Offices']);">Administrative Offices</a></li>
                 <li class="last"> <a href="http://www.willamette.edu/about/visit/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Visiting WU']);">Visiting Willamette</a></li>
-
                 <li class="last"><a href="http://www.willamette.edu/virtual_tour/index.html">Virtual Tour</a></li>
               </ul>
             </li>
-
             <li class="has-dropdown show-for-medium-up">
               <a href="http://www.willamette.edu/about/academics/index.html">Academics</a>
               <ul class="dropdown">
@@ -321,7 +294,6 @@
                 <li class="last"> <a href="http://www.willamette.edu/dept/registrar/calendar/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Academic Calendar']);">Academic Calendar</a></li>
               </ul>
             </li>
-
             <li class="has-dropdown show-for-medium-up">
               <a href="http://www.willamette.edu/about/campus_life/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Campus Life']);">Campus Life</a>
               <ul class="dropdown">
@@ -345,9 +317,7 @@
                 <li> <a href="http://www.willamette.edu/admission/index.html">College of Liberal Arts (undergraduate)</a></li>
                 <li> <a href="http://www.willamette.edu/wucl/admission/index.html">College of Law</a></li>
                 <li> <a href="http://www.willamette.edu/agsm/index.html">Willamette MBA (Atkinson School)</a></li>
-
               </ul>
-
             </li>
             <li class="has-dropdown show-for-medium-up">
               <a href="http://www.willamette.edu/arts/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Arts']);">Arts</a>
@@ -361,7 +331,6 @@
                 <li> <a href="http://www.willamette.edu/cla/music/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Department of Music']);">Department of Music</a></li>
                 <li> <a href="http://www.willamette.edu/cla/theatre/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Department of Theatre']);">Department of Theatre</a></li>
                 <li class="last"> <a href="http://www.willamette.edu/arts/goudyartistseries/index.html" onclick="_gaq.push(['_trackEvent', 'Header', 'Outbound Link', 'Goudy']);">Goudy Distinguished Artists Series</a></li>
-
               </ul>
             </li>
             <!--
@@ -373,7 +342,6 @@
                     <li><a href="http://library.willamette.edu/about/staff/" onclick="_gaq.push(['_trackEvent', 'Header', 'Internal Link', 'Contact Us']);">Contact Us / Staff</a></li>
                     <li><a href="http://library.willamette.edu/about/giving/">Giving to the Library</a></li>
                     <li><a href="http://library.willamette.edu/about/" onclick="_gaq.push(['_trackEvent', 'Header', 'Internal Link', 'Description &amp; Mission']);">Description &amp; Mission</a></li>
-
                 </ul>
             </li>
             -->
@@ -388,12 +356,10 @@
             </li>
           </ul>
         </section>
-
       </nav>
     </div>
-
   </div>
-
+  <!-- End University header -->
   <div class=" show-for-medium-up" >
     <div class="row contain-to-grid">
       <div class="large-4 medium-4 nav-panel text-center column"><a href="http://library.willamette.edu">Hatfield Library</a> </div>
@@ -401,18 +367,14 @@
       <div class="large-4 medium-4 nav-panel text-center column current"> <a href="/#/home">Academic Commons</a> </div>
     </div>
   </div>
-
+  <!-- End Navigation -->
+  <!-- Main content container -->
   <div class=" row collapse">
     <div class="small-12 column">
-      <!-- End Header and Nav -->
-
-      <!-- End Navigation -->
-
       <div class="view-container">
-
+        <!-- Angularjs container -->
         <div ng-view class="view-frame"></div>
       </div>
-
     </div>
   </div>
   <!-- Footer -->
@@ -463,20 +425,11 @@
             </div>
           </div>
           <span class="phone" itemprop="telephone">503-370-6312</span>
-          <meta itemprop="openingHours" datetime="Mo-Th 07:45-11:59" content="Monday - Thursday 7:45 a.m. - 11:59 p.m.">
-          <meta itemprop="openingHours" datetime="Mo-Fr 00:00-02:00" content="Monday - Friday midnight - 2 a.m.">
-          <meta itemprop="openingHours" datetime="Fr 07:45-21:00" content="Friday 7:45 a.m. - 9:00 p.m.">
-          <meta itemprop="openingHours" datetime="Sa 10:00-21:00" content="Saturday 10:00 a.m. - 9:00 p.m.">
-          <meta itemprop="openingHours" datetime="Su 10:00-00:00" content="Sunday 10:00 a.m. - 2:00 a.m.">
-
         </div>
       </div>
     </div>
   </div>
-
   <!-- End Footer -->
-
-
 </div>
 
 <!-- build:js /js/vendor/libraries.min.js -->
@@ -489,8 +442,7 @@
 <script src="bower_components/angular-resource/angular-resource.js"></script>
 <script src="bower_components/angular-animate/angular-animate.js"></script>
 <script src="bower_components/rem-unit-polyfill/js/rem.js"></script>
-<script src="bower_components/slick-carousel/slick/slick.min.js"></script>
-<script src="bower_components/angular-slick-carousel/dist/slick.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
 <!-- build:js /js/vendor/foundation.min.js -->
@@ -518,7 +470,6 @@
 <script src="/js/directives.js"></script>
 <script src="/js/filters.js"></script>
 <script src="/js/app.js"></script>
-
 
 </body>
 </html>

@@ -7,6 +7,7 @@
 var collectionDirectives  = angular.module('collectionDirectives', []);
 
 collectionDirectives.directive('collectionsView', function() {
+
     return {
         restrict: 'E',
         scope: {},
@@ -14,13 +15,11 @@ collectionDirectives.directive('collectionsView', function() {
         transclude: true,
         templateUrl: '/commons/components/collections.html'
     };
-
 });
 
 collectionDirectives.directive('taggedCollection', function() {
 
     return {
-
         scope: {
             name: '@',
             url: '@',
@@ -42,6 +41,7 @@ collectionDirectives.directive('taggedCollection', function() {
 });
 
 collectionDirectives.directive('tag', function() {
+
     return {
         restrict: 'E',
         scope: {
@@ -51,8 +51,6 @@ collectionDirectives.directive('tag', function() {
         },
         templateUrl: '/commons/components/tagButton.html'
     };
-
-
 });
 
 collectionDirectives.directive('findingaid', function() {
@@ -70,19 +68,18 @@ collectionDirectives.directive('findingaid', function() {
         transclude: false,
         templateUrl: '/commons/components/modFindingAid.html'
     };
-
 });
 
 collectionDirectives.directive('simpleLink', function() {
-        return {
-            scope: {
-                name: '@',
-                url: '@'
-            },
-            restrict: 'E',
-            transclude: false,
-            templateUrl: '/commons/components/simpleLink.html'
-        };
+      return {
+        scope: {
+          name: '@',
+          url: '@'
+        },
+        restrict: 'E',
+        transclude: false,
+        templateUrl: '/commons/components/simpleLink.html'
+      };
 });
 
 collectionDirectives.directive('simpleTaggedCollection', function() {
@@ -107,6 +104,7 @@ collectionDirectives.directive('simpleTaggedCollection', function() {
 
 
 collectionDirectives.directive('unTaggedCollection', function() {
+
     return {
         scope: {
             name: '@',
@@ -118,6 +116,7 @@ collectionDirectives.directive('unTaggedCollection', function() {
 });
 
 collectionDirectives.directive('searchForm', function() {
+
     return {
         scope: {
             name: '@',
@@ -131,6 +130,7 @@ collectionDirectives.directive('searchForm', function() {
 });
 
 collectionDirectives.directive('searchFormSimple', function() {
+
     return {
         scope: {
             name: '@',

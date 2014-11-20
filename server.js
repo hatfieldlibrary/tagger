@@ -6,17 +6,22 @@ var express = require('express'),
     session = require('express-session'),
     http = require('http'),
     passport = require('passport'),
-    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+    logger = require('morgan'),
+    fs = require('fs');
 
 var config = require('./config/environment');
 global.db = require('./app/models');
-//global.async = require('async');
+
 
 var app = express();
 // configure app
 app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+// setup the access logger
+var accessLogStream = fs.createWriteStream('/var/log/tagger/access.log', {flags: 'a'});
+app.use(logger({stream: accessLogStream}));
 
 
 // Google OAUTH2.

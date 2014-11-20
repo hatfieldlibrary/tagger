@@ -9,13 +9,13 @@
                 <li class="current">{{tagInfo.name}}</li>
             </ul>
         </div>
-        <div class="small-4 columns text-right" style="margin-bottom: 11px;">
+        <div class="small-4 columns text-right" >
             <a href="/commons/home"><img src="/images/academiccommons_lg.png"></a>
 
         </div>
         <div class="row">
-            <div class="large-7 medium-7 small-12 columns">
-                <h2 style="margin-top: -10px;">University Archives Collections</h2>
+            <div class="large-7 medium-7 small-12 columns page-header">
+                <h2>University Archives Collections</h2>
             </div>
             <div class="large-1 medium-1 columns"></div>
         </div>
@@ -27,13 +27,6 @@
         <div class="row">
             <div class="small-12 text-center">
                 <div id="loadingImage" style="display: none;"><img src="/images/8.gif">&nbsp;&nbsp;loading ...</div>
-            </div>
-        </div>
-        <div class="row" >
-            <div class="large-12 columns text-center">
-                <h6 id="resultInfo" class="highlight-text" style="display:none;margin:15px 0 10px;">
-                    {{tagInfo.name}} contains {{filtered.length}} {{getTypeLabel()}}{{plural(collections[0])}}.
-                </h6>
             </div>
         </div>
     </div>
@@ -55,8 +48,14 @@
             </div>
         </div>
         <div class="small-12 medium-10 large-10 columns">
-            <div class="row" style="background: #eee;padding: 6px;">
-                <div class="small-12">
+            <div class="row radius" style="background: #eee;padding-top: 3px;">
+              <div class="small-12 large-2 medium-2 columns"></div>
+              <div class="small-12 large-8 medium-8 columns">
+                <h6 id="resultInfo" class="highlight-text" style="display:none;">
+                  {{tagInfo.name}} contains {{filtered.length}} {{getTypeLabel()}}{{plural(collections[0])}}.
+                </h6>
+              </div>
+                <div class="small-12 large-2 medium-2 columns">
                     <div class="right">
                         <a ng-click="toggleView()">{{toggleText}}</a>
                     </div>

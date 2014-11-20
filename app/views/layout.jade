@@ -2,32 +2,30 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/foundation.min.css')
-    link(rel='stylesheet', href='/stylesheets/foundation.css')
-    link(rel='stylesheet', href='/stylesheets/normalize.css')
-    link(rel='stylesheet', href='/stylesheets/jquery-ui-1.10.4.custom.min.css')
+    link(rel='stylesheet', href='/stylesheets/app.css')
+    link(rel='stylesheet', href='/stylesheets/jquery-ui-1.11.2-min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(type='text/javascript', src='/javascripts/local.js')
     script(type='text/javascript', src='/javascripts/vendor/modernizr.js')
     script(type='text/javascript', src='/javascripts/vendor/jquery.js')
-    script(type='text/javascript', src='/javascripts/vendor/jquery-ui-1.10.4.custom.js')
+    script(type='text/javascript', src='/javascripts/jquery-ui-1.11.2.js')
     script(type='text/javascript', src='/javascripts/foundation.min.js')
-    script(type='text/javascript', src='/javascripts/foundation/foundation.js')
     script(type='text/javascript', src='/javascripts/foundation/foundation.reveal.js')
     script(type='text/javascript', src='/javascripts/foundation/foundation.dropdown.js')
+    script(type='text/javascript', src='/javascripts/application.js')
+
   body
-      .contain-to-grid.fixed
+      .contain-to-grid.fixed(style="background: #294750;height:60px;padding-top: 10px;")
         nav.top-bar('data-topbar')
             ul.title-area
                 li.name: a(href="/")
                     img(src="/img/tagger.png")
             section.top-bar-section
             ul.left
-                li: a(href="/admin/", class="button") Manage Collections
+                li: a(href="/admin/", class="button radius") Manage Collections
             ul.left
-                li: a(href="/admin/tag/view", class="button") Manage Tags
+                li: a(href="/admin/tag/view", class="button radius") Manage Tags
             ul.left
-                li: a(href="/admin/content/view", class="button") Content Types
+                li: a(href="/admin/content/view", class="button radius") Content Types
       p  &nbsp;
       p  &nbsp;
       block content

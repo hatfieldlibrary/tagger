@@ -21,7 +21,6 @@ var collectionsApp = angular.module('collectionsApp', [
 collectionsApp.run(function($rootScope) {
 
     $rootScope.$on('$viewContentLoaded', function () {
-
         // global
         app = (function(document, $) {
             var docElem = document.documentElement,
@@ -40,8 +39,6 @@ collectionsApp.run(function($rootScope) {
         (function() {
             app.init();
         })();
-
-
     });
 });
 
@@ -74,7 +71,6 @@ collectionsApp.config(['$httpProvider', function ($httpProvider) {
             }
 
             return function (promise) {
-
                 $('#resultInfo').hide();
                 $('#loadingImage').show();
                 return promise.then(success, error);

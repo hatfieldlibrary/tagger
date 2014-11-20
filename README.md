@@ -1,7 +1,7 @@
-# Tagger Application
+# Collections Tagger Application
 
-This nodejs application associates tags with collection information.  It provides a REST API that that allows clients to retrieve tag and collection information as JSON.
-Currently, two additional REST services are included: one for retrieving items from CONTENTdm and a second for retreving communities from DSpace.
+This nodejs application associates tags with collection information.  It provides a REST API that that allows clients to retrieve this tag and collection information via JSON.
+Two additional REST services are included: one for retrieving items from CONTENTdm and a second for retreving communities from DSpace.
 
 
 ### Development

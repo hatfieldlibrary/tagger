@@ -2,10 +2,10 @@
 
 var collectionControllers = angular.module('collectionControllers', []);
 
-collectionControllers.controller('CollectionByIdCtrl', ['$scope','$location', 'CollectionLookup', function($scope, $location, CollectionLookup) {
+collectionControllers.controller('CollectionByIdCtrl', ['$scope','$location', 'CollectionLookup',
+  function($scope, $location, CollectionLookup) {
 
     $scope.init = function () {
-
         var path = $location.path();
         var components = path.split('/');
         var id = components[3];
@@ -19,12 +19,11 @@ collectionControllers.controller('CollectionByIdCtrl', ['$scope','$location', 'C
 
 }]);
 
-collectionControllers.controller('TypeCollectionsCtrl', ['$scope', '$location', '$anchorScroll', 'CollectionsType', 'Collections','TypeInfo', function($scope, $location, $anchorScroll, CollectionsType, Collections, TypeInfo) {
+collectionControllers.controller('TypeCollectionsCtrl', ['$scope', '$location', '$anchorScroll', 'CollectionsType', 'Collections','TypeInfo',
+  function($scope, $location, $anchorScroll, CollectionsType, Collections, TypeInfo) {
 
     $scope.init = function () {
-
         var id;
-
         $scope.taglist = {};
         $scope.tagged = true;
         $scope.findingaid = false;
@@ -34,7 +33,7 @@ collectionControllers.controller('TypeCollectionsCtrl', ['$scope', '$location', 
         var path = $location.path();
         var components = path.split('/');
 
-        if (components.length < 3) {
+        if (components.length < 4) {
             // unit test
             id = 5;
         } else {
@@ -44,8 +43,6 @@ collectionControllers.controller('TypeCollectionsCtrl', ['$scope', '$location', 
         $scope.activeIndex = 0;
         $scope.test = '';
         $scope.collections = CollectionsType.query({id: id});
-
-
     };
 
     $scope.toggleView = function() {
@@ -59,7 +56,6 @@ collectionControllers.controller('TypeCollectionsCtrl', ['$scope', '$location', 
     };
 
     $scope.isFindingAid = function(type) {
-
         return type === 'ead';
     };
 
@@ -114,22 +110,20 @@ collectionControllers.controller('TypeCollectionsCtrl', ['$scope', '$location', 
         if (index !== undefined) {
             $scope.activeIndex = index;
         }
-
         $scope.tagged = true;
         $scope.getTypeInfo(id);
         $scope.collections = CollectionsType.query({id: id});
-
     });
 
     $scope.init();
+
 }]);
 
-collectionControllers.controller('CollectionsCtrl', ['$scope', '$location', '$anchorScroll', 'Collections', 'DspaceCollections', 'TagInfo', function($scope, $location, $anchorScroll, Collections, DspaceCollections, TagInfo) {
+collectionControllers.controller('CollectionsCtrl', ['$scope', '$location', '$anchorScroll', 'Collections', 'DspaceCollections', 'TagInfo',
+  function($scope, $location, $anchorScroll, Collections, DspaceCollections, TagInfo) {
 
     $scope.init = function () {
-
         var id;
-
         $scope.taglist = {};
         $scope.tagged = true;
         $scope.findingaid = false;
@@ -153,7 +147,6 @@ collectionControllers.controller('CollectionsCtrl', ['$scope', '$location', '$an
         $scope.collections = Collections.query({id: id});
 
     };
-
 
     $scope.toggleView = function() {
         if ($scope.layout === 'full') {

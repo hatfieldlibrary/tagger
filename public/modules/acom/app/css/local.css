@@ -18,6 +18,13 @@
 ul.vertical-list {
     list-style-type: none;
 }
+/*--------------------------------------------------------
+ * Page sections
+ *--------------------------------------------------------*/
+.page-header>h2 {
+  margin-top: 10px;
+  margin-bottom: 45px;
+}
 
 /*--------------------------------------------------------
  * Breadcrumbs
@@ -88,7 +95,6 @@ p a {
     box-shadow: rgba(0, 0, 0, 0.258824) 0px 2px 5px 0px;
 }
 .content-justify {
-    margin-top: 25px;
     text-align: justify;
     color: #3F3732;
 }
