@@ -72,7 +72,7 @@ module.exports = function(app,config,passport){
 
 
   // Public angularjs module routes
-  app.get("/commons/", function(req, res) {
+  app.get("/commons", function(req, res) {
     res.sendFile(config.root + config.modulePath + '/index.html' )
   });
   // request for partial

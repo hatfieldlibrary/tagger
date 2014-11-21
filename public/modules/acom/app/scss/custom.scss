@@ -192,6 +192,20 @@
   border-radius: 2px;
 }
 
+.white-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+    $bg: #ffffff,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding: 1.25rem,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  border: 1px solid #ccc;
+  font-size: 1.1em;
+
+}
+
 .clear-panel {
   @include panel(
     // Sets the panel background color. Default: $panel-pg

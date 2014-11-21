@@ -100,7 +100,7 @@ module.exports = function (grunt) {
           '<%= client %>/app/*.css',
           '<%= client %>/app/**/*.{jpg,gif,svg,jpeg,png}'
         ],
-        tasks: ['newer:jshint','express:dev', 'wait'],
+       // tasks: ['newer:jshint','express:dev', 'wait'],
         options: {
           livereload: ReloadPort,
           nospawn: true //Without this option specified express won't be reloaded

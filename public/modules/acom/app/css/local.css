@@ -25,7 +25,10 @@ ul.vertical-list {
   margin-top: 10px;
   margin-bottom: 45px;
 }
-
+.side-top-margin {
+  padding: 0;
+  margin-top: -10px;
+}
 /*--------------------------------------------------------
  * Breadcrumbs
  *-------------------------------------------------------*/

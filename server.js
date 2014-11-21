@@ -3,12 +3,12 @@
 var server;
 
 var express = require('express'),
-    session = require('express-session'),
-    http = require('http'),
-    passport = require('passport'),
-    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-    logger = require('morgan'),
-    fs = require('fs');
+  session = require('express-session'),
+  http = require('http'),
+  passport = require('passport'),
+  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+  logger = require('morgan'),
+  fs = require('fs');
 
 var config = require('./config/environment');
 global.db = require('./app/models');
@@ -20,7 +20,7 @@ app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true }
 app.use(passport.initialize());
 app.use(passport.session());
 // setup the access logger
-var accessLogStream = fs.createWriteStream('/var/log/tagger/access.log', {flags: 'a'});
+var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
 app.use(logger({stream: accessLogStream}));
 
 
@@ -31,39 +31,39 @@ var GOOGLE_CALLBACK = config.googleCallback;
 // passport used for Google OAuth2
 // define serializer and deserializer
 passport.serializeUser(function(user, done) {
-    done(null, user);
+  done(null, user);
 });
 passport.deserializeUser(function(user, done) {
-    done(null, user);
+  done(null, user);
 });
 // Configure Google authentication for this application
 passport.use(new GoogleStrategy({
-        clientID: GOOGLE_CLIENT_ID,
-        clientSecret: GOOGLE_CLIENT_SECRET,
-        callbackURL: GOOGLE_CALLBACK
-    },
-    function(accessToken, refreshToken, profile, done) {
-        // asynchronous verification
-        process.nextTick(function () {
-            // attempt to retrieve user by their Google profile
-            // email address
-            db.Users.find({ attributes: ['id'],
-                where: {
-                    email: {
-                        eq: profile._json.email
-                    }
-                }
-            }).success( function (user, err) {
-                // if email lookup succeeded, pass the user id to passport callback
-                if (user) {
-                    console.log(user);
-                    return done(err, user.dataValues.id);
-                }
-                // otherwise pass null (unauthenticated)
-                done(null, null);
-            });
-        });
-    }
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: GOOGLE_CALLBACK
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification
+    process.nextTick(function () {
+      // attempt to retrieve user by their Google profile
+      // email address
+      db.Users.find({ attributes: ['id'],
+        where: {
+          email: {
+            eq: profile._json.email
+          }
+        }
+      }).success( function (user, err) {
+        // if email lookup succeeded, pass the user id to passport callback
+        if (user) {
+          console.log(user);
+          return done(err, user.dataValues.id);
+        }
+        // otherwise pass null (unauthenticated)
+        done(null, null);
+      });
+    });
+  }
 ));
 
 // Route middleware ensures user is authenticated.
@@ -72,8 +72,8 @@ passport.use(new GoogleStrategy({
 // the request will proceed.  Otherwise, the user will be redirected to the
 // login page.
 app.ensureAuthenticated = function(req, res, next) {
-    if (req.isAuthenticated()) { return next(); }
-    res.redirect('/login');
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login');
 };
 
 require('./config/express')(app, config);
@@ -81,61 +81,79 @@ require('./config/routes')(app, config, passport);
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 /// error handlers
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
     });
+  });
 }
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
 
 // Snyc database if not in test mode then start server
 if (config.nodeEnv !== 'test') {
-    db
-        .sequelize
-        .sync(config.sync)
-        .complete(function(err) {
-            if (err) {
-                throw err[0]
-            } else {
-                startServer();
-            }
-        });
+  db
+    .sequelize
+    .sync(config.sync)
+    .complete(function(err) {
+      if (err) {
+        throw err[0]
+      } else {
+        startServer();
+      }
+    });
 }
 // Doing integration tests.  These drop database tables
 // before they run. For now, just start the server.
 else {
-    startServer();
+  startServer();
 }
 
 function startServer() {
 
-    // avoids annoying error message when testing.
-    if (server !== undefined) {
-        server.close();
+  // stop annoying error message when testing.
+  if (server !== undefined) {
+    server.close();
+  }
+  server = http.createServer(app).listen(config.port, function() {
+
+    if (config.nodeEnv !== 'development') {
+      try {
+        console.log('Old User ID: ' + process.getuid() + ', Old Group ID: ' + process.getgid());
+        // WU Mac group id. For 'runlocal' task.
+        // process.setuid('staff');
+        process.setuid('node');
+        process.setuid('node');
+        console.log('New User ID: ' + process.getuid() + ', New Group ID: ' + process.getgid());
+        console.log('Express server listening on port ' + config.port);
+      } catch (err) {
+        console.log('Cowardly refusing to keep the process alive as root.');
+        process.exit(1);
+      }
+    }  else {
+      console.log('Running with User Id: ' + process.getuid());
+      console.log('Express server listening on port ' + config.port)
     }
-    server = http.createServer(app).listen(config.port, function(){
-        console.log('Express server listening on port ' + config.port)
-    })
+
+  })
 
 }
 
