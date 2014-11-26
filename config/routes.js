@@ -57,10 +57,12 @@ module.exports = function(app,config,passport){
   app.post('/admin/collection/type', ensureAuthenticated, collection.addType);
   app.post('/admin/collection/create', ensureAuthenticated, collection.create);
   app.post('/admin/collection/update', ensureAuthenticated, collection.update);
+
   // pass application configuration to imageUpdate controller.
   app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
     collection.updateImage(res, req, config)
   });
+
   app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);
   app.post('/admin/tag/create', ensureAuthenticated, tag.create);
   app.post('/admin/tag/update', ensureAuthenticated, tag.tagUpdate);
@@ -68,8 +70,6 @@ module.exports = function(app,config,passport){
   app.post('/admin/content/create', ensureAuthenticated, content.create);
   app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
   app.get('/admin/content/delete/:id', ensureAuthenticated, content.delete);
-
-
 
   // Public angularjs module routes
   app.get("/commons", function(req, res) {
@@ -89,6 +89,10 @@ module.exports = function(app,config,passport){
   // This  catch-all is required by html5mode.
   app.get('/commons/*', function(req, res) {
     res.sendFile(config.root + config.modulePath + '/index.html');
+  });
+
+  app.get('*', function(req, res) {
+    res.status(404).end();
   });
 
 };

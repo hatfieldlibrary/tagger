@@ -8,10 +8,11 @@ angular.module('collectionFilters', []).filter('collectionFilter', function() {
 
 
     return function( items, types) {
-        var filtered = [];
 
+        var filtered = [];
+         console.log(types);
         angular.forEach(items, function(item) {
-                console.log(item);
+
             // types is the ng-model used by the filter toggle buttons. Initialized
             // to false places switch in off position.  When both toggles in off position,
             // push all items to display.

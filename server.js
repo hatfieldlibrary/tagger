@@ -1,4 +1,4 @@
-"use strict";
+"use strict;"
 
 var server;
 
@@ -9,16 +9,40 @@ var express = require('express'),
   GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
   logger = require('morgan'),
   fs = require('fs');
+  //RedisStore = require('connect-redis')(session);
+
 
 var config = require('./config/environment');
 global.db = require('./app/models');
 
-
 var app = express();
-// configure app
+
+require('./config/express')(app, config);
+
+
+// Attempting to use Redisstore for sessions.  Not
+// able to get this working with OAuth, yet.  The
+// advantage of Redisstore is that sessions persist
+// when the application is restarted, and we eliminate
+// a pesky warning when launching in production mode.
+// In practice, lost sessions will seldom - if ever - be a problem
+// for us and the few administrative users who use tagger.
+//app.use(session({
+//    store: new RedisStore({
+//      host: config.redis.host,
+//      port: config.redis.port,
+//      db: 2,
+//      pass: 'rdpasswd'
+//    }),
+//    secret: 'keyboardcat',
+//    resave: true,
+//   saveUninitialized: true })
+//);
+// Use express-session in lieu of Redisstore.
 app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true }));
 app.use(passport.initialize());
 app.use(passport.session());
+
 // setup the access logger
 var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
 app.use(logger({stream: accessLogStream}));
@@ -66,6 +90,7 @@ passport.use(new GoogleStrategy({
   }
 ));
 
+
 // Route middleware ensures user is authenticated.
 // Use this middleware on any resource that needs to be protected.  If
 // the request is authenticated (typically via a persistent login session),
@@ -76,21 +101,23 @@ app.ensureAuthenticated = function(req, res, next) {
   res.redirect('/login');
 };
 
-require('./config/express')(app, config);
+// configure routes.
 require('./config/routes')(app, config, passport);
 
 /// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+//app.use(function(req, res, next) {
+//  var err = new Error('Not Found');
+//  err.status = 404;
+//  next(err);
+//});
+
 /// error handlers
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
+    console.error(err.stack);
     res.render('error', {
       message: err.message,
       error: err
@@ -101,12 +128,12 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  console.error(err.stack);
+//  res.render('error', {
+//    message: err.message,
+//    error: {}
+//  });
 });
-
 
 // Snyc database if not in test mode then start server
 if (config.nodeEnv !== 'test') {
@@ -138,10 +165,8 @@ function startServer() {
     if (config.nodeEnv !== 'development') {
       try {
         console.log('Old User ID: ' + process.getuid() + ', Old Group ID: ' + process.getgid());
-        // WU Mac group id. For 'runlocal' task.
-        // process.setuid('staff');
-        process.setuid('node');
-        process.setuid('node');
+        process.setgid(config.gid);
+        process.setuid(config.uid);
         console.log('New User ID: ' + process.getuid() + ', New Group ID: ' + process.getgid());
         console.log('Express server listening on port ' + config.port);
       } catch (err) {

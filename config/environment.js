@@ -13,6 +13,8 @@ var config = {
     db: 'acomtags_development',
     user: 'mspalti',
     password: 'coffee',
+    uid: 'mspalti',
+    gid: 'staff',
     host: 'localhost',
     sync: { force: false },
     convert: '/usr/local/bin/convert',
@@ -22,6 +24,10 @@ var config = {
     googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
     googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
     googleCallback: 'http://localhost:3000/auth/google/callback',
+    redis: {
+      host: "127.0.0.1",
+      port: 3006
+    },
     nodeEnv: env
   },
 
@@ -34,6 +40,8 @@ var config = {
     db: 'acomtags_development',
     user: 'mspalti',
     password: 'coffee',
+    uid: 'node',
+    gid: 'staff',
     host: 'localhost',
     sync: { force: false },
     convert: '/usr/local/bin/convert',
@@ -55,6 +63,8 @@ var config = {
     db: 'acomtags_test',
     user: 'mspalti',
     password: 'coffee',
+    uid: 'mspalti',
+    gid: 'staff',
     host: 'localhost',
     sync: { force: true },
     convert: '/usr/local/bin/convert',
@@ -76,6 +86,8 @@ var config = {
     db: 'acomtags',
     user: 'tagger',
     password: 'c0fFee12',
+    uid: 'node',
+    gid: 'node',
     host: 'libdb.willamette.edu',
     sync: { force: false },
     convert: '/usr/bin/convert',

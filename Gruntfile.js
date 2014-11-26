@@ -184,7 +184,7 @@ module.exports = function (grunt) {
           flatten: true,
           cwd:'<%= client %>/app',
           src: ['bower_components/font-awesome/fonts/**'],
-          dest: '<%= dist %>/fonts/',
+          dest: '<%= dist %>/css/fonts/',
           filter: 'isFile'
         }, {
           expand: true,

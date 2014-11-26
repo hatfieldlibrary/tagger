@@ -1,78 +1,71 @@
 <div ng-controller="TypeCollectionsCtrl">
-
-    <div class="row  show-for-large-up">
-        <div class="small-8 columns">
-            <ul class="breadcrumbs">
-                <li><i class="fa fa-home"></i> <a href="http://library.willamette.edu/archives">University archives</a></li>
-                <li><a href="/commons/archives">Archives Collections</a></li>
-                <li class="current">{{typeInfo.name}}</li>
-            </ul>
-        </div>
-        <div class="small-4 columns text-right" style="margin-bottom: 11px;">
-            <a href="/commons/home"><img src="/images/academiccommons_lg.png"></a>
-
-        </div>
-        <div class="row">
-            <div class="large-7 medium-7 small-12 columns">
-                <h2 style="margin-top: -15px;">University Archives Collections</h2>
-            </div>
-            <div class="large-1 medium-1 columns"></div>
-        </div>
-        <div class="row">
-            <div class="small-12 text-center">
-                <div id="loadingImage" style="display: none;"><img src="/images/8.gif">&nbsp;&nbsp;loading ...</div>
-            </div>
-        </div>
+  <div class="row  show-for-large-up">
+    <div class="small-8 columns">
+      <ul class="breadcrumbs">
+        <li><i class="fa fa-home"></i> <a href="http://library.willamette.edu/archives">University archives</a></li>
+        <li><a href="/commons/archives">Archives Collections</a></li>
+        <li class="current">{{typeInfo.name}}</li>
+      </ul>
     </div>
-
-
+    <div class="small-4 columns text-right" style="margin-bottom: 11px;">
+      <a href="/commons/home"><img src="/images/academiccommons_lg.png"></a>
     </div>
     <div class="row">
-        <div class="small-12 medium-2 large-2 columns ">
-            <div class="row">
-                <div class="switch round large">
-                    <legend style="font-size: 0.9rem;margin-left: 12px;font-weight:bold;">Show<br>Finding Aids<br>Only</legend>
-                    <input id="eadcheckbox" type="checkbox" ng-model="collectionType.ead" ng-change="resetFilter('ead')" ng-init="collectionType.ead=false"/>
-                    <label for="eadcheckbox">All</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="switch round large">
-                    <legend style="font-size: 0.9rem;margin-left: 12px;margin-top: 30px;font-weight:bold;">Digital Collections<br>Only</legend>
-                    <input id="digcheckbox" type="checkbox" ng-model="collectionType.dig" ng-change="resetFilter('dig')" ng-init="collectionType.dig=false"/>
-                    <label for="digcheckbox">All</label>
-                </div>
-            </div>
-        </div>
-        <div class="small-12 medium-10 large-10 columns">
-            <div class="row" style="background: #eee;padding: 6px;">
-                <div class="small-12">
-                    <div class="right">
-                        <a ng-click="toggleView()">{{toggleText}}</a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div ng-repeat="collection in filtered = ( collections[1] | collectionFilter:collectionType)" ng-switch on="layout" class="view-frame small-12">
-
-                    <div class="row" ng-if="!isFindingAid(collection.collType)">
-                        <div ng-switch-when="full">
-                            <tagged-collection name="{{collection.name}}" url="{{collection.url}}" description="{{collection.description}}" browse-type="{{collection.browseType}}" image="{{collection.image}}" coll-type="{{collection.collType}}" dates="{{collection.dates}}" items="{{collection.items}}" item-types="collection.itemTypes" tags="collection.tags"></tagged-collection>
-                        </div>
-                        <div ng-switch-when="list">
-                            <simple-link name="{{collection.name}}" url="{{collection.url}}"></simple-link>
-                        </div>
-                    </div>
-                    <div class="row" ng-if="isFindingAid(collection.collType)" >
-                        <div ng-switch-when="full">
-                            <findingaid name="{{collection.name}}" url="{{collection.url}}" dates="{{collection.dates}}" description="{{collection.description}}" tags="collection.tags"></findingaid>
-                        </div>
-                        <div ng-switch-when="list">
-                            <simple-link name="{{collection.name}}" url="{{collection.url}}"></simple-link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div class="large-7 medium-7 small-12 page-header columns">
+        <h2>University Archives Collections</h2>
+      </div>
+      <div class="large-1 medium-1 columns"></div>
     </div>
+    <div class="row">
+      <div class="small-12 text-center">
+        <div id="loadingImage" style="display: none;"><img src="/images/8.gif">&nbsp;&nbsp;loading ...</div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12 medium-2 large-2 columns ">
+      <div class="row">
+        <div class="switch round large">
+          <legend style="font-size: 0.9rem;margin-left: 12px;font-weight:bold;">Show<br>Finding Aids<br>Only</legend>
+          <input id="eadcheckbox" type="checkbox" ng-model="collectionType.ead" ng-change="resetFilter('ead')" ng-init="collectionType.ead=false"/>
+          <label for="eadcheckbox">All</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="switch round large">
+          <legend style="font-size: 0.9rem;margin-left: 12px;margin-top: 30px;font-weight:bold;">Digital Collections<br>Only</legend>
+          <input id="digcheckbox" type="checkbox" ng-model="collectionType.dig" ng-change="resetFilter('dig')" ng-init="collectionType.dig=false"/>
+          <label for="digcheckbox">All</label>
+        </div>
+      </div>
+    </div>
+    <div class="small-12 medium-10 large-10 columns">
+      <div class="row" style="background: #eee;padding: 6px;">
+        <div class="small-12">
+          <div class="right">
+            <a ng-click="toggleView()">{{toggleText}}</a>
+          </div>
+        </div>
+      </div>
+      <div ng-repeat="collection in filtered = ( collections[1] | collectionFilter:collectionType)"  ng-switch on="layout" class="view-frame small-12">
+        <div class="row" ng-if="!isFindingAid(collection.collType)">
+          <div ng-switch-when="full">
+            <tagged-collection name="{{collection.name}}" url="{{collection.url}}" description="{{collection.description}}" browse-type="{{collection.browseType}}" image="{{collection.image}}" coll-type="{{collection.collType}}" dates="{{collection.dates}}" items="{{collection.items}}" item-types="collection.itemTypes" tags="collection.tags"></tagged-collection>
+          </div>
+          <div ng-switch-when="list">
+            <simple-link name="{{collection.name}}" url="{{collection.url}}"></simple-link>
+          </div>
+        </div>
+        <div class="row" ng-if="isFindingAid(collection.collType)" >
+          <div ng-switch-when="full">
+            <findingaid name="{{collection.name}}" url="{{collection.url}}" dates="{{collection.dates}}" description="{{collection.description}}" tags="collection.tags"></findingaid>
+          </div>
+          <div ng-switch-when="list">
+            <simple-link name="{{collection.name}}" url="{{collection.url}}"></simple-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+

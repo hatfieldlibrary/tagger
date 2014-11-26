@@ -4,8 +4,8 @@
 
 'use strict';
 
-var host = 'http://127.0.0.1:3000/rest/';
-//var host = 'http://libmedia.willamette.edu/acomrest/';
+//var host = 'http://127.0.0.1:3000/rest/';
+var host = 'http://libmedia.willamette.edu/acomrest/';
 
 var collectionServices = angular.module('collectionServices', ['ngResource']);
 

@@ -53,12 +53,14 @@ exports.collectionByTypeId = function (req, res) {
         eq: typeId
       }
     },
+
     include: [db.Collection]
   }).success (function(coll) {
     processCollectionResult(coll,res);
   }).error(function(err){
     console.log(err);
   });
+
 };
 
 processCollectionResult = function(coll, res) {
@@ -117,14 +119,15 @@ processCollectionResult = function(coll, res) {
   });
   chainer.run()
     .success(function() {
-
+      console.log(collList);
       var result = [];
       result[0] = count;
       result[1] = collList;
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(result))
+      res.end(JSON.stringify(result));
+
     })
     .error(function(err) {
       console.log(err);
