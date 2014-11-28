@@ -15,8 +15,8 @@
     </div>
     <div class="small-4 columns show-for-medium-up" style="min-height: 270px;">
       <div ng-if="isStaticLink(browseType)">
-        <a href="{{url}}" ng-if="isCollection(collType)" style="clear:right;margin: 0 10px 30px;min-width: 180px;" class="button radius small right">Browse Collection&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>
-        <a href="{{url}}" ng-if="!isCollection(collType)" style="clear:right;margin: 0 10px 30px 0;min-width: 180px;" class="button radius small right">View this Item&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>
+        <a href="{{url}}" ng-if="isCollection(collType)" style="clear:right;margin: 0 10px 30px;min-width: 180px;" class="button radius small right" target="_self">Browse Collection&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>
+        <a href="{{url}}" ng-if="!isCollection(collType)" style="clear:right;margin: 0 10px 30px 0;min-width: 180px;" class="button radius small right" target="_self">View this Item&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>
       </div>
       <div style="width: 200px;float:right">
         <div ng-if="isBrowseList(browseType)" ng-controller="BrowseListCtrl">

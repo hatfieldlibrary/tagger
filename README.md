@@ -1,12 +1,14 @@
-# Collections Tagger Application
+# AngularJS - Express Collection Tagger
 
-This nodejs application associates tags with collection information.  It provides a REST API that that allows clients to retrieve this tag and collection information via JSON.
-Two additional REST services are included: one for retrieving items from CONTENTdm and a second for retreving communities from DSpace.
+The Express application associates tags with collection information.  It includes a REST API for retrieving tag and collection information via JSON.
+Two additional REST services are included: one for retrieving items from CONTENTdm and a second for retreiving communities from DSpace.
+
+The public AngularJS module is the Academic Commons web site.
 
 
 ### Development
 
-To get started with development, first clone the project into your working directory. For example:
+To get started with development, clone the project into your working directory. For example:
 
     git init
     git pull https://mspalti@stash.app.willamette.edu/scm/ac/backend.git
@@ -15,36 +17,51 @@ Next, install the dependencies:
 
     npm install
 
-The application requires mysql.  When in development, you need to install mysql on your machine and create the following empty databases:
+The application requires mysql.  When in development, you need to install mysql on your machine and create empty databases (Acomtags is the production database, so you may not require it for your local development work.):
 
     acomtags_development
     acomtags_test
     acomtags
 
-Assign permissions to these databases. Since this is your own test mysql instance, you might want use a shortcut by assigning all privileges on all databases to yourself.
+Assign mysql permissions to the databases. 
 
-The application uses Sequelize as the ORM.  Database tables are defined in the application models (think Express MVC). To access your mysql databases, you need to provide Sequelize with your mysql user name and password.
- To do this, open `config/environment.js` and edit the `user` and `password` for each of the three databases, or minimally for the development and test databases.  Example:
+The application uses Sequelize as the ORM.  Database tables are defined in the application models package (Express MVC). To access your mysql databases, add the mysql user name and password the the project configuration.
+ To do this, open `config/environment.js` and edit the `user` and `password` for each of the databases. Do this only for development, runlocal, and test configurations if these are what you will be using.  Example:
 
         development: {
-            root: rootPath,
-            app: {
-                name: 'myapp'
-            },
-            port: 3000,
-            db: 'myapp_development',
-            user: 'username',
-            password: 'password',
-            host: 'localhost',
-            sync: { force: false },
-            nodeEnv: env
-        },
+           root: rootPath,
+           app: {
+             name: 'acomtags'
+           },
+           port: 3000,
+           db: 'acomtags_development',
+           user: <username>',
+           password: '<password>',
+           uid: 'mspalti',
+           gid: 'staff',
+           host: 'localhost',
+           sync: { force: false },
+           convert: '/usr/local/bin/convert',
+           identify: '/usr/local/bin/identify',
+           taggerImageDir: '/usr/local/taggerImages',
+           modulePath: '/public/modules/acom/app',
+           googleClientId: '<GOOGLE CLIENT ID>',
+           googleClientSecret: '<GOOGLE CLIENT SECRET',
+           googleCallback: 'http://localhost:3000/auth/google/callback',
+           redis: {
+             host: "127.0.0.1",
+             port: 3006
+           },
+           nodeEnv: env
+         },
 
-You're now ready to start the application. When you first run the application, Sequelize will create tables for you in the `acomtags_development` database.
 
-When started in development mode, the Express service runs on the port configured in `config/environment.js` (3000).  A browser window is opened on start and the watch service restarts things as needed when files are updated.  This
-application uses Jade templates. Updating the browser window automatically with file edits doesn't appear possible without additional effort.
-E.g.: my attempt to use livereload with the Jade templates ran into a problem with conditional logic in the templates.  So, when coding you'll need to manually refresh the browser.
+You're now ready to start the application. When you first start the application in development mode, Sequelize will create tables in the `acomtags_development` database.
+
+The Express service runs on the port configured in `config/environment.js` (3000).  A browser window is opened on start and the watch service restarts as needed when files are updated.  
+
+The Tagger application uses Jade templates. Unfortunately, updating the browser window automatically with file edits doesn't appear possible without additional work.
+My attempt to use livereload with the Jade templates ran into a problem with conditional logic in the templates.  So, when coding you'll need to manually refresh the browser.
 
 To start development mode:
 
@@ -59,32 +76,57 @@ To start test mode:
 
     grunt test
 
+### Runlocal
+
+The AngularJS application is compiled using `grunt publish` and copied to the `dist` directory inside the module.  You can preview the result using the runlocal task:
+
+    grunt runlocal
 
 ### Production
 
-First, copy or clone the application to the server.  There is no need to copy node_modules since these will be installed using npm once on the server.
+To run on the production server, be sure that nodejs and the required node modules are installed.
 
-Next, make sure nodejs is installed on the server.  It can be installed in a number of ways.  RHEL package manager includes nodejs in extra packages, so the simplest option may be this:
+First, make sure nodejs is installed on the server.  It can be installed in a number of ways.  If using RHEL package manager, you can try this:
 
     sudo yum install nodejs npm --enablerepo=epel
 
-Once node is installed, run:
-
-    npm install
-
-Currently, we are using the forever CLI to launch and keep the nodejs script running, so install forever globally as follows:
+Currently, we are using the forever CLI to launch and keep the Express server running.  Install forever globally as follows:
 
     sudo npm install forever -g
+    
+From this point, how you proceed will depend on the production environment and whether you are copying the project from your local machine or cloning from git and building from scratch.  
 
-Now we need to account for differences between the development and production environments. For now, this involves a manual edit.  Change the default environment by editing app/config/environment.js as follows:
+The following assumes that you have built and tested the application already. It also assumes that you have created an init.d script that launches forever and added this to your system runlevels.
 
-    env = process.env.NODE_ENV || 'production';
+1. Copy the project to a location on the server. If you know what you are doing, you can omit unnecessary development files.
+2. If you have not done so already, create a `node` user. Set the owner and group for all files (including .* files) to the node user.  
+3. Start `forever` via the init.d script (e.g. /sbin/service script start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
 
-The production environment is similar to the development example above.  Make changes to mysql connection parameters and app configuration (e.g. port) there.
+Be sure that the init.d startup script sets the NODE_ENV value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`
 
-Finally, to start the server from the command line, type the following:
+Set the etails of the production environment, including database access credentials, paths, and Google OAUTH2 credentials in config/environment.js.  
 
-    forever server.js &
 
+### Configuration
+
+Configuration file: config/environment.js
+
+* root: path set by module
+* port: Express port
+* db: database name
+* user: database user
+* password: database password
+* uid: Express system user
+* gid: Express system group
+* host: host name
+* sync: Sequelize database initialization setting
+* convert: location of ImageMagick convert library
+* identify: location of ImageMagick identify library
+* taggerImageDir: path to tagger images
+* modulePath: path to the module directory (app or dist)
+* googleClientId: the Google ID for this application (used by OAUTH2)
+* googleClientSecrect: Google secret (used by OAUTH2)
+* redis: sesion cache settings (experimental)
+* nodeEnv: current node environment (startup setting or default)
 
 
