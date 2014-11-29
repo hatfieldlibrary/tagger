@@ -118,12 +118,12 @@ Configuration file: config/environment.js
 * password: database password
 * uid: Express system user
 * gid: Express system group
-* host: host name
+* mysql host: host name (e.g. libdb.willamette.edu)
 * sync: Sequelize database initialization setting
 * convert: location of ImageMagick convert library
 * identify: location of ImageMagick identify library
 * taggerImageDir: path to tagger images
-* modulePath: path to the module directory (app or dist)
+* modulePath: path to the AngularJS module directory (app or dist)
 * googleClientId: the Google ID for this application (used by OAUTH2)
 * googleClientSecrect: Google secret (used by OAUTH2)
 * redis: sesion cache settings (experimental)

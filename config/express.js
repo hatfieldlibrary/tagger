@@ -4,12 +4,15 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var helmet = require('helmet')
 
 module.exports = function(app, config) {
 
   app.set('port', config.port);
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'jade');
+
+  app.use(helmet());
 
   // setup static file paths
   // admin ui
