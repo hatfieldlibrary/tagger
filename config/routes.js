@@ -93,9 +93,6 @@ module.exports = function(app,config,passport){
     res.sendFile(config.root + config.modulePath + '/index.html');
   });
 
-  app.get('*', function(req, res) {
-    res.status(404).end();
-  });
 
 };
 
