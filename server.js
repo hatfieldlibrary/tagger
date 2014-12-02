@@ -45,7 +45,7 @@ app.use(passport.session());
 
 // setup the access logger
 var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
-app.use(logger({stream: accessLogStream}));
+app.use(logger('combined',{stream: accessLogStream}));
 
 
 // Google OAUTH2.

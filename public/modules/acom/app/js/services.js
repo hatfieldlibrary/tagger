@@ -100,7 +100,7 @@ collectionServices.factory('EadRestRequest', ['$resource',
 
 collectionServices.factory('BrowseListRequest', ['$resource',
     function($resource) {
-        return $resource(host + 'getBrowseList:collection', {}, {
+        return $resource(host + 'getBrowseList/collegian', {}, {
             query: {method:'GET', isArray: false }
         });}
 ]);
