@@ -86,6 +86,8 @@ module.exports = function(app,config,passport){
     var name = req.params.name;
     res.sendFile(config.root + config.modulePath + '/components/' +name );
   });
+
+
   // This  catch-all is required by html5mode.
   app.get('/commons/*', function(req, res) {
     res.sendFile(config.root + config.modulePath + '/index.html');

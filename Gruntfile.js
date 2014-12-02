@@ -177,7 +177,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd:'<%= client %>/app',
-          src: ['js/*.js','images/**','*.txt', '**/*.html', '!**/*.scss', '!bower_components/**'],
+          src: ['js/*.js','extras/**','images/**','*.txt', '**/*.html', '!**/*.scss', '!bower_components/**'],
           dest: '<%= dist %>'
         } , {
           expand: true,
@@ -194,7 +194,8 @@ module.exports = function (grunt) {
           dest: '<%= dist %>/js/vendor',
           filter: 'isFile'
 
-        } ]
+        }
+        ]
       },
       server: {
         files: [{
