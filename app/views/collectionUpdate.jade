@@ -14,7 +14,7 @@ block content
         .small-2.columns
             p
             a(class="th radius", href="/images/full/"+collImg)
-                img(src="/images/full/"+collImg)
+                img(src="/resources/img/full/"+collImg)
             .small-text-center
                 a(href="#" data-reveal-id="uploadModal") Upload Image
                 p
@@ -22,7 +22,7 @@ block content
                 .label.secondary(style="white-space:normal;") Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
 
         .small-10.columns
-            form(method="post", enctype='application/x-www-form-urlencoded', action="/collection/update")
+            form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/collection/update")
                 .row
                     .small-12.columns
                         label Collection Name
@@ -101,11 +101,11 @@ block content
                 .row
                 each tag in tags
                     label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
-                        a(href="/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
+                        a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
                 p &nbsp;
                 p
                 .ui-widget
-                form(method="post" enctype='application/x-www-form-urlencoded', action="/collection/tag", id="tagForm")
+                form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/tag", id="tagForm")
 
                     .small-12.columns
                     label(for="tagNames") Add Tag Here
@@ -127,11 +127,11 @@ block content
                 .row
                 each type in types
                     label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
-                        a(href="/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
+                        a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
                 p &nbsp;
                 p
                 .ui-widget
-                form(method="post" enctype='application/x-www-form-urlencoded', action="/collection/type", id="typeForm")
+                form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/type", id="typeForm")
                     .small-12.columns
                     label(for="typeNames") Add Content Type Here
                     .row
@@ -148,11 +148,11 @@ block content
         #deleteModal.reveal-modal.small(data-reveal)
             h3 Delete Collection
             p Are you sure you want to delete this collection?
-            a(href="/collection/delete/"+collId) Yes, delete this collection
+            a(href="/admin/collection/delete/"+collId) Yes, delete this collection
             a(class="close-reveal-modal") &#215;
 
         #uploadModal.reveal-modal.small(data-reveal)
-            form(action="/collection/image", method="post", enctype="multipart/form-data")
+            form(action="/admin/collection/image", method="post", enctype="multipart/form-data")
                 input(type="hidden", name="id", value=collId)
                 input(type="file", name="image")
                 input(type="submit" value="upload")

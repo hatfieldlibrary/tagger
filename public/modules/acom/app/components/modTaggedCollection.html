@@ -1,0 +1,65 @@
+<div class="coll-background" style="padding-top: 20px;padding-right: 5px;">
+  <div class="row collapse" >
+    <div class="small-11 columns">
+      <h3 style="padding-bottom: 15px;">{{name}}</h3>
+    </div>
+    <div class="small-1 columns text-right">
+
+    </div>
+  </div>
+  <div class="row collapse">
+    <div class="small-1 columns">&nbsp;</div>
+    <div class="small-7  columns">
+      <search-form-simple ng-if="isCollection(collType)" name="{{name}}"  url="{{url}}"></search-form-simple>
+      <p class="justify">{{description | limitTo: letterLimit}} <span ng-if="description.length > 450">&nbsp;&nbsp;<a ng-click="setLimit()">{{limitText}}</a></span></p>
+    </div>
+    <div class="small-4 columns show-for-medium-up" style="min-height: 270px;">
+      <div ng-if="isStaticLink(browseType)">
+        <a href="{{url}}" ng-if="isCollection(collType)" style="clear:right;margin: 0 10px 30px;min-width: 180px;" class="button radius small right" target="_self">Browse Collection&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>
+        <a href="{{url}}" ng-if="!isCollection(collType)" style="clear:right;margin: 0 10px 30px 0;min-width: 180px;" class="button radius small right" target="_self">View this Item&nbsp;&nbsp;<i class="fa fa-angle-right"></i></a>
+      </div>
+      <div style="width: 200px;float:right">
+        <div ng-if="isBrowseList(browseType)" ng-controller="BrowseListCtrl">
+          <input type="hidden" ng-init="query.area='collegian'">
+          <input type="hidden" ng-init="query.collections='collegian'"/>
+          <select ng-model="query.terms" ng-options="item.item.title for item in list.result" ng-change="submitQuery(query)">
+            <option value="">Browse by year</option>
+          </select>
+        </div>
+      </div>
+      <!-- hardcoded src!  -->
+      <img class="th radius" style="width: 200px;height:163px;float:right;margin-left:30px;"
+           src="http://libmedia.willamette.edu/acomimages/resources/img/thumb/{{image}}">
+
+
+    </div>
+  </div>
+  <div class="row collapse" >
+    <div class="small-1 columns">&nbsp;</div>
+    <div class="small-8 columns">
+      <tag  name="{{tagger.tag.name}}" id="{{tagger.tag.id}}" update-items="updateItems(tagger.tag.id)" ng-repeat="tagger in tags"></tag>
+    </div>
+    <div class="small-3 columns" style="margin-top: -30px;">
+      <div  ng-if="dates.length > 0"  style="width:100%;"><span class="line-label">Dates</span> {{dates}}</div>
+      <div  ng-if="items.length > 0"  style="width:100%;"><span class="line-label">Item count</span> {{items}}</div>
+      <span class="line-label">Content types</span>
+      <ul class="inline-list" >
+        <li ng-repeat='type in itemTypes' ng-switch on="type.itemContent.name">
+          <a ng-switch-when="PDF" style="font-size: 1.8em;" title="PDF"><i class="fa fa-file-pdf-o"></i></a>
+          <a ng-switch-when="Video" style="font-size: 1.8em;" title="Video"><i class="fa fa-film"></i></a>
+          <a ng-switch-when="Image" style="font-size: 1.8em;" title="Image"><i class="fa fa-picture-o"></i></a>
+          <a ng-switch-when="Transcribed Document" style="font-size: 1.8em;" title="Transcribed Content"><i class="fa fa-file-text-o"></i></a>
+          <a ng-switch-when="Document" style="font-size: 1.8em;" title="Document"><i class="fa fa-file-o"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row collapse">
+    <div class="small-1 columns"></div>
+    <div class="small-11 columns">
+    </div>
+  </div>
+</div>
+
+
+

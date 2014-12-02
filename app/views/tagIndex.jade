@@ -2,7 +2,7 @@ extends layout
 
 mixin tagLink(tag)
     .small-10.columns
-        a(href='/form/tag/update/'+tag.id)=tag.name
+        a(href='/admin/form/tag/update/'+tag.id)=tag.name
     .small-1.columns
         label ID:&nbsp;
             =tag.id

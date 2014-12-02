@@ -1,0 +1,479 @@
+@import "foundation/components/panels",
+"foundation/components/accordion",
+"foundation/components/grid",
+"foundation/components/buttons",
+"foundation/components/inline-lists",
+"foundation/components/side-nav",
+"foundation/components/sub-nav",
+"foundation/components/labels";
+
+.search-box-row {
+  @include grid-row();
+  padding-top: 10px;
+  background: #ECEAE8;
+  border: 1px solid #e4e2e0;
+  h5 {
+    color: $primary-color
+  }
+  ul.inline-list {
+    margin-left: 5px;
+    border-top: 1px solid #ccc;
+  }
+  ul.inline-list li {
+    color: #aaa;
+    margin-left: 0;
+    margin-right: 0.5rem;
+    font-size: 1.0em;
+
+
+  }
+}
+
+.menu-button {
+
+  @include button(
+
+    // $padding - Used to build padding for buttons Default: $button-med or rem-calc(12)
+  $padding: rem-calc(12),
+    // Primary color set in settings file. Default: $primary-color.
+  $bg: $primary-color,
+    // If true, set to button radius which is $global-radius or explicitly set radius amount in px (ex. $radius:10px). Default:false.
+  $radius: true,
+    // We can set $full-width:true to remove side padding extend width. Default:false
+  $full-width: false,
+    // We can set $disabled:true to create a disabled transparent button. Default:false
+  $disabled: false
+    // $is-input - <input>'s and <button>'s take on strange padding. We added this to help fix that. Default:false
+    //$is-input: false
+  );
+  font-size: 0.8em;
+  margin: 0 0.33rem;
+  color: #EDFFFD;
+}
+.menu-list {
+  @include inline-list;
+  margin-left: 0;
+  margin-right:0;
+  li {
+    margin-left: 0;
+    margin-right: 30px;
+    margin-top: 20px;
+    font-size: 0.9em;
+  }
+
+}
+
+.small-pad-button {
+  @include button(
+
+    // $padding - Used to build padding for buttons Default: $button-med or rem-calc(12)
+  $padding: rem-calc(8),
+    // Primary color set in settings file. Default: $primary-color.
+  $bg: $primary-color,
+    // If true, set to button radius which is $global-radius or explicitly set radius amount in px (ex. $radius:10px). Default:false.
+  $radius: true,
+    // We can set $full-width:true to remove side padding extend width. Default:false
+  $full-width: false,
+    // We can set $disabled:true to create a disabled transparent button. Default:false
+  $disabled: false
+    // $is-input - <input>'s and <button>'s take on strange padding. We added this to help fix that. Default:false
+    //$is-input: false
+  );
+  font-size: 0.8em;
+  margin: 0 0.33rem;
+}
+
+.callout-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #CDEBE9,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:16px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true);
+
+  margin-bottom: 0;
+  p {
+    color: #7A959C;
+    font-size: 0.95em;
+  }
+  a {
+    color: #107C75;
+    text-decoration: underline;
+  }
+
+}
+.mobile-callout-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #afc0ca,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:10px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true);
+  background-color: rgba(175, 192, 202, 0.80);
+  margin-bottom: 0;
+  border-width: 0;
+  a {
+    color: #fff;
+  }
+
+}
+.mobile-top-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #fff,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:3px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  border: 1px solid #fff;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 2px;
+  padding-left: 8px;
+  height: 45px;
+}
+.row.collapse .mobile-top-panel {
+  padding-left: 15px;
+}
+.mobile-top-button-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #333,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:3px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0;
+  padding-left: 2px;
+  height: 45px;
+  .button {
+    margin-top: -1px;
+  }
+
+}
+
+.row.collapse .mobile-top-panel {
+  padding-left: 15px;
+}
+
+.sm-padding-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #fff,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding: 15px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  border: 1px solid #ccc;
+
+  font-size: 1.1em;
+  font-family: 'Lato', Arial, sans-serif;
+}
+
+
+.no-padding-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #CAAD68,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:0,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  margin-bottom: 0;
+  margin-top: 0;
+  border-radius: 2px;
+}
+
+.white-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+    $bg: #ffffff,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding: 1.25rem,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  border: 1px solid #ccc;
+  font-size: 1.1em;
+
+}
+
+.clear-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  //$bg: transparentize(#000, 1),
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding: 1.25rem,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  background: transparent;
+  font-size: 0.8em;
+  border-style: none;
+}
+.margin-less {
+  margin: 0;
+}
+.no-padding-clear-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #fff,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:4px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  margin-bottom: 0.4rem;
+  margin-top: 0.8rem;
+  font-size: 0.8em;
+}
+
+.nav-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #A34D23,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:0,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  border-width: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-left: 1px solid #77480B;
+  text-transform: uppercase;
+  font-size: 0.9em;
+  a {
+    padding: 20px 0;
+    width: 100%;
+    display: block;
+    font-family: Lato,Arial,sans-serif;
+    background-color: #A34D23;
+    color: #F8F5EF;
+  }
+  a:hover {
+    background: #c4663a;
+    color: #F8F5EF;
+  }
+}
+.nav-panel.current a, .nav-panel.current a:hover{
+  background: #B86034;
+  color: #F1DEB6;
+  border-right: none;
+}
+.nav-panel.current a {
+  font-weight: 500;
+  letter-spacing: 0.12rem;
+}
+
+.search-result-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #F1F0EE,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:20px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  margin-bottom: 12px;
+  margin-left: 0;
+  a {
+    font-weight: 800;
+  }
+}
+
+.control-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #ECEAE8,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding: 20px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  margin-bottom: 20px;
+  padding-top: 10px;
+  ul.inline-list {
+    margin: 0 0 30px 0;
+  }
+  ul.inline-list li {
+    color: #B8B5AF;
+  }
+  ul.inline-list li.wide {
+    margin-left: 4px;
+    width: 40px;
+  }
+}
+
+.no-margin-panel {
+  @include panel(
+    // Sets the panel background color. Default: $panel-pg
+  $bg: #E9E9E9,
+    // Sets the panel padding amount. Default: $panel-padding
+  $padding:10px,
+    // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+  $adjust:true
+  );
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.hatfield-sidenav {
+  @include side-nav(
+    // Border color of divider
+  $divider-color: #ccc,
+    // Font size of nav items
+  $font-size: 1.0em,
+    // Color of navigation links
+  $link-color: $primary-color,
+    // Color of navigation links on hover
+  $link-color-hover: #444
+  );
+  border: 1px solid #eee;
+}
+
+.wu-accordion {
+  @include accordion-container;
+
+  .wu-accordion-navigation  {
+    @include accordion-navigation( $bg: #CF8A68,
+    $hover-bg: #b3775a,
+    $active-bg: $accordion-navigation-active-bg-color,
+    $padding: 6px,
+    $active_class: 'wu_active',
+    $font-color: #fff,
+    $font-size: .9em,
+    $font-family: $accordion-navigation-font-family );
+  }
+  .wu-accordion-content  {
+    @include accordion-content(
+      // Sets the panel background color. Default: $panel-pg
+    $bg: #FDFDF4,
+      // Sets the panel padding amount. Default: $panel-padding
+    $padding:4px,
+      // Sets the font color based on the darkness of the bg & resets header line-heights for panels. Default: $panel-header-adjust
+    $active_class: wu_active
+    );
+
+  }
+
+  ul {
+    height: 150px;
+    line-height: 1.2rem;
+    margin-left: 4px;
+    margin-bottom: 0;
+  }
+  ul li {
+    list-style-type: none;
+    padding-bottom: 10px;
+  }
+  ul li a {
+    font-size: 0.85em;
+    color: #55493A;
+  }
+
+}
+.wu-accordion {
+  height: 260px;
+}
+
+.wu-sub-nav {
+  @include sub-nav(
+    // Control the color of the divider between links.
+  $font-color: #41817D,
+    // Control your font-size per label.
+  $font-size: rem-calc(14),
+    // Change the background color for your labels
+  $active-bg: $primary-color
+  );
+  padding-top: 7px;
+  padding-left: 0;
+  margin-bottom: 15px;
+
+  dt {
+    color: #B86E01;
+  }
+  dd {
+    font-family: Lato, Arial, sans-serif;
+  }
+  dd a {
+    color: $primary-color;
+  }
+  dd.active a:hover {
+
+  }
+}
+
+.libguide-sidenav {
+  @include side-nav(
+    // Border color of divider
+  $divider-color: '#ccc',
+    // Font size of nav items
+  $font-size:  rem-calc(18),
+    // Color of navigation links
+  $link-color:$primary-color,
+    // Color of navigation links on hover
+  $link-color-hover: '#444'
+  );
+  padding: 0;
+  margin: 0;
+  line-height: 1.4rem;
+  li a:not(.button) {
+    padding: .4375rem .1rem;
+  }
+}
+
+.warm-label-large {
+  @include label(
+    // This options sets label padding
+  $padding:12px 16px 11px,
+    // This option sets label text-size
+  $text-size:16px,
+    // This option sets label background-color
+  $bg: #B96236,
+    // This option sets the radius of the label
+  $radius:16px
+  );
+  color: #fff;
+}
+.warm-label {
+  @include label(
+    // This options sets label padding
+  $padding:7px 16px 9px,
+    // This option sets label text-size
+  $text-size:13px,
+    // This option sets label background-color
+  $bg: #B96236,
+    // This option sets the radius of the label
+  $radius:10px
+  );
+  color: #fff;
+}
+.warm-label:hover, .warm-label-large:hover {
+  color: #fff;
+  background: #A95536;
+}
+
+.acom-side-nav {
+  @include side-nav(
+    // Border color of divider
+  $divider-color: '#666',
+    // Font size of nav items
+  $font-size:  rem-calc(17),
+    // Color of navigation links
+  $link-color: $primary-color,
+    // Color of navigation links on hover
+  $link-color-hover: '#444'
+  );
+  padding:0;
+  margin:0;
+  line-height: 2.0em;
+}
