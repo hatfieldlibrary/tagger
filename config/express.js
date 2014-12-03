@@ -4,7 +4,8 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var helmet = require('helmet')
+var helmet = require('helmet');
+var fs = require('fs');
 
 module.exports = function(app, config) {
 
@@ -27,7 +28,6 @@ module.exports = function(app, config) {
   app.use('/js', express.static(config.root + config.modulePath + '/js'));
   app.use('/css', express.static(config.root + config.modulePath + '/css'));
   app.use('/images', express.static(config.root + config.modulePath + '/images'));
- // app.use('/css/fonts', express.static(config.root + config.modulePath + '/css/fonts'));
   app.use('/commons/info', express.static(config.root + config.modulePath + '/extras'));
   app.use('/commons/robots.txt', express.static(config.root + config.modulePath + '/robots.txt'));
   // development
@@ -36,7 +36,9 @@ module.exports = function(app, config) {
 
 
   app.use(favicon(config.root + '/favicon.ico'));
-  app.use(logger('dev'));
+  // setup the access logger
+  var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
+  app.use(logger('combined', {stream: accessLogStream}));
   app.use(bodyParser());
   app.use(cookieParser());
 

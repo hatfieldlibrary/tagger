@@ -6,9 +6,7 @@ var express = require('express'),
   session = require('express-session'),
   http = require('http'),
   passport = require('passport'),
-  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-  logger = require('morgan'),
-  fs = require('fs');
+  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
   //RedisStore = require('connect-redis')(session);
 
 
@@ -43,9 +41,7 @@ app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true }
 app.use(passport.initialize());
 app.use(passport.session());
 
-// setup the access logger
-var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
-app.use(logger('combined',{stream: accessLogStream}));
+
 
 
 // Google OAUTH2.
