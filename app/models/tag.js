@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Created by mspalti on 5/23/14.
  */
@@ -16,10 +17,9 @@ module.exports =  function(sequelize, DataTypes) {
                 allowNull: false
             },
             url: {
-                type: DataTypes.STRING(255),
-                allowNull: true
-            }
-            ,
+              type: DataTypes.STRING(255),
+              allowNull: true
+            },
             type: {
                 type: DataTypes.STRING(3),
                 allowNull: false
@@ -38,10 +38,10 @@ module.exports =  function(sequelize, DataTypes) {
         },  {
             classMethods: {
                 associate: function(models) {
-                    Tag.belongsTo(models.TagTarget)
+                    Tag.belongsTo(models.TagTarget);
                 }
             }
         });
 
-    return Tag
+    return Tag;
 };

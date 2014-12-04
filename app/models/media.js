@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Created by mspalti on 8/1/14.
  */
@@ -29,7 +30,7 @@ module.exports =  function(sequelize, DataTypes) {
             },  {
                 classMethods: {
                     associate: function(models) {
-                        ItemContent.belongsTo(models.ItemContentTarget)
+                        ItemContent.belongsTo(models.ItemContentTarget);
                     }
                 }
             });

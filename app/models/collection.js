@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Created by mspalti on 5/23/14.
  */
@@ -16,7 +17,7 @@ module.exports = function(sequelize, DataTypes) {
             image: {
                 type: DataTypes.STRING(80),
                 allowNull: false,
-                defaultValue: "no_image.gif"},
+                defaultValue: 'no_image.gif'},
             url: {
                 type: DataTypes.STRING(255),
                 allowNull: false

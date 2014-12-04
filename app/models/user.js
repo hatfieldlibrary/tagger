@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Created by mspalti on 10/13/14.
  */
@@ -21,5 +22,5 @@ module.exports =  function(sequelize, DataTypes) {
                 }
             });
 
-    return Users
-}
+    return Users;
+};

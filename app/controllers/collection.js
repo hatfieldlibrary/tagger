@@ -1,73 +1,15 @@
+'use strict';
 
 var
   async = require('async');
 
 
 
-exports.collectionById = function(req, res) {
-
-  var collId = req.params.id;
-
-  db.Collection.find( {
-    where: {
-      id: {
-        eq: collId
-      }
-    },
-    include: [db.TagTarget]
-  }).success( function(coll) {
-    processCollectionResult(coll, res);
-
-  })
-};
-
-exports.collectionByTagId = function(req, res) {
-
-  var tagId = req.params.id;
-  // retrieve collections with matching TagId
-  db.TagTarget.findAndCountAll({
-    where:
-    {
-      TagId: {
-        eq: tagId
-      }
-    },
-    order: [['title', 'ASC']],
-    include: [db.Collection]
-
-  }).success( function(coll) {
-    processCollectionResult(coll, res);
-
-  }).error(function(err) {
-    console.log(err);
-  })
-
-};
-
-exports.collectionByTypeId = function (req, res) {
-
-  var typeId = req.params.id;
-  db.ItemContentTarget.findAndCountAll({
-    where: {
-      ItemContentId: {
-        eq: typeId
-      }
-    },
-
-    include: [db.Collection]
-  }).success (function(coll) {
-    processCollectionResult(coll,res);
-  }).error(function(err){
-    console.log(err);
-  });
-
-};
-
-processCollectionResult = function(coll, res) {
+var processCollectionResult = function(coll, res) {
 
   var count = coll.count;
-  var collList = new Array(),
-    chainer = new db.Sequelize.Utils.QueryChainer;
+  var collList = [],
+    chainer = new db.Sequelize.Utils.QueryChainer();
 
   // chain queries to retrieve other tags associated with each collection
   coll.rows.forEach(function(entry) {
@@ -96,26 +38,26 @@ processCollectionResult = function(coll, res) {
         temp.collType = tmpColl.ctype;
         temp.tags = tags;
       }).error(function(err) {
-        console.log(err)
+        console.log(err);
       })
-    ),
-      chainer.add(
-        db.ItemContentTarget.findAll({
-          where: {
-            CollectionId: {
-              eq: collId
-            }
-          },
-          order: [['name', 'ASC']],
-          include: [db.ItemContent]
+    );
+    chainer.add(
+      db.ItemContentTarget.findAll({
+        where: {
+          CollectionId: {
+            eq: collId
+          }
+        },
+        order: [['name', 'ASC']],
+        include: [db.ItemContent]
 
-        }).success(function(media) {
-          temp.itemTypes = media;
-          collList.push(temp );
-        }).error(function(err) {
-          console.log(err)
-        })
-      )
+      }).success(function(media) {
+        temp.itemTypes = media;
+        collList.push(temp );
+      }).error(function(err) {
+        console.log(err);
+      })
+    );
   });
   chainer.run()
     .success(function() {
@@ -131,7 +73,68 @@ processCollectionResult = function(coll, res) {
     })
     .error(function(err) {
       console.log(err);
-    })
+    });
+};
+
+
+
+exports.collectionById = function(req, res) {
+
+  var collId = req.params.id;
+
+  db.Collection.find( {
+    where: {
+      id: {
+        eq: collId
+      }
+    },
+    include: [db.TagTarget]
+  }).success( function(coll) {
+    processCollectionResult(coll, res);
+
+  });
+};
+
+exports.collectionByTagId = function(req, res) {
+
+  var tagId = req.params.id;
+  // retrieve collections with matching TagId
+  db.TagTarget.findAndCountAll({
+    where:
+    {
+      TagId: {
+        eq: tagId
+      }
+    },
+    order: [['title', 'ASC']],
+    include: [db.Collection]
+
+  }).success( function(coll) {
+    processCollectionResult(coll, res);
+
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+exports.collectionByTypeId = function (req, res) {
+
+  var typeId = req.params.id;
+  db.ItemContentTarget.findAndCountAll({
+    where: {
+      ItemContentId: {
+        eq: typeId
+      }
+    },
+
+    include: [db.Collection]
+  }).success (function(coll) {
+    processCollectionResult(coll,res);
+  }).error(function(err){
+    console.log(err);
+  });
+
 };
 
 // Returns a JSON representation of the DSpace API communities
@@ -142,11 +145,11 @@ exports.getDspaceCollections = function (req, res ) {
 
   var options = {
     headers: {
-      accept: "application/json"
+      accept: 'application/json'
     },
-    host: "dspace.willamette.edu",
+    host: 'dspace.willamette.edu',
     port: 8080,
-    path: "/rest/communities",
+    path: '/rest/communities',
     method: 'GET'
   };
   var callback = function(response) {
@@ -162,7 +165,7 @@ exports.getDspaceCollections = function (req, res ) {
   };
   var request = http.request(options, callback);
   request.on('error', function (e) {
-    console.log('Problem with request: ' + e)
+    console.log('Problem with request: ' + e);
   });
   request.end();
 
@@ -178,10 +181,10 @@ exports.getEadBySubject = function(req, res) {
   var sub = req.params.id;
 
   var options = {
-    host:  "condm.willamette.edu",
-    port:  "81",
-    path:  "/dmwebservices/index.php?q=dmQuery/eads/" + field + "^" + sub + "^exact^and!/descri!bdate!title!creato/nosort/75/1/1/0/0/geogra!bdate!/json",
-    method: "GET"
+    host:  'condm.willamette.edu',
+    port:  '81',
+    path:  '/dmwebservices/index.php?q=dmQuery/eads/' + field + '^' + sub + '^exact^and!/descri!bdate!title!creato/nosort/75/1/1/0/0/geogra!bdate!/json',
+    method: 'GET'
   };
 
   var callback = function(response) {
@@ -233,7 +236,7 @@ exports.create = function(req, res) {
         }).complete(callback)
           .error(function(err) {
             console.log(err);
-          })
+          });
       },
       home: function (callback) {
         db.Collection.findAll(
@@ -244,17 +247,17 @@ exports.create = function(req, res) {
         ).complete(callback)
           .error(function(err) {
             console.log(err);
-          })
+          });
       }
     },
     function(err, result) {
-      if (err) console.log(err);
+      if (err) { console.log(err); }
       res.render('index', {
         title: 'Collections',
         collections: result.home
-      })
+      });
     }
-  )
+  );
 };
 
 exports.update = function(req, res) {
@@ -286,7 +289,7 @@ exports.update = function(req, res) {
             id: {
               eq: collId
             }
-          }).complete(callback)
+          }).complete(callback);
       },
       home: function (callback) {
         db.Collection.findAll(
@@ -298,13 +301,13 @@ exports.update = function(req, res) {
       }
     },
     function(err, result) {
-      if (err) console.log(err);
+      if (err) { console.log(err); }
       res.render('index', {
         title: 'Collections',
         collections: result.home
-      })
+      });
     }
-  )
+  );
 };
 
 
@@ -323,7 +326,7 @@ exports.delete = function(req, res) {
         }).complete(callback)
           .error(function(err) {
             console.log(err);
-          })
+          });
       },
       home: function(callback) {
         db.Collection.findAll(
@@ -337,13 +340,13 @@ exports.delete = function(req, res) {
           });
       }
     }, function(err, result) {
-      if (err) console.log(err);
+      if (err) { console.log(err); }
       res.render('index', {
         title: 'Collections',
         collections: result.home
-      })
+      });
     }
-  )
+  );
 };
 
 
@@ -377,30 +380,33 @@ exports.updateImage = function (req, res, config) {
       id = fields.id;
       console.log(imageName);
       if (!imageName) {
-        console.log("Image name not defined")
-        res.redirect("/");
+        console.log('Image name not defined');
+        res.redirect('/');
         res.end();
 
       } else {
         // use imagemagick to transform the full image to thumbnail.
         // write to thumb directory
-        var fullPath = imagePath + "/full/" + imageName;
-        var thumbPath = imagePath + "/thumb/" + imageName;
+        var fullPath = imagePath + '/full/' + imageName;
+        var thumbPath = imagePath + '/thumb/' + imageName;
         console.log(fullPath);
 
         fs.writeFile(fullPath, data, function (err) {
           if (err) {
             console.log(err);
-            res.redirect("/admin");
+            res.redirect('/admin');
           }
           else {
-            console.log("ImageMagick at work");
+            console.log('ImageMagick at work');
             magick.resize({
               srcPath: fullPath,
               dstPath: thumbPath,
               width:   200
-            }, function(err, stdout, stderr){
-              if (err) console.log(err);
+
+            },
+              /*jshint unused:false */
+              function(err, stdout, stderr){
+              if (err) { console.log(err); }
               // update database even if the conversion fails
               updateDb(id);
             });
@@ -419,13 +425,14 @@ exports.updateImage = function (req, res, config) {
           eq: id
         }
       }
+      /*jshint unused:false*/
     ).success(function(err, result) {
-        res.redirect("/admin/form/collection/update/"+id)
+        res.redirect('/admin/form/collection/update/'+id);
       }
     ).error(function(err) {
         console.log(err);
       }
-    )
+    );
 
   }
 };
@@ -453,22 +460,23 @@ exports.addTag = function(req, res) {
         db.TagTarget.create({
           CollectionId: collId,
           TagId: tagId
+          /*jshint unused:false*/
         }).success(function (result) {
-            res.redirect("/admin/form/collection/update/" + collId)
+            res.redirect('/admin/form/collection/update/' + collId);
           }
         ).error(function(err) {
             console.log(err);
           }
-        )
+        );
       }
       else {
-        res.redirect("/admin/form/collection/update/" + collId)
+        res.redirect('/admin/form/collection/update/' + collId);
       }
     }
   ).error(function(err) {
       console.log(err);
     }
-  )
+  );
 };
 
 exports.removeTag = function(req, res) {
@@ -481,11 +489,12 @@ exports.removeTag = function(req, res) {
     TagId: {
       eq: tagId
     }
+    /*jshint unused:false*/
   }).success(function(result) {
-    res.redirect("/admin/form/collection/update/"+collId)
+    res.redirect('/admin/form/collection/update/'+collId);
   }).error(function(err) {
     console.log(err);
-  })
+  });
 };
 
 exports.addType = function(req, res) {
@@ -511,22 +520,23 @@ exports.addType = function(req, res) {
         db.ItemContentTarget.create({
           CollectionId: collId,
           ItemContentId: typeId
+          /*jshint unused:false*/
         }).success(function (result) {
-            res.redirect("/admin/form/collection/update/" + collId)
+            res.redirect('/admin/form/collection/update/' + collId);
           }
         ).error(function(err) {
             console.log(err);
           }
-        )
+        );
       }
       else {
-        res.redirect("/admin/form/collection/update/" + collId)
+        res.redirect('/admin/form/collection/update/' + collId);
       }
     }
   ).error(function(err) {
       console.log(err);
     }
-  )
+  );
 };
 
 exports.removeTag = function(req, res) {
@@ -539,17 +549,18 @@ exports.removeTag = function(req, res) {
     TagId: {
       eq: tagId
     }
+    /*jshint unused:false*/
   }).success(function(result) {
-    res.redirect('/admin/form/collection/update/'+collId)
+    res.redirect('/admin/form/collection/update/'+collId);
   }).error(function(err) {
     console.log(err);
-  })
+  });
 };
 
 exports.browseList = function(req, res) {
 
   var http = require('http');
-  var collection = req.params.collection;
+  //var collection = req.params.collection;
 
   var options = {
     headers: {
@@ -576,7 +587,7 @@ exports.browseList = function(req, res) {
   };
   var request = http.request(options, callback);
   request.on('error', function (e) {
-    console.log('Problem with request: ' + e)
+    console.log('Problem with request: ' + e);
   });
   request.end();
 };

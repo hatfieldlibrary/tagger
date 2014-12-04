@@ -1,6 +1,8 @@
+'use strict';
+
 var express = require('express');
-var router = express.Router()
-  , async = require('async');
+var router = express.Router(),
+  async = require('async');
 
 /* GET home page. */
 router.get('/', function(req, res) {

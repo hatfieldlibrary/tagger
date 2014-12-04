@@ -400,7 +400,6 @@ collectionControllers.controller('DspaceCollectionsCtrl', ['$scope', '$location'
 collectionControllers.controller('FilterCtrl', ['$scope', function($scope) {
 
   $scope.clickItem = function(clickEvent) {
-    alert(clickEvent.currentTarget);
     $scope.selected = clickEvent ;
   };
 
@@ -501,7 +500,7 @@ collectionControllers.controller('ScopedSearchCtrl', ['$scope', function($scope)
 }]);
 
 collectionControllers.controller('BrowseListCtrl', ['$scope', 'BrowseListRequest', function($scope, BrowseListRequest) {
-  $scope.collection = "";
+  $scope.collection = '';
   $scope.init = function() {
 
   };

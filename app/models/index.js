@@ -1,29 +1,30 @@
+'use strict';
 /**
  * Created by mspalti on 5/23/14.
  */
 
 
-var fs = require('fs')
-  , path      = require('path')
-  , Sequelize = require('sequelize')
-  , lodash    = require('lodash')
-  , config    = require('../../config/environment')
-  , sequelize = new Sequelize(config.db, config.user, config.password, { host: config.host })
-  , db        = {};
+var fs = require('fs'),
+  path      = require('path'),
+  Sequelize = require('sequelize'),
+  lodash    = require('lodash'),
+  config    = require('../../config/environment'),
+  sequelize = new Sequelize(config.db, config.user, config.password, { host: config.host }),
+  database  = {};
 
 fs
   .readdirSync(__dirname)
   .filter(function(file) {
-    return (file.indexOf('.') !== 0) && (file !== 'index.js')
+    return (file.indexOf('.') !== 0) && (file !== 'index.js');
   })
   .forEach(function(file) {
     var model = sequelize.import(path.join(__dirname, file));
-    db[model.name] = model
+    database[model.name] = model;
   });
 
-Object.keys(db).forEach(function(modelName) {
-  if ('associate' in db[modelName]) {
-    db[modelName].associate(db)
+Object.keys(database).forEach(function(modelName) {
+  if ('associate' in database[modelName]) {
+    database[modelName].associate(database);
   }
 });
 
@@ -31,4 +32,4 @@ Object.keys(db).forEach(function(modelName) {
 module.exports = lodash.extend({
   sequelize: sequelize,
   Sequelize: Sequelize
-}, db);
+}, database);

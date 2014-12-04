@@ -1,18 +1,20 @@
+'use strict';
+
 /**
  * Created by mspalti on 5/29/14.
  */
 
 exports.create = function(req, res){
 
-    db.TagTarget.create({ coll_id: 1, TagId: 1, CollectionId: 1 })
+    db.TagTarget.create({ collId: 1, TagId: 1, CollectionId: 1 })
         .success(function(tags) {
             res.render('index', {
                 title: 'Express',
                 users: tags
-            })
+            });
         }).error(function(err) {
             console.log(err);
-        })
+        });
 
 };
 
@@ -22,6 +24,6 @@ exports.index = function(req, res){
         res.render('index', {
             title: 'Express',
             users: tags
-        })
-    })
+        });
+    });
 };
