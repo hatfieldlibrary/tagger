@@ -10,7 +10,7 @@ var config = {
       name: 'acomtags'
     },
     port: 3000,
-    redisPort: 3002,
+    redisPort: 6379,
     db: 'acomtags_development',
     user: 'mspalti',
     password: 'coffee',
@@ -38,7 +38,7 @@ var config = {
       name: 'acomtags'
     },
     port: 3000,
-    redisPort: 3002,
+    redisPort: 6379,
     db: 'acomtags_development',
     user: 'mspalti',
     password: 'coffee',
@@ -62,7 +62,7 @@ var config = {
       name: 'acomtags'
     },
     port: 3000,
-    redisPort: 3002,
+    redisPort: 6379,
     db: 'acomtags_test',
     user: 'mspalti',
     password: 'coffee',
@@ -86,7 +86,7 @@ var config = {
       name: 'acomtags'
     },
     port: 3000,
-    redisPort: 3002,
+    redisPort: 6379,
     db: 'acomtags',
     user: 'tagger',
     password: 'c0fFee12',
