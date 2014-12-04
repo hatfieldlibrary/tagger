@@ -5,10 +5,13 @@ var server;
 var express = require('express'),
   session = require('express-session'),
   http = require('http'),
+  cookieParser = require('cookie-parser'),
   passport = require('passport'),
-  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-  //RedisStore = require('connect-redis')(session);
+  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+  redis = require('redis'),
+  RedisStore = require('connect-redis')(session);
 
+var client = redis.createClient();
 
 var config = require('./config/environment');
 global.db = require('./app/models');
@@ -18,31 +21,24 @@ var app = express();
 require('./config/express')(app, config);
 
 
-// Attempting to use Redisstore for sessions.  Not
-// able to get this working with OAuth, yet.  The
-// advantage of Redisstore is that sessions persist
-// when the application is restarted, and we eliminate
-// a pesky warning when launching in production mode.
-// In practice, lost sessions will seldom - if ever - be a problem
-// for us and the few administrative users who use tagger.
-//app.use(session({
-//    store: new RedisStore({
-//      host: config.redis.host,
-//      port: config.redis.port,
-//      db: 2,
-//      pass: 'rdpasswd'
-//    }),
-//    secret: 'keyboardcat',
-//    resave: true,
-//   saveUninitialized: true })
-//);
+if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
 // Use express-session in lieu of Redisstore.
-app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true }));
+  app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true}));
+} else if (app.get('env') === 'production') {
+  // using redis as the production session store
+  app.use( cookieParser());
+  app.use(session(
+    {
+      secret: 'insideoutorup',
+      store: new RedisStore({host: '127.0.0.1', port: 3002, client: client}),
+      saveUninitialized: true, // don't create session until something stored,
+      resave: true // don't save session if unmodified
+    }
+  ));
+}
+
 app.use(passport.initialize());
 app.use(passport.session());
-
-
-
 
 // Google OAUTH2.
 var GOOGLE_CLIENT_ID = config.googleClientId;
@@ -51,7 +47,7 @@ var GOOGLE_CALLBACK = config.googleCallback;
 // passport used for Google OAuth2
 // define serializer and deserializer
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, {id:user});
 });
 passport.deserializeUser(function(user, done) {
   done(null, user);
