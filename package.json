@@ -32,7 +32,8 @@
     "passport-google-oauth": "^0.1.5",
     "sequelize": "~1.7.5",
     "static-favicon": "~1.0.0",
-    "helmet": "~0.5.2"
+    "helmet": "~0.5.2",
+    "redis": "~0.12.1"
   },
   "devDependencies": {
     "chai": "~1.9.1",
