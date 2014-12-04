@@ -100,7 +100,7 @@ module.exports = function (grunt) {
           '<%= client %>/app/*.css',
           '<%= client %>/app/**/*.{jpg,gif,svg,jpeg,png}'
         ],
-       // tasks: ['newer:jshint','express:dev', 'wait'],
+        // tasks: ['newer:jshint','express:dev', 'wait'],
         options: {
           livereload: ReloadPort,
           nospawn: true //Without this option specified express won't be reloaded
@@ -137,6 +137,17 @@ module.exports = function (grunt) {
           jshintrc: '<%= client %>/test/.jshintrc'
         },
         src: ['<%= client %>/test/*.js']
+      },
+      client: {
+        options: {
+          jshintrc: '.jshintrc'
+        },
+        src: [
+          'app/controllers/*.js',
+          'app/models/*.js',
+          'app/config/*.js',
+          '<%= client %>/app/js/*.js'
+        ]
       }
     },
 
