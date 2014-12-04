@@ -1,4 +1,4 @@
-"use strict;"
+"use strict";
 
 var server;
 
@@ -103,11 +103,11 @@ require('./config/routes')(app, config, passport);
 // Catch 404 and forward to error handler. Any request
 // not handled by express or routes configuration will
 // invoke this middleware.
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+//app.use(function(req, res, next) {
+//  var err = new Error('Not Found');
+//  err.status = 404;
+//  next(err);
+//});
 
 /// error handlers
 // development error handler
@@ -126,11 +126,11 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+  res.status(err.status || 500).end();
+ // res.render('error', {
+ //   message: err.message,
+ //   error: {}
+ // });
 });
 
 // Snyc database if not in test mode then start server
