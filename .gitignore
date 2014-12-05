@@ -3,9 +3,10 @@ resources/images/full
 resources/images/thumb
 public/modules/acom/app/bower_components/
 public/modules/acom/app/css/app.css
-.DS_Store
-public/.DS_Store
+public/stylesheets/app.css
+public/modules/acom/dist/**
 .tmp
 .sass-cache
 .idea/workspace.xml
 .idea/misc.xml
+.idea/workspace.xml
