@@ -39,7 +39,7 @@ describe('Tagger CRUD operations', function() {
 
     it("should create a tag", function(done) {
         request(app)
-            .post('/tag/create')
+            .post('/admin/tag/create')
             .type('form')
             .send({name:'Summer'})
             .expect(200)

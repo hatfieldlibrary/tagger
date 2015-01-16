@@ -20,8 +20,9 @@ module.exports = function(app, config) {
   // admin ui
   app.use('/img', express.static(config.root + '/public/images'));
   app.use('/javascripts/application.js', express.static(config.root + '/public/javascripts/application.js'));
-  app.use('/javascripts/jquery-ui-1.11.2.js', express.static(config.root + '/public/javascripts/jquery-ui-1.11.2.js'));
-  app.use('/javascripts', express.static( config.root + config.modulePath + '/bower_components/foundation/js'));
+  app.use('/javascripts/vendor', express.static(config.root + '/public/javascripts/vendor'));
+
+ // app.use('/javascripts', express.static( config.root + config.modulePath + '/bower_components/foundation/js'));
   app.use('/stylesheets', express.static( config.root + '/public/stylesheets'));
   // collection images
   app.use('/resources/img', express.static(config.taggerImageDir));
