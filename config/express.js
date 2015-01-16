@@ -27,9 +27,9 @@ module.exports = function(app, config) {
   // collection images
   app.use('/resources/img', express.static(config.taggerImageDir));
   // public ui
-  app.use('/js', express.static(config.root + config.modulePath + '/js'));
-  app.use('/css', express.static(config.root + config.modulePath + '/css'));
-  app.use('/images', express.static(config.root + config.modulePath + '/images'));
+  app.use('/js', express.static(config.root + config.resourcePath + '/js'));
+  app.use('/css', express.static(config.root + config.resourcePath + '/css'));
+  app.use('/images', express.static(config.root + config.resourcePath + '/images'));
   app.use('/commons/info', express.static(config.root + config.modulePath + '/extras'));
   app.use('/commons/robots.txt', express.static(config.root + config.modulePath + '/robots.txt'));
   // development
