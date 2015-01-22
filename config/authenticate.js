@@ -10,17 +10,22 @@ var session = require('express-session'),
   RedisStore = require('connect-redis')(session);
 
 
-
 module.exports = function(app, config, passport) {
 
-
-
+  // For development, use express-session in lieu of Redisstore.
   if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
-  // Use express-session in lieu of Redisstore.
-    app.use(session({secret: 'keyboard cat', saveUninitialized: true, resave: true}));
+    app.use(session({
+      secret: 'keyboard cat',
+      saveUninitialized: true,
+      resave: true})
+    );
+  // Use redis as the production session store for oauth2.
+  // http://redis.io/
   } else if (app.get('env') === 'production') {
-    var client = redis.createClient(config.redisPort, '127.0.0.1', {});
-    // use redis as the production session store
+    var client = redis.createClient(
+      config.redisPort, '127.0.0.1',
+      {}
+    );
     app.use(cookieParser());
     app.use(session(
       {
