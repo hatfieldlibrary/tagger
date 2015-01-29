@@ -17,7 +17,11 @@ Next, install the dependencies:
 
     npm install
 
-The application requires mysql.  When in development, you need to install mysql on your machine and create empty databases (Acomtags is the production database, so you may not require it for your local development work.):
+The tagger application itself currently does not use bower for dependency management.  The public Academic Commons module does use bower.  So you will next need to run:
+
+    bower install
+
+Finally, the application requires mysql.  When in development, you need to install mysql on your machine and create empty databases (Acomtags is the production database, so you may not require it for your local development work.):
 
     acomtags_development
     acomtags_test
