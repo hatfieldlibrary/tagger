@@ -6,7 +6,7 @@ Two additional REST services are included: one for retrieving items from CONTENT
 The public AngularJS module is the Academic Commons web site.
 
 
-### Development
+### Setup
 
 To get started with development, clone the project into your working directory. For example:
 
@@ -95,41 +95,37 @@ You will need to decide how to manage the application runtime on your server. Cu
 
     sudo npm install forever -g
     
-The following steps assume that you have previously built and tested the application on your development machine. They also assume that you have created an init.d script that launches the application using forever as well as a second init.d script that starts the redis session store.  
+Create an init.d script that launches the application using forever as well as a second init.d script that starts the redis session store. Add these two startup tasks to your system runlevels. 
 
-Add these two startup tasks to your system runlevels. Create a `node` user on the system. Verify that your init.d startup script sets the NODE_ENV value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`. 
+Create a `node` user on the system. Next, verify that your init.d startup script sets the NODE_ENV value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`. 
 
-Then: 
+The following deployment assumes that you have previously built and tested the application on your development machine. 
 
 1. Copy the project to a location on the server. If you know what you are doing, you can omit unnecessary development files.
 2. Edit the details of the production environment in config/environment.js, including database access credentials, paths, and Google OAUTH2 credentials. 
-3. Set the owner and group for project all files (including .* files) to the node user.  
+3. Set the owner and group for project all files (including .* files) to the `node` user.  
 4. Start `forever` via the init.d script (e.g. /sbin/service <script name> start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
 
-
- 
-
-
-### Configuration Paramenters
+## Configuration Params
 
 Configuration file: config/environment.js
 
-* root: path set by module
-* port: Express port
-* db: database name
-* user: database user
-* password: database password
-* uid: Express system user
-* gid: Express system group
-* mysql host: host name (e.g. libdb.willamette.edu)
-* sync: Sequelize database initialization setting
-* convert: location of ImageMagick convert library
-* identify: location of ImageMagick identify library
-* taggerImageDir: path to tagger images
-* modulePath: path to the AngularJS module directory (app or dist)
-* googleClientId: the Google ID for this application (used by OAUTH2)
-* googleClientSecrect: Google secret (used by OAUTH2)
-* redis: sesion cache settings (experimental)
-* nodeEnv: current node environment (startup setting or default)
+- root: path set by module
+- port: Express port
+- db: database name
+- user: database user
+- password: database password
+- uid: Express system user
+- gid: Express system group
+- mysql host: host name (e.g. libdb.willamette.edu)
+- sync: Sequelize database initialization setting
+- convert: location of ImageMagick convert library
+- identify: location of ImageMagick identify library
+- taggerImageDir: path to tagger images
+- modulePath: path to the AngularJS module directory (app or dist)
+- googleClientId: the Google ID for this application (used by OAUTH2)
+- googleClientSecrect: Google secret (used by OAUTH2)
+- redis: sesion cache settings (experimental)
+- nodeEnv: current node environment (startup setting or default)
 
 
