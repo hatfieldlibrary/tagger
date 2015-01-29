@@ -89,11 +89,9 @@ The AngularJS application is compiled using `grunt publish` and copied to the `d
 
 ### Production
 
-To run on the production server, be sure that nodejs and the required node modules are installed.
-
 First, make sure nodejs is installed on the server.  It can be installed in a number of ways.  It's wise to use the identical nodejs version that you are using in your development environment.
 
-You will need to decide how to run the application on your server. Currently, we are using the forever CLI to launch and keep the Express application running. Install forever globally as follows:
+You will need to decide how to manage the application runtime on your server. Currently, we are using the forever CLI to launch and keep the Express application online. Install forever globally as follows:
 
     sudo npm install forever -g
     
