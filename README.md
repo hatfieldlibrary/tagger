@@ -29,8 +29,8 @@ Finally, the application requires mysql.  When in development, you need to insta
 
 Assign mysql permissions to the databases. 
 
-The application uses Sequelize as the ORM.  Database tables are defined in the application models package (Express MVC). To access your mysql databases, add the mysql user name and password the the project configuration.
- To do this, open `config/environment.js` and edit the `user` and `password` for each of the databases. Do this only for development, runlocal, and test configurations if these are what you will be using.  Example:
+The application uses Sequelize as the ORM.  Database tables are defined in the application models package (Express MVC). To access your mysql databases, set the mysql user name and password the the project configuration.
+ To do this, open `config/environment.js` and edit the `user` and `password` for each of the databases. Pay attention to the different environment configurations since these are associated with different databases.  Example:
 
         development: {
            root: rootPath,
@@ -60,6 +60,7 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
          },
 
 
+### Development
 You're now ready to start the application. When you first start the application in development mode, Sequelize will create tables in the `acomtags_development` database.
 
 The Express service runs on the port configured in `config/environment.js` (3000).  A browser window is opened on start and the watch service restarts as needed when files are updated.  
@@ -90,28 +91,28 @@ The AngularJS application is compiled using `grunt publish` and copied to the `d
 
 To run on the production server, be sure that nodejs and the required node modules are installed.
 
-First, make sure nodejs is installed on the server.  It can be installed in a number of ways.  If using RHEL package manager, you can try this:
+First, make sure nodejs is installed on the server.  It can be installed in a number of ways.  It's wise to use the identical nodejs version that you are using in your development environment.
 
-    sudo yum install nodejs npm --enablerepo=epel
-
-Currently, we are using the forever CLI to launch and keep the Express server running.  Install forever globally as follows:
+You will need to decide how to run the application on your server. Currently, we are using the forever CLI to launch and keep the Express application running. Install forever globally as follows:
 
     sudo npm install forever -g
     
-From this point, how you proceed will depend on the production environment and whether you are copying the project from your local machine or cloning from git and building from scratch.  
+The following steps assume that you have previously built and tested the application on your development machine. They also assume that you have created an init.d script that launches the application using forever as well as a second init.d script that starts the redis session store.  
 
-The following assumes that you have built and tested the application already. It also assumes that you have created an init.d script that launches forever and added this to your system runlevels.
+Add these two startup tasks to your system runlevels. Create a `node` user on the system. Verify that your init.d startup script sets the NODE_ENV value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`. 
+
+Then: 
 
 1. Copy the project to a location on the server. If you know what you are doing, you can omit unnecessary development files.
-2. If you have not done so already, create a `node` user. Set the owner and group for all files (including .* files) to the node user.  
-3. Start `forever` via the init.d script (e.g. /sbin/service script start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
-
-Be sure that the init.d startup script sets the NODE_ENV value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`
-
-Set the etails of the production environment, including database access credentials, paths, and Google OAUTH2 credentials in config/environment.js.  
+2. Edit the details of the production environment in config/environment.js, including database access credentials, paths, and Google OAUTH2 credentials. 
+3. Set the owner and group for project all files (including .* files) to the node user.  
+4. Start `forever` via the init.d script (e.g. /sbin/service <script name> start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
 
 
-### Configuration
+ 
+
+
+### Configuration Paramenters
 
 Configuration file: config/environment.js
 
