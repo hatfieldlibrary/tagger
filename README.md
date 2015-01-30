@@ -67,11 +67,11 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
 ### Development
 You're now ready to start the application. When you first start the application in development mode, Sequelize will create tables in the `acomtags_development` database.
 
-The Express service runs on the port configured in `config/environment.js` (3000).  A browser window is opened on start and the watch service restarts as needed when files are updated.  
+The Express service runs on the port configured in `config/environment.js` (3000).  A browser window is opened on start and the watch service restarts the Express server and compiles sass whenever files are updated.  
 
 The Tagger application uses Jade templates. 
 
-Unfortunately, the grunt watch task doesn't update the browser window automatically with file edits.  This might be possible with additional work.
+Unfortunately, the grunt `watch` task doesn't update the browser window automatically with file edits.  This might be possible with additional work.
 My attempt to use livereload with the Jade templates ran into a problem with the conditional logic in the templates.  So, when coding you'll need to manually refresh the browser.
 
 To start development mode:
@@ -97,18 +97,18 @@ The AngularJS application is compiled using `grunt publish` and copied to the `d
 
 First, make sure nodejs is installed on the server.  It can be installed in a number of ways.  It's wise to use the identical nodejs version that you are using in your development environment.
 
-You will need to decide how to manage the application runtime on your server. Currently, we are using the forever CLI to launch and keep the Express application online. Install forever globally as follows:
+You will need to decide how to manage the application runtime on your server. Currently, we are using the `forever` CLI to launch and keep the Express application online. Install `forever` globally as follows:
 
     sudo npm install forever -g
     
-Create an init.d script that launches the application using forever as well as a second init.d script that starts the redis session store. Add these two startup tasks to your system runlevels. 
+Create an init.d script that launches the application using `forever` as well as a second init.d script that starts the `redis` session store. Add these two startup tasks to your system runlevels. 
 
-Create a `node` user on the system. Next, verify that your init.d startup script sets the NODE_ENV value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`. 
+Create a `node` user on the system. Next, verify that your init.d startup script sets the `NODE_ENV` value to 'production.' Example: `NODE_ENV=production $DAEMON $DAEMONOPTS start $NODEAPP`. 
 
 The following deployment assumes that you have previously built and tested the application on your development machine. 
 
 1. Copy the project to a location on the server. If you know what you are doing, you can omit unnecessary development files.
-2. Edit the details of the production environment in config/environment.js, including database access credentials, paths, and Google OAUTH2 credentials. 
+2. Edit the details of the production environment in `config/environment.js`, including database access credentials, paths, and Google OAUTH2 credentials. 
 3. Set the owner and group for project all files (including .* files) to the `node` user.  
 4. Start `forever` via the init.d script (e.g. /sbin/service <script name> start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
 
