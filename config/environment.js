@@ -76,7 +76,7 @@ var config = {
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/var/taggerImages',
     modulePath: '/public/modules/acom/app',
-    resourcePath: '/public/modules/acom/dist',
+    resourcePath: '/public/modules/acom/app',
     googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
     googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
     googleCallback: 'http://localhost:3000/auth/google/callback',

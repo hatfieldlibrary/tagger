@@ -69,8 +69,10 @@ You're now ready to start the application. When you first start the application 
 
 The Express service runs on the port configured in `config/environment.js` (3000).  A browser window is opened on start and the watch service restarts as needed when files are updated.  
 
-The Tagger application uses Jade templates. Unfortunately, updating the browser window automatically with file edits doesn't appear possible without additional work.
-My attempt to use livereload with the Jade templates ran into a problem with conditional logic in the templates.  So, when coding you'll need to manually refresh the browser.
+The Tagger application uses Jade templates. 
+
+Unfortunately, the grunt watch task doesn't update the browser window automatically with file edits.  This might be possible with additional work.
+My attempt to use livereload with the Jade templates ran into a problem with the conditional logic in the templates.  So, when coding you'll need to manually refresh the browser.
 
 To start development mode:
 
