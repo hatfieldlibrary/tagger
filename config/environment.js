@@ -9,17 +9,16 @@ var config = {
     app: {
       name: 'acomtags'
     },
+    uid: 'mspalti',
+    gid: 'staff',
     port: 3000,
-    redisPort: 6379,
     mysql: {
       db: 'acomtags_development',
       user: 'mspalti',
       password: 'coffee',
-      uid: 'mspalti',
-      gid: 'staff',
       host: 'localhost',
-      port: '3306',
-      sync: {force: false}
+      port: 3306,
+      dialect: 'mysql'
     },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
@@ -29,10 +28,6 @@ var config = {
     googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
     googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
     googleCallback: 'http://localhost:3000/auth/google/callback',
-    redis: {
-      host: "127.0.0.1",
-      port: 3006
-    },
     nodeEnv: env
   },
 
@@ -41,17 +36,16 @@ var config = {
     app: {
       name: 'acomtags'
     },
+    uid: 'mspalti',
+    gid: 'staff',
     port: 3000,
-    redisPort: 6379,
     mysql: {
       db: 'acomtags_development',
       user: 'mspalti',
       password: 'coffee',
-      uid: 'mspalti',
-      gid: 'staff',
       host: 'localhost',
-      port: '3306',
-      sync: {force: false}
+      port: 3306,
+      dialect: 'mysql'
     },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
@@ -69,17 +63,16 @@ var config = {
     app: {
       name: 'acomtags'
     },
+    uid: 'mspalti',
+    gid: 'staff',
     port: 3000,
-    redisPort: 6379,
     mysql: {
       db: 'acomtags_test',
       user: 'mspalti',
       password: 'coffee',
-      uid: 'mspalti',
-      gid: 'staff',
       host: 'localhost',
-      port: '3306',
-      sync: {force: true}
+      port: 3306,
+      dialect: 'mysql'
     },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
@@ -97,17 +90,17 @@ var config = {
     app: {
       name: 'acomtags'
     },
+    uid: 'node',
+    gid: 'node',
     port: 3000,
     redisPort: 6379,
     mysql: {
       db: 'acomtags',
       user: 'tagger',
       password: 'c0fFee12',
-      uid: 'node',
-      gid: 'node',
       host: 'libdb.willamette.edu',
-      port: '3306',
-      sync: {force: false}
+      port: 3306,
+      dialect: 'mariadb'
     },
     convert: '/usr/bin/convert',
     identify: '/usr/bin/identify',

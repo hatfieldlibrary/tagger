@@ -32,39 +32,38 @@ Assign mysql permissions to the databases.
 The application uses Sequelize as the ORM.  Database tables are defined in the application models package (Express MVC). To access your mysql databases, set the mysql user name and password the the project configuration.
  To do this, open `config/environment.js` and edit the `user` and `password` for each of the databases. Pay attention to the different environment configurations since these are associated with different databases.  
  
- The Express server will run setuid and setgid on startup.  On the production server, both values should be set to `node`.  When working on your own development machine, set these values to match your own uid and gid.
+ The Express server will run setuid and setgid on startup.  On the production server, both values should be set to `node`.  When working on your own development machine, set these values to match your own `uid` and `gid`.
+ 
+ The configuration also supports `mysql` and `mariadb` clients via the `mysql.dialect` parameter.
   
  Here's an example development configuration:
 
-        development: {
-           root: rootPath,
-           app: {
-             name: 'acomtags'
-           },
-           port: 3000,
-           mysql: {
-             db: 'acomtags_development',
-             user: 'mspalti',
-             password: 'coffee',
-             uid: 'mspalti',
-             gid: 'staff',
-             host: 'localhost',
-             port: '3306',
-             sync: {force: false}
-           },
-           convert: '/usr/local/bin/convert',
-           identify: '/usr/local/bin/identify',
-           taggerImageDir: '/usr/local/taggerImages',
-           modulePath: '/public/modules/acom/app',
-           googleClientId: '<GOOGLE CLIENT ID>',
-           googleClientSecret: '<GOOGLE CLIENT SECRET',
-           googleCallback: 'http://localhost:3000/auth/google/callback',
-           redis: {
-             host: "127.0.0.1",
-             port: 3006
-           },
-           nodeEnv: env
-         },
+    development: {
+       root: rootPath,
+       app: {
+         name: 'acomtags'
+       },
+       uid: 'mspalti',
+       gid: 'staff',
+       port: 3000,
+       mysql: {
+         db: 'acomtags_development',
+         user: 'mspalti',
+         password: 'coffee',
+         host: 'localhost',
+         port: 3306,
+         dialect: 'mysql'
+       },
+       convert: '/usr/local/bin/convert',
+       identify: '/usr/local/bin/identify',
+       taggerImageDir: '/usr/local/taggerImages',
+       modulePath: '/public/modules/acom/app',
+       resourcePath: '/public/modules/acom/app',
+       googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
+       googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+       googleCallback: 'http://localhost:3000/auth/google/callback',
+       nodeEnv: env
+     }
 
 
 ### Development
@@ -110,31 +109,36 @@ Create a `node` user on the system. Next, verify that your init.d startup script
 
 The following deployment assumes that you have previously built and tested the application on your development machine. 
 
-1. Copy the project to a location on the server. If you know what you are doing, you can omit unnecessary development files.
-2. Edit the details of the production environment in `config/environment.js`, including database access credentials, paths, and Google OAUTH2 credentials. 
-3. Set the owner and group for project all files (including .* files) to the `node` user.  
-4. Start `forever` via the init.d script (e.g. /sbin/service <script name> start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
+   1. Copy the project to a location on the server. If you know what you are doing, you can omit unnecessary development files.
+   2. Edit the details of the production environment in `config/environment.js`, including database access credentials, paths, and Google OAUTH2 credentials. 
+   3. Set the owner and group for project all files (including .* files) to the `node` user.  
+   4. Start `forever` via the init.d script (e.g. /sbin/service acomtagger start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
 
-## Configuration Params
+### Oauth2 Authentication Configuration
+
+Access to the Tagger module is controlled by Google OAuth2.  After a successful OAuth2 login, the `Users` table of the Tagger database is queried by the email address returned in the OAuth2 user profile.  To access Tagger, the email address 
+ must be in the database.  You will need to add this manually.
+
+### Configuration Params
 
 Configuration file: config/environment.js
 
 - root: path set by module
 - port: Express port
-- db: database name
-- user: database user
-- password: database password
 - uid: Express system user
 - gid: Express system group
-- mysql host: host name (e.g. libdb.willamette.edu)
-- sync: Sequelize database initialization setting
+- redisPort: port used by the redis session store (production environment only)
+- mysql.db: database name
+- mysql.user: database user
+- mysql.password: database password
+- mysql.host: host name (e.g. libdb.willamette.edu)
+- mysql.dialect: the client type (mysql or mariadb)
 - convert: location of ImageMagick convert library
 - identify: location of ImageMagick identify library
 - taggerImageDir: path to tagger images
 - modulePath: path to the AngularJS module directory (app or dist)
 - googleClientId: the Google ID for this application (used by OAUTH2)
 - googleClientSecrect: Google secret (used by OAUTH2)
-- redis: sesion cache settings (experimental)
 - nodeEnv: current node environment (startup setting or default)
 
 

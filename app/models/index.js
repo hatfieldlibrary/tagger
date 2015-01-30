@@ -14,9 +14,9 @@ var fs = require('fs'),
     config.mysql.user,
     config.mysql.password,
     { host: config.mysql.host,
-      port: config.mysql.port
+      port: config.mysql.port,
+      dialect: config.mysql.dialect
     }),
-
   database  = {};
 
 fs

@@ -17,11 +17,13 @@ module.exports = function(app, config, passport) {
     app.use(session({
       secret: 'keyboard cat',
       saveUninitialized: true,
-      resave: true})
+      resave: true
+      })
     );
   // Use redis as the production session store for oauth2.
   // http://redis.io/
   } else if (app.get('env') === 'production') {
+    console.log('production');
     var client = redis.createClient(
       config.redisPort, '127.0.0.1',
       {}
@@ -29,6 +31,7 @@ module.exports = function(app, config, passport) {
     app.use(cookieParser());
     app.use(session(
       {
+
         secret: 'insideoutorup',
         store: new RedisStore({host: '127.0.0.1', port: config.redisPort, client: client}),
         saveUninitialized: false, // don't create session until something stored,
