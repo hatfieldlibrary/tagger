@@ -9,7 +9,14 @@ var fs = require('fs'),
   Sequelize = require('sequelize'),
   lodash    = require('lodash'),
   config    = require('../../config/environment'),
-  sequelize = new Sequelize(config.db, config.user, config.password, { host: config.host }),
+  sequelize = new Sequelize(
+    config.mysql.db,
+    config.mysql.user,
+    config.mysql.password,
+    { host: config.mysql.host,
+      port: config.mysql.port
+    }),
+
   database  = {};
 
 fs

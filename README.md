@@ -42,13 +42,16 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
              name: 'acomtags'
            },
            port: 3000,
-           db: 'acomtags_development',
-           user: <username>',
-           password: '<password>',
-           uid: '<your uid>',
-           gid: 'staff',
-           host: 'localhost',
-           sync: { force: false },
+           mysql: {
+             db: 'acomtags_development',
+             user: 'mspalti',
+             password: 'coffee',
+             uid: 'mspalti',
+             gid: 'staff',
+             host: 'localhost',
+             port: '3306',
+             sync: {force: false}
+           },
            convert: '/usr/local/bin/convert',
            identify: '/usr/local/bin/identify',
            taggerImageDir: '/usr/local/taggerImages',
