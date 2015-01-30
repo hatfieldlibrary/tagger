@@ -30,7 +30,11 @@ Finally, the application requires mysql.  When in development, you need to insta
 Assign mysql permissions to the databases. 
 
 The application uses Sequelize as the ORM.  Database tables are defined in the application models package (Express MVC). To access your mysql databases, set the mysql user name and password the the project configuration.
- To do this, open `config/environment.js` and edit the `user` and `password` for each of the databases. Pay attention to the different environment configurations since these are associated with different databases.  Example:
+ To do this, open `config/environment.js` and edit the `user` and `password` for each of the databases. Pay attention to the different environment configurations since these are associated with different databases.  
+ 
+ The Express server will run setuid and setgid on startup.  On the production server, both values should be set to `node`.  When working on your own development machine, set these values to match your own uid and gid.
+  
+ Here's an example development configuration:
 
         development: {
            root: rootPath,
@@ -41,7 +45,7 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
            db: 'acomtags_development',
            user: <username>',
            password: '<password>',
-           uid: 'mspalti',
+           uid: '<your uid>',
            gid: 'staff',
            host: 'localhost',
            sync: { force: false },
