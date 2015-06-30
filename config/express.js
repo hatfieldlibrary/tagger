@@ -13,8 +13,11 @@ module.exports = function(app, config) {
   app.set('port', config.port);
   app.set('views', path.join(config.root, '/app/views'));
   app.set('view engine', 'jade');
+  app.set('view engine', 'html');
 
   //app.use(helmet());
+
+ // hbs.registerPartials(express.static(config.root + config.resourcePath + '/views/partials'));
 
   // setup static file paths
   // admin ui

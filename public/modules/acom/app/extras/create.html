@@ -416,7 +416,7 @@
       <h2>Starting a Collection</h2>
     </div>
   </div>
-
+  <ng-include src="'/modules/test.html'"></ng-include>
   <div class="row">
     <div class="large-8 medium-8 small-12 columns">
       <div class="content-justify">
@@ -534,5 +534,43 @@
 </div>
 
 
+<!-- build:js /js/vendor/libraries.min.js -->
+<!-- bower:js -->
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/bower_components/fastclick/lib/fastclick.js"></script>
+<script src="/bower_components/angular/angular.js"></script>
+<script src="/bower_components/angular-mocks/angular-mocks.js"></script>
+<script src="/bower_components/angular-route/angular-route.js"></script>
+<script src="/bower_components/angular-resource/angular-resource.js"></script>
+<script src="/bower_components/angular-animate/angular-animate.js"></script>
+<script src="/bower_components/rem-unit-polyfill/js/rem.js"></script>
+<script src="/bower_components/jquery-ui/jquery-ui.js"></script>
+<!-- endbower -->
+<!-- endbuild -->
+<!-- build:js /js/vendor/foundation.min.js -->
+<script src="/bower_components/foundation/js/foundation/foundation.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.abide.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.accordion.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.alert.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.clearing.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.dropdown.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.equalizer.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.interchange.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.joyride.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.magellan.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.offcanvas.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.orbit.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.reveal.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.slider.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.tab.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.tooltip.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.topbar.js"></script>
+<!-- endbuild -->
+<script src="/js/services.js"></script>
+<script src="/js/animations.js"></script>
+<script src="/js/controllers.js"></script>
+<script src="/js/directives.js"></script>
+<script src="/js/filters.js"></script>
+<script src="/js/app.js"></script>
 </body>
 </html>

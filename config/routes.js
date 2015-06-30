@@ -81,6 +81,10 @@ module.exports = function(app,config,passport){
     res.sendFile(config.root + config.modulePath + '/partials/' +name + '.html');
   });
 
+  app.get('/modules/test.html', function(req, res) {
+    res.sendFile(config.root + config.modulePath + '/modules/test.html' )
+  });
+
   // request for a directive templateUrl.
   app.get('/commons/components/:name', function(req, res) {
     var name = req.params.name;
