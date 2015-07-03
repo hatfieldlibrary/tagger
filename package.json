@@ -71,6 +71,8 @@
     "requirejs": "^2.1.18",
     "supertest": "^0.13.0",
     "time-grunt": "~0.3.2",
-    "wiredep": "^2.1.0"
+    "wiredep": "^2.1.0",
+    "karma-firefox-launcher": "~0.1.6",
+    "karma-junit-reporter": "~0.2.2"
   }
 }

@@ -23,26 +23,26 @@ collectionControllers.controller('TypeCollectionsCtrl', ['$scope', '$location', 
   function($scope, $location, $anchorScroll, CollectionsType, TypeInfo) {
 
     $scope.init = function () {
+
       var id;
       $scope.taglist = {};
       $scope.tagged = true;
       $scope.findingaid = false;
       $scope.collectionType = false;
-
       $scope.layout = 'full';
       $scope.toggleText = '(to list view)';
       var path = $location.path();
       var components = path.split('/');
-
       if (components.length < 4) {
         // unit test
         id = 5;
       } else {
         id = components[4];
       }
-      $scope.getTypeInfo(id);
       $scope.activeIndex = 0;
       $scope.test = '';
+      //TypeInfo.query({id: id})
+      $scope.getTypeInfo(id);
       $scope.collections = CollectionsType.query({id: id});
 
     };
@@ -130,24 +130,25 @@ collectionControllers.controller('CollectionsCtrl', ['$scope', '$location', '$an
       $scope.tagged = true;
       $scope.findingaid = false;
       $scope.collectionType = false;
-
       $scope.layout = 'full';
       $scope.toggleText = '(to list view)';
+      $scope.activeIndex = 0;
+      $scope.test = '';
       var path = $location.path();
       var components = path.split('/');
-
       if (components.length < 4) {
-        // unit test
+        // it's a unit test
         id = 5;
       } else {
         id = components[3];
       }
-
       $scope.getTagInfo(id);
-      $scope.activeIndex = 0;
-      $scope.test = '';
-      $scope.collections = Collections.query({id: id});
+      $scope.getCollections(id);
 
+    };
+
+    $scope.getCollections = function(id) {
+      $scope.collections = Collections.query({id: id});
     };
 
     $scope.toggleView = function() {
@@ -165,7 +166,6 @@ collectionControllers.controller('CollectionsCtrl', ['$scope', '$location', '$an
     };
 
     $scope.isFindingAid = function(type) {
-
       return type === 'ead';
     };
 
@@ -271,7 +271,7 @@ collectionControllers.controller('CollectionsCtrl', ['$scope', '$location', '$an
       if (id !== 'comm') {
         $scope.tagged = true;
         $scope.getTagInfo(id);
-        $scope.collections = Collections.query({id: id});
+        $scope.getCollections(id);
       } else {
         $scope.tagged = false;
         $scope.collections = DspaceCollections.query();

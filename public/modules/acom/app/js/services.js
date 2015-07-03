@@ -81,6 +81,7 @@ collectionServices.factory('TypeInfo', ['$resource',
         });
     }
 ]);
+
 // Direct query of CDM API via NodeJS tagger application
 collectionServices.factory('EADs', ['$resource',
     function($resource){
