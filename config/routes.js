@@ -71,34 +71,91 @@ module.exports = function(app,config,passport){
   app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
   app.get('/admin/content/delete/:id', ensureAuthenticated, content.delete);
 
-  // Public angularjs module routes
-  app.get("/commons", function(req, res) {
-    res.sendFile(config.root + config.modulePath + '/index.html' )
-  });
-  // request for partial
+
+  /* Static Angularjs module routes */
+
+  // request for partials
   app.get('/commons/partials/:name', function(req, res) {
+
     var name = req.params.name;
-    res.sendFile(config.root + config.modulePath + '/partials/' +name + '.html');
+
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/partials/'  +
+      name +
+      '.html'
+    );
   });
-
-  app.get('/modules/:name', function(req, res) {
-    var name = req.params.name;
-    res.sendFile(config.root + config.modulePath + '/modules/' +name+ '.html' )
-  });
-
-
-  // request for a directive templateUrl.
+  // requests for an angular directive template.
   app.get('/commons/components/:name', function(req, res) {
+
     var name = req.params.name;
-    res.sendFile(config.root + config.modulePath + '/components/' +name );
+
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/components/' +
+      name
+    );
+  });
+  // requests for static files that contain no angular directives
+
+  app.get('/commons/grants/:name', function(req, res) {
+
+    var name = req.params.name;
+
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/grants/' +
+      name +
+      '.html'
+    );
+  });
+  app.get('/commons/info/:name', function(req, res) {
+
+    var name = req.params.name;
+
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/info/' +
+      name +
+      '.html'
+    );
+  });
+  app.get('/commons/error/:name', function(req, res) {
+
+    var name = req.params.name;
+
+      res.sendFile(
+        config.root +
+        config.modulePath +
+        '/error/' +
+        name +
+        '.html'
+      );
   });
 
+  // This catch-all is required by html5mode.
+  app.get('/commons', function(req, res) {
 
-  // This  catch-all is required by html5mode.
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/index.html'
+    );
+  });
+  // This catch-all is required by html5mode.
   app.get('/commons/*', function(req, res) {
-    res.sendFile(config.root + config.modulePath + '/index.html');
-  });
 
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/index.html'
+    );
+  });
 
 };
 

@@ -13,11 +13,8 @@ module.exports = function(app, config) {
   app.set('port', config.port);
   app.set('views', path.join(config.root, '/app/views'));
   app.set('view engine', 'jade');
-  app.set('view engine', 'html');
 
   //app.use(helmet());
-
- // hbs.registerPartials(express.static(config.root + config.resourcePath + '/views/partials'));
 
   // setup static file paths
   // admin ui
@@ -33,7 +30,8 @@ module.exports = function(app, config) {
   app.use('/js', express.static(config.root + config.resourcePath + '/js'));
   app.use('/css', express.static(config.root + config.resourcePath + '/css'));
   app.use('/images', express.static(config.root + config.resourcePath + '/images'));
-  app.use('/commons/info', express.static(config.root + config.modulePath + '/extras'));
+  app.use('/commons/info/images', express.static(config.root + config.modulePath + '/info/images'));
+  app.use('/commons/info/student', express.static(config.root + config.modulePath + '/info/student'));
   app.use('/commons/robots.txt', express.static(config.root + config.modulePath + '/robots.txt'));
   // development
   app.use('/bower_components', express.static(config.root + config.modulePath + '/bower_components'));
