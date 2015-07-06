@@ -383,7 +383,7 @@ module.exports = function (grunt) {
           // public ui
           '<%= client %>/app/css/app.css': '<%= app %>/scss/app.scss',
           // admin ui
-          '<%= app %>/stylesheets/app.css': '<%= app %>/scss/app.scss'
+          '<%= public %>/stylesheets/app.css': '<%= app %>/scss/app.scss'
         }
       }
     }
