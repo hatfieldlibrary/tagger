@@ -1,0 +1,64 @@
+<div class="row">
+    <div class="large-12 columns page-header">
+        <div class="row ">
+            <div class="large-12 columns">
+                <h3>University Archives & Records</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="row show-for-large-up">
+        <div class="small-8 columns">
+            <ul class="breadcrumbs">
+                <li><i class="fa fa-home"></i> <a href="/#/home">Academic Commons</a></li>
+                <li><a href="/#/archives" class="current">Archives Collections</a></li>
+                <li><a href="/#/collections/3" class="current">Archives & Records</a></li>
+            </ul>
+        </div>
+        <div class="small-4 columns text-right" style="margin-bottom: 11px;">
+            <a href="/#/home"><img src="../images/academiccommons_lg.png"></a>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="large-10 columns end" style="margin-bottom: 30px;">
+            <h5 class="subheader justify">Publications, images, administrative records, research materials, and scrapbooks dating from Willamette’s beginnings. Also available are materials relating to Freshman Glee, one of Willamette’s longest running – and most beloved – traditions.</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div ng-controller="EadRestRequest" class="large-6 small-12 columns ">
+            <a class="button small radius right" style="margin-top: 12px;" href="http://libmedia.willamette.edu/cview/archives.html#!search:meta:eads/subjec^university+archives+and+records+collection^exact^and!">Browse Finding Aids</a>
+            <h3>Finding Aids</h3>
+            <h6 class="highlight-text">
+            <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;&nbsp;{{eads.pager.total}} Finding Aids
+            </h6>
+
+            <div class="small-12 column panel">
+            <div ng-repeat="ead in eads.records">
+                <p>{{ead.resultMap.columnOne[0]}}</p>
+
+            </div>
+            </div>
+        </div>
+        <div ng-controller="CollectionsCtrl" class="large-6 small-12 columns">
+            <h3>Digital Collections</h3>
+            <h6 class="highlight-text">
+                <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;&nbsp;{{collections[0]}} digital collection{{plural(collections[0])}}
+            </h6>
+            <div ng-repeat='collection in collections[1]' >
+
+                <div class="small-12 panel columns" ng-if="isTagged()" >
+                    <simple-tagged-collection name="{{collection.name}}" url="{{collection.url}}" description="{{collection.description}}" dates="{{collection.dates}}" items="{{collection.items}}" ctypes="collection.ctypes"></simple-tagged-collection>
+                    <tag name="{{tagger.tag.name}}" id="{{tagger.tag.id}}" update-items="updateItems(tagger.tag.id)" ng-repeat="tagger in collection.tags"></tag>
+                </div>
+                <div ng-if="!isTagged()">
+                    <un-tagged-collection name="{{collection.name}}" url="{{collection.handle}}"></un-tagged-collection>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

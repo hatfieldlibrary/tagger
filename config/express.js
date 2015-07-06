@@ -1,17 +1,17 @@
-
+'use strict';
 var express = require('express');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var helmet = require('helmet');
+//var helmet = require('helmet');
 var path = require('path');
 var fs = require('fs');
 
 module.exports = function(app, config) {
 
   app.set('port', config.port);
-  app.set('views', path.join(config.root, '/app/views'));
+  app.set('views', path.join(config.root, '/views'));
   app.set('view engine', 'jade');
 
   //app.use(helmet());
@@ -21,8 +21,6 @@ module.exports = function(app, config) {
   app.use('/img', express.static(config.root + '/public/images'));
   app.use('/javascripts/application.js', express.static(config.root + '/public/javascripts/application.js'));
   app.use('/javascripts/vendor', express.static(config.root + '/public/javascripts/vendor'));
-
- // app.use('/javascripts', express.static( config.root + config.modulePath + '/bower_components/foundation/js'));
   app.use('/stylesheets', express.static( config.root + '/public/stylesheets'));
   // collection images
   app.use('/resources/img', express.static(config.taggerImageDir));
@@ -34,8 +32,8 @@ module.exports = function(app, config) {
   app.use('/commons/info/student', express.static(config.root + config.modulePath + '/info/student'));
   app.use('/commons/robots.txt', express.static(config.root + config.modulePath + '/robots.txt'));
   // development
-  app.use('/bower_components', express.static(config.root + config.modulePath + '/bower_components'));
-  app.use('/commons/bower_components', express.static(config.root + config.modulePath + '/bower_components'));
+  app.use('/bower_components', express.static(config.root + '/bower_components'));
+ // app.use('/commons/bower_components', express.static(config.root ));
 
 
   app.use(favicon(config.root + '/favicon.ico'));

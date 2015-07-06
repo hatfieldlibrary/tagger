@@ -1,11 +1,14 @@
 module.exports = function(app,config,passport){
 
+  'use strict';
   var crud = require('../app/controllers/crud');
   var tag = require('../app/controllers/tags');
   var content = require('../app/controllers/content');
   var collection = require('../app/controllers/collection');
   var target = require('../app/controllers/target');
   var ensureAuthenticated = app.ensureAuthenticated;
+
+  /*jshint unused:false*/
 
 //   GET /auth/google
 //   Use passport.authenticate() as middleware. The first step in Google authentication
@@ -60,7 +63,7 @@ module.exports = function(app,config,passport){
 
   // pass application configuration to imageUpdate controller.
   app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
-    collection.updateImage(res, req, config)
+    collection.updateImage(res, req, config);
   });
 
   app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);

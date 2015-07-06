@@ -16,10 +16,10 @@ module.exports = function (grunt) {
 
     pkg: grunt.file.readJSON('package.json'),
     app:    'app',
-    client: 'public/modules/acom',
-    dist:   'public/modules/acom/dist',
     config: 'config',
-    public: 'public',
+    client: 'app/public/modules/acom',
+    dist:   'app/public/modules/acom/dist',
+    public: 'app/public',
 
     express: {
       options: {
@@ -91,14 +91,16 @@ module.exports = function (grunt) {
       },
       module: {
         files: [
+          // admin
           '<%= public %>/stylesheets/{,*//*}*.css',
           '<%= public %>/javascripts/{,*//*}*.js',
+          // public view
           '<%= client %>/app/**/*.html',
-          '/Users/mspalti/git/acomtags/public/modules/acom/app/css/local.css',
-          '!<%= client %>/app/bower_components/**',
           '<%= client %>/app/js/**/*.js',
           '<%= client %>/app/*.css',
-          '<%= client %>/app/**/*.{jpg,gif,svg,jpeg,png}'
+          '<%= client %>/app/**/*.{jpg,gif,svg,jpeg,png}',
+          // exclude bower components
+          '!<%= client %>/app/bower_components/**'
         ],
         // tasks: ['newer:jshint','express:dev', 'wait'],
         options: {
@@ -108,9 +110,11 @@ module.exports = function (grunt) {
       },
       express: {
         files: [
+          '!<%= client %>/**/*.js',
           '<%= app %>/**/*.js',
           'config/*.js',
-          'server.js'
+          'server.js',
+
         ],
         tasks: ['newer:jshint', 'express:dev', 'wait'],
         options: {
@@ -145,7 +149,7 @@ module.exports = function (grunt) {
         src: [
           'app/controllers/*.js',
           'app/models/*.js',
-          'app/config/*.js',
+          'config/*.js',
           '<%= client %>/app/js/*.js'
         ]
       }
@@ -184,6 +188,7 @@ module.exports = function (grunt) {
     },
 
     copy: {
+      // copy to the public ui dist directory
       client: {
         files: [{
           expand: true,
@@ -204,50 +209,74 @@ module.exports = function (grunt) {
           src: ['bower_components/modernizr/modernizr.js' ],
           dest: '<%= dist %>/js/vendor',
           filter: 'isFile'
-
         }
         ]
-      },
-      server: {
-        files: [{
-          expand: true,
-          flatten: true,
-          cwd: '<%= client %>/app',
-          src: ['css/app.css'],
-          dest: '<%= public %>/stylesheets',
-          filter: 'isFile'
-        }]
       }
     },
 
     concat: {
+      // These targets concat javascript libraries into the
+      // public UI dist directory.
       libraries: {
         flatten: true,
         src:[
-          '<%= client %>/app/bower_components/angular/angular.js',
-          '<%= client %>/app/bower_components/angular-animate/angular-animate.js',
-          '<%= client %>/app/bower_components/angular-resource/angular-resource.js',
-          '<%= client %>/app/bower_components/angular-route/angular-route.js',
-          '<%= client %>/app/bower_components/jquery/dist/jquery.js',
-          '<%= client %>/app/bower_components/foundation/js/vendor/jquery.cookie.js',
-          '<%= client %>/app/bower_components/jquery.placeholder/jquery.placeholder.js',
-          '<%= client %>/app/bower_components/foundation/js/vendor/fastclick.js',
-          '<%= client %>/app/bower_components/rem-unit-polyfill/js/rem.js'],
+          '<%= app %>/bower_components/angular/angular.js',
+          '<%= app %>/bower_components/angular-animate/angular-animate.js',
+          '<%= app %>/bower_components/angular-resource/angular-resource.js',
+          '<%= app %>/bower_components/angular-route/angular-route.js',
+          '<%= app %>/bower_components/jquery/dist/jquery.js',
+          '<%= app %>/bower_components/foundation/js/vendor/jquery.cookie.js',
+          '<%= app %>/bower_components/jquery.placeholder/jquery.placeholder.js',
+          '<%= app %>/bower_components/foundation/js/vendor/fastclick.js',
+          '<%= app %>/bower_components/rem-unit-polyfill/js/rem.js'],
         dest: '<%= dist %>/js/vendor/libraries.js'
       },
       foundation: {
         flatten: true,
         src: [
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.accordian.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.dropdown.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.offcanvas.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.tab.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.topbar.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.tooltip.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.equalizer.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.magellan.js'],
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.accordian.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.dropdown.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.offcanvas.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.tab.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.topbar.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.tooltip.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
         dest: '<%= dist %>/js/vendor/foundation.js'
+      },
+      // These targets contact the same javascript libraries
+      // into the admin UI javascripts directory. This allows
+      // the backend and frontend to be decoupled, although this
+      // isn't necessary given how we deploy the application under
+      // a single Express server.
+      serverlibs: {
+        flatten: true,
+        src:[
+          '<%= app %>/bower_components/angular/angular.js',
+          '<%= app %>/bower_components/angular-animate/angular-animate.js',
+          '<%= app %>/bower_components/angular-resource/angular-resource.js',
+          '<%= app %>/bower_components/angular-route/angular-route.js',
+          '<%= app %>/bower_components/jquery/dist/jquery.js',
+          '<%= app %>/bower_components/foundation/js/vendor/jquery.cookie.js',
+          '<%= app %>/bower_components/jquery.placeholder/jquery.placeholder.js',
+          '<%= app %>/bower_components/foundation/js/vendor/fastclick.js',
+          '<%= app %>/bower_components/rem-unit-polyfill/js/rem.js'],
+        dest: '<%= app %>/public/javascripts/vendor/libraries.js'
+      },
+      serverfoundation: {
+        flatten: true,
+        src: [
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.accordian.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.dropdown.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.offcanvas.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.tab.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.topbar.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.tooltip.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
+        dest: '<%= app %>/public/javascripts/vendor/foundation.js'
       },
       css: {
         flatten: true,
@@ -282,7 +311,7 @@ module.exports = function (grunt) {
         preserveComments: 'some',
         mangle: false
       },
-      target:
+      client:
       {
         files: [{
           expand: true,
@@ -290,6 +319,15 @@ module.exports = function (grunt) {
           src: '*.js',
           ext: '.min.js',
           dest: '<%= dist %>/js/vendor'
+        }]
+      },
+      server:{
+        files: [{
+          expand: true,
+          cwd: '<%= app %>/public/javascripts/vendor',
+          src: '*.js',
+          ext: '.min.js',
+          dest: '<%= app %>/public/javascripts/vendor'
         }]
       }
     },
@@ -312,7 +350,7 @@ module.exports = function (grunt) {
     bowerInstall: {
       target: {
         src: [
-          'public/modules/acom/app/index.html'
+          '<%= client %>/app/index.html'
         ],
         exclude: [
           'jasmine',
@@ -334,15 +372,18 @@ module.exports = function (grunt) {
     sass: {
       options: {
         includePaths: [
-          '<%= client %>/app/bower_components/foundation/scss',
-          '<%= client %>/app/scss/**/*.scss']
+          '<%= app %>/bower_components/foundation/scss',
+          '<%= app %>/scss/**/*.scss']
       },
       dist: {
         options: {
           outputStyle: 'compressed'
         },
         files: {
-          '<%= client %>/app/css/app.css': '<%= client %>/app/scss/app.scss'
+          // public ui
+          '<%= client %>/app/css/app.css': '<%= app %>/scss/app.scss',
+          // admin ui
+          '<%= app %>/stylesheets/app.css': '<%= app %>/scss/app.scss'
         }
       }
     }
@@ -393,7 +434,14 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'compile-sass',
-      'copy:server',
+      'concat:serverlibs',
+      'concat:serverfoundation',
+      // Uncomment the following uglify task if you
+      // want to test new javascript libs with admin
+      // mode. It takes a while to complete, which
+      // is why it is commented out here. The task
+      // is included by default when you run publish.
+      // 'uglify:server',
       'express:dev',
       'bower-install',
       'open',
@@ -412,6 +460,7 @@ module.exports = function (grunt) {
     'compile-sass',
     'clean:dist',
     'validate-js',
+    'bower-install',
     'useminPrepare',
     'copy:client',
     'concat',
