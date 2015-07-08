@@ -87,7 +87,7 @@ module.exports = function (grunt) {
         tasks: ['sass']
       },
       sass: {
-        files: '<%= client %>/app/scss/**/*.scss',
+        files: '<%= public %>/scss/**/*.scss',
         tasks: ['sass']
       },
       module: {
@@ -264,6 +264,12 @@ module.exports = function (grunt) {
           '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
         dest: '<%= app %>/public/javascripts/vendor/foundation.js'
       },
+      modernizr: {
+        flatten: true,
+        src:['<%= client %>/app/js/plugins/modernizr.optimized.js',
+        ],
+        dest: '<%= dist %>/js/plugins/modernizr.js'
+      },
       css: {
         flatten: true,
         src: ['<%= client %>/app/css/*.css', '!*.min.css'],
@@ -392,6 +398,41 @@ module.exports = function (grunt) {
           ext: '.css'
         }]
       }
+    },
+    modernizr: {
+
+      dist: {
+        devFile: '<%= app %>/bower_components/modernizr/modernizr.js',
+        outputFile: '<%= client %>/app/js/plugins/modernizr.optimized.js',
+        extra: {
+          shiv: true,
+          printshiv: false,
+          load: true,
+          mq: false,
+          cssclasses: true
+        },
+        extensibility: {
+          addtest: false,
+          prefixed: false,
+          teststyles: false,
+          testprops: false,
+          testallprops: false,
+          hasevents: false,
+          prefixes: false,
+          domprefixes: false
+        },
+        uglify: true,
+        tests: [],
+        parseFiles: true,
+        files: {
+          src: ['<%= client %>/app/js/**/*.js',
+            '<%= client %>/app/css/**/*.css',
+            '<%= public %>/sass/**/*.scss'
+          ]
+        },
+        matchCommunityTests: false,
+        customTests: []
+      }
     }
 
   });
@@ -467,6 +508,7 @@ module.exports = function (grunt) {
     'compile-sass',
     'clean:dist',
     'validate-js',
+    'modernizr:dist',
     'bower-install',
     'useminPrepare',
     'copy:client',
