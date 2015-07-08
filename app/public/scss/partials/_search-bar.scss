@@ -1,0 +1,53 @@
+.search-bar {
+	padding: 0.675em;
+	background-color: lighten($ecru, 15%);
+
+	label, input, select, button {
+		vertical-align: middle;
+
+		@include bp(medium-up) {
+			display: inline-block;
+		}
+
+	}
+
+	input, select, button {
+		margin: 0 0 em-calc(15);
+
+		@include bp(medium-up) {
+			margin: 0 em-calc(15) 0 0;
+		}
+
+	}
+
+	label {
+		margin: 0 0 em-calc(5) 0;
+		color: $body-font-color;
+		font-family: $heading-font;
+		font-weight: bold; /* Fallback */
+		font-weight: 500;
+		@include em_fontsize(26px);
+
+		@include bp(medium-up) {
+			margin: 0 em-calc(10) 0 0;
+		}
+
+	}
+
+	input, select {
+
+		@include bp(medium-up) {
+			width: 12.5em;
+		}
+
+		@include bp(large-up) {
+			width: 11em;
+		}
+
+		@include bp(xlarge-up) {
+			width: 14.5em;
+		}
+
+	}
+
+}

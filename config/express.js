@@ -28,6 +28,7 @@ module.exports = function(app, config) {
   app.use('/js', express.static(config.root + config.resourcePath + '/js'));
   app.use('/css', express.static(config.root + config.resourcePath + '/css'));
   app.use('/images', express.static(config.root + config.resourcePath + '/images'));
+  app.use('/fonts', express.static(config.root + config.modulePath + '/fonts'));
   app.use('/commons/info/images', express.static(config.root + config.modulePath + '/info/images'));
   app.use('/commons/info/student', express.static(config.root + config.modulePath + '/info/student'));
   app.use('/commons/robots.txt', express.static(config.root + config.modulePath + '/robots.txt'));

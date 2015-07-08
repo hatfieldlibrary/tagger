@@ -1,0 +1,50 @@
+.footer {
+	background-color: $maroon;
+	position: relative;
+	> .row {
+		background-image: url(i/footer-watermark.png);
+		background-position: 50% 100%;
+		background-repeat: no-repeat;
+		@include em_padding(35px);
+		@include bp(medium-up) {
+			@include em_padding(55px, 0px);
+		}
+		@include bp(large-up) {
+			background-position: 100% 0%;
+		}
+	}
+	.footer-main-nav, .footer-contact, .social-media-icons {
+		margin: 1.5em auto;
+	}
+	.footer-cta-nav {
+		margin: 0 auto 1.5em;
+		@include bp(medium-up) {
+			@include em_width(700px);
+		}
+	}
+	.footer-main-nav {
+		.lt-ie10 & {
+			@include bp(medium-up) {
+				@include em_width(700px);
+			}
+		}
+		@include bp(medium-up) {
+			@include em_width(715px);
+		}
+		@include bp(large-up) {
+			margin: 1.5em auto 0.5em;
+		}
+	}
+	.footer-contact {
+		@include bp(large-up) {
+			margin: 0.25em auto 1.5em;
+			// @include em_width(800px);
+		}
+	}
+	.social-media-icons {
+		@include em_width(205px);
+		@include bp(medium-up) {
+			@include em_width(425px);
+		}
+	}
+}

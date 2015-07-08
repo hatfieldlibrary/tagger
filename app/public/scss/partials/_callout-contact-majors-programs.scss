@@ -1,0 +1,27 @@
+.callout-contact-majors-programs {
+
+	.college-list {
+
+		li {
+			margin: 0 0 1em;
+
+			&:last-child {
+				margin: 0;
+			}
+
+		}
+
+		.college-name, .college-tel, .college-email {
+			display: block;
+			font-size: em-calc(16);
+			line-height: 1.5;
+		}
+
+		.college-name {
+			font-weight: bold; /* Fallback */
+			font-weight: 700;
+		}
+
+	}
+
+}

@@ -1,0 +1,116 @@
+.masthead-story-mosaic {
+
+	p {
+		margin: 0;
+	}
+
+	img {
+		width: 100%;
+	}
+
+	.row {
+		// @include display-flex;
+		// @include flex-direction(column);
+
+		.row {
+			margin-left: 0;
+			margin-right: 0;
+			//@include flex-direction(row);
+		}
+
+		// @include bp(medium-up) {
+		// 	@include flex-direction(row);
+		// }
+
+	}
+
+	.columns {
+		padding: 0;
+		// border: 1px solid $gray-90; // For coding/debugging purposes - remove later
+		// @include align-items(stretch);
+	}
+
+	.tile {
+		width: 100%;
+		height: 100%;
+
+		.spacer-image {
+			visibility: hidden;
+			height: auto;
+		}
+
+		.tile-content {
+			margin: 0;
+			padding: 1em;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			.center-vertical {
+				.lt-ios8 & {
+					top: 0;
+					-webkit-transform: translateY(0%);
+					-moz-transform: translateY(0%);
+					-ms-transform: translateY(0%);
+					-o-transform: translateY(0%);
+					transform: translateY(0%);
+				}
+				@include vertical-align;
+			}
+			@include bp(large-up) {
+				padding: 1.5em;
+			}
+		}
+
+	}
+
+	.more-stories {
+		font-family: $heading-font;
+		font-weight: bold; /* Fallback */
+		font-weight: 500;
+		color: $ecru;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		@include em_fontsize(18px);
+
+		&.mobile {
+			display: block;
+			width: 100%;
+			padding: 0.75em;
+			background-color: $maroon;
+			@include bp(medium-up) {
+				display: none;
+			}
+		}
+
+		&.desktop {
+			display: none;
+			@include bp(medium-up) {
+				display: block;
+			}
+		}
+
+	}
+
+	.clear-fade {
+		width: 100%;
+		height: 0;
+		.ie & {
+			@include bp(medium-up) {
+				height: 3.5em;
+			}
+			@include bp(large-up) {
+				height: 5.5em;
+			}
+		}
+		@include bp(medium-up) {
+			height: 1.5em;
+		}
+		@include bp(large-up) {
+			height: 3em;
+		}
+	}
+
+}

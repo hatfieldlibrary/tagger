@@ -1,0 +1,18 @@
+.off-canvas-nav {
+
+	background-color: $gray-85;
+	padding: em-calc(29) em-calc(25);
+	right: 1px;
+
+	@include box-sizing(border-box);
+
+	.keywords {
+		border: 1px solid $gray-75;
+		margin: 0 0 1em 0;
+	}
+
+	.secondary-nav-small {
+		margin-top: 0.4em;
+	}
+
+}

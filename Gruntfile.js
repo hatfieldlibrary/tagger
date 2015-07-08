@@ -376,20 +376,21 @@ module.exports = function (grunt) {
 
     sass: {
       options: {
+        sourceMap: true,
         includePaths: [
-          '<%= app %>/bower_components/foundation/scss',
-          '<%= app %>/scss/**/*.scss']
+          '<%= public %>/scss/**/*.scss']
       },
       dist: {
         options: {
           outputStyle: 'compressed'
         },
-        files: {
-          // public ui
-          '<%= client %>/app/css/app.css': '<%= app %>/scss/app.scss',
-          // admin ui
-          '<%= public %>/stylesheets/app.css': '<%= app %>/scss/app.scss'
-        }
+        files: [{
+          expand: true,
+          cwd: '<%= public %>/scss',
+          src: ['**/*.scss'],
+          dest: '<%= client %>/app/css',
+          ext: '.css'
+        }]
       }
     }
 

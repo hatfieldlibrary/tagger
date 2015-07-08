@@ -1,0 +1,20 @@
+.masthead-story-tile-black-quote {
+	background-color: $gray-85;
+
+	p {
+		color: $gray-60;
+		font-family: $serif-font;
+		font-style: italic;
+		line-height: 1.25;
+		@include em_fontsize(18px);
+
+		@include bp(medium-up) {
+			@include em_fontsize(28px);
+		}
+
+		@include bp(large-up) {
+			@include em_fontsize(35px);
+		}
+
+	}
+}

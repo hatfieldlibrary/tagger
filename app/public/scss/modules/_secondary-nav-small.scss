@@ -1,0 +1,22 @@
+.secondary-nav-small {
+
+	a:link,
+	a:visited {
+		font-family: $heading-font;
+		font-size: em-calc(16);
+		font-weight: 500;
+		text-transform: uppercase;
+		color: $white;
+	}
+
+	a:hover,
+	a:active {
+		text-decoration: none;
+		color: $ecru;
+	}
+
+	li {
+		line-height: 2.4em;
+	}
+
+}

@@ -46,11 +46,12 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: true
       },
       repoType: {
-        type: DataTypes.STRING(6),
+        type: DataTypes.STRING(7),
+        defaultValue: 'DEFAULT',
         allowNull: false
       },
       category: {
-        type: DataTypes.STRING(6),
+        type: DataTypes.INTEGER(3),
         allowNull: false
       }
     },

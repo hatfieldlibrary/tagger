@@ -1,0 +1,106 @@
+.masthead-story-tile-bio {
+	width: 100%;
+	background-color: $maroon;
+	position: relative;
+	text-align: left;
+	overflow: hidden;
+	-ms-overflow-style: none;
+	
+	.bio-content {
+		width: 100%;
+		padding: 1.5em;
+		.lt-ie10 & {
+			@include bp(medium-up) {
+				padding: 2em;
+			}
+			@include bp(large-up) {
+				padding: 2.5em;
+			}
+		}
+		@include bp(medium-up) {
+			width: -webkit-calc(100% + 35px); // Hides scrollbar on IE
+			width: -moz-calc(100% + 35px); // Hides scrollbar on IE
+			width: calc(100% + 35px); // Hides scrollbar on IE
+			margin: 0;
+			padding: 2em 4em 2em 2em;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			overflow-y: scroll;
+			-ms-overflow-style: none;
+		}
+		@include bp(large-up) {
+			padding: 2.5em 5em 2.5em 2.5em;
+		}
+	}
+
+	.name, .major, .question, .answer {
+		margin: 0;
+		line-height: 1.125;
+		color: $white;
+	}
+
+	.name, .question, .more-stories {
+		font-family: $heading-font;
+		font-weight: bold; /* Fallback */
+		font-weight: 500;
+	}
+
+	.name {
+		@include em_fontsize(36px);
+		@include bp(large-up) {
+			@include em_fontsize(42px);
+		}
+	}
+
+	.major {
+		font-family: $serif-font;
+		font-style: italic;
+		@include em_fontsize(22px);
+		@include bp(large-up) {
+			@include em_fontsize(26px);
+		}
+	}
+
+	.question {
+		margin: 1em 0 0;
+		@include em_fontsize(22px);
+	}
+
+	.answer {
+		margin: 0 0 1em;
+		line-height: 1.6;
+		@include em_fontsize(14px);
+		@include bp(large-up) {
+			font-size: 1em;
+		}
+	}
+
+	.spacer-image {
+		display: none;
+		@include bp(medium-up) {
+			display: inline-block;
+		}
+	}
+
+	.bio-gradient {
+		@include bp(medium-up) {
+			margin: 0;
+			width: 100%;
+			height: 4.5em;
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background-image: url(i/bio-gradient.png);
+			background-repeat: repeat-x;
+		}
+		@include bp(large-up) {
+			height: 6em;
+		}
+	}
+
+}

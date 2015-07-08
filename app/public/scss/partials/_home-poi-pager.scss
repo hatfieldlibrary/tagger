@@ -1,0 +1,63 @@
+.home-poi-pager  {
+	overflow: hidden;
+	margin: em-calc(-45) auto 0;
+	max-width: em-calc($homepage-max-width);
+
+	a {
+		display: block;
+		float: left;
+		width: 20%;
+		position: relative;
+		top: em-calc(45);
+		z-index: 100;
+		@include transition-property(all);
+		@include transition-duration(0.375s);
+
+		&:hover, &:focus {
+			text-decoration: none;
+		}
+
+		&:hover, &.active {
+			top: 0;
+		}
+
+		img {
+			width: 100%;
+			max-width: 100%;
+		}
+
+		.label {
+			background-color: $white;
+			text-align: center;
+			font-family: $heading-font;
+			font-weight: bold; /* Fallback */
+			font-weight: 500;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			color: $body-font-color;
+			// white-space: nowrap;
+			vertical-align: middle;
+			line-height: 0.95;
+			display: table-cell;
+			padding: 0 0.5em;
+			height: em-calc(45);
+			@include box-shadow(inset 0px -7px 20px 0px rgba(0, 0, 0, 0.25));
+			
+			@include bp(xlarge-up) {
+				height: em-calc(55);
+				@include em_fontsize(20px);
+			}
+
+		}
+
+		@include bp(xlarge-up) {
+			top: em-calc(55);
+		}
+
+	}
+
+	@include bp(xlarge-up) {
+		margin: em-calc(-55) auto 0;
+	}
+
+}

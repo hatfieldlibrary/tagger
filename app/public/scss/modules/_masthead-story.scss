@@ -1,0 +1,118 @@
+.masthead-story {
+
+  @include bp(large-up) {
+	max-height: 753px;
+  }
+
+	&.peek {
+		.masthead-story-bottom {
+			max-height: 1em;
+			@include transition-duration(0.375s);
+			&.open {
+				max-height: 3000px; // Taller than div should ever get. Used for CSS animation.
+				@include transition-duration(1.5s);
+			}
+			@include bp(large-up) {
+				max-height: 2em;
+			}
+		}
+		.i-am {
+			@include bp(medium-up) {
+				fill: $willamette-svg-secondary-fade;
+				@include transition-duration(0.5s);
+			}
+		}
+	}
+
+	.masthead-story-top {
+		position: relative;
+		@include gradient(transparent 66.6%, $gray-90);
+
+		@include bp(large-up) {
+		  @include gradient(transparent, transparent);
+		  max-height: 753px;
+		}
+	}
+
+	.masthead-story-bottom {
+		max-height: 1em;
+		overflow: hidden;
+		@include transition-property(max-height);
+		@include transition-duration(0.75s);
+		&.open {
+			max-height: 3000px; // Taller than div should ever get. Used for CSS animation.
+			@include transition-duration(1.5s); // Needs to be longer time to offset difference in max-height for animation.
+		}
+		.no-js & {
+			height: auto;
+			max-height: none;
+		}
+	}
+
+	.story-toggle-container {
+		margin: 0 auto;
+		padding: 0 0 1em;
+		text-align: center;
+		@include em_width(250px);
+
+		> span {
+			display: block;
+		}
+
+		.story-toggle-text, i {
+			color: $white;
+		}
+
+		.story-toggle-text {
+			font-family: $serif-font;
+			font-style: italic;
+			font-weight: 400;
+			letter-spacing: -1px;
+			text-shadow: 0px 1px 2px $gray-90;
+			@include em_fontsize(24px);
+
+			@include bp(large-up) {
+              @include em_fontsize(38px);
+			}
+
+		}
+
+		.story-toggle {
+			margin: 0 auto;
+			background-color: $blue-chill;
+			cursor: pointer;
+			@include em_width(38px);
+			@include em_height(38px);
+			@include border-radius(38px);
+			@include box-shadow(0px 1px 2px $gray-90);
+
+			.fa {
+				@include em_padding(11px);
+
+				@include bp(large-up) {
+					@include em_padding(12px);
+					@include em_fontsize(20px);
+				}
+
+			}
+
+			@include bp(large-up) {
+				@include em_width(48px);
+				@include em_height(48px);
+				@include border-radius(48px);
+			}
+
+		}
+
+		@include bp(large-up) {
+			padding: 0;
+			position: absolute;
+			bottom: 2.5em;
+			left: 50%;
+			margin-left: -125px;
+
+		}
+
+	}
+
+}

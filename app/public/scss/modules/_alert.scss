@@ -1,0 +1,67 @@
+.alert {
+	background-color: $auburn;
+	font-size: em-calc(16);
+
+	* {
+		color: $white;
+	}
+
+	.accordion {
+
+		.accordion-navigation {
+			margin: 0;
+
+			.accordion-header {
+				background-color: $maroon;
+			}
+
+			.trigger > a {
+				padding: 0.375em 1em 0.375em 1.75em;
+				text-decoration: none;
+
+				&:hover, &:focus {
+					text-decoration: none;
+				}
+
+				&:before {
+					color: $auburn;
+				}
+
+			}
+
+			.content {
+				padding: 0.5em 0.5em 1em;
+				border-bottom: em-calc(7) solid $maroon;
+
+				.columns {
+					max-width: em-calc(1000);
+				}
+
+			}
+
+		}
+
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		margin: em-calc(10) 0;
+	}
+
+	p, a {
+		font-size: em-calc(16);
+	}
+
+	a {
+		text-decoration: underline;
+
+		&:hover, &:focus {
+			color: $ecru;
+		}
+
+		&:visited {
+			color: $white;
+		}
+
+	}
+
+}
