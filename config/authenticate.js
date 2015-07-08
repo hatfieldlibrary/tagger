@@ -1,7 +1,8 @@
-'use strict';
 /**
  * Created by mspalti on 12/4/14.
  */
+
+'use strict';
 
 var session = require('express-session'),
   cookieParser = require('cookie-parser'),

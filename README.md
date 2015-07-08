@@ -85,9 +85,13 @@ To start development mode:
 
 The test environment runs a series of integration tests against the `acomtags_test` database. Before each test run, Sequelize will drop the existing tables and create new ones.
 
-To start test mode:
+To start test mode for the AngularJS public UI:
 
-    grunt test
+    grunt karma
+
+To test the backend Nodejs application:
+
+    grunt mocha
 
 ### Runlocal
 

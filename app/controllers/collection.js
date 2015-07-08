@@ -1,9 +1,6 @@
 'use strict';
 
-var
-  async = require('async');
-
-
+var async = require('async');
 
 var processCollectionResult = function(coll, res) {
 

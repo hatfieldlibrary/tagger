@@ -4,16 +4,16 @@ module.exports = function(config){
 
     config.set({
 
-        basePath : '../../../',
+        basePath : '../../../../',
         files : [
-            'modules/acom/app/bower_components/angular/angular.js',
-            'modules/acom/app/bower_components/angular-route/angular-route.js',
-            'modules/acom/app/bower_components/angular-animate/angular-animate.js',
-            'modules/acom/app/bower_components/angular-resource/angular-resource.js',
-            'modules/acom/app/bower_components/angular-mocks/angular-mocks.js',
-            'modules/acom/app/bower_components/jquery/dist/jquery.js',
-            'modules/acom/app/js/**/*.js',
-            'modules/acom/test/unit/**/*.js'
+            'bower_components/angular/angular.js',
+            'bower_components/angular-route/angular-route.js',
+            'bower_components/angular-animate/angular-animate.js',
+            'bower_components/angular-resource/angular-resource.js',
+            'bower_components/angular-mocks/angular-mocks.js',
+            'bower_components/jquery/dist/jquery.js',
+            'public/modules/acom/app/js/**/*.js',
+            'public/modules/acom/test/unit/**/*.js'
         ],
 
         autoWatch : true,

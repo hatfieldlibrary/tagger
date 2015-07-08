@@ -8,7 +8,6 @@ var express = require('express'),
 
 global.db = require('./app/models');
 var config = require('./config/environment');
-
 var app = express();
 
 // configure express
@@ -54,6 +53,10 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+// This is needed when running from IDE
+module.exports = app;
 
 // Snyc database if not in test mode
 if (config.nodeEnv !== 'test') {
@@ -103,6 +106,4 @@ function startServer() {
 
 }
 
-// This is needed when running from IDE
-module.exports = app;
 

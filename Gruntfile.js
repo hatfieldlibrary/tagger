@@ -53,6 +53,7 @@ module.exports = function (grunt) {
           debug: true
         }
       }
+
     },
 
 
@@ -164,21 +165,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-
-    mochaTest: {
-      options: {
-        reporter: 'spec',
-        ui: 'bdd',
-        slow: true
-      },
-      src: ['test/{,*/}*.js']
-    },
-
-    env: {
-      test: {
-        NODE_ENV: 'test'
-      }
-    } ,
 
     clean: {
       server: '.tmp',
@@ -369,6 +355,25 @@ module.exports = function (grunt) {
       }
     },
 
+    mocha: {
+      all: {
+        options: {
+          //   reporter: 'spec',
+          ui: 'bdd',
+          slow: true,
+          run: true
+        }
+      },
+
+      src: ['<%= app %>/test/{,*/}*.js']
+    },
+
+    env: {
+      test: {
+        NODE_ENV: 'test'
+      }
+    },
+
     sass: {
       options: {
         includePaths: [
@@ -406,10 +411,11 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-bower-install');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
-
+  grunt.loadNpmTasks('grunt-karma');
+ // grunt.loadNpmTasks('grunt-mocha');
   files = grunt.config('watch.js.files');
   files = grunt.file.expand(files);
-  grunt.loadNpmTasks('grunt-karma');
+
 
 
   grunt.registerTask('wait', function () {
@@ -421,14 +427,14 @@ module.exports = function (grunt) {
     }, 500);
   });
   grunt.registerTask('serverTest', function() {
-    return grunt.task.run([
+     grunt.task.run([
       'env:test',
-      'mochaTest'
+      'mocha'
     ]);
   });
+  grunt.registerTask('test', ['karma']);
   grunt.registerTask('bower-install', ['bowerInstall']);
   grunt.registerTask('validate-js', ['jshint']);
-  grunt.registerTask('test', ['karma']);
   grunt.registerTask('compile-sass', ['sass']);
   grunt.registerTask('develop', function () {
     grunt.task.run([

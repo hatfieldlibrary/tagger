@@ -53,7 +53,7 @@
     "grunt-env": "~0.4.1",
     "grunt-express-server": "~0.4.17",
     "grunt-karma": "^0.9.0",
-    "grunt-mocha-test": "^0.11.0",
+    "grunt-mocha": "^0.4.13",
     "grunt-newer": "^0.7.0",
     "grunt-open": "~0.2.3",
     "grunt-sass": "^1.0.0",
@@ -62,17 +62,17 @@
     "jshint-stylish": "~0.2.0",
     "karma": "^0.12.24",
     "karma-chrome-launcher": "^0.1.5",
+    "karma-firefox-launcher": "~0.1.6",
     "karma-jasmine": "^0.1.5",
+    "karma-junit-reporter": "~0.2.2",
     "karma-requirejs": "~0.2.0",
     "load-grunt-tasks": "^0.5.0",
-    "mocha": "^1.20.1",
+    "mocha": "^2.2.5",
     "node-sass": "^3.2.0",
     "protractor": "~0.20.1",
     "requirejs": "^2.1.18",
-    "supertest": "^0.13.0",
+    "supertest": "^1.0.1",
     "time-grunt": "~0.3.2",
-    "wiredep": "^2.1.0",
-    "karma-firefox-launcher": "~0.1.6",
-    "karma-junit-reporter": "~0.2.2"
+    "wiredep": "^2.1.0"
   }
 }

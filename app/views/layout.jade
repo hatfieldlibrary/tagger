@@ -5,8 +5,9 @@ html
     link(rel='stylesheet', href='/stylesheets/app.css')
     link(rel='stylesheet', href='/stylesheets/jquery-ui-1.11.2-min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript', src='/javascripts/vendor/libraries.min.js')
     script(type='text/javascript', src='/javascripts/vendor/modernizr.js')
-
+    script(type='text/javascript', src='/javascripts/vendor/foundation.min.js')
 
   body
     .contain-to-grid.fixed(style="background: #294750;height:60px;padding-top: 10px;")
@@ -21,12 +22,14 @@ html
           li: a(href="/admin/tag/view", class="button radius") Manage Tags
         ul.left
           li: a(href="/admin/content/view", class="button radius") Content Types
+        ul.left
+          li: a(href="/admin/category/view", class="button radius") Categories
     p  &nbsp;
     p  &nbsp;
     block content
 
-    script(type='text/javascript', src='/javascripts/vendor/libraries.min.js')
-    script(type='text/javascript', src='/javascripts/vendor/foundation.min.js')
+
+
     script(type='text/javascript', src='/javascripts/application.js')
 
 

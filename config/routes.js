@@ -1,19 +1,20 @@
 module.exports = function(app,config,passport){
 
   'use strict';
+
   var crud = require('../app/controllers/crud');
   var tag = require('../app/controllers/tags');
   var content = require('../app/controllers/content');
   var collection = require('../app/controllers/collection');
   var target = require('../app/controllers/target');
+  var category = require('../app/controllers/category');
   var ensureAuthenticated = app.ensureAuthenticated;
 
   /*jshint unused:false*/
 
-//   GET /auth/google
-//   Use passport.authenticate() as middleware. The first step in Google authentication
-//   redirects the user to google.com.  After authorization, Google
-//   will redirect the user back to the callback URL /auth/google/callback
+  // Use passport.authenticate() as middleware. The first step in Google authentication
+  // redirects the user to google.com.  After authorization, Google
+  // will redirect the user back to the callback URL /auth/google/callback
   app.get('/auth/google',
     passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email'] }),
@@ -22,14 +23,48 @@ module.exports = function(app,config,passport){
       // function will not be called.
     });
 
-//   GET /auth/google/callback
-//   If authentication failed, redirect the login page.  Otherwise, redirect
-//   to the admin page page.
+  // If authentication failed, redirect the login page.  Otherwise, redirect
+  // to the admin page page.
   app.get('/auth/google/callback',
     passport.authenticate('google', { successRedirect: '/admin',
       failureRedirect: '/login' }));
 
-  // API routes
+  // Administration routes.
+  app.get('/admin', ensureAuthenticated, crud.index);
+  app.get('/login', crud.login);
+  app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
+  app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
+  app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);
+  app.get('/admin/form/collection', ensureAuthenticated, crud.index);
+  app.get('/admin/form/collection/create', ensureAuthenticated, crud.collCreate);
+  app.get('/admin/form/collection/update/:id', ensureAuthenticated, crud.collUpdate);
+  app.get('/admin/form/tag/create', ensureAuthenticated,  crud.tagCreate);
+  app.get('/admin/form/tag/update/:id', ensureAuthenticated, crud.tagUpdate);
+  app.get('/admin/form/category/update/:id', ensureAuthenticated, crud.categoryUpdate);
+  app.get('/admin/form/content/update/:id', ensureAuthenticated,  crud.contentUpdate);
+  app.get('/admin/collection/remove/tag/:collid/:tagid', ensureAuthenticated, collection.removeTag);
+  app.get('/admin/collection/delete/:id', ensureAuthenticated, collection.delete);
+  app.post('/admin/collection/tag', ensureAuthenticated, collection.addTag);
+  app.post('/admin/collection/type', ensureAuthenticated, collection.addType);
+  app.post('/admin/collection/create', ensureAuthenticated, collection.create);
+  app.post('/admin/collection/update', ensureAuthenticated, collection.update);
+  // need to pass application configuration to imageUpdate controller.
+  app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
+    collection.updateImage(res, req, config);
+  });
+  app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);
+  app.post('/admin/tag/create', ensureAuthenticated, tag.create);
+  app.post('/admin/tag/update', ensureAuthenticated, tag.tagUpdate);
+  app.get('/admin/target/create', ensureAuthenticated, target.create);
+  app.post('/admin/content/create', ensureAuthenticated, content.create);
+  app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
+  app.get('/admin/content/delete/:id', ensureAuthenticated, content.delete);
+  app.post('/admin/category/create', ensureAuthenticated, category.create);
+  app.post('/admin/category/update', ensureAuthenticated, category.update);
+  app.get('/admin/category/delete/:id', ensureAuthenticated, category.delete);
+
+
+  // Public API routes. These return JSON.
   app.get('/rest/taglist',               tag.tagList);
   app.use('/rest/tag/getInfo/:id',       tag.getTagInfo);
   app.use('/rest/subjects',              tag.getSubjects);
@@ -43,40 +78,8 @@ module.exports = function(app,config,passport){
   app.use('/rest/getBrowseList/:collection', collection.browseList);
   app.use('/rest/collection/byId/:id',   collection.collectionById);
 
-  // Administration routes.
-  app.get('/admin', ensureAuthenticated, crud.index);
-  app.get('/login', crud.login);
-  app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
-  app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
-  app.get('/admin/form/collection', ensureAuthenticated, crud.index);
-  app.get('/admin/form/collection/create', ensureAuthenticated, crud.collCreate);
-  app.get('/admin/form/collection/update/:id', ensureAuthenticated, crud.collUpdate);
-  app.get('/admin/form/tag/create', ensureAuthenticated,  crud.tagCreate);
-  app.get('/admin/form/tag/update/:id', ensureAuthenticated, crud.tagUpdate);
-  app.get('/admin/form/content/update/:id', ensureAuthenticated,  crud.contentUpdate);
-  app.get('/admin/collection/remove/tag/:collid/:tagid', ensureAuthenticated, collection.removeTag);
-  app.get('/admin/collection/delete/:id', ensureAuthenticated, collection.delete);
-  app.post('/admin/collection/tag', ensureAuthenticated, collection.addTag);
-  app.post('/admin/collection/type', ensureAuthenticated, collection.addType);
-  app.post('/admin/collection/create', ensureAuthenticated, collection.create);
-  app.post('/admin/collection/update', ensureAuthenticated, collection.update);
 
-  // pass application configuration to imageUpdate controller.
-  app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
-    collection.updateImage(res, req, config);
-  });
-
-  app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);
-  app.post('/admin/tag/create', ensureAuthenticated, tag.create);
-  app.post('/admin/tag/update', ensureAuthenticated, tag.tagUpdate);
-  app.get('/admin/target/create', ensureAuthenticated, target.create);
-  app.post('/admin/content/create', ensureAuthenticated, content.create);
-  app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
-  app.get('/admin/content/delete/:id', ensureAuthenticated, content.delete);
-
-
-  /* Static Angularjs module routes */
-
+  /* Static Angularjs module routes.  Used by the Academic Commons public site. */
   // request for partials
   app.get('/commons/partials/:name', function(req, res) {
 

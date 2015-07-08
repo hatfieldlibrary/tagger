@@ -43,6 +43,21 @@ exports.tagIndex = function(req, res) {
     });
 };
 
+exports.categoryIndex = function(req, res) {
+
+  db.Category.findAll({
+    order: [['title', 'ASC']]
+  })
+    .success(function(categories) {
+      res.render('categoryIndex', {
+        title: 'Category',
+        categories: categories
+      });
+    }).error(function(err) {
+      console.log(err);
+    });
+};
+
 exports.contentIndex = function(req, res) {
 
   db.ItemContent.findAll().success(function(ctypes) {
@@ -172,6 +187,27 @@ exports.tagUpdate = function (req, res) {
     });
 };
 
+exports.categoryUpdate = function (req, res) {
+  var catId = req.params.id;
+  db.Category.find(
+    {
+      where: {
+        id: {
+          eq: catId
+        }
+      },
+      attributes: ['id','title','url','description']
+    }
+  ).success(function(categories) {
+      res.render('categoryUpdate', {
+        title: 'Update Category',
+        category: categories
+      });
+    }
+  ).error(function(err) {
+      console.log(err);
+    });
+};
 
 exports.contentCreate = function(req, res) {
   res.render('contentCreate', {
@@ -228,3 +264,5 @@ exports.collUp  = function(req, res) {
       console.log(err);
     });
 };
+
+
