@@ -1068,7 +1068,7 @@
 
       // comma delimited list of selectors that, on click, will close clearing,
       // add 'div.clearing-blackout, div.visible-img' to close on background click
-      close_selectors : '.clearing-close, div.clearing-blackout', 
+      close_selectors : '.clearing-close, div.clearing-blackout',
 
       // Default to the entire li element.
       open_selectors : '',
@@ -1212,7 +1212,7 @@
       if ($el.parent().hasClass('carousel')) {
         return;
       }
-      
+
       $el.after('<div id="foundationClearingHolder"></div>');
 
       var grid = $el.detach(),
@@ -1223,7 +1223,7 @@
       } else {
         grid_outerHTML = grid[0].outerHTML;
       }
-      
+
       var holder = this.S('#foundationClearingHolder'),
           settings = $el.data(this.attr_name(true) + '-init'),
           data = {
@@ -1324,7 +1324,7 @@
           .removeClass('clearing-blackout');
         container.removeClass('clearing-container');
         visible_image.hide();
-        visible_image.trigger('closed.fndtn.clearing');        
+        visible_image.trigger('closed.fndtn.clearing');
       }
 
       // Event to re-enable scrolling on touch devices
@@ -1488,7 +1488,7 @@
           .hide();
       }
       return this;
-    }, 
+    },
 
     // directional methods
 
@@ -2136,9 +2136,9 @@
           if (passed) {
             this.settings.directives[passed
               .scenario[1]].call(this, passed.el, passed.scenario[0], function () {
-                if (arguments[0] instanceof Array) { 
+                if (arguments[0] instanceof Array) {
                   var args = arguments[0];
-                } else { 
+                } else {
                   var args = Array.prototype.slice.call(arguments, 0);
                 }
 
@@ -2272,7 +2272,7 @@
       else {
         var cached_split = scenario[0].split(/,\s*$/),
         path             = cached_split[0],
-        directive        = '';               
+        directive        = '';
       }
 
       return [this.trim(path), this.convert_directive(directive), this.trim(media_query)];
@@ -2280,7 +2280,7 @@
 
     object : function(el) {
       var raw_arr = this.parse_data_attr(el),
-          scenarios = [], 
+          scenarios = [],
           i = raw_arr.length;
 
       if (i > 0) {
@@ -2335,7 +2335,7 @@
 
     parse_data_attr : function (el) {
       var raw = el.attr(this.attr_name()).split(/\[(.*?)\]/),
-          i = raw.length, 
+          i = raw.length,
           output = [];
 
       while (i--) {
@@ -3534,7 +3534,6 @@
         .on('click.fndtn.offcanvas', '.right-off-canvas-menu a', function (e) {
           var settings = self.get_settings(e);
           var parent = S(this).parent();
-
           if(settings.close_on_click && !parent.hasClass("has-submenu") && !parent.hasClass("back")){
             self.hide.call(self, move_class + left_postfix, self.get_wrapper(e));
             parent.parent().removeClass(move_class + left_postfix);
@@ -4140,7 +4139,7 @@
         .off('.reveal')
         .on('click.fndtn.reveal', '[' + this.add_namespace('data-reveal-id') + ']:not([disabled])', function (e) {
           e.preventDefault();
-        
+
           if (!self.locked) {
             var element = S(this),
                 ajax = element.data(self.data_attr('reveal-ajax'));
@@ -4581,15 +4580,15 @@
               if (!e.pageY) {
                 scroll_offset = window.scrollY;
               }
-              self.calculate_position(self.cache.active, (e.pageY || 
-                                                          e.originalEvent.clientY || 
-                                                          e.originalEvent.touches[0].clientY || 
-                                                          e.currentPoint.y) 
+              self.calculate_position(self.cache.active, (e.pageY ||
+                                                          e.originalEvent.clientY ||
+                                                          e.originalEvent.touches[0].clientY ||
+                                                          e.currentPoint.y)
                                                           + scroll_offset);
             } else {
-              self.calculate_position(self.cache.active, e.pageX || 
-                                                         e.originalEvent.clientX || 
-                                                         e.originalEvent.touches[0].clientX || 
+              self.calculate_position(self.cache.active, e.pageX ||
+                                                         e.originalEvent.clientX ||
+                                                         e.originalEvent.touches[0].clientX ||
                                                          e.currentPoint.x);
             }
           }

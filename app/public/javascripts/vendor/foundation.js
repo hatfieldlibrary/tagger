@@ -974,7 +974,6 @@
           move_class = '',
           right_postfix = '',
           left_postfix = '';
-
       if (this.settings.open_method === 'move') {
         move_class = 'move-';
         right_postfix = 'right';
@@ -1021,7 +1020,6 @@
         .on('click.fndtn.offcanvas', '.right-off-canvas-menu a', function (e) {
           var settings = self.get_settings(e);
           var parent = S(this).parent();
-
           if(settings.close_on_click && !parent.hasClass("has-submenu") && !parent.hasClass("back")){
             self.hide.call(self, move_class + left_postfix, self.get_wrapper(e));
             parent.parent().removeClass(move_class + left_postfix);

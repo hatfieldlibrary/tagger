@@ -1,0 +1,21 @@
+.tag-box {
+  a {
+    margin-top: 16px;
+
+    &.button {
+      background-color: #BDB5A3;
+      text-transform: capitalize;
+      font-size: 0.8875rem;
+      transition: background-color 300ms ease-out;
+      padding-top: 0.425rem;
+      padding-bottom: 0.4875rem;
+    }
+    &.button:hover {
+      background-color: #A39B8A;
+    }
+    i {
+      margin-left: 15px;
+    }
+
+  }
+}

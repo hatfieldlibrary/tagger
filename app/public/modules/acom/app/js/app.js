@@ -14,36 +14,6 @@ var collectionsApp = angular.module('collectionsApp', [
 
 ]);
 
-// This adds foundation 5 support and sets user agent
-// after angular has been initialized.  (As we continue
-// to develop with foundation, note this as a possible
-// source of problems.  At the moment, it's not clear
-// what effect, if any, this is having.)
-collectionsApp.run(function($rootScope) {
-
-  $rootScope.$on('$viewContentLoaded', function () {
-    // global
-    app = (function(document, $) {
-      var docElem = document.documentElement,
-        _userAgentInit = function() {
-          docElem.setAttribute('data-useragent', navigator.userAgent);
-        },
-        _init = function() {
-          $(document).foundation();
-          _userAgentInit();
-        };
-      return {
-        init: _init
-      };
-    })(document, jQuery);
-
-    (function() {
-      app.init();
-    })();
-  });
-});
-
-
 
 collectionsApp.config(['$httpProvider', function ($httpProvider) {
 
@@ -82,7 +52,6 @@ collectionsApp.config(['$httpProvider', function ($httpProvider) {
 
 }]);
 
-
 // routes
 collectionsApp.config(['$routeProvider','$locationProvider',
   function($routeProvider, $locationProvider) {
@@ -98,8 +67,8 @@ collectionsApp.config(['$routeProvider','$locationProvider',
         templateUlr: 'commons/partials/collection'
       }).
       when ('/commons/archivesCollect/:id/:fld', {
-        templateUrl: 'commons/partials/archivesCollect'
-      }).
+      templateUrl: 'commons/partials/archivesCollect'
+    }).
       when('/commons/archivesCollect/:id/:fld/:tag', {
         templateUrl: 'commons/partials/archivesCollect'
       }).
@@ -139,6 +108,42 @@ collectionsApp.config(['$routeProvider','$locationProvider',
     $locationProvider.html5Mode(true).hashPrefix('!');
 
   }]);
+
+// This adds foundation 5 support and sets user agent
+// after angular has been initialized.  (As we continue
+// to develop with foundation, note this as a possible
+// source of problems. Foundation for Apps is an attempt
+// to integrate angular and foundation.)
+// After config(), Angular calls run blocks on startup.
+collectionsApp.run(function($rootScope) {
+
+  $rootScope.$on('$viewContentLoaded', function () {
+    // add init method
+    app = (function(document, $) {
+      var docElem = document.documentElement,
+        _userAgentInit = function () {
+          docElem.setAttribute('data-useragent', navigator.userAgent);
+        },
+        _init = function () {
+          try {
+            // initialize foundation
+            $(document).foundation();
+          } catch (err) {
+            console.log(err.message);
+          }
+          _userAgentInit();
+        };
+      return {
+        init: _init
+      };
+    })(document, jQuery);
+    // call init
+    (function() {
+      app.init();
+    })();
+  });
+});
+
 
 
 // manually bootstrap angular here

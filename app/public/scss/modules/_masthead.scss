@@ -24,7 +24,9 @@
 
   // for foundation interchage - ms
   .interchange-masthead {
-    min-height: em-calc(421);
+    @include bp(large-up) {
+      min-height: em-calc(421);
+    }
   }
 
   .library-content-box-container {

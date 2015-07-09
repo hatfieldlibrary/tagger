@@ -32,7 +32,7 @@
 <header class="header">
   <div class="row">
     <img src="/images/logo.png" alt="Willamette University logo" class="logo" />
-    <a href="#" title="Menu" class="off-canvas-toggle right-off-canvas-toggle">
+    <a href="#" title="Menu" class="off-canvas-toggle right-off-canvas-toggle" aria-expanded="true">
       <i class="fa fa-bars"></i>
       Menu
     </a>
@@ -113,15 +113,16 @@
 
 <div class="masthead masthead-story">
   <div class="masthead-story-top interchange-masthead">
+    <!-- essential to put noscript tag on the same line as the image tag! -->
     <img data-interchange="[images/site/GreenHills.jpg, (default)],
-                                [images/site/lib-header-phone.jpg, (small)],
-                                [images/site/lib-header-desktop.jpg, (medium)],
-                                [images/site/lib-header-desktop.jpg, (large)],
+                                [images/site/GreenHills-phone.jpg, (small)],
+                                [images/site/GreenHills.jpg, (medium)],
+                                [images/site/GreenHills.jpg, (large)],
                                 [images/site/GreenHills.jpg, (xlarge)],
                                 [images/site/GreenHills.jpg, (xxlarge)],
                                 [images/site/lib-header-retina.jpg, (retina_small_up)]"
-         alt="Hatfield Library and Mill Stream" width="1425" height="750"/>
-    <noscript><img src="images/site/lib-header-desktop.jpg"></noscript>
+         alt="Hatfield Library and Mill Stream" width="1425" height="750"/><noscript><img src="images/site/lib-header-desktop.jpg"></noscript>
+
     <div class="library-secondary-nav hide-for-small-down">
       <div class="row">
         <div class="column medium-12">
@@ -138,6 +139,7 @@
 
 <!-- Angularjs view container -->
 <div ng-view class="view-frame"></div>
+
 
 <footer id="footer" class="footer">
   <div class="row">
@@ -247,8 +249,30 @@
 </footer>
 
 
-<!-- build:js /js/vendor/libraries.min.js -->
+
+<!-- endbuild -->
+<!-- build:js /js/vendor/foundation.min.js -->
 <script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.js"></script>
+<!--
+<script src="/bower_components/foundation/js/foundation/foundation.abide.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.accordion.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.alert.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.clearing.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.dropdown.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.equalizer.js"></script> -->
+<script src="/bower_components/foundation/js/foundation/foundation.interchange.js"></script>
+<!--<script src="/bower_components/foundation/js/foundation/foundation.joyride.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.magellan.js"></script>  -->
+<script src="/bower_components/foundation/js/foundation/foundation.offcanvas.js"></script>
+<!--<script src="/bower_components/foundation/js/foundation/foundation.orbit.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.reveal.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.slider.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.tab.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.tooltip.js"></script>
+<script src="/bower_components/foundation/js/foundation/foundation.topbar.js"></script>     -->
+<!-- build:js /js/vendor/libraries.min.js -->
+
 <script src="/bower_components/fastclick/lib/fastclick.js"></script>
 <script src="/bower_components/angular/angular.js"></script>
 <script src="/bower_components/angular-mocks/angular-mocks.js"></script>
@@ -257,25 +281,6 @@
 <script src="/bower_components/angular-animate/angular-animate.js"></script>
 <script src="/bower_components/rem-unit-polyfill/js/rem.js"></script>
 <script src="/bower_components/jquery-ui/jquery-ui.js"></script>
-<!-- endbuild -->
-<!-- build:js /js/vendor/foundation.min.js -->
-<script src="/bower_components/foundation/js/foundation/foundation.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.abide.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.accordion.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.alert.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.clearing.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.dropdown.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.equalizer.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.interchange.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.joyride.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.magellan.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.offcanvas.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.orbit.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.reveal.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.slider.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.tab.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.tooltip.js"></script>
-<script src="/bower_components/foundation/js/foundation/foundation.topbar.js"></script>
 <!-- endbuild -->
 <script src="/js/services.js"></script>
 <script src="/js/animations.js"></script>

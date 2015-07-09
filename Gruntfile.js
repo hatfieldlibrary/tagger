@@ -233,8 +233,8 @@ module.exports = function (grunt) {
       },
       // These targets contact the same javascript libraries
       // into the admin UI javascripts directory. This allows
-      // the backend and frontend to be decoupled, although this
-      // isn't necessary given how we deploy the application under
+      // backend and frontend dependencies to be decoupled, although this
+      // probably isn't necessary given that we deploy the application under
       // a single Express server.
       serverlibs: {
         flatten: true,
@@ -454,6 +454,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-bower-install');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-modernizr');
  // grunt.loadNpmTasks('grunt-mocha');
   files = grunt.config('watch.js.files');
   files = grunt.file.expand(files);
@@ -488,7 +489,7 @@ module.exports = function (grunt) {
       // want to test new javascript libs with admin
       // mode. It takes a while to complete, which
       // is why it is commented out here. The task
-      // is included by default when you run publish.
+      // is included by default when you publish.
       // 'uglify:server',
       'express:dev',
       'bower-install',
@@ -516,7 +517,7 @@ module.exports = function (grunt) {
     'newer:imagemin',
     'cssmin',
     'uglify',
-    'copy:server',
+   // 'copy:server',
     'usemin']);
 
 };
