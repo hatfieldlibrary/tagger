@@ -182,9 +182,7 @@
 
     }
 
-    @include bp(medium-only) {
-      bottom: -43px;
-    }
+
 
     @include bp(large-up) {
       padding: 0;

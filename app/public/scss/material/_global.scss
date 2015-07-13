@@ -279,6 +279,7 @@ td, th{
       }
 
 
+
       .title {
         font-size: 16px;
       }
@@ -309,6 +310,7 @@ td, th{
       }
     }
   }
+
   a.collection-item{
     display: block;
     @include transition(.25s);
@@ -329,6 +331,11 @@ td, th{
     .collection-item {
       padding-left: 30px;
     }
+  }
+
+  a.selected {
+    text-transform: uppercase;
+    font-weight: 700;
   }
 
 }
