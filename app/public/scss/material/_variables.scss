@@ -6,6 +6,7 @@ $primary-color-dark: darken($primary-color, 15%) !default;
 $secondary-color: color("wu-colors", "darken-1") !default;
 $wu-secondary-color: color("wu-colors", "darken-1") !default;
 $wu-card-color: color("wu-colors", "lighten-6") !default;
+$wu-card-text: color("wu-colors", "card-text") !default;
 $success-color: color("green", "base") !default;
 $error-color: color("red", "base") !default;
 $link-color: color("light-blue", "darken-1") !default;
@@ -137,7 +138,7 @@ $interval-size: $range / $intervals !default;
 $collection-border-color: #e0e0e0 !default;
 $collection-bg-color: #fff !default;
 $collection-active-bg-color: $wu-secondary-color !default;
-$collection-active-color: lighten($wu-secondary-color, 65%) !default;
+$collection-active-color: lighten($wu-secondary-color, 70%) !default;
 $collection-hover-bg-color: #ddd !default;
 
 /* Progress Bar */

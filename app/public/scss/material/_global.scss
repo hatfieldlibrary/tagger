@@ -1,8 +1,5 @@
 @charset "UTF-8";
 
-
-
-
 // Z-levels
 
 .z-depth-1{
@@ -115,56 +112,6 @@ ul.staggered-list li {
 /*********************
   Media Query Classes
 **********************/
-.hide-on-small-only, .hide-on-small-and-down {
-  @media #{$small-and-down} {
-    display: none !important;
-  }
-}
-.hide-on-med-and-down {
-  @media #{$medium-and-down} {
-    display: none !important;
-  }
-}
-.hide-on-med-and-up {
-  @media #{$medium-and-up} {
-    display: none !important;
-  }
-}
-.hide-on-med-only {
-  @media only screen and (min-width: $small-screen) and (max-width: $medium-screen) {
-    display: none !important;
-  }
-}
-.hide-on-large-only {
-  @media #{$large-and-up} {
-    display: none !important;
-  }
-}
-.show-on-large {
-  @media #{$large-and-up} {
-    display: initial !important;
-  }
-}
-.show-on-medium {
-  @media only screen and (min-width: $small-screen) and (max-width: $medium-screen) {
-    display: initial !important;
-  }
-}
-.show-on-small {
-  @media #{$small-and-down} {
-    display: initial !important;
-  }
-}
-.show-on-medium-and-up {
-  @media #{$medium-and-up} {
-    display: initial !important;
-  }
-}
-.show-on-medium-and-down {
-  @media #{$medium-and-down} {
-    display: initial !important;
-  }
-}
 
 
 // Center text on mobile
@@ -290,21 +237,23 @@ td, th{
 
 }
 
-
 // Collections
 .collection {
-  background-color: #999;
+  background-color: transparent;
   margin: $element-top-margin 0 $element-bottom-margin 0;
   border: 1px solid $collection-border-color;
   @include border-radius(2px);
   overflow: hidden;
 
   .collection-item {
-    background-color: $collection-bg-color;
+    background-color: rgba(255,255,255,0.5);
     line-height: 1.5rem;
     padding: 10px 20px;
     margin: 0px;
     border-bottom: 1px solid $collection-border-color;
+    font-family: franklin-gothic-urw-cond, sans-serif;
+    font-size: 1.1rem;
+    text-transform: uppercase;
 
     // Avatar Collection
     &.avatar {
@@ -356,6 +305,7 @@ td, th{
       color: $collection-active-color;
       a {
         color: $collection-active-color;
+        font-weight: 700;
       }
     }
   }
@@ -510,33 +460,6 @@ span.badge {
   Utility Classes
 *******************/
 
-// Text Align
-.left-align {
-  text-align: left;
-}
-.right-align {
-  text-align: right
-}
-.center, .center-align {
-  text-align: center;
-}
-
-.left {
-  float: left !important;
-}
-.right {
-  float: right !important;
-}
-
-// No Text Select
-.no-select {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 
 // Circle
 .circle {

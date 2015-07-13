@@ -28,8 +28,13 @@
 
 <body class="{{ bodyClass }}" ng-cloak>
 <div id="top"></div>
+<div class="level two-column">
 
-<header class="header">
+  <div class="off-canvas-wrap" data-offcanvas>
+
+    <main class="inner-wrap">
+
+    <header class="header">
   <div class="row">
     <img src="/images/logo.png" alt="Willamette University logo" class="logo" />
     <a href="#" title="Menu" class="off-canvas-toggle right-off-canvas-toggle" aria-expanded="true">
@@ -109,6 +114,8 @@
       <span class="fa fa-search"></span>
     </form>
   </div>
+
+
 </header>
 
 <div class="masthead masthead-story">
@@ -140,115 +147,13 @@
 <!-- Angularjs view container -->
 <div ng-view class="view-frame"></div>
 
+      <ng-include src="'/commons/partials/footer'"></ng-include>
 
-<footer id="footer" class="footer">
-  <div class="row">
-    <nav class="footer-cta-nav" data-partial="footer-cta-nav">
-      <ul>
-        <li>
-          <a href="#" title="Plan A Visit" class="">
-					<span class="text">
-						<span class="title">Plan A Visit</span>
-
-					</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="Request Info" class="">
-					<span class="text">
-						<span class="title">Request Info</span>
-					</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="Apply Now" class="">
-					<span class="text">
-						<span class="title">Apply Now</span>
-					</span>
-          </a>
-        </li>
-
-      </ul>
-    </nav>
-    <nav class="footer-main-nav">
-      <ul>
-        <li>
-          <a href="#" title="About">About</a>
-        </li>
-        <li>
-          <a href="#" title="News">News</a>
-        </li>
-        <li>
-          <a href="#" title="Events">Events</a>
-        </li>
-        <li>
-          <a href="#" title="Maps &amp; Directions">Maps &amp; Directions</a>
-        </li>
-        <li>
-          <a href="#" title="A–Z Index">A–Z Index</a>
-        </li>
-        <li>
-          <a href="#" title="Compliance">Compliance</a>
-        </li>
-        <li>
-          <a href="#" title="Privacy">Privacy</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="footer-contact">
-      <ul class="clearfix">
-        <li class="copyright-line-1">&copy; 2014 Willamette University</li>
-        <li class="copyright-line-2">900 State Street, Salem, Oregon 97301</li>
-        <li class="phone"><a href='tel:+15033706300' class='phone-mobile'>(503) 370-6300</a><span class='phone-desktop'>(503) 370-6300</span></li>
-        <li class="email"><a href='mailto:ask@willamette.edu'>ask@willamette.edu</a></li>
-        <li class="contact-us">
-          <a href="#" title="Contact Us">Contact Us</a>
-        </li>
-      </ul>
-    </div>
-    <div class="social-media-icons">
-      <ul class="clearfix">
-        <li>
-          <a href="#" title="Facebook" class="icon-facebook">
-            <span>Facebook</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="Twitter" class="icon-twitter">
-            <span>Twitter</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="Vimeo" class="icon-vimeo">
-            <span>Vimeo</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="Instagram" class="icon-instagram">
-            <span>Instagram</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="Google Plus" class="icon-googleplus">
-            <span>Google Plus</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="LinkedIn" class="icon-linkedin">
-            <span>LinkedIn</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" title="Tumblr" class="icon-tumblr">
-            <span>Tumblr</span>
-          </a>
-        </li>
-      </ul>
-    </div>
+      <a class="exit-off-canvas"></a>
+    </main>
   </div>
-</footer>
 
-
+</div>
 
 <!-- endbuild -->
 <!-- build:js /js/vendor/foundation.min.js -->
