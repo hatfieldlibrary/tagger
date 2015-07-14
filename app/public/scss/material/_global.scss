@@ -255,6 +255,8 @@ td, th{
     font-size: 1.1rem;
     text-transform: uppercase;
 
+
+
     // Avatar Collection
     &.avatar {
       height: 84px;
@@ -302,11 +304,31 @@ td, th{
     }
 
     &.active {
+      position:relative;
       background-color: $collection-active-bg-color;
       color: $collection-active-color;
+      display:block;
       a {
         color: $collection-active-color;
         font-weight: 700;
+      }
+
+      &:after {
+        position: absolute;
+        /* top: 53px; */
+        right: -18px;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        pointer-events: none;
+        border-color: rgba(87,181,188,0);
+        border-left-color: #57b5bc;
+        border-top-color: #fff;
+        border-right-color: #fff;
+        border-bottom-color: #fff;
+        margin-top: -10px;
+        border-width: 22px;
       }
     }
   }
@@ -327,11 +349,27 @@ td, th{
       background-color: $collection-bg-color;
       border-bottom: 1px solid $collection-border-color;
       padding: 10px 20px;
+
+      &.link-header {
+        background-color: #0F9BA5 !important;
+        color: #fff;
+        padding: 15px 20px !important;
+
+        a {
+          font-weight: 700;
+          color:#fff;
+          text-transform: uppercase;
+        }
+      }
+
     }
     .collection-item {
       padding-left: 30px;
     }
+
   }
+
+
 
   a.selected {
     text-transform: uppercase;

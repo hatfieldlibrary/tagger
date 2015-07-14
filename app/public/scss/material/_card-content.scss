@@ -8,6 +8,10 @@
     color:  $wu-card-text !important;
     text-decoration: none;
     text-transform: none;
-  }
 
+  }
+  h4 a:after {
+    content: "" !important;
+    display: inline;
+  }
 }

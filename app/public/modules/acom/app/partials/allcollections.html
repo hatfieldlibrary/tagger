@@ -1,0 +1,47 @@
+<div class="level-container">
+  <div class="row">
+    <ng-include src="'commons/partials/global-sidebar'"></ng-include>
+
+    <div class="main-column small-12 large-9  columns">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="All Collections">
+            All Collections
+          </a>
+        </li>
+      </ul>
+      <div class="row">
+        <div class="small-12 column ac-opaque">
+          <div class="panel"  >
+            <div class="row">
+              <div class="small-12 medium-6 large-6 column">
+                <h2>All Collections</h2>
+                <div style="width: 100%; border-top: 1px solid rgba(160,160,160,0.2);padding-top: 16px;padding-left: 15px;">
+                  <div class="row">
+                    <p>To filter collections, begin typing in the form below.</p>
+                    <form name="simpleForm" method="get">
+                      <div class="large-7 medium-7 small-7 left">
+                        <input name="query" type="text"  style="margin:0;" placeholder="Enter collection name">
+                      </div>
+                      <div class="large-2 medium-2 small-2 left end">
+                        <a href="#" class="postfix radius" style="background-color:#3faab2;border: none; color: #fff;"><i class="fa fa-search"></i></a>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <ng-include src="'commons/partials/mobile-nav'"></ng-include>
+  </div>
+</div>

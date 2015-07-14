@@ -1,0 +1,23 @@
+.ac-box {
+
+  margin-top: 20px !important;
+
+  .container {
+    background: #E7E2D5;
+    padding: 15px;
+    padding-bottom: 25px;
+  }
+
+  form {
+    margin: 0.75em 0.25em 0.75em 0;
+
+    input {
+      margin: 0;
+    }
+  }
+
+  .postfix {
+    background-color:#3faab2;
+    border: none; color: #fff;
+  }
+}

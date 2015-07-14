@@ -1,0 +1,16 @@
+.ac-iteminfo {
+
+  li {
+    padding: 4px;
+  }
+
+  span {
+    &.ac-label {
+      font-weight: 700;
+    }
+
+    &.icon {
+      font-size: 1.5rem;
+    }
+  }
+}
