@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       browseType: {
         type: DataTypes.STRING(4),
-        allowNull: false
+        allowNull: true
       },
       description: {
         type: DataTypes.STRING(4096),
@@ -50,9 +50,13 @@ module.exports = function(sequelize, DataTypes) {
         defaultValue: 'DEFAULT',
         allowNull: false
       },
-      category: {
+      categoryId: {
         type: DataTypes.INTEGER(3),
-        allowNull: false
+        allowNull: true
+      },
+      restricted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
       }
     },
     {
@@ -68,7 +72,8 @@ module.exports = function(sequelize, DataTypes) {
             'dates': this.getDataValue('dates'),
             'items': this.getDataValue('items'),
             'ctype':this.getDataValue('ctype'),
-            'category':this.getDataValue('category')
+            'categoryId':this.getDataValue('categoryId'),
+            'restricted': this.getDataValue('restricted')
           };
         }
       },
@@ -83,6 +88,7 @@ module.exports = function(sequelize, DataTypes) {
         associate: function(models) {
           Collection.hasMany(models.TagTarget);
           Collection.hasMany(models.ItemContentTarget);
+          Collection.hasMany(models.AreaTargets);
           Collection.hasOne((models.Category));
         }
       }

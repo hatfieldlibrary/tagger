@@ -1,11 +1,11 @@
 'use strict';
 /**
- * Created by mspalti on 7/9/14.
+ * Created by mspalti on 5/29/14.
  */
 
 module.exports = function(sequelize, DataTypes) {
 
-  var CategoryTarget = sequelize.define('CategoryTarget',
+  var AreaTarget = sequelize.define('AreaTarget',
     {
       id: {
         type: DataTypes.INTEGER(4),
@@ -16,12 +16,12 @@ module.exports = function(sequelize, DataTypes) {
     {
       classMethods: {
         associate: function(models) {
-          CategoryTarget.belongsTo(models.Category, { onDelete: 'cascade' }) ;
-          CategoryTarget.belongsTo(models.Collection, { onDelete: 'cascade' });
+          AreaTarget.belongsTo(models.Area, { onDelete: 'cascade' }) ;
+          AreaTarget.belongsTo(models.Collection, { onDelete: 'cascade' });
         }
       }
     }
   );
 
-  return CategoryTarget;
+  return AreaTarget;
 };

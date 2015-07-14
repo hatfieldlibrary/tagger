@@ -217,6 +217,8 @@ exports.create = function(req, res) {
   var collDates = req.body.dates;
   var collItems = req.body.items;
   var collType = req.body.ctype;
+  var categoryId = req.body.categoryId;
+  var restricted = req.body.restricted;
   // First create the new collection. Then retrieve the
   // updated collection list and pass it to the view.
   async.series (
@@ -229,7 +231,9 @@ exports.create = function(req, res) {
           description: collDesc,
           dates: collDates,
           items: collItems,
-          ctype: collType
+          ctype: collType,
+          categoryId: categoryId,
+          restricted: restricted
         }).complete(callback)
           .error(function(err) {
             console.log(err);
@@ -476,6 +480,49 @@ exports.addTag = function(req, res) {
   );
 };
 
+
+exports.addArea = function(req, res) {
+
+  var areaId = req.body.areaid;
+  var collId = req.body.collid;
+  // only add tag if not already attached to the collection
+  db.AreaTarget.find(
+    {
+      where: {
+        CollectionId: {
+          eq: collId
+        },
+        areaId: {
+          eq: areaId
+        }
+      }
+    }
+  ).success(function(result)
+    {
+      console.log(result);
+      if (result === null) {
+        db.AreaTarget.create({
+          collectionId: collId,
+          areaId: areaId
+          /*jshint unused:false*/
+        }).success(function (result) {
+            res.redirect('/admin/form/collection/update/' + collId);
+          }
+        ).error(function(err) {
+            console.log(err);
+          }
+        );
+      }
+      else {
+        res.redirect('/admin/form/collection/update/' + collId);
+      }
+    }
+  ).error(function(err) {
+      console.log(err);
+    }
+  );
+};
+
 exports.removeTag = function(req, res) {
   var collId = req.params.collid;
   var tagId = req.params.tagid;
@@ -493,6 +540,25 @@ exports.removeTag = function(req, res) {
     console.log(err);
   });
 };
+
+exports.removeArea = function(req, res) {
+  var collId = req.params.collid;
+  var areaId = req.params.areaid;
+  db.AreaTarget.destroy({
+    collectionId: {
+      eq: collId
+    },
+    areaId: {
+      eq: areaId
+    }
+    /*jshint unused:false*/
+  }).success(function(result) {
+    res.redirect('/admin/form/collection/update/'+collId);
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
 
 exports.addType = function(req, res) {
 

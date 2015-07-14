@@ -5,7 +5,7 @@
 
 module.exports = function(sequelize, DataTypes) {
 
-  var Category = sequelize.define('Category',
+  var Area = sequelize.define('Area',
     {
       id: {
         type: DataTypes.INTEGER(2),
@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING(255),
         allowNull: true
       },
-      secondaryUrl: {
+      searchUrl: {
         type: DataTypes.STRING(255),
         allowNull: true
       },
@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
             'id': this.getDataValue('id'),
             'title': this.getDataValue('title'),
             'url': this.getDataValue('url'),
-            'secondaryUrl': this.getDataValue('secondaryUrl'),
+            'searchUrl': this.getDataValue('searchUrl'),
             'desc': this.getDataValue('description')
           };
         }
@@ -45,5 +45,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     });
 
-  return Category;
+  return Area;
 };

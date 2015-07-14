@@ -196,7 +196,7 @@ exports.categoryUpdate = function (req, res) {
           eq: catId
         }
       },
-      attributes: ['id','title','url','description']
+      attributes: ['id','title','url','secondaryUrl','description']
     }
   ).success(function(categories) {
       res.render('categoryUpdate', {

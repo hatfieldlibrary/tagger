@@ -5,20 +5,20 @@ var async = require('async');
 
 exports.create = function(req, res) {
 
-  var catName = req.body.title;
-  var catUrl = req.body.url;
-  var secondUrl = req.body.secondUrl;
-  var catDesc = req.body.description;
+  var title = req.body.title;
+  var url = req.body.url;
+  var searchUrl = req.body.searchUrl;
+  var description = req.body.description;
   // First create the new category. Then retrieve the
   // updated category list and pass it to the view.
   async.series (
     {
       create: function (callback) {
         db.Category.create({
-          title: catName,
-          url: catUrl,
-          secondaryUrl: secondUrl,
-          description: catDesc,
+          title: title,
+          url: url,
+          searchUrl: searchUrl,
+          description: description,
         }).complete(callback)
           .error(function(err) {
             console.log(err);
@@ -27,7 +27,7 @@ exports.create = function(req, res) {
       home: function (callback) {
         db.Category.findAll(
           {
-            attributes: ['id','title', 'url','secondaryUrl', 'description'],
+            attributes: ['id','title', 'url','searchUrl', 'description'],
             order: [['title', 'ASC']]
           }
         ).complete(callback)
@@ -48,33 +48,33 @@ exports.create = function(req, res) {
 
 exports.update = function(req, res) {
 
-  var catName = req.body.title;
-  var catUrl = req.body.url;
-  var secondUrl = req.body.secondUrl;
-  var catDesc = req.body.description;
-  var catId = req.body.id;
+  var title = req.body.title;
+  var url = req.body.url;
+  var searchUrl = req.body.searchUrl;
+  var description = req.body.description;
+  var id = req.body.id;
 
   // First update the collection. Then retrieve the updated
   // collection list and pass it to the view.
   async.series (
     {
       update:  function (callback) {
-        db.Category.update({
-            title: catName,
-            url: catUrl,
-            secondaryUrl: secondUrl,
-            description: catDesc,
+        db.Area.update({
+            title: title,
+            url: url,
+            searchUrl: searchUrl,
+            description: description,
           },
           {
             id: {
-              eq: catId
+              eq: id
             }
           }).complete(callback);
       },
       home: function (callback) {
-        db.Category.findAll(
+        db.Area.findAll(
           {
-            attributes: ['id','title', 'url', 'secondaryUrl', 'description'],
+            attributes: ['id','title', 'url', 'searchUrl', 'description'],
             order: [['title', 'ASC']]
           }
         ).complete(callback);
@@ -83,7 +83,7 @@ exports.update = function(req, res) {
     function(err, result) {
       if (err) { console.log(err); }
       res.render('categoryIndex', {
-        title: 'Categories',
+        title: 'Areas',
         categories: result.home
       });
     }
@@ -111,7 +111,7 @@ exports.delete = function(req, res) {
       home: function(callback) {
         db.Category.findAll(
           {
-            attributes: ['id','title', 'url', 'secondaryUrl', 'description'],
+            attributes: ['id','title', 'url', 'searchUrl', 'description'],
             order: [['title', 'ASC']]
           }
         ).complete(callback)

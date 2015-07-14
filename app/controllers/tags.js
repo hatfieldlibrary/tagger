@@ -11,6 +11,7 @@ exports.create = function(req, res) {
   var tagName = req.body.name;
   var tagUrl = req.body.url;
   var tagType = req.body.type;
+  var areaId = req.body.areaId;
 
 
   // async not really required here
@@ -37,7 +38,8 @@ exports.create = function(req, res) {
           {
             name: tagName,
             url: tagUrl,
-            type: tagType
+            type: tagType,
+            areaId: areaId
             /*jshint unused:false*/
           }).success(function (items) {
             db.Tag.findAll()
@@ -107,6 +109,7 @@ exports.tagUpdate = function (req, res) {
   var tagName = req.body.name;
   var tagUrl = req.body.url;
   var tagType = req.body.type;
+  var areaId = req.body.areaId;
   async.series (
     {
       update: function (callback) {
@@ -114,7 +117,8 @@ exports.tagUpdate = function (req, res) {
           {
             name: tagName,
             url: tagUrl,
-            type: tagType
+            type: tagType,
+            areaId: areaId
           },
           {
             id: {
