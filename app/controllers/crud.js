@@ -43,6 +43,21 @@ exports.tagIndex = function(req, res) {
     });
 };
 
+exports.areaIndex = function(req, res) {
+
+  db.Area.findAll({
+    order: [['title', 'ASC']]
+  })
+    .success(function(areas) {
+      res.render('areaIndex', {
+        title: 'Areas',
+        areas: areas
+      });
+    }).error(function(err) {
+      console.log(err);
+    });
+};
+
 exports.categoryIndex = function(req, res) {
 
   db.Category.findAll({
@@ -204,6 +219,28 @@ exports.tagUpdate = function (req, res) {
       res.render('tagUpdate', {
         title: 'Update Tag',
         tag: tag
+      });
+    }
+  ).error(function(err) {
+      console.log(err);
+    });
+};
+
+exports.areaUpdate = function (req, res) {
+  var areaId = req.params.id;
+  db.Area.find(
+    {
+      where: {
+        id: {
+          eq: areaId
+        }
+      },
+      attributes: ['id','title','url','searchUrl','description']
+    }
+  ).success(function(area) {
+      res.render('areaUpdate', {
+        title: 'Update Area',
+        area: area
       });
     }
   ).error(function(err) {

@@ -4,6 +4,7 @@ module.exports = function(app,config,passport){
 
   var crud = require('../app/controllers/crud');
   var tag = require('../app/controllers/tags');
+  var area = require('../app/controllers/area');
   var content = require('../app/controllers/content');
   var collection = require('../app/controllers/collection');
   var target = require('../app/controllers/target');
@@ -35,11 +36,13 @@ module.exports = function(app,config,passport){
   app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
   app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
   app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);
+  app.get('/admin/area/view', ensureAuthenticated, crud.areaIndex);
   app.get('/admin/form/collection', ensureAuthenticated, crud.index);
   app.get('/admin/form/collection/create', ensureAuthenticated, crud.collCreate);
   app.get('/admin/form/collection/update/:id', ensureAuthenticated, crud.collUpdate);
   app.get('/admin/form/tag/create', ensureAuthenticated,  crud.tagCreate);
   app.get('/admin/form/tag/update/:id', ensureAuthenticated, crud.tagUpdate);
+  app.get('/admin/form/area/update/:id', ensureAuthenticated, crud.areaUpdate);
   app.get('/admin/form/category/update/:id', ensureAuthenticated, crud.categoryUpdate);
   app.get('/admin/form/content/update/:id', ensureAuthenticated,  crud.contentUpdate);
   app.get('/admin/collection/remove/tag/:collid/:tagid', ensureAuthenticated, collection.removeTag);
@@ -55,6 +58,9 @@ module.exports = function(app,config,passport){
   app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);
   app.post('/admin/tag/create', ensureAuthenticated, tag.create);
   app.post('/admin/tag/update', ensureAuthenticated, tag.tagUpdate);
+  app.post('/admin/area/create', ensureAuthenticated, area.create);
+  app.post('/admin/area/update', ensureAuthenticated, area.update);
+  app.get('/admin/area/delete/:id', ensureAuthenticated, area.delete);
   app.get('/admin/target/create', ensureAuthenticated, target.create);
   app.post('/admin/content/create', ensureAuthenticated, content.create);
   app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);

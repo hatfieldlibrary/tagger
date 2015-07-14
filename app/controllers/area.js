@@ -14,7 +14,7 @@ exports.create = function(req, res) {
   async.series (
     {
       create: function (callback) {
-        db.Category.create({
+        db.Area.create({
           title: title,
           url: url,
           searchUrl: searchUrl,
@@ -25,7 +25,7 @@ exports.create = function(req, res) {
           });
       },
       home: function (callback) {
-        db.Category.findAll(
+        db.Area.findAll(
           {
             attributes: ['id','title', 'url','searchUrl', 'description'],
             order: [['title', 'ASC']]
@@ -38,9 +38,9 @@ exports.create = function(req, res) {
     },
     function(err, result) {
       if (err) { console.log(err); }
-      res.render('categoryIndex', {
-        title: 'Categories',
-        categories: result.home
+      res.render('areaIndex', {
+        title: 'Areas',
+        areas: result.home
       });
     }
   );
@@ -63,7 +63,7 @@ exports.update = function(req, res) {
             title: title,
             url: url,
             searchUrl: searchUrl,
-            description: description,
+            description: description
           },
           {
             id: {
@@ -82,9 +82,9 @@ exports.update = function(req, res) {
     },
     function(err, result) {
       if (err) { console.log(err); }
-      res.render('categoryIndex', {
+      res.render('areaIndex', {
         title: 'Areas',
-        categories: result.home
+        areas: result.home
       });
     }
   );
@@ -93,15 +93,15 @@ exports.update = function(req, res) {
 
 exports.delete = function(req, res) {
 
-  var catId = req.params.id;
+  var areaId = req.params.id;
   // First delete the collection. Then retrieve the updated
   // collection list and pass it to the view.
   async.series (
     {
       delete: function(callback) {
-        db.Category.destroy({
+        db.Area.destroy({
           id: {
-            eq: catId
+            eq: areaId
           }
         }).complete(callback)
           .error(function(err) {
@@ -109,7 +109,7 @@ exports.delete = function(req, res) {
           });
       },
       home: function(callback) {
-        db.Category.findAll(
+        db.Area.findAll(
           {
             attributes: ['id','title', 'url', 'searchUrl', 'description'],
             order: [['title', 'ASC']]
@@ -121,9 +121,9 @@ exports.delete = function(req, res) {
       }
     }, function(err, result) {
       if (err) { console.log(err); }
-      res.render('categoryIndex', {
-        title: 'Categories',
-        categories: result.home
+      res.render('areaIndex', {
+        title: 'Areas',
+        areas: result.home
       });
     }
   );
