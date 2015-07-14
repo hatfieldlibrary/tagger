@@ -271,6 +271,7 @@ exports.update = function(req, res) {
   var collDates = req.body.dates;
   var collItems = req.body.items;
   var collType = req.body.ctype;
+  var categoryId = req.body.categoryId;
 
   // First update the collection. Then retrieve the updated
   // collection list and pass it to the view.
@@ -284,7 +285,8 @@ exports.update = function(req, res) {
             description: collDesc,
             dates: collDates,
             items: collItems,
-            ctype: collType
+            ctype: collType,
+            categoryId: categoryId
           },
           {
             id: {

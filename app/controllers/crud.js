@@ -119,6 +119,25 @@ exports.collUpdate = function(req, res) {
             console.log(err);
           });
       },
+      categoryData: function(callback) {
+        db.Category.findAll().complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      areaData: function(callback) {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            }
+          }
+        ).complete(callback).error(function(err) {
+            console.log(err);
+          });
+      },
       typeData: function(callback)
       {
         db.ItemContentTarget.findAll(
@@ -140,6 +159,8 @@ exports.collUpdate = function(req, res) {
       var collectionData = rd.collectionData;
       var tags = rd.tagData;
       var types = rd.typeData;
+      var categories = rd.categoryData;
+      var areas = rd.areaData;
       res.render('collectionUpdate', {
         title: 'Update Collection',
         collName: collectionData.title,
@@ -150,8 +171,11 @@ exports.collUpdate = function(req, res) {
         collItems: collectionData.getCollectionObject.items,
         collDates: collectionData.getCollectionObject.dates,
         collType: collectionData.getCollectionObject.ctype,
+        categoryId: collectionData.getCollectionObject.categoryId,
         collId: collectionData.id,
         tags: tags,
+        categories: categories,
+        areas: areas,
         types: types
       });
     }
