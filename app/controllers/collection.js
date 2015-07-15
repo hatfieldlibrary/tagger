@@ -272,6 +272,7 @@ exports.update = function(req, res) {
   var collItems = req.body.items;
   var collType = req.body.ctype;
   var categoryId = req.body.categoryId;
+  var areas = req.body.areas;
 
   // First update the collection. Then retrieve the updated
   // collection list and pass it to the view.
@@ -293,6 +294,29 @@ exports.update = function(req, res) {
               eq: collId
             }
           }).complete(callback);
+      },
+      dropAreaTargets: function(callback) {
+        db.AreaTarget.destroy({
+        CollectionId: {
+          eq: collId
+        }
+      }).complete(callback)
+        .error(function(err) {
+          console.log(err);
+        });
+      },
+      addAreaTargets: function(callback) {
+        var newTargets = [];
+       for (var i = 0; i < areas.length; i++) {
+           newTargets[i] = { AreaId: areas[i], CollectionId: collId };
+       }
+        console.log(newTargets);
+        db.AreaTarget.bulkCreate(
+          newTargets
+        ).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
       },
       home: function (callback) {
         db.Collection.findAll(

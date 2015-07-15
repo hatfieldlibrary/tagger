@@ -23,10 +23,6 @@ module.exports =  function(sequelize, DataTypes) {
             areaId: {
               type: DataTypes.INTEGER(2),
               allowNull: true
-            },
-            type: {
-                type: DataTypes.STRING(3),
-                allowNull: false
             }
         },  {
             getterMethods: {
@@ -34,8 +30,8 @@ module.exports =  function(sequelize, DataTypes) {
                     return {'id': this.getDataValue('id'),
                       'name': this.getDataValue('name'),
                       'url': this.getDataValue('url'),
-                      'areaId': this.getDataValue('areaId'),
-                      'type': this.getDataValue('type')};
+                      'areaId': this.getDataValue('areaId')
+                    };
                 }
             },
             setterMethods: {

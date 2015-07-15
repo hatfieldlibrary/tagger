@@ -91,14 +91,30 @@ block content
                     .small-10.columns
                         input(type="radio", name="ctype", value="ead" checked=collType=='ead')
                         | <label>Finding Aid &nbsp;&nbsp;</label>
-
                         input(type="radio", name="ctype", value="dig" checked=collType=='dig')
                         | <label>Digital Collection </label>
                         input(type="radio", name="ctype", value="itm" checked=collType=='itm')
                         | <label>Single Item &nbsp;&nbsp;</label>
                     .small-2.columns
+                p
+                .row
+                  .small-12.columns
+                    label Areas
+                .row
+                  .small-10.columns
+                    for area in availableAreas
+                      - var checked = false;
+                      - for(var i = 0; i < areas.length; i++ ) {
+                        - if (areas[i].id === area.id) {
+                         - checked = true;
+                        -}
+                      -}
+                      input(type="checkbox", name="areas", value=area.id, checked=checked)
+                      |<label>#{area.title}&nbsp;&nbsp;</label>
 
-                    input(type="hidden" name="id" value=collId)
+                  .small-2.columns
+
+                  input(type="hidden" name="id" value=collId)
                 p
                 .row
                     .small-10.columns

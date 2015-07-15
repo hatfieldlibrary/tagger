@@ -10,7 +10,6 @@ exports.create = function(req, res) {
 
   var tagName = req.body.name;
   var tagUrl = req.body.url;
-  var tagType = req.body.type;
   var areaId = req.body.areaId;
 
 
@@ -38,7 +37,6 @@ exports.create = function(req, res) {
           {
             name: tagName,
             url: tagUrl,
-            type: tagType,
             areaId: areaId
             /*jshint unused:false*/
           }).success(function (items) {
@@ -108,7 +106,6 @@ exports.tagUpdate = function (req, res) {
   var tagId = req.body.id;
   var tagName = req.body.name;
   var tagUrl = req.body.url;
-  var tagType = req.body.type;
   var areaId = req.body.areaId;
   async.series (
     {
@@ -117,7 +114,6 @@ exports.tagUpdate = function (req, res) {
           {
             name: tagName,
             url: tagUrl,
-            type: tagType,
             areaId: areaId
           },
           {
@@ -135,12 +131,21 @@ exports.tagUpdate = function (req, res) {
           .error(function(err) {
             console.log(err);
           });
+      },
+      areas: function (callback) {
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
       }
     },
     function (err, result) {
       res.render('tagIndex', {
         title: 'Tags',
-        tags: result.tags
+        tags: result.tags,
+        areas: result.areas
       });
     }
   );

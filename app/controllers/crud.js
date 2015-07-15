@@ -29,17 +29,30 @@ exports.index = function(req, res){
 
 
 exports.tagIndex = function(req, res) {
-
-  db.Tag.findAll({
-    order: [['name', 'ASC']]
-  })
-    .success(function(tags) {
+  async.parallel (
+    {
+      tags: function (callback) {
+        db.Tag.findAll({
+          order: [['name', 'ASC']]
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      },
+      areas: function (callback) {
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    }, function(err,rd) {
       res.render('tagIndex', {
         title: 'Tags',
-        tags: tags
+        tags: rd.tags,
+        areas: rd.areas
       });
-    }).error(function(err) {
-      console.log(err);
     });
 };
 
@@ -147,7 +160,18 @@ exports.collUpdate = function(req, res) {
               CollectionId: {
                 eq: collId
               }
-            }
+            },
+            include : [db.Area],
+            attributes: ['Area.title','Area.id']
+          }
+        ).complete(callback).error(function(err) {
+            console.log(err);
+          });
+      },
+      areas: function(callback) {
+        db.Area.findAll(
+          {
+            attributes: ['id','title']
           }
         ).complete(callback).error(function(err) {
             console.log(err);
@@ -176,6 +200,8 @@ exports.collUpdate = function(req, res) {
       var types = rd.typeData;
       var categories = rd.categoryData;
       var areas = rd.areaData;
+      var availableAreas = rd.areas;
+      console.log(areas);
       res.render('collectionUpdate', {
         title: 'Update Collection',
         collName: collectionData.title,
@@ -191,38 +217,62 @@ exports.collUpdate = function(req, res) {
         tags: tags,
         categories: categories,
         areas: areas,
+        availableAreas: availableAreas,
         types: types
       });
     }
   );
 };
 
-
+ // not in use...
 exports.tagCreate = function(req, res) {
-  res.render('tagCreate', {
-    title: 'Create Tag'
-  });
+  db.Area.findAll(
+    {
+      attributes: ['title','id']
+    }
+  ).success(function(areas) {
+      res.render('tagCreate', {
+        title: 'Create Tag',
+        areas: areas
+      });
+    });
 };
 
 exports.tagUpdate = function (req, res) {
   var tagId = req.params.id;
-  db.Tag.find(
+  async.parallel (
     {
-      where: {
-        id: {
-          eq: tagId
-        }
+      tag: function (callback) {
+        db.Tag.find(
+          {
+            where: {
+              id: {
+                eq: tagId
+              }
+            },
+            attributes: ['id','name','url','areaId']
+          }).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
       },
-      attributes: ['id','name','url','type']
-    }
-  ).success(function(tag) {
+      areas: function (callback) {
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function(err, rd) {
+      var tag = rd.tag;
+      var areas = rd.areas;
       res.render('tagUpdate', {
-        title: 'Update Tag',
-        tag: tag
+        title: 'Tags',
+        tag: tag,
+        areas: areas
       });
-    }
-  ).error(function(err) {
-      console.log(err);
     });
 };
 

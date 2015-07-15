@@ -22,11 +22,10 @@ block content
                         input(type="text", size=60 name="url" value=tag.url)
 
                 .row
-                    .large-10.columns
-                        input(type="radio", name="type", value="adm" checked=tag.type=='adm')
-                        | <label>Administrative Area &nbsp;&nbsp;</label>
-                        input(type="radio", name="type", value="sub" checked=tag.type=='sub')
-                        | <label>Subject </label>
+                  .large-10.columns
+                    for area in areas
+                      input(type="radio", name="areaId", value=area.id checked=tag.areaId==area.id)
+                      | <label>#{area.title} &nbsp;&nbsp;</label>
 
                 .row
                     .large-10.columns
