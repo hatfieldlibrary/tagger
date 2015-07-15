@@ -271,6 +271,7 @@ exports.update = function(req, res) {
   var collDates = req.body.dates;
   var collItems = req.body.items;
   var collType = req.body.ctype;
+  var restricted = req.body.restricted;
   var categoryId = req.body.categoryId;
   var areas = req.body.areas;
 
@@ -279,6 +280,7 @@ exports.update = function(req, res) {
   async.series (
     {
       update:  function (callback) {
+        console.log('update ' +restricted);
         db.Collection.update({
             title: collName,
             url: collUrl,
@@ -287,6 +289,7 @@ exports.update = function(req, res) {
             dates: collDates,
             items: collItems,
             ctype: collType,
+            restricted: restricted,
             categoryId: categoryId
           },
           {

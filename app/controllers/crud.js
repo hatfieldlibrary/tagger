@@ -201,7 +201,7 @@ exports.collUpdate = function(req, res) {
       var categories = rd.categoryData;
       var areas = rd.areaData;
       var availableAreas = rd.areas;
-      console.log(areas);
+      console.log('test ' +collectionData.restricted);
       res.render('collectionUpdate', {
         title: 'Update Collection',
         collName: collectionData.title,
@@ -213,6 +213,7 @@ exports.collUpdate = function(req, res) {
         collDates: collectionData.getCollectionObject.dates,
         collType: collectionData.getCollectionObject.ctype,
         categoryId: collectionData.getCollectionObject.categoryId,
+        restricted: collectionData.restricted,
         collId: collectionData.id,
         tags: tags,
         categories: categories,

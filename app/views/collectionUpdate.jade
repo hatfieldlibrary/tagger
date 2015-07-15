@@ -28,8 +28,20 @@ block content
                         label Collection Name
 
                 .row
-                    .small-10.columns
+                  .small-10.columns
                         input(type="text", class="small-8" name="name", value=collName)
+                  .small-2.columns
+                p
+
+                .row
+                  .small-12.columns
+                    label Restricted Access
+                .row
+                  .small-10.columns
+                    input(type="radio", name="restricted", value="1" checked=restricted==1)
+                    | <label>Yes &nbsp;&nbsp;</label>
+                    input(type="radio", name="restricted", value="" checked=restricted==0)
+                    | <label>No </label>
                     .small-2.columns
                 p
                 .row
