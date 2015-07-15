@@ -41,7 +41,7 @@ module.exports = function(app, config) {
   // setup the access logger
   var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
   app.use(logger('combined', {stream: accessLogStream}));
-  app.use(bodyParser());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
 
 
