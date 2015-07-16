@@ -370,7 +370,6 @@ module.exports = function (grunt) {
           run: true
         }
       },
-
       src: ['<%= app %>/test/{,*/}*.js']
     },
 
@@ -455,7 +454,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-modernizr');
- // grunt.loadNpmTasks('grunt-mocha');
+  grunt.loadNpmTasks('grunt-mocha');
   files = grunt.config('watch.js.files');
   files = grunt.file.expand(files);
 

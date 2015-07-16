@@ -3,7 +3,7 @@ exports.config = {
   allScriptsTimeout: 11000,
   // Do not start a Selenium Standalone sever - only run this using chrome.
   chromeOnly: true,
-  chromeDriver: '../node_modules/protractor/selenium/chromedriver',
+  chromeDriver: '/usr/local/lib/node_modules/protractor/selenium/chromedriver',
 
   // Capabilities to be passed to the webdriver instance.
   capabilities: {

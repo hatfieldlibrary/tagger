@@ -19,7 +19,7 @@ module.exports = function(app, config) {
   // setup static file paths
   // admin ui
   app.use('/img', express.static(config.root + '/public/images'));
-  app.use('/javascripts/application.js', express.static(config.root + '/public/javascripts/application.js'));
+  app.use('/javascripts', express.static(config.root + '/public/javascripts'));
   app.use('/javascripts/vendor', express.static(config.root + '/public/javascripts/vendor'));
   app.use('/stylesheets', express.static( config.root + '/public/stylesheets'));
   // collection images

@@ -29,10 +29,22 @@ exports.create = function(req, res) {
           .error(function (err) {
             console.log(err);
           });
+      },
+      areas: function (callback) {
+      db.Area.findAll({
+        attributes: ['id', 'title']
+      }).complete(callback)
+        .error(function (err) {
+          console.log(err);
+        });
+    }
+    },
+    function (err, result) {
+      if (err) {
+        console.log(err);
       }
-    }, function (err, result) {
-      if (err) { console.log(err); }
       if (result.check === null) {
+        console.log('creating tag');
         db.Tag.create(
           {
             name: tagName,
@@ -45,6 +57,7 @@ exports.create = function(req, res) {
                 res.render('tagIndex', {
                   title: 'Tags',
                   tags: tags,
+                  areas: result.areas,
                   exists: false
 
                 });
@@ -61,6 +74,7 @@ exports.create = function(req, res) {
             res.render('tagIndex', {
               title: 'Tags',
               tags: tags,
+              areas: result.areas,
               exists: true
             });
           }).error(function (err) {

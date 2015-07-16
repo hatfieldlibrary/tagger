@@ -12,8 +12,8 @@ mixin tagLink(tag)
                 =tag.type
     else
         .small-1.columns.id-color
-            label Type:&nbsp
-                =tag.type
+            label Area:&nbsp
+                =tag.areaId
 
 block content
     .row
@@ -31,7 +31,7 @@ block content
       .row
       .small-10.columns
         h3.left= title
-        form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/tag/update")
+        form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/tag/create")
           .row
             .large-10.columns
               label Tag Name
