@@ -128,3 +128,40 @@ exports.delete = function(req, res) {
     }
   );
 };
+
+exports.addCategoryTarget = function (req, res) {
+
+  var catId = req.body.catId;
+  var collId = req.body.collId;
+
+  async.series (
+    {
+      dropCategoryTarget: function(callback) {
+        db.CategoryTarget.destroy({
+          CollectionId: {
+            eq: collId
+          }
+        }).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      addCategoryTarget: function(callback) {
+        db.CategoryTarget.create({
+          CollectionId: collId,
+          CategoryId: catId
+        }).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      }
+
+    },
+    /*jshint unused:false */
+    function(err, result) {
+      if (err) { console.log(err); }
+      res.redirect('/admin/form/collection/update/' + collId);
+    });
+
+
+};

@@ -246,3 +246,25 @@ exports.tagList = function(req, res) {
     });
 
 };
+
+exports.subjectsByArea = function(req, res) {
+
+  var areaId = req.params.id;
+
+  db.Tag.find( {
+    where: {
+      areaId: {
+        eq: areaId
+      }
+    },
+    attributes: ['id','name'],
+    order: [['name', 'ASC']]
+  }).success( function(tags) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(tags));
+
+  });
+};
+

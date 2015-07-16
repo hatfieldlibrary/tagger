@@ -4,12 +4,52 @@
 
 'use strict';
 
-//var host = 'http://127.0.0.1:3000/rest/';
-var host = 'http://libmedia.willamette.edu/acomrest/';
+var host = 'http://127.0.0.1:3000/rest/';
+//var host = 'http://libmedia.willamette.edu/acomrest/';
 
 var collectionServices = angular.module('collectionServices', ['ngResource']);
 
+collectionServices.factory('CollectionById', ['$resource',
+  function($resource){
+    return $resource(host + 'collection/byId/:id', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
 
+collectionServices.factory('CollectionsByArea', ['$resource',
+  function($resource){
+    return $resource(host + 'collection/byArea/:id', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
+
+collectionServices.factory('CollectionBySubject', ['$resource',
+  function($resource){
+    return $resource(host + 'collection/bySubject/:id/area/:areaId', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
+
+collectionServices.factory('SubjectsByArea', ['$resource',
+  function($resource){
+    return $resource(host + 'subjects/byArea/:id', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
+
+collectionServices.factory('AreaById', ['$resource',
+  function($resource){
+    return $resource(host + 'area/byId/:id', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
+
+/*
 collectionServices.factory('Collections', ['$resource',
     function($resource){
         return $resource(host + 'collection/bytag/:id', {}, {
@@ -105,4 +145,4 @@ collectionServices.factory('BrowseListRequest', ['$resource',
             query: {method:'GET', isArray: false }
         });}
 ]);
-
+   */

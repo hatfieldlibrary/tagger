@@ -2,6 +2,23 @@
 
 var collectionControllers = angular.module('collectionControllers', []);
 
+collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', 'CollectionsByArea','CollectionBySubject','SubjectsByArea','AreaById',
+  function($scope, $location, CollectionsByArea, CollectionsBySubject, SubjectsByArea, AreaById ) {
+
+    $scope.init = function () {
+      var path = $location.path();
+      var components = path.split('/');
+      var id = components[3];
+      $scope.layout = 'full';
+      $scope.tagged = true;
+      $scope.getTagInfo(id);
+      $scope.collection = CollectionByArea.query({id: id});
+    };
+
+    $scope.init();
+
+  }]);
+
 collectionControllers.controller('CollectionByIdCtrl', ['$scope','$location', 'CollectionLookup',
   function($scope, $location, CollectionLookup) {
 

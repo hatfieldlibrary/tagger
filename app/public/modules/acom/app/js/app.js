@@ -57,9 +57,20 @@ collectionsApp.config(['$routeProvider','$locationProvider',
   function($routeProvider, $locationProvider) {
 
     $routeProvider.
+      when('/commons', {
+        templateUrl: 'commons/partials/home/1'
+      }).
       when('/commons/collections/:id', {
         templateUrl: 'commons/partials/collections'
       }).
+      when('/commons/home/:id', {
+        templateUrl: 'commons/partials/home/:id'
+      }).
+      otherwise({
+        templateUrl: 'commons/partials/home/1'
+      });
+
+      /*.
       when('/commons/collections/type/:id', {
         templateUrl: 'commons/partials/typecollections'
       }).
@@ -103,7 +114,7 @@ collectionsApp.config(['$routeProvider','$locationProvider',
       otherwise({
         templateUrl: 'commons/partials/home'
       });
-
+          */
 
     $locationProvider.html5Mode(true).hashPrefix('!');
 
@@ -154,4 +165,5 @@ angular.element(document).ready(function() {
     console.log(e);
   }
 });
+
 

@@ -147,8 +147,24 @@ exports.collUpdate = function(req, res) {
             console.log(err);
           });
       },
-      categoryData: function(callback) {
+      categories: function(callback) {
         db.Category.findAll().complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      currentCategory: function(callback) {
+        db.CategoryTarget.find(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            },
+            include : [db.Category],
+            attributes: ['Category.title','Category.id']
+          }
+        ).complete(callback)
           .error(function(err) {
             console.log(err);
           });
@@ -198,7 +214,8 @@ exports.collUpdate = function(req, res) {
       var collectionData = rd.collectionData;
       var tags = rd.tagData;
       var types = rd.typeData;
-      var categories = rd.categoryData;
+      var categories = rd.categories;
+      var currentCategory = rd.currentCategory;
       var areas = rd.areaData;
       var availableAreas = rd.areas;
       console.log('test ' +collectionData.restricted);
@@ -212,11 +229,12 @@ exports.collUpdate = function(req, res) {
         collItems: collectionData.getCollectionObject.items,
         collDates: collectionData.getCollectionObject.dates,
         collType: collectionData.getCollectionObject.ctype,
-        categoryId: collectionData.getCollectionObject.categoryId,
+        //categoryId: collectionData.getCollectionObject.categoryId,
         restricted: collectionData.restricted,
         collId: collectionData.id,
         tags: tags,
         categories: categories,
+        currentCategory: currentCategory,
         areas: areas,
         availableAreas: availableAreas,
         types: types

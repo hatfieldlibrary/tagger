@@ -43,6 +43,7 @@ module.exports = function(sequelize, DataTypes) {
           this.setDataValue('title', val);
         }
       }
+
     });
 
   return Category;

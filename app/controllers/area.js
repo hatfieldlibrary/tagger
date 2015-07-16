@@ -128,3 +128,36 @@ exports.delete = function(req, res) {
     }
   );
 };
+
+exports.areaById = function(req, res) {
+
+  var areaId = req.params.id;
+
+  db.Area.find( {
+    where: {
+      id: {
+        eq: areaId
+      }
+    },
+    order: [['title', 'ASC']]
+  }).success( function(tags) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(tags));
+
+  });
+};
+
+exports.getAreas = function(req, res) {
+
+  db.Area.findAll( {
+    order: [['title', 'ASC']]
+  }).success( function(tags) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(tags));
+
+  });
+};

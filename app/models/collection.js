@@ -50,10 +50,6 @@ module.exports = function(sequelize, DataTypes) {
         defaultValue: 'DEFAULT',
         allowNull: false
       },
-      categoryId: {
-        type: DataTypes.INTEGER(3),
-        allowNull: true
-      },
       restricted: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
@@ -89,7 +85,7 @@ module.exports = function(sequelize, DataTypes) {
           Collection.hasMany(models.TagTarget);
           Collection.hasMany(models.ItemContentTarget);
           Collection.hasMany(models.AreaTargets);
-          Collection.hasOne((models.Category));
+          Collection.hasOne((models.CategoryTarget));
         }
       }
     });

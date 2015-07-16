@@ -58,7 +58,7 @@ var processCollectionResult = function(coll, res) {
   });
   chainer.run()
     .success(function() {
-      console.log(collList);
+
       var result = [];
       result[0] = count;
       result[1] = collList;
@@ -73,24 +73,128 @@ var processCollectionResult = function(coll, res) {
     });
 };
 
+exports.collectionsByArea = function (req, res) {
 
+  var areaId = req.params.id;
+  db.AreaTarget.findAll({
+    where:
+    {
+      AreaId: {
+        eq: areaId
+      }
+    },
+    order: [['title', 'ASC']],
+    include: [db.Collection]
+
+  }).success( function(collections) {
+
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(collections));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+exports.collectionsBySubject = function (req, res) {
+
+  var subjectId = req.params.id;
+  var areaId = req.params.areaId;
+
+  db.TagTarget.findAll({
+    where:
+    {
+      TagId: {
+        eq: subjectId
+      }
+    },
+    order: [['name', 'ASC']],
+    include: [
+      { model: db.Collection},
+      { model: db.Tag,
+        where: {
+          areaId: {
+            eq: areaId
+          }
+        }
+      }]
+
+  }).success( function(collections) {
+
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(collections));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+/*
+ exports.collectionById = function(req, res) {
+
+ var collId = req.params.id;
+
+ db.Collection.find( {
+ where: {
+ id: {
+ eq: collId
+ }
+ },
+ include: [db.TagTarget]
+ }).success( function(coll) {
+ processCollectionResult(coll, res);
+
+ });
+ };
+ */
 
 exports.collectionById = function(req, res) {
 
   var collId = req.params.id;
-
-  db.Collection.find( {
-    where: {
-      id: {
-        eq: collId
+  async.series (
+    {
+      collection: function (callback) {
+        db.Collection.find(
+          {
+            where: {
+              id: {
+                eq: collId
+              }
+            }
+          }
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      },
+      category: function (callback) {
+        db.CategoryTarget.find(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            },
+            include: [db.Category]
+          }
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
       }
     },
-    include: [db.TagTarget]
-  }).success( function(coll) {
-    processCollectionResult(coll, res);
-
-  });
+    function (err, result) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify(result));
+    }
+  );
 };
+
 
 exports.collectionByTagId = function(req, res) {
 
@@ -289,8 +393,7 @@ exports.update = function(req, res) {
             dates: collDates,
             items: collItems,
             ctype: collType,
-            restricted: restricted,
-            categoryId: categoryId
+            restricted: restricted
           },
           {
             id: {
@@ -298,25 +401,49 @@ exports.update = function(req, res) {
             }
           }).complete(callback);
       },
+      // these two tasks in the series are needed
+      // because we update area and category targets
+      // from within the collection update UI. They
+      // probably could and should be moved when the
+      // tagger UI is updated.
       dropAreaTargets: function(callback) {
         db.AreaTarget.destroy({
-        CollectionId: {
-          eq: collId
-        }
-      }).complete(callback)
-        .error(function(err) {
-          console.log(err);
-        });
+          CollectionId: {
+            eq: collId
+          }
+        }).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
       },
       addAreaTargets: function(callback) {
         var newTargets = [];
-       for (var i = 0; i < areas.length; i++) {
-           newTargets[i] = { AreaId: areas[i], CollectionId: collId };
-       }
+        for (var i = 0; i < areas.length; i++) {
+          newTargets[i] = { AreaId: areas[i], CollectionId: collId };
+        }
         console.log(newTargets);
         db.AreaTarget.bulkCreate(
           newTargets
         ).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      dropCategoryTarget: function(callback) {
+        db.CategoryTarget.destroy({
+          CollectionId: {
+            eq: collId
+          }
+        }).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      addCategoryTarget: function(callback) {
+        db.CategoryTarget.create({
+          CollectionId: collId,
+          CategoryId: categoryId
+        }).complete(callback)
           .error(function(err) {
             console.log(err);
           });
@@ -429,17 +556,17 @@ exports.updateImage = function (req, res, config) {
           else {
             console.log('ImageMagick at work');
             magick.resize({
-              srcPath: fullPath,
-              dstPath: thumbPath,
-              width:   200
+                srcPath: fullPath,
+                dstPath: thumbPath,
+                width:   200
 
-            },
+              },
               /*jshint unused:false */
               function(err, stdout, stderr){
-              if (err) { console.log(err); }
-              // update database even if the conversion fails
-              updateDb(id);
-            });
+                if (err) { console.log(err); }
+                // update database even if the conversion fails
+                updateDb(id);
+              });
           }
         });
       }
