@@ -13,7 +13,7 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', '
       //var path = $location.path();
       //var components = path.split('/');
       //var id = components[3];
-
+      $scope.currentAreaId = $scope.defaultAreaId;
       $scope.layout = 'full';
       $scope.tagged = true;
       $scope.subjectId = '';

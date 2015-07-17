@@ -236,6 +236,7 @@ module.exports = function (grunt) {
       // backend and frontend dependencies to be decoupled, although this
       // probably isn't necessary given that we deploy the application under
       // a single Express server.
+      /*
       serverlibs: {
         flatten: true,
         src:[
@@ -263,7 +264,7 @@ module.exports = function (grunt) {
           '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
           '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
         dest: '<%= app %>/public/javascripts/vendor/foundation.js'
-      },
+      }, */
       modernizr: {
         flatten: true,
         src:['<%= client %>/app/js/plugins/modernizr.optimized.js',
@@ -482,8 +483,8 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'compile-sass',
-      'concat:serverlibs',
-      'concat:serverfoundation',
+      //'concat:serverlibs',
+      //'concat:serverfoundation',
       // Uncomment the following uglify task if you
       // want to test new javascript libs with admin
       // mode. It takes a while to complete, which

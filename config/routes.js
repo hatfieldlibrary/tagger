@@ -68,21 +68,35 @@ module.exports = function(app,config,passport){
   app.post('/admin/category/create', ensureAuthenticated, category.create);
   app.post('/admin/category/update', ensureAuthenticated, category.update);
   app.get('/admin/category/delete/:id', ensureAuthenticated, category.delete);
+  app.post('/admin/category/link', ensureAuthenticated, category.addCategoryTarget);
 
+
+  // used by admin
+  app.get('/rest/taglist',               tag.tagList);
+  app.get('/rest/contentlist',           content.getTypeList);
 
   // Public API routes. These return JSON.
-  app.get('/rest/taglist',               tag.tagList);
-  app.use('/rest/tag/getInfo/:id',       tag.getTagInfo);
-  app.use('/rest/subjects',              tag.getSubjects);
-  app.get('/rest/contentlist',           content.getTypeList);
-  app.use('/rest/types',                 content.getTypeList);
-  app.use('/rest/type/getInfo/:id',      content.getTypeInfo);
-  app.get('/rest/collection/bytype/:id', collection.collectionByTypeId);
-  app.get('/rest/collection/bytag/:id',  collection.collectionByTagId);
-  app.get('/rest/getEad/:id/:fld',       collection.getEadBySubject);
-  app.get('/rest/getDspaceCollections',  collection.getDspaceCollections);
-  app.use('/rest/getBrowseList/:collection', collection.browseList);
-  app.use('/rest/collection/byId/:id',   collection.collectionById);
+  //app.get('/rest/taglist',               tag.tagList);
+  //app.use('/rest/tag/getInfo/:id',       tag.getTagInfo);
+  //app.use('/rest/subjects',              tag.getSubjects);
+  //app.get('/rest/contentlist',           content.getTypeList);
+  //app.use('/rest/types',                 content.getTypeList);
+  //app.use('/rest/type/getInfo/:id',      content.getTypeInfo);
+  //app.get('/rest/collection/bytype/:id', collection.collectionByTypeId);
+  //app.get('/rest/collection/bytag/:id',  collection.collectionByTagId);
+  //app.get('/rest/getEad/:id/:fld',       collection.getEadBySubject);
+  //app.get('/rest/getDspaceCollections',  collection.getDspaceCollections);
+  //app.use('/rest/getBrowseList/:collection', collection.browseList);
+
+  //existing
+  app.use('/rest/collection/byId/:id',      collection.collectionById);
+  // new
+  app.use('/rest/collection/byArea/:id',    collection.collectionsByArea);
+  app.use('/rest/collection/bySubject/:id/area/:areaId', collection.collectionsBySubject);
+  app.use('/rest/subjects/byArea/:id',      tag.subjectsByArea);
+  app.use('/rest/area/byId/:id',            area.areaById);
+  app.use('/rest/areas',                    area.getAreas);
+
 
 
   /* Static Angularjs module routes.  Used by the Academic Commons public site. */

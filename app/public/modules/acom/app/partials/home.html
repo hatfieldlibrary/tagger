@@ -54,6 +54,7 @@
           <div class="panel" >
             <div class="row">
               <div class="small-12 medium-6 large-6 column">
+                <span style="font-size: 0.95rem;color: #999;">COLLECTION AREA</span>
                 <h2>{{area.title}}</h2>
               </div>
               <div ng-if="subjectLength > 0" class="small-12 medium-6 large-6 column hide-for-small-down  tag-box text-right">
@@ -69,7 +70,7 @@
             </div>
             <div style="width: 100%; border-top: 1px solid rgba(160,160,160,0.2); padding-top: 16px; padding-left: 15px;">
               <div class="row">
-                <p>{{area.description}}</p>
+                <p style="padding-right: 20px;">{{area.description}}</p>
                 <form ng-if="area.searchUrl.length > 0" name="simpleForm" ng-controller="AcomHomeSearchCtrl" ng-submit="submitQuery(query)" method="get" action="{{area.searchUrl}}">
                   <div class="large-5 medium-5 small-6 left">
                     <input type="text" ng-model="query.terms" placeholder="Search terms" ng-keyup="$event.keyCode == 13 &amp;&amp; submitQuery(query)" class="ng-pristine ng-valid">
