@@ -74,7 +74,7 @@ collectionDirectives.directive('subjectTags', function() {
       subjects: '=',
       collections: '=',
       areaId: '@',
-      model: "="
+      model: '='
     },
     restrict: 'E',
     transclude: true,
@@ -226,7 +226,7 @@ collectionDirectives.directive('searchFormSimple', function() {
 
 
 collectionDirectives.directive('ellipsis', ['$timeout', '$window', function($timeout, $window) {
-
+  /*jshint unused:false*/
   return {
     restrict	: 'A',
     scope		: {
@@ -246,9 +246,10 @@ collectionDirectives.directive('ellipsis', ['$timeout', '$window', function($tim
         /* State Variables */
         attributes.isTruncated = false;
 
+
         function buildEllipsis() {
           if (scope.ngBind) {
-            var bindArray = scope.ngBind.split(" "),
+            var bindArray = scope.ngBind.split(' '),
               i = 0,
               ellipsisSymbol = (typeof(attributes.ellipsisSymbol) !== 'undefined') ? attributes.ellipsisSymbol : '&hellip;',
               appendString = (typeof(scope.ellipsisAppend) !== 'undefined' && scope.ellipsisAppend !== '') ? ellipsisSymbol + '<span>' + scope.ellipsisAppend + '</span>' : ellipsisSymbol;
@@ -266,7 +267,7 @@ collectionDirectives.directive('ellipsis', ['$timeout', '$window', function($tim
               // Set complete text and remove one word at a time, until there is no overflow
               for ( ; i < bindArrayStartingLength; i++) {
                 bindArray.pop();
-                element.text(bindArray.join(" ")).html(element.html() + appendString);
+                element.text(bindArray.join(' ')).html(element.html() + appendString);
 
                 if (element[0].scrollHeight < initialMaxHeight || isOverflowed(element) === false) {
                   attributes.isTruncated = true;
@@ -275,8 +276,8 @@ collectionDirectives.directive('ellipsis', ['$timeout', '$window', function($tim
               }
 
               // If append string was passed and append click function included
-              if (ellipsisSymbol != appendString && typeof(scope.ellipsisAppendClick) !== 'undefined' && scope.ellipsisAppendClick !== '' ) {
-                element.find('span').bind("click", function (e) {
+              if (ellipsisSymbol !== appendString && typeof(scope.ellipsisAppendClick) !== 'undefined' && scope.ellipsisAppendClick !== '' ) {
+                element.find('span').bind('click', function (e) {
                   scope.$apply(scope.ellipsisAppendClick);
                 });
               }
@@ -324,7 +325,7 @@ collectionDirectives.directive('ellipsis', ['$timeout', '$window', function($tim
           $timeout.cancel(attributes.lastWindowTimeoutEvent);
 
           attributes.lastWindowTimeoutEvent = $timeout(function() {
-            if (attributes.lastWindowResizeWidth != window.innerWidth || attributes.lastWindowResizeHeight != window.innerHeight) {
+            if (attributes.lastWindowResizeWidth !== window.innerWidth || attributes.lastWindowResizeHeight !== window.innerHeight) {
               buildEllipsis();
             }
 
