@@ -10,6 +10,7 @@
       color: #fff;
     }
   }
+
   .collection {
     background-color: transparent;
     border: 0 !important;
@@ -22,6 +23,13 @@
     a {
       margin-right: 6px;
 
+      &.active {
+        text-transform: uppercase;
+      }
+
+    }
+    a:visited {
+      color: #0f4c9f;
     }
   }
 
@@ -35,6 +43,41 @@
     display: inline-block;
     font-size: 0.84rem;
     margin-right: 25px;
+  }
+
+  .sub {
+    &.inline-list>li {
+      margin-left: 0.375rem;
+    }
+  }
+
+  .sub .animate-enter,
+  .sub .animate-leave
+  {
+    -webkit-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 400ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-overflow: clip;
+    white-space:nowrap;
+  }
+
+  .sub .animate-leave.animate-leave-active,
+  .sub .animate-enter {
+    opacity: 0;
+    width: 0px;
+    height: 0px;
+  }
+
+  .sub .animate-enter.animate-enter-active,
+  .sub .animate-leave {
+    opacity: 1;
+    width: 150px;
+    height: 30px;
   }
 
 }

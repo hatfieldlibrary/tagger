@@ -5,20 +5,114 @@ var collectionControllers = angular.module('collectionControllers', []);
 collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', 'CollectionsByArea','CollectionBySubject','SubjectsByArea','AreaById',
   function($scope, $location, CollectionsByArea, CollectionsBySubject, SubjectsByArea, AreaById ) {
 
+    $scope.defaultAreaId = 5;
+    $scope.viewType = 'card';
+
     $scope.init = function () {
-      var path = $location.path();
-      var components = path.split('/');
-      var id = components[3];
+
+      //var path = $location.path();
+      //var components = path.split('/');
+      //var id = components[3];
+
       $scope.layout = 'full';
       $scope.tagged = true;
-      $scope.getTagInfo(id);
-      $scope.collection = CollectionByArea.query({id: id});
+      $scope.subjectId = '';
+      $scope.subjectName = '';
+      $scope.selectedAreaIndex = 0;
+      $scope.area = AreaById.query({id: $scope.defaultAreaId});
+      $scope.collections = CollectionsByArea.query({id: $scope.defaultAreaId});
+      $scope.subjects =  SubjectsByArea.query({id: $scope.defaultAreaId});
+
     };
+
+
+    $scope.clearSubjects = function() {
+
+        $scope.subjects = [{id:'', name:''}];
+
+    };
+
+    $scope.getNewCollectionArea = function(areaId) {
+
+      $scope.selectedSubjectIndex = 1000;
+      $scope.currentAreaId = areaId;
+      $scope.subjectLength = 0;
+      $scope.subjectName = '';
+      $scope.area = AreaById.query({id: areaId});
+      $scope.collections = CollectionsByArea.query({id: areaId});
+      $scope.subjects = SubjectsByArea.query({id: areaId});
+
+    };
+
+    $scope.setView = function(type) {
+      $scope.viewType = type;
+    };
+
+    $scope.getAreaInfo = function(id) {
+      $scope.area = AreaById.query({id: id});
+    };
+
+    $scope.setSelectedArea = function(index) {
+      $scope.selectedAreaIndex = index;
+    };
+
+    $scope.setSelectedSubject = function(index) {
+      $scope.selectedSubjectIndex = index;
+    };
+
+
+    $scope.getCollectionsBySubject = function(subjectId, areaId, subName) {
+      $scope.subjectId = subjectId;
+      $scope.subjectName = subName;
+      $scope.subjectLength = subjectId.toString().length;
+      $scope.collections = CollectionsBySubject.query({id: subjectId, areaId: areaId });
+    };
+
+    $scope.mainAreaMenu = [
+
+      {title: 'Student Research', id: 5},
+      {title: 'Faculty Research', id: 5},
+      {title: 'University Archives', id: 5},
+      {title: 'Museum of Art', id: 6},
+      {title: 'Library', id: 5},
+      {title: 'Other Departments', id: 5} ];
 
     $scope.init();
 
   }]);
 
+collectionControllers.controller('AcomHomeSearchCtrl', ['$scope', '$location', function($scope) {
+
+  $scope.collections = [
+    {'repo': 'cdm',area: 'images', 'collection': 'art,hfmanw,theatre', label:'Art & Costume Images'},
+    {'repo': 'cdm',area: 'hfma', 'collection': 'hfmanw,hfmoaevents', label:'Hallie Ford Museum'},
+    {'repo': 'cdm',area: 'archives', 'collection': 'manuscripts,aphotos,glee,rare,eads,pnaa', label:'University Archives'},
+    {'repo': 'dspace',area: 'all', 'collection': 'all', label:'WU Community Collections'}
+  ];
+
+  $scope.selectedCollection = $scope.collections[0];
+
+  $scope.submitQuery = function(query) {
+    var href = '';
+    if ($scope.selectedCollection.repo === 'cdm') {
+      href = 'http://libmedia.willamette.edu/cview/'+$scope.selectedCollection.area+'.html#!search:search:' + $scope.selectedCollection.collection + '/all^' + encodeURIComponent(query.terms) + '^all^and!';
+      window.location.href = href;
+    }
+    else if ($scope.selectedCollection.repo === 'dspace') {
+      var form = $('<form>').hide();
+      form.attr('action','http://libmedia.willamette.edu/xmlui/discover');
+      form.attr('method','POST');
+      var input = $('<input type="hidden"/>');
+      input.attr({'id': 'query',
+        'name': 'query',
+        'value': query.terms });
+      form.append(input);
+      form.submit();
+    }
+  };
+
+}]);
+    /*
 collectionControllers.controller('CollectionByIdCtrl', ['$scope','$location', 'CollectionLookup',
   function($scope, $location, CollectionLookup) {
 
@@ -530,3 +624,4 @@ collectionControllers.controller('BrowseListCtrl', ['$scope', 'BrowseListRequest
   };
 
 }]);
+    */

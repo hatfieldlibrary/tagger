@@ -251,7 +251,7 @@ exports.subjectsByArea = function(req, res) {
 
   var areaId = req.params.id;
 
-  db.Tag.find( {
+  db.Tag.findAll( {
     where: {
       areaId: {
         eq: areaId

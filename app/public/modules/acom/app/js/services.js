@@ -4,7 +4,7 @@
 
 'use strict';
 
-var host = 'http://127.0.0.1:3000/rest/';
+var host = 'http://localhost:3000/rest/';
 //var host = 'http://libmedia.willamette.edu/acomrest/';
 
 var collectionServices = angular.module('collectionServices', ['ngResource']);
@@ -44,7 +44,7 @@ collectionServices.factory('SubjectsByArea', ['$resource',
 collectionServices.factory('AreaById', ['$resource',
   function($resource){
     return $resource(host + 'area/byId/:id', {}, {
-      query: {method:'GET', isArray:true}
+      query: {method:'GET', isArray:false}
     });
   }
 ]);

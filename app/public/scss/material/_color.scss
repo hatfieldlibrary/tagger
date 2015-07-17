@@ -4,14 +4,18 @@
 
 // Willamette colors
 $wu-colors: (
-  "darken-1": #0F9BA5,
+
   "darken-2": #611212,
   "card-text": #416671,
   "lighten-1": #c0ac7e,
   "lighten-2": #c0ac7e,
-  "lighten-4": #57b5bc,
   "lighten-5": #fdeaeb,
   "lighten-6": #fefefe
+);
+$wu-blue: (
+  "darken-1": #4099a0,
+  "base": #0f959f,
+  "lighten-4": #57b5bc,
 );
 
 $materialize-red: (
@@ -347,6 +351,7 @@ $shades: (
 
 $colors: (
   "wu-colors": $wu-colors,
+  "wu-blue": $wu-blue,
   "materialize-red": $materialize-red,
   "red": $red,
   "pink": $pink,

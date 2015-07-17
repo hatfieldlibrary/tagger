@@ -254,7 +254,8 @@ td, th{
     font-family: franklin-gothic-urw-cond, sans-serif;
     font-size: 1.1rem;
     text-transform: uppercase;
-
+    color: $collection-item-color;
+    cursor: pointer;
 
 
     // Avatar Collection
@@ -323,7 +324,7 @@ td, th{
         width: 0;
         pointer-events: none;
         border-color: rgba(87,181,188,0);
-        border-left-color: #57b5bc;
+        border-left-color: $collection-active-bg-color;
         border-top-color: #fff;
         border-right-color: #fff;
         border-bottom-color: #fff;
@@ -335,6 +336,8 @@ td, th{
 
   a.collection-item{
     display: block;
+    width: 100%;
+    height: 100%;
     @include transition(.25s);
     color: $secondary-color;
     &:not(.active) {
@@ -347,7 +350,7 @@ td, th{
   &.with-header {
     .collection-header {
       background-color: $collection-bg-color;
-      border-bottom: 1px solid $collection-border-color;
+      border-bottom: 0;
       padding: 10px 20px;
 
       &.link-header {

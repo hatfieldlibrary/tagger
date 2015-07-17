@@ -120,15 +120,15 @@ block content
         .row
           .small-10.columns
             input(type="submit" value="Update Collection")
-      p &nbsp;
+            p &nbsp;
       p This is bad.  But, for now...linking catetory requires round trip to server.
       form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/category/link")
         .row
           .small-12.columns
             label Category
-          .row
-            .small-10.columns
-              select(name="catId")
+        .row
+          .small-10.columns
+            select(name="catId")
                 for cat in categories
                   if (currentCategory !== null)
                     if (cat.id === currentCategory.id )
@@ -137,63 +137,65 @@ block content
                       option(value=cat.id) #{cat.title}
                   else
                     option(value=cat.id) #{cat.title}
-              input(type="hidden" name="collId" value=collId)
-         .small-2.columns
-          p
-          .row
-            .small-10.columns
+            input(type="hidden" name="collId" value=collId)
+          .small-2.columns
+            p
+          .small-12.columns
             input(type="submit" value="Update Category")
-          p &nbsp;
-  .row
-    .small-2.columns  &nbsp;
-    .small-10.columns(style="padding-left: 0;padding-right:0;")
-      .panel
-        .label.medium.success.radius Current Tags &nbsp;&nbsp;(click "x" to remove)
-        p
-        .row
-        each tag in tags
-          label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
-          a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
-        p &nbsp;
-        p
-        .ui-widget
-        form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/tag", id="tagForm")
-
-          .small-12.columns
-          label(for="tagNames") Add Tag Here
-          .row
-          .small-10.columns
-          input(type="text" id="tagNames" name='tagName')
-          input(type="hidden" name='collid' value=collId)
-          input(type="hidden" id="tagId" name='tagid')
-          p
-          input(type="submit", value="Add tag to this collection")
-
       p &nbsp;
-  .row
-    .small-2.columns  &nbsp;
-    .small-10.columns(style="padding-left: 0;padding-right:0;")
-      .panel
-        .label.medium.success.radius Current Content Types &nbsp;&nbsp;(click "x" to remove)
-        p
-        .row
-        each type in types
-          label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
-          a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
-        p &nbsp;
-        p
-        .ui-widget
-        form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/type", id="typeForm")
-          .small-12.columns
-          label(for="typeNames") Add Content Type Here
-          .row
-          .small-10.columns
-          input(type="text" id="typeNames" name='typeName')
-          input(type="hidden" name='collid' value=collId)
-          input(type="hidden" id="typeId" name='typeid')
+      p &nbsp;
+    .row
+      .small-2.columns  &nbsp;
+      .small-10.columns(style="padding-left: 0;padding-right:0;")
+        .panel
+          .label.medium.success.radius Current Tags &nbsp;&nbsp;(click "x" to remove)
           p
-          input(type="submit", value="Add type to this collection")
-      p
+          .row
+          each tag in tags
+            label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
+            a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
+          p &nbsp;
+          p
+          .ui-widget
+          form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/tag", id="tagForm")
+
+            .small-12.columns
+            label(for="tagNames") Add Tag Here
+            .row
+            .small-10.columns
+            input(type="text" id="tagNames" name='tagName')
+            input(type="hidden" name='collid' value=collId)
+            input(type="hidden" id="tagId" name='tagid')
+            p
+            input(type="submit", value="Add tag to this collection")
+
+        p &nbsp;
+    .row
+      .small-2.columns  &nbsp;
+      .small-10.columns(style="padding-left: 0;padding-right:0;")
+        .panel
+          .label.medium.success.radius Current Content Types &nbsp;&nbsp;(click "x" to remove)
+          p
+          .row
+          each type in types
+            label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
+            a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
+          p &nbsp;
+          p
+          .ui-widget
+          form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/type", id="typeForm")
+            .small-12.columns
+            label(for="typeNames") Add Content Type Here
+            .row
+            .small-10.columns
+            input(type="text" id="typeNames" name='typeName')
+            input(type="hidden" name='collid' value=collId)
+            input(type="hidden" id="typeId" name='typeid')
+            p
+            input(type="submit", value="Add type to this collection")
+        p
+
+
 
 
 

@@ -57,17 +57,25 @@ collectionsApp.config(['$routeProvider','$locationProvider',
   function($routeProvider, $locationProvider) {
 
     $routeProvider.
-      when('/commons', {
-        templateUrl: 'commons/partials/home/1'
-      }).
-      when('/commons/collections/:id', {
-        templateUrl: 'commons/partials/collections'
-      }).
+
       when('/commons/home/:id', {
-        templateUrl: 'commons/partials/home/:id'
+        templateUrl: 'commons/partials/home'
+      }).
+      when('/commons/partials/:name', {
+        templateUrl: function(params) {
+          return 'commons/partials/' + params.name;
+        }
+      }).
+      when('/commons/:name', {
+        templateUrl: function(params) {
+          return 'commons/partials/' + params.name;
+        }
+      }).
+      when('/commons', {
+        templateUrl: 'commons/partials/home'
       }).
       otherwise({
-        templateUrl: 'commons/partials/home/1'
+        templateUrl: 'commons/partials/home'
       });
 
       /*.

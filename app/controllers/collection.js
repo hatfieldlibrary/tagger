@@ -87,7 +87,6 @@ exports.collectionsByArea = function (req, res) {
     include: [db.Collection]
 
   }).success( function(collections) {
-
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
