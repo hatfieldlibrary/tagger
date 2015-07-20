@@ -44,8 +44,13 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', '
 
     };
 
-    $scope.setView = function(type) {
+    $scope.setViewIndex = function(index) {
+      $scope.selectedView = index;
+    };
+
+    $scope.setView = function(type, index) {
       $scope.viewType = type;
+      $scope.selectedView = index;
     };
 
     $scope.getAreaInfo = function(id) {

@@ -2,11 +2,13 @@ node_modules
 resources/images/full
 resources/images/thumb
 public/modules/acom/app/bower_components/
-public/modules/acom/app/css/app.css
+public/modules/acom/app/css/main.css
+public/modules/acom/app/css/main.css.map
+public/modules/acom/app/css/leval.css
+public/modules/acom/app/css/level.css.map
 public/stylesheets/app.css
 public/modules/acom/dist/**
 .tmp
 .sass-cache
 .idea/workspace.xml
 .idea/misc.xml
-.idea/workspace.xml

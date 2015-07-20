@@ -94,10 +94,12 @@
       <div class="row">
         <div class="small-12 columns" style="min-height: 900px;">
           <div class="row" style="margin-bottom: 15px;">
-            <div class="small-12 columns hide-for-small-down text-right">
+            <div class="ac-view-toggle small-12 columns hide-for-small-down text-right">
               <span style="font-size: 0.9rem;color: #999;">toggle view:&nbsp; </span>
-              <a ng-click="setView('card')"><i class="fa fa-th"></i> </a>
-              <a ng-click="setView('list')"><i class="fa fa-align-justify"></i> </a>
+              <a ng-click="setView('card', card)"
+                 ng-class="{active: 'card' === viewType}"><i class="fa fa-th"></i></a>
+              <a ng-click="setView('list', list)"
+                 ng-class="{active: 'list' === viewType}"><i class="fa fa-align-justify"></i></a>
             </div>
           </div>
           <div class="row">
