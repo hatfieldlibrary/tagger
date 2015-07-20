@@ -61,6 +61,9 @@ collectionsApp.config(['$routeProvider','$locationProvider',
       when('/commons/home/:id', {
         templateUrl: 'commons/partials/home'
       }).
+      when('/commons/collec/:id', {
+          templateUrl: 'commons/partials/collec/'
+      }).
       when('/commons/partials/:name', {
         templateUrl: function(params) {
           return 'commons/partials/' + params.name;
@@ -127,6 +130,10 @@ collectionsApp.config(['$routeProvider','$locationProvider',
     $locationProvider.html5Mode(true).hashPrefix('!');
 
   }]);
+
+collectionsApp.factory('Data', function() {
+  return { currentAreaIndex: 0 };
+});
 
 // This adds foundation 5 support and sets user agent
 // after angular has been initialized.  (As we continue

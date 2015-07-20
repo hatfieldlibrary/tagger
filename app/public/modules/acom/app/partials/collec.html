@@ -1,4 +1,4 @@
-<div class="level-container">
+<div class="level-container" ng-controller="SingleCollectionCtrl">
   <div class="row">
    <ng-include src="'commons/partials/global-sidebar'"></ng-include>
 
@@ -21,35 +21,35 @@
           <div class="panel">
             <div class="row">
               <div class="small-12 column">
-                <h3>Northwest Collection</h3>
+                <h3>{{collection.collection.title }}</h3>
               </div>
               <div class="small-12 column">
-                <div class="th pull-left" style="margin-right: 20px"><img src="img/collections/HillsideinSpring.png"></div>
-                <p>This digital collection contains selected works from the Hallie Ford Museum of Art's Northwest Collection. The museum’s largest collecting
-                  focus is on art created in the American Northwest (Oregon, Washington, Idaho, and Montana), with an emphasis on
-                  the Pacific Northwest. The Northwest Collection traces the history of modern and contemporary art in the region and includes works by Oregon modernists
-                  C.S. Price, Charles Heaney, Amanda Snyder, Carl Hall, and Jan Zach. Contemporary artists include Fay Jones, Michael Spafford, Michael Dailey, Gaylen Hansen,
-                  and Dan Webb of Washington, and Oregon artists Frank Boyden, Michael Brophy, George Johanson, Lucinda Parker, and Mel Katz, among others. This collection also
-                  includes work by contemporary Native American artists from the Pacific Northwest, including work by Rick Bartow, Joe Feddesen, James Lavadour, Marie Watt, and
-                  Lillian Pitt, among others.</p>
+                <div class="th pull-left" style="margin-right: 20px"><img src="resources/img/thumb/{{collection.collection.image}}"></div>
+                <p>{{collection.collection.description}}</p>
               </div>
             </div>
             <div class="row ac-iteminfo">
               <div class="small-7  column">
                 <ul>
-                  <li>
-                    <span class="ac-label">Dates: </span> 1940-2000
+                  <li ng-if="collection.collection.dates.length > 0">
+                    <span class="ac-label">Dates: </span> {{collection.collection.dates}}
                   </li>
                   </li>
-                  <li>
-                    <span class="ac-label">Item count: </span> 230
+                  <li ng-if="collection.collection.items.length > 0">
+                    <span class="ac-label">Item count: </span> {{collection.collection.items}}
                   </li>
                 </ul>
               </div>
               <div class="small-5 column">
                 <ul>
                   <li>
-                    <span class="ac-label">Content Types: </span> <span class="icon">&nbsp;&nbsp;<a href="#"><i class="fa fa-file-text-o"></i></a></span>
+                    <span class="ac-label">Content Types:
+                    <span ng-repeat="type in collection.contentTypes">
+                      <i ng-if="type.ItemContentId==1" class="fa fa-picture-o"></i>
+                      <i ng-if="type.ItemContentId==2" class="fa fa-file-text-o"></i>
+                      &nbsp;&nbsp;
+                    </span>
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -73,7 +73,7 @@
                     </form>
                   </div>
                   <div class="small-12 medium-4 large-4 column" >
-                    <a href="http://libmedia.willamette.edu/cview/hfma.html#!search:facet:hfmanw/collec%5ENorthwest+Art+Collection%5Eexact%5Eand!" class="button">Go to Collection</a>
+                    <a href="{{collection.collection.url}}" class="button">Go to Collection</a>
                   </div>
                 </div>
 
@@ -82,7 +82,7 @@
             <div class="row ac-moreabout">
               <div class="small-12 column">
                 <h4>More about this collection</h4>
-                <p>This digital collection contains selected works from the museum's Northwest Collection.  Visit the <a href="#">Hallie Ford Museum's Northwest Collection</a> page for more information about artists and museum holdings.</p>
+                <p>{{collection.category.description}}</p>
               </div>
             </div>
           </div>

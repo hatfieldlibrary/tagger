@@ -2,12 +2,12 @@
   <div class="row">
     <div class="sidebar small-12 medium-3 large-3  ac-opaque hide-for-small-down columns">
 
-
       <ul class="collection with-header area-menu">
         <li class="collection-header"><h5>Collection Areas</h5></li>
-        <li class="collection-item" ng-repeat="item in mainAreaMenu"
-            ng-click="setSelectedArea($index);setSelectedSubject(1000);getNewCollectionArea(item.id); "
-            ng-class="{active: $index === selectedAreaIndex}">
+        <li class="collection-item" ng-repeat="item in mainAreaMenu"     role="{{Data.currentAreaIndex}}"
+            ng-click="setSelectedArea($index);setSelectedSubject(1000);getNewCollectionArea(item.id, $index); "
+            ng-class="{active: $index === Data.currentAreaIndex}">
+
           {{item.title}}
 
         </li>
@@ -104,7 +104,7 @@
           </div>
           <div class="row">
             <div class="small-12 medium-4 end columns" ng-if="viewType == 'card'" ng-repeat="collection in collections">
-              <collection-card  title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
+              <collection-card  id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
             </div>
             <div class="small-12 columns" ng-if="viewType == 'list'" ng-repeat="collection in collections">
               <collection-list  title="{{collection.collection.title}}"></collection-list>

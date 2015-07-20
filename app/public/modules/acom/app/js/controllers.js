@@ -2,29 +2,33 @@
 
 var collectionControllers = angular.module('collectionControllers', []);
 
-collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', 'CollectionsByArea','CollectionBySubject','SubjectsByArea','AreaById',
-  function($scope, $location, CollectionsByArea, CollectionsBySubject, SubjectsByArea, AreaById ) {
+collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', 'Data','CollectionsByArea','CollectionBySubject','SubjectsByArea','AreaById',
+  function($scope, $location, Data, CollectionsByArea, CollectionsBySubject, SubjectsByArea, AreaById ) {
 
-    $scope.defaultAreaId = 5;
+
     $scope.viewType = 'card';
+    $scope.Data = Data;
 
     $scope.init = function () {
 
-      //var path = $location.path();
-      //var components = path.split('/');
-      //var id = components[3];
       $scope.currentAreaId = $scope.defaultAreaId;
+      $scope.mainAreaMenu = [
+        {title: 'Student Research', id: 5},
+        {title: 'Faculty Research', id: 5},
+        {title: 'University Archives', id: 5},
+        {title: 'Museum of Art', id: 6},
+        {title: 'Library', id: 5},
+        {title: 'Other Departments', id: 5} ];
+      $scope.defaultAreaId = $scope.mainAreaMenu[Data.currentAreaIndex].id;
       $scope.layout = 'full';
       $scope.tagged = true;
       $scope.subjectId = '';
       $scope.subjectName = '';
-      $scope.selectedAreaIndex = 0;
       $scope.area = AreaById.query({id: $scope.defaultAreaId});
       $scope.collections = CollectionsByArea.query({id: $scope.defaultAreaId});
       $scope.subjects =  SubjectsByArea.query({id: $scope.defaultAreaId});
 
     };
-
 
     $scope.clearSubjects = function() {
 
@@ -32,8 +36,8 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', '
 
     };
 
-    $scope.getNewCollectionArea = function(areaId) {
-
+    $scope.getNewCollectionArea = function(areaId, index) {
+      $scope.Data.currentArea = index;
       $scope.selectedSubjectIndex = 1000;
       $scope.currentAreaId = areaId;
       $scope.subjectLength = 0;
@@ -58,7 +62,8 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', '
     };
 
     $scope.setSelectedArea = function(index) {
-      $scope.selectedAreaIndex = index;
+      $scope.Data.currentAreaIndex = index;
+
     };
 
     $scope.setSelectedSubject = function(index) {
@@ -72,15 +77,6 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location', '
       $scope.subjectLength = subjectId.toString().length;
       $scope.collections = CollectionsBySubject.query({id: subjectId, areaId: areaId });
     };
-
-    $scope.mainAreaMenu = [
-
-      {title: 'Student Research', id: 5},
-      {title: 'Faculty Research', id: 5},
-      {title: 'University Archives', id: 5},
-      {title: 'Museum of Art', id: 6},
-      {title: 'Library', id: 5},
-      {title: 'Other Departments', id: 5} ];
 
     $scope.init();
 
@@ -115,6 +111,22 @@ collectionControllers.controller('AcomHomeSearchCtrl', ['$scope', '$location', f
       form.submit();
     }
   };
+
+}]);
+
+collectionControllers.controller('SingleCollectionCtrl', ['$scope','$location' ,'Data', 'CollectionById', function($scope,$location,Data,CollectionById) {
+
+  var path = $location.path();
+  var components = path.split('/');
+  $scope.id = components[3];
+
+  $scope.Data = Data;
+  $scope.init = function () {
+    $scope.collection = CollectionById.query({id: $scope.id});
+
+  };
+
+  $scope.init();
 
 }]);
     /*

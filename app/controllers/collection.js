@@ -153,45 +153,92 @@ exports.collectionsBySubject = function (req, res) {
 
 exports.collectionById = function(req, res) {
 
+  var chainer = new db.Sequelize.Utils.QueryChainer();
   var collId = req.params.id;
-  async.series (
-    {
-      collection: function (callback) {
-        db.Collection.find(
-          {
-            where: {
-              id: {
-                eq: collId
-              }
-            }
+  var result = {
+    collection: {},
+    category: {},
+    contentTypes: []
+  };
+
+  chainer.add(
+    db.Collection.find(
+      {
+        where: {
+          id: {
+            eq: collId
           }
-        ).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
-      },
-      category: function (callback) {
-        db.CategoryTarget.find(
-          {
-            where: {
-              CollectionId: {
-                eq: collId
-              }
-            },
-            include: [db.Category]
-          }
-        ).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
+        }
       }
-    },
-    function (err, result) {
+    ).success(function(collection) {
+        result.collection.title = collection.title;
+        result.collection.url = collection.url;
+        result.collection.description = collection.description;
+        result.collection.image = collection.image;
+        result.collection.dates = collection.dates;
+        result.collection.items = collection.items;
+      })
+      .error(function (err) {
+        console.log(err);
+      })
+  );
+  chainer.add(
+    db.CategoryTarget.find(
+      {
+        where: {
+          CollectionId: {
+            eq: collId
+          }
+        },
+        include: [db.Category]
+      }
+    ).success(function(category) {
+        if (category === null) {
+          result.category.title = '';
+          result.category.description = "Category is undefined.  Contact adminstrator.";
+        } else if (category.category  === null) {
+          result.category.title = '';
+          result.category.description = "Category is undefined.  Contact adminstrator.";
+        }else {
+          result.category.title = category.category.title;
+          result.category.description  = category.category.description;
+        }
+
+      })
+      .error(function (err) {
+        console.log(err);
+      }
+    )
+  );
+  chainer.add(
+    db.ItemContentTarget.findAll(
+      {
+        where: {
+          CollectionId: {
+            eq: collId
+          }
+        },
+        include: [db.ItemContent]
+      }
+    ).success(function(types) {
+        result.contentTypes = types;
+      })
+      .error(function (err) {
+        console.log(err);
+      })
+  );
+  chainer.run()
+    .success(function() {
+
+      // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
       res.end(JSON.stringify(result));
-    }
-  );
+
+    })
+    .error(function(err) {
+      console.log(err);
+    })
 };
 
 
@@ -687,6 +734,25 @@ exports.removeTag = function(req, res) {
     },
     TagId: {
       eq: tagId
+    }
+    /*jshint unused:false*/
+  }).success(function(result) {
+    res.redirect('/admin/form/collection/update/'+collId);
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+
+exports.removeType = function(req, res) {
+  var collId = req.params.collid;
+  var typeId = req.params.type;
+  db.ItemContentTarget.destroy({
+    CollectionId: {
+      eq: collId
+    },
+    ItemContentId: {
+      eq: typeId
     }
     /*jshint unused:false*/
   }).success(function(result) {

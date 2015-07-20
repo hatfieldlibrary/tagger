@@ -12,7 +12,7 @@ var collectionServices = angular.module('collectionServices', ['ngResource']);
 collectionServices.factory('CollectionById', ['$resource',
   function($resource){
     return $resource(host + 'collection/byId/:id', {}, {
-      query: {method:'GET', isArray:true}
+      query: {method:'GET', isArray:false}
     });
   }
 ]);

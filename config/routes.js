@@ -46,6 +46,7 @@ module.exports = function(app,config,passport){
   app.get('/admin/form/category/update/:id', ensureAuthenticated, crud.categoryUpdate);
   app.get('/admin/form/content/update/:id', ensureAuthenticated,  crud.contentUpdate);
   app.get('/admin/collection/remove/tag/:collid/:tagid', ensureAuthenticated, collection.removeTag);
+  app.get('/admin/collection/remove/type/:collid/:type', ensureAuthenticated, collection.removeType);
   app.get('/admin/collection/delete/:id', ensureAuthenticated, collection.delete);
   app.post('/admin/collection/tag', ensureAuthenticated, collection.addTag);
   app.post('/admin/collection/type', ensureAuthenticated, collection.addType);

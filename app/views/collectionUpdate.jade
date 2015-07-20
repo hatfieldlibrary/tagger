@@ -153,7 +153,7 @@ block content
           .row
           each tag in tags
             label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
-            a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
+              a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
           p &nbsp;
           p
           .ui-widget
@@ -179,7 +179,7 @@ block content
           .row
           each type in types
             label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
-            a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
+              a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
           p &nbsp;
           p
           .ui-widget

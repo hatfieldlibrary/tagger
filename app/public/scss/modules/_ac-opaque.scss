@@ -1,7 +1,13 @@
 .ac-opaque {
 
+  .th {
+    max-width: 170px;
+  }
   .panel {
     background-color:rgba(255, 255, 255, 0.5) !important;
+    h2 {
+      color: #791716 !important;
+    }
   }
   .collection-header {
     background-color: #c0ac7e !important;

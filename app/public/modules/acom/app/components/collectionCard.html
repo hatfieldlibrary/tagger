@@ -1,11 +1,11 @@
 
   <div class="card ">
     <div class="card-content blue-grey-text">
-      <h4><a href="commons/collec">{{title}}</a></h4>
+      <h4><a href="commons/collec/{{id}}">{{title}}</a></h4>
       <p  data-ng-bind="description" ellipsis></p>
     </div>
     <div class="card-action">
-      <a href="commons/collec">View Collection&nbsp&nbsp;<span ng-if="restricted==true"><i class="fa fa-lock"></i></span></a>
+      <a href="commons/collec/{{id}}">View Collection&nbsp&nbsp;<span ng-if="restricted==true"><i class="fa fa-lock"></i></span></a>
     </div>
   </div>
 
