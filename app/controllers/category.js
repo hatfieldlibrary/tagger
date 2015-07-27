@@ -52,6 +52,7 @@ exports.update = function(req, res) {
   var catUrl = req.body.url;
   var secondUrl = req.body.secondUrl;
   var catDesc = req.body.description;
+  var catLink = req.body.linkLabel;
   var catId = req.body.id;
 
   // First update the collection. Then retrieve the updated
@@ -62,6 +63,7 @@ exports.update = function(req, res) {
         db.Category.update({
             title: catName,
             url: catUrl,
+            linkLabel: catLink,
             secondaryUrl: secondUrl,
             description: catDesc,
           },
@@ -74,7 +76,7 @@ exports.update = function(req, res) {
       home: function (callback) {
         db.Category.findAll(
           {
-            attributes: ['id','title', 'url', 'secondaryUrl', 'description'],
+            attributes: ['id','title', 'url','linkLabel', 'secondaryUrl', 'description'],
             order: [['title', 'ASC']]
           }
         ).complete(callback);

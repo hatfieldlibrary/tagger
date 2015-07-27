@@ -13,7 +13,12 @@ module.exports = function(sequelize, DataTypes) {
         autoIncrement: true},
       title: {
         type: DataTypes.STRING(60),
-        allowNull: false},
+        allowNull: false
+      },
+      linkLabel: {
+        type: DataTypes.STRING(60),
+        allowNull: true
+      },
       url: {
         type: DataTypes.STRING(255),
         allowNull: true

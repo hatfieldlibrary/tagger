@@ -304,7 +304,7 @@ exports.areaUpdate = function (req, res) {
           eq: areaId
         }
       },
-      attributes: ['id','title','url','searchUrl','description']
+      attributes: ['id','title','linkLabel','url','searchUrl','description']
     }
   ).success(function(area) {
       res.render('areaUpdate', {
@@ -326,7 +326,7 @@ exports.categoryUpdate = function (req, res) {
           eq: catId
         }
       },
-      attributes: ['id','title','url','secondaryUrl','description']
+      attributes: ['id','title','linkLabel','url','secondaryUrl','description']
     }
   ).success(function(categories) {
       res.render('categoryUpdate', {

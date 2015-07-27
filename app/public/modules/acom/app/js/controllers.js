@@ -129,6 +129,16 @@ collectionControllers.controller('SingleCollectionCtrl', ['$scope','$location' ,
   $scope.init();
 
 }]);
+
+collectionControllers.controller('SimpleSearchCtrl', ['$scope', '$location', function($scope) {
+
+  $scope.submitQuery = function(query) {
+    var href = $scope.url + 'all^' + encodeURIComponent(query.terms) + '^all^and!';
+    window.location.href = href;
+  };
+
+}]);
+
     /*
 collectionControllers.controller('CollectionByIdCtrl', ['$scope','$location', 'CollectionLookup',
   function($scope, $location, CollectionLookup) {

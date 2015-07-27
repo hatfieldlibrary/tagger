@@ -27,7 +27,7 @@ exports.create = function(req, res) {
       home: function (callback) {
         db.Area.findAll(
           {
-            attributes: ['id','title', 'url','searchUrl', 'description'],
+            attributes: ['id','title', 'url','linkLabel','searchUrl', 'description'],
             order: [['title', 'ASC']]
           }
         ).complete(callback)
@@ -52,6 +52,7 @@ exports.update = function(req, res) {
   var url = req.body.url;
   var searchUrl = req.body.searchUrl;
   var description = req.body.description;
+  var linkLabel = req.body.linkLabel;
   var id = req.body.id;
 
   // First update the collection. Then retrieve the updated
@@ -62,6 +63,7 @@ exports.update = function(req, res) {
         db.Area.update({
             title: title,
             url: url,
+            linkLabel: linkLabel,
             searchUrl: searchUrl,
             description: description
           },
@@ -74,7 +76,7 @@ exports.update = function(req, res) {
       home: function (callback) {
         db.Area.findAll(
           {
-            attributes: ['id','title', 'url', 'searchUrl', 'description'],
+            attributes: ['id','title', 'linkLabel', 'url', 'searchUrl', 'description'],
             order: [['title', 'ASC']]
           }
         ).complete(callback);
@@ -111,7 +113,7 @@ exports.delete = function(req, res) {
       home: function(callback) {
         db.Area.findAll(
           {
-            attributes: ['id','title', 'url', 'searchUrl', 'description'],
+            attributes: ['id','title', 'linkLabel', 'url', 'searchUrl', 'description'],
             order: [['title', 'ASC']]
           }
         ).complete(callback)

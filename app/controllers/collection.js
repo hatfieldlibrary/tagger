@@ -195,13 +195,15 @@ exports.collectionById = function(req, res) {
     ).success(function(category) {
         if (category === null) {
           result.category.title = '';
-          result.category.description = "Category is undefined.  Contact adminstrator.";
+          result.category.description = '';
         } else if (category.category  === null) {
           result.category.title = '';
-          result.category.description = "Category is undefined.  Contact adminstrator.";
+          result.category.description = '';
         }else {
           result.category.title = category.category.title;
           result.category.description  = category.category.description;
+          result.category.url = category.category.url;
+          result.category.linkLabel = category.category.linkLabel;
         }
 
       })

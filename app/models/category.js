@@ -10,10 +10,16 @@ module.exports = function(sequelize, DataTypes) {
       id: {
         type: DataTypes.INTEGER(2),
         primaryKey: true,
-        autoIncrement: true},
+        autoIncrement: true
+      },
       title: {
         type: DataTypes.STRING(60),
-        allowNull: false},
+        allowNull: false
+      },
+      linkLabel: {
+        type: DataTypes.STRING(60),
+        allowNull: true
+      },
       url: {
         type: DataTypes.STRING(255),
         allowNull: true

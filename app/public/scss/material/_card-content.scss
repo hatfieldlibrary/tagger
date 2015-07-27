@@ -11,8 +11,12 @@
     text-transform: none;
 
   }
+  h4 a {
+    color: #791716 !important;
+  }
   h4 a:after {
     content: "" !important;
     display: inline;
+
   }
 }
