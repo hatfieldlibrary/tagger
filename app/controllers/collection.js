@@ -286,6 +286,21 @@ exports.collectionByTypeId = function (req, res) {
 
 };
 
+exports.allCollections = function (req, res) {
+  db.Collection.findAll({
+    attributes: ['id','title'],
+    order:[['title', 'ASC']]
+  }).success( function(collections) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(collections));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
 // Returns a JSON representation of the DSpace API communities
 // response.
 exports.getDspaceCollections = function (req, res ) {
@@ -319,6 +334,8 @@ exports.getDspaceCollections = function (req, res ) {
   request.end();
 
 };
+
+
 
 
 // This is not currently in use.  The fuction returns

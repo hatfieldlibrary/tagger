@@ -1,5 +1,8 @@
 .ac-opaque {
 
+  p.teaser {
+    font-size: 1.45rem;
+  }
   .th {
     max-width: 170px;
   }
@@ -13,6 +16,7 @@
     background-color: #c0ac7e !important;
 
     h5 {
+      text-transform: uppercase;
       color: #fff;
     }
   }

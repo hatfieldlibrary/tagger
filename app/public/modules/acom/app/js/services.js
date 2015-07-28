@@ -49,6 +49,13 @@ collectionServices.factory('AreaById', ['$resource',
   }
 ]);
 
+collectionServices.factory('AllCollections', ['$resource'],
+function($resource) {
+  return $resource(host + 'collections/all', {}, {
+    query: {method:'GET',isArray:true}
+  })
+});
+
 /*
 collectionServices.factory('Collections', ['$resource',
     function($resource){

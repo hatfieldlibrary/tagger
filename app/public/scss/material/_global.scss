@@ -308,29 +308,23 @@ td, th{
       position:relative;
       background-color: $collection-active-bg-color;
       color: $collection-active-color;
+      -webkit-transition: background-color 0.3s ease;
+      -moz-transition: background-color 0.3s ease;
+      -ms-transition: background-color 0.3s ease; /* IE10 is actually unprefixed */
+      -o-transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease;
+
       display:block;
       a {
         color: $collection-active-color;
         font-weight: 700;
       }
 
-      &:after {
-        position: absolute;
-        /* top: 53px; */
-        right: -18px;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        pointer-events: none;
-        border-color: rgba(87,181,188,0);
-        border-left-color: $collection-active-bg-color;
-        border-top-color: #fff;
-        border-right-color: #fff;
-        border-bottom-color: #fff;
-        margin-top: -10px;
-        border-width: 22px;
-      }
+
+    }
+
+    ul.sub li {
+      font-size: 1.084rem;
     }
   }
 
@@ -354,13 +348,16 @@ td, th{
       padding: 10px 20px;
 
       &.link-header {
-        background-color: #0F9BA5 !important;
+        background-color: transparent !important;
         color: #fff;
-        padding: 15px 20px !important;
+        padding: 5px 0px !important;
+        border-radius: 4px;
 
         a {
           font-weight: 700;
           color:#fff;
+          padding: 20px 20px;
+          border-radius: 5px;
           text-transform: uppercase;
         }
       }
@@ -372,7 +369,9 @@ td, th{
 
   }
 
-
+  h5 {
+    margin-top: 0.5rem;
+  }
 
   a.selected {
     text-transform: uppercase;

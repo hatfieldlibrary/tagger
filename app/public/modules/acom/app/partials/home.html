@@ -4,25 +4,23 @@
 
       <ul class="collection with-header area-menu">
         <li class="collection-header"><h5>Collection Areas</h5></li>
-        <li class="collection-item" ng-repeat="item in mainAreaMenu"     role="{{Data.currentAreaIndex}}"
-            ng-click="setSelectedArea($index);setSelectedSubject(1000);getNewCollectionArea(item.id, $index); "
+        <li class="collection-item" ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}"
+            ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea(item.id, $index); "
             ng-class="{active: $index === Data.currentAreaIndex}">
-
           {{item.title}}
-
         </li>
         <li class="collection-header hide-for-small-down">
           <h5>Subject Tags</h5>
         </li>
         <li class="collection-item lowercase hide-for-small-down">
-          <ul class="inline-list sub" style="min-height: 50px;">
+          <ul class="inline-list sub">
             <li ng-repeat="sub in subjects">
               <a ng-click="setSelectedSubject($index);getCollectionsBySubject(sub.id, currentAreaId, sub.name)"
                  ng-class="{active: $index === selectedSubjectIndex}">{{sub.name}}</a>
             </li>
           </ul>
         </li>
-        <li class="collection-header link-header"><a href="commons/allcollections">See all collections</a>&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i></li>
+        <li class="collection-header link-header" style="padding: 0;"><a class="button z-depth-1" style="width:100%;height:100%;" href="commons/partials/filter">See all collections&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
       </ul>
 
       <nav class="left-nav home hide-for-small-down">
@@ -48,8 +46,8 @@
         </ul>
       </nav>
     </div>
-    <div class="main-column small-12 medium-9 large-9  columns">
-      <div class="row">
+    <div class="main-column small-12 medium-9 large-9 columns animate-show" ng-show="collections.length > 0" >
+      <div class="row"  >
         <div class="small-12 column ac-opaque">
           <div class="panel" >
             <div class="row">
@@ -63,14 +61,14 @@
                     <span class="stack-label">Using subject tag:</span>
                   </li>
                   <li>
-                    <a ng-click="setSelectedSubject(1000);getNewCollectionArea(currentAreaId)" class="button round tiny">{{subjectName}} &nbsp;<i class="fa fa-times"></i></a>
+                    <a ng-click="setSelectedSubject(null);getNewCollectionArea(currentAreaId, Data.currentAreaIndex)" class="button round tiny">{{subjectName}} &nbsp;<i class="fa fa-times"></i></a>
                   </li>
                 </ul>
               </div>
             </div>
             <div style="width: 100%; border-top: 1px solid rgba(160,160,160,0.2); padding-top: 16px; padding-left: 15px;">
               <div class="row">
-                <p style="padding-right: 20px;">{{area.description}}</p>
+                <p class="teaser" style="padding-right: 20px;">{{area.description}}</p>
                 <p ng-if="area.linkLabel.length > 0">
                   <a class="button radius" href="{{area.url}}" targt="_blank">{{area.linkLabel}}</a>
                 </p>
@@ -106,7 +104,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="small-12 medium-4 end columns" ng-if="viewType == 'card'" ng-repeat="collection in collections">
+            <div class="small-12 medium-4 end columns " ng-if="viewType == 'card'" ng-repeat="collection in collections">
               <collection-card  id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
             </div>
             <div class="small-12 columns" ng-if="viewType == 'list'" ng-repeat="collection in collections">
