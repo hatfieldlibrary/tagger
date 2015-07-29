@@ -177,6 +177,9 @@ exports.collectionById = function(req, res) {
         result.collection.image = collection.image;
         result.collection.dates = collection.dates;
         result.collection.items = collection.items;
+        result.collection.browseType = collection.browseType;
+        result.collection.collType = collection.ctype;
+        result.collection.searchType = collection.repoType;
       })
       .error(function (err) {
         console.log(err);
@@ -440,6 +443,7 @@ exports.update = function(req, res) {
   var collDates = req.body.dates;
   var collItems = req.body.items;
   var collType = req.body.ctype;
+  var repoType = req.body.repoType;
   var restricted = req.body.restricted;
   //var categoryId = req.body.categoryId;
   var areas = req.body.areas;
@@ -449,7 +453,7 @@ exports.update = function(req, res) {
   async.series (
     {
       update:  function (callback) {
-        console.log('update ' +restricted);
+        console.log('update ' +repoType);
         db.Collection.update({
             title: collName,
             url: collUrl,
@@ -458,6 +462,7 @@ exports.update = function(req, res) {
             dates: collDates,
             items: collItems,
             ctype: collType,
+            repoType: repoType,
             restricted: restricted
           },
           {

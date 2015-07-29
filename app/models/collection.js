@@ -68,6 +68,7 @@ module.exports = function(sequelize, DataTypes) {
             'dates': this.getDataValue('dates'),
             'items': this.getDataValue('items'),
             'ctype':this.getDataValue('ctype'),
+            'repoType':this.getDataValue('repoType'),
             'categoryId':this.getDataValue('categoryId'),
             'restricted': this.getDataValue('restricted')
           };

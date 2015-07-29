@@ -138,7 +138,22 @@ collectionControllers.controller('SingleCollectionCtrl',
       $scope.Data = Data;
       $scope.init = function () {
         $scope.collection = CollectionById.query({id: $scope.id});
+      };
 
+      $scope.isStaticLink = function(link) {
+        return link === 'link';
+      };
+
+      $scope.isBrowseList = function(link) {
+        return link === 'list';
+      };
+
+      // test for digital collection type
+      $scope.isCollection = function(type) {
+        if (type === 'dig') {
+          return true;
+        }
+        return false;
       };
 
       $scope.init();
@@ -200,7 +215,19 @@ collectionControllers.controller('SimpleSearchCtrl', ['$scope', '$location', fun
 }]);
 
 
+collectionControllers.controller('BrowseListCtrl', ['$scope', 'BrowseListRequest', function($scope, BrowseListRequest) {
+  $scope.collection = '';
+  $scope.init = function () {
 
+  };
+  $scope.list = BrowseListRequest.query();
+
+  $scope.submitQuery = function (query) {
+    var href = 'http://libmedia.willamette.edu/cview/' + query.area + '.html#!browse:search:' + query.collections + '/all^' + query.terms.item.title + '^any^and!';
+    window.location.href = href;
+  };
+
+}]);
 
 
 /*

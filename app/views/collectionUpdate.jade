@@ -114,7 +114,20 @@ block content
               |<label>#{area.title}&nbsp;&nbsp;</label>
 
           .small-2.columns
-
+        .row
+          .small-12.columns
+            label Search Type
+              .row
+                .small-10.columns
+                  - var options = [{value:'DEFAULT', label: 'Search & Browse'}, {value: 'BROWSE', label: 'Browse Only'}, {value: 'SEARCH', label: 'Search Only'}];
+                  select(name="repoType")
+                    for option in options
+                      if (option.value === searchType)
+                        option(value=option.value selected) #{option.label}
+                      else
+                        option(value=option.value) #{option.label}
+                .small-2.columns
+                p
           input(type="hidden" name="id" value=collId)
         p
         .row

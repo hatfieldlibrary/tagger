@@ -4,8 +4,8 @@
 
 'use strict';
 
-var host = 'http://localhost:3000/rest/';
-//var host = 'http://libmedia.willamette.edu/acomrest2/';
+//var host = 'http://localhost:3000/rest/';
+var host = 'http://libmedia.willamette.edu/acomrest2/';
 
 var collectionServices = angular.module('collectionServices', ['ngResource']);
 
@@ -55,6 +55,13 @@ collectionServices.factory('AllCollections', ['$resource',
       query: {method:'GET',isArray:true}
     });
   }
+]);
+
+collectionServices.factory('BrowseListRequest', ['$resource',
+  function($resource) {
+    return $resource(host + 'getBrowseList/collegian', {}, {
+      query: {method:'GET', isArray: false }
+    });}
 ]);
 
 /*

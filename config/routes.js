@@ -91,6 +91,7 @@ module.exports = function(app,config,passport){
 
   //existing
   app.use('/rest/collection/byId/:id',      collection.collectionById);
+  app.use('/rest/getBrowseList/:collection', collection.browseList);
   // new
   app.use('/rest/collections/all',          collection.allCollections);
   app.use('/rest/collection/byArea/:id',    collection.collectionsByArea);

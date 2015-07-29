@@ -229,6 +229,7 @@ exports.collUpdate = function(req, res) {
         collItems: collectionData.getCollectionObject.items,
         collDates: collectionData.getCollectionObject.dates,
         collType: collectionData.getCollectionObject.ctype,
+        searchType: collectionData.getCollectionObject.repoType,
         //categoryId: collectionData.getCollectionObject.categoryId,
         restricted: collectionData.restricted,
         collId: collectionData.id,
