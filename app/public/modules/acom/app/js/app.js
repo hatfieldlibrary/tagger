@@ -64,6 +64,9 @@ collectionsApp.config(['$routeProvider','$locationProvider',
       when('/commons/collec/:id', {
         templateUrl: 'commons/partials/collec/'
       }).
+      when('/commons/all', {
+        templateUrl: 'commons/partials/filter/'
+      }).
       when('/commons/partials/:name', {
         templateUrl: function(params) {
           return 'commons/partials/' + params.name;

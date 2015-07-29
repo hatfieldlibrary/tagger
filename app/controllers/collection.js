@@ -240,7 +240,7 @@ exports.collectionById = function(req, res) {
     })
     .error(function(err) {
       console.log(err);
-    })
+    });
 };
 
 
@@ -441,7 +441,7 @@ exports.update = function(req, res) {
   var collItems = req.body.items;
   var collType = req.body.ctype;
   var restricted = req.body.restricted;
-  var categoryId = req.body.categoryId;
+  //var categoryId = req.body.categoryId;
   var areas = req.body.areas;
 
   // First update the collection. Then retrieve the updated
@@ -494,7 +494,7 @@ exports.update = function(req, res) {
             console.log(err);
           });
       },
-      dropCategoryTarget: function(callback) {
+      /*dropCategoryTarget: function(callback) {
         db.CategoryTarget.destroy({
           CollectionId: {
             eq: collId
@@ -512,7 +512,7 @@ exports.update = function(req, res) {
           .error(function(err) {
             console.log(err);
           });
-      },
+      },  */
       home: function (callback) {
         db.Collection.findAll(
           {

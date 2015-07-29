@@ -183,11 +183,10 @@ module.exports = function (grunt) {
           dest: '<%= dist %>'
         } , {
           expand: true,
-          flatten: true,
+          flatten: false,
           cwd:'<%= client %>/app',
-          src: ['bower_components/font-awesome/fonts/**'],
-          dest: '<%= dist %>/css/fonts/',
-          filter: 'isFile'
+          src: ['fonts/**'],
+          dest: '<%= dist %>'
         }, {
           expand: true,
           flatten: true,
@@ -195,7 +194,13 @@ module.exports = function (grunt) {
           src: ['bower_components/modernizr/modernizr.js' ],
           dest: '<%= dist %>/js/vendor',
           filter: 'isFile'
-        }
+        }, {
+            expand: true,
+            flatten: false,
+            cwd:'<%= client %>/app',
+            src: ['css/font-awesome/**','css/i/**','css/icomoon/**','css/materialize/**' ],
+            dest: '<%= dist %>'
+          }
         ]
       }
     },
@@ -226,6 +231,7 @@ module.exports = function (grunt) {
           '<%= app %>/bower_components/foundation/js/foundation/foundation.offcanvas.js',
           '<%= app %>/bower_components/foundation/js/foundation/foundation.tab.js',
           '<%= app %>/bower_components/foundation/js/foundation/foundation.topbar.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.interchange.js',
           '<%= app %>/bower_components/foundation/js/foundation/foundation.tooltip.js',
           '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
           '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],

@@ -1,7 +1,8 @@
 <div class="level-container" ng-controller="FilterCollectionsCtrl">
   <div class="row">
+
     <ng-include src="'commons/partials/global-sidebar'"></ng-include>
-              {{allCollections}}
+
     <div class="main-column small-12 large-9  columns" style="min-height: 800px;">
       <ul class="breadcrumbs clearfix">
         <li>
@@ -11,19 +12,31 @@
           </a>
         </li>
         <li>
-          <a href="#" title="All Collections">
-           All COllections
+          <a href="#" title="Everything">
+            Everything
           </a>
         </li>
       </ul>
       <div class="row animate-show" ng-show="allCollections.length > 0">
         <div class="small-12 column ac-opaque">
           <div class="panel">
-                 <ul>
-                   <li ng-repeat="collection in allCollections">
-                     {{collection.title}}
-                   </li>
-                 </ul>
+            <h3>Collection Search</h3>
+            <form>
+              <div class="row">
+              <div class="small-8 end columns">
+                <input type="text" placeholder="Begin typing the name" ng-model="search">
+                </div>
+              </div>
+              <div class="row">
+                <div class="columns small-12 ac-animate">
+                  <ul>
+                    <li ng-animate="'animate'" ng-repeat="collection in allCollections | filter:{title:search}">
+                      <h6><a href="commons/collec/{{collection.id}}">{{collection.title}}</a></h6>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>

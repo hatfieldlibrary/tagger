@@ -121,26 +121,26 @@ block content
           .small-10.columns
             input(type="submit" value="Update Collection")
             p &nbsp;
-      p This is bad.  But, for now...linking catetory requires round trip to server.
+      p This is bad.  But, for now...linking category requires round trip to server.
       form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/category/link")
         .row
           .small-12.columns
             label Category
-        .row
-          .small-10.columns
-            select(name="catId")
-                for cat in categories
-                  if (currentCategory !== null)
-                    if (cat.id === currentCategory.id )
-                      option(value=cat.id selected) #{cat.title}
+            .row
+              .small-10.columns
+                select(name="catId")
+                  for cat in categories
+                    if (currentCategory !== null)
+                     if (cat.id === currentCategory.id )
+                        option(value=cat.id selected) #{cat.title}
+                      else
+                        option(value=cat.id) #{cat.title}
                     else
                       option(value=cat.id) #{cat.title}
-                  else
-                    option(value=cat.id) #{cat.title}
-            input(type="hidden" name="collId" value=collId)
-          .small-2.columns
-            p
-          .small-12.columns
+                input(type="hidden" name="collId" value=collId)
+            .small-2.columns
+             p
+            .small-12.columns
             input(type="submit" value="Update Category")
       p &nbsp;
       p &nbsp;

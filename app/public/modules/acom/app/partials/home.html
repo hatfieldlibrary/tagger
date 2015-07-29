@@ -1,18 +1,19 @@
 <div class="level-container" ng-controller="CollectionsHomeCtrl">
-  <div class="row">
+  <div class="row ac-animate">
     <div class="sidebar small-12 medium-3 large-3  ac-opaque hide-for-small-down columns">
 
       <ul class="collection with-header area-menu">
-        <li class="collection-header"><h5>Collection Areas</h5></li>
+
+        <li class="collection-header"><h5>Choose Area</h5></li>
         <li class="collection-item" ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}"
             ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea(item.id, $index); "
             ng-class="{active: $index === Data.currentAreaIndex}">
           {{item.title}}
         </li>
         <li class="collection-header hide-for-small-down">
-          <h5>Subject Tags</h5>
+          <h5>Choose subject</h5>
         </li>
-        <li class="collection-item lowercase hide-for-small-down">
+        <li class="collection-item lowercase hide-for-small-down" style="border-bottom: none;">
           <ul class="inline-list sub">
             <li ng-repeat="sub in subjects">
               <a ng-click="setSelectedSubject($index);getCollectionsBySubject(sub.id, currentAreaId, sub.name)"
@@ -20,7 +21,7 @@
             </li>
           </ul>
         </li>
-        <li class="collection-header link-header" style="padding: 0;"><a class="button z-depth-1" style="width:100%;height:100%;" href="commons/partials/filter">See all collections&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+        <li class="collection-header link-header" style="padding: 0;"><a class="button z-depth-1" style="width:100%;height:100%;" href="commons/all">See everything&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
       </ul>
 
       <nav class="left-nav home hide-for-small-down">
@@ -95,7 +96,10 @@
       <div class="row">
         <div class="small-12 columns" style="min-height: 900px;">
           <div class="row" style="margin-bottom: 15px;">
-            <div class="ac-view-toggle small-12 columns hide-for-small-down text-right">
+            <div class="small-6 columns" style="padding-left: 25px;">
+              <h5 style="color: #791716;margin-top: 0;">Items</h5>
+            </div>
+            <div class="ac-view-toggle small-6 columns hide-for-small-down text-right">
               <span style="font-size: 0.9rem;color: #999;">toggle view:&nbsp; </span>
               <a ng-click="setView('card', card)"
                  ng-class="{active: 'card' === viewType}"><i class="fa fa-th"></i></a>
@@ -104,11 +108,11 @@
             </div>
           </div>
           <div class="row">
-            <div class="small-12 medium-4 end columns " ng-if="viewType == 'card'" ng-repeat="collection in collections">
+            <div class="small-12 stack medium-4 columns " ng-if="viewType == 'card'" ng-repeat="collection in collections">
               <collection-card  id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
             </div>
-            <div class="small-12 columns" ng-if="viewType == 'list'" ng-repeat="collection in collections">
-              <collection-list  title="{{collection.collection.title}}"></collection-list>
+            <div class="small-12  columns" ng-if="viewType == 'list'" ng-repeat="collection in collections">
+              <collection-list  title="{{collection.collection.title}}" id="{{collection.collection.id}}" restricted=collection.collection.restricted></collection-list>
             </div>
           </div>
         </div>

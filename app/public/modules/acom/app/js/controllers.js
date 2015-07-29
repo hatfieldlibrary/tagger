@@ -10,12 +10,12 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','D
     // data store
     $scope.Data = Data;
     $scope.mainAreaMenu = [
-      {title: 'Student Research', id: 5},
-      {title: 'Faculty Research', id: 5},
-      {title: 'University Archives', id: 5},
-      {title: 'Museum of Art', id: 6},
+      {title: 'Student Research', id: 3},
+      {title: 'Faculty Research', id: 4},
+      {title: 'University Archives', id: 1},
+      {title: 'Museum of Art', id: 2},
       {title: 'Library', id: 5},
-      {title: 'Other Departments', id: 5} ];
+      {title: 'Other Departments', id: 6} ];
 
     // initialize
     $scope.init = function () {
@@ -124,25 +124,39 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','D
   }
 ]);
 
-collectionControllers.controller('SingleCollectionCtrl', ['$scope','$location' ,'Data', 'CollectionById', function($scope,$location,Data,CollectionById) {
+collectionControllers.controller('SingleCollectionCtrl',
+  ['$scope',
+    '$location',
+    'Data',
+    'CollectionById',
+    function($scope,$location,Data,CollectionById) {
 
-  var path = $location.path();
-  var components = path.split('/');
-  $scope.id = components[3];
-  $scope.collection = {};
-  $scope.Data = Data;
-  $scope.init = function () {
-    $scope.collection = CollectionById.query({id: $scope.id});
+      var path = $location.path();
+      var components = path.split('/');
+      $scope.id = components[3];
+      $scope.collection = {};
+      $scope.Data = Data;
+      $scope.init = function () {
+        $scope.collection = CollectionById.query({id: $scope.id});
 
-  };
+      };
 
-  $scope.init();
+      $scope.init();
 
-}]);
+    }]);
 
-collectionControllers.controller('FilterCollectionsCtrl',['$scope','AllCollections', function($scope, AllCollections) {
-      $scope.allCollections = AllCollections.query();
-}]);
+collectionControllers.controller('FilterCollectionsCtrl',
+  ['$scope',
+    'AllCollections',
+    function($scope, AllCollections) {
+
+      $scope.init = function() {
+        $scope.allCollections = AllCollections.query();
+      };
+
+      $scope.init();
+
+    }]);
 
 collectionControllers.controller('AcomHomeSearchCtrl', ['$scope', '$location', function($scope) {
 

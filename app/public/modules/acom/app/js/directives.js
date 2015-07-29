@@ -24,7 +24,7 @@ collectionDirectives.directive('collectionList', function() {
     scope: {
       title: '@',
       restricted: '=restricted',
-      url: '@'
+      id: '@'
     },
 
     transclude: true,
