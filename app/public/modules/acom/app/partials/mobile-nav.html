@@ -1,51 +1,29 @@
-<div class="off-canvas-nav right-off-canvas-menu" >
 
-  <form action="#" method="get" name="global-search" class="global-search">
-    <input name="keywords" type="search" autocomplete="off" placeholder="Search" class="keywords">
-    <span class="fa fa-search"></span>
-  </form>
 
+<div class="off-canvas-nav right-off-canvas-menu">
+
+  <form action="http://www.willamette.edu/search/index1.html" class="global-search" id="cse-search-box">
+    <input name="cx" type="hidden" value="011125815161069797886:grzkhoi3q9s">
+    <input name="cof" type="hidden" value="FORID:10"> <input name="ie" type="hidden" value="UTF-8">
+    <input autocomplete="off" class="keywords" id="qallwu" name="qallwu" placeholder="Search" type="search">
+    <span class="fa fa-search"></span></form>
 
 
   <nav class="main-nav-small">
     <ul>
-
+      <li ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}" ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea(item.id, $index);" ng-class="{active: $index === Data.currentAreaIndex}"  style="font-family: franklin-gothic-urw-cond,sans-serif;font-size: 1.5rem; font-weight: 500; color: #c0ac7e;height:45px;"><a href="#">{{item.title}}</a></li>
+      <li>&nbsp;</li>
       <li>
-        <a href="javascript:" title="Academics" class="main-nav-small-link">
-          Student Research
+        <a href="http://library.willamette.edu" title="Directions" class="main-nav-small-link">
+          Library Home
         </a>
       </li>
 
       <li>
-        <a href="javascript:" title="Admission" class="main-nav-small-link">
-          Faculty Research
+        <a href="http://www.willamette.edu" title="Willamette Home" class="main-nav-small-link">
+          Willamette Home
         </a>
       </li>
-
-      <li>
-        <a href="javascript:" title="Campus Life" class="main-nav-small-link">
-          University Archives
-        </a>
-      </li>
-
-      <li>
-        <a href="javascript:" title="Why Willamette" class="main-nav-small-link">
-          Museum of Art
-        </a>
-      </li>
-
-      <li>
-        <a href="javascript:" title="Athletics" class="main-nav-small-link">
-          Other Departments
-        </a>
-      </li>
-
-      <li>
-        <a href="javascript:" title="Arts" class="main-nav-small-link">
-          About the Commons
-        </a>
-      </li>
-
     </ul>
   </nav>
 
@@ -55,35 +33,38 @@
     <ul>
 
       <li>
-        <a href="javascript:" title="Students" class="secondary-nav-small-link">
+        <a href="http://willamette.edu/internal/students/index.html" title="Students" class="secondary-nav-small-link">
           Students
         </a>
       </li>
 
       <li>
-        <a href="javascript:" title="Faculty &amp; Staff" class="secondary-nav-small-link">
+        <a href="http://willamette.edu/internal/faculty-staff/index.html" title="Faculty &amp; Staff" class="secondary-nav-small-link">
           Faculty &amp; Staff
         </a>
       </li>
 
       <li>
-        <a href="javascript:" title="Parents" class="secondary-nav-small-link">
+        <a href="http://willamette.edu/parents/index.html" title="Parents" class="secondary-nav-small-link">
           Parents
         </a>
       </li>
 
       <li>
-        <a href="javascript:" title="Alumni" class="secondary-nav-small-link">
+        <a href="http://willamette.edu/alumni/index.html" title="Alumni" class="secondary-nav-small-link">
           Alumni
         </a>
       </li>
 
       <li>
-        <a href="javascript:" title="Community" class="secondary-nav-small-link">
+        <a href="http://willamette.edu/internal/community/index.html" title="Community" class="secondary-nav-small-link">
           Community
         </a>
       </li>
 
     </ul>
   </nav>
+
 </div>
+
+

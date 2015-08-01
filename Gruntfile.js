@@ -206,58 +206,7 @@ module.exports = function (grunt) {
     },
 
     concat: {
-      // These targets concat javascript libraries into the
-      // public UI dist directory.
-      libraries: {
-        flatten: true,
-        src:[
-          '<%= app %>/bower_components/angular/angular.js',
-          '<%= app %>/bower_components/angular-animate/angular-animate.js',
-          '<%= app %>/bower_components/angular-resource/angular-resource.js',
-          '<%= app %>/bower_components/angular-route/angular-route.js',
-          '<%= app %>/bower_components/jquery/dist/jquery.js',
-          '<%= app %>/bower_components/foundation/js/vendor/jquery.cookie.js',
-          '<%= app %>/bower_components/jquery.placeholder/jquery.placeholder.js',
-          '<%= app %>/bower_components/foundation/js/vendor/fastclick.js',
-          '<%= app %>/bower_components/rem-unit-polyfill/js/rem.js'],
-        dest: '<%= dist %>/js/vendor/libraries.js'
-      },
-      foundation: {
-        flatten: true,
-        src: [
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.accordian.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.dropdown.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.offcanvas.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.tab.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.topbar.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.interchange.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.tooltip.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
-        dest: '<%= dist %>/js/vendor/foundation.js'
-      },
-      // These targets contact the same javascript libraries
-      // into the admin UI javascripts directory. This allows
-      // backend and frontend dependencies to be decoupled, although this
-      // probably isn't necessary given that we deploy the application under
-      // a single Express server.
-      /*
-      serverlibs: {
-        flatten: true,
-        src:[
-          '<%= app %>/bower_components/angular/angular.js',
-          '<%= app %>/bower_components/angular-animate/angular-animate.js',
-          '<%= app %>/bower_components/angular-resource/angular-resource.js',
-          '<%= app %>/bower_components/angular-route/angular-route.js',
-          '<%= app %>/bower_components/jquery/dist/jquery.js',
-          '<%= app %>/bower_components/foundation/js/vendor/jquery.cookie.js',
-          '<%= app %>/bower_components/jquery.placeholder/jquery.placeholder.js',
-          '<%= app %>/bower_components/foundation/js/vendor/fastclick.js',
-          '<%= app %>/bower_components/rem-unit-polyfill/js/rem.js'],
-        dest: '<%= app %>/public/javascripts/vendor/libraries.js'
-      },
-      serverfoundation: {
+      server: {
         flatten: true,
         src: [
           '<%= app %>/bower_components/foundation/js/foundation/foundation.js',
@@ -270,17 +219,6 @@ module.exports = function (grunt) {
           '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
           '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
         dest: '<%= app %>/public/javascripts/vendor/foundation.js'
-      }, */
-      modernizr: {
-        flatten: true,
-        src:['<%= client %>/app/js/plugins/modernizr.optimized.js',
-        ],
-        dest: '<%= dist %>/js/plugins/modernizr.js'
-      },
-      css: {
-        flatten: true,
-        src: ['<%= client %>/app/css/*.css', '!*.min.css'],
-        dest: '<%= dist %>/css/app.css'
       }
     },
 
@@ -309,25 +247,6 @@ module.exports = function (grunt) {
       options: {
         preserveComments: 'some',
         mangle: false
-      },
-      client:
-      {
-        files: [{
-          expand: true,
-          cwd: '<%= dist %>/js/vendor',
-          src: '*.js',
-          ext: '.min.js',
-          dest: '<%= dist %>/js/vendor'
-        }]
-      },
-      server:{
-        files: [{
-          expand: true,
-          cwd: '<%= app %>/public/javascripts/vendor',
-          src: '*.js',
-          ext: '.min.js',
-          dest: '<%= app %>/public/javascripts/vendor'
-        }]
       }
     },
 
@@ -492,7 +411,7 @@ module.exports = function (grunt) {
       //'concat:serverlibs',
       //'concat:serverfoundation',
       // Uncomment the following uglify task if you
-      // want to test new javascript libs with admin
+      // want to test javascript libs for admin
       // mode. It takes a while to complete, which
       // is why it is commented out here. The task
       // is included by default when you publish.
@@ -512,18 +431,19 @@ module.exports = function (grunt) {
     ]);
   });
   grunt.registerTask('publish', [
+    'useminPrepare',
     'compile-sass',
     'clean:dist',
+    'concat',
     'validate-js',
     'modernizr:dist',
     'bower-install',
-    'useminPrepare',
     'copy:client',
-    'concat',
     'newer:imagemin',
     'cssmin',
     'uglify',
-   // 'copy:server',
-    'usemin']);
+    'usemin',
+
+    ]);
 
 };

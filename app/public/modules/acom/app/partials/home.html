@@ -108,7 +108,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="small-12 stack medium-4 columns " ng-if="viewType == 'card'" ng-repeat="collection in collections">
+            <div class="small-12 stack medium-12 columns " ng-if="viewType == 'card'" ng-repeat="collection in collections">
               <collection-card  id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
             </div>
             <div class="small-12  columns" ng-if="viewType == 'list'" ng-repeat="collection in collections">
@@ -117,6 +117,7 @@
           </div>
         </div>
       </div>
+      <!--
       <ul class="pagination">
         <li class="arrow unavailable"><a href="">&laquo;</a></li>
         <li class="current"><a href="">1</a></li>
@@ -128,7 +129,9 @@
         <li><a href="">13</a></li>
         <li class="arrow"><a href="">&raquo;</a></li>
       </ul>
+
+    -->
     </div>
-    <ng-include src="'commons/partials/mobile-nav'"
+    <ng-include src="'commons/partials/mobile-nav'"></ng-include>
   </div>
 </div>
