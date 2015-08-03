@@ -19,7 +19,7 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','D
 
     // initialize
     $scope.init = function () {
-
+      $scope.search = '';
       $scope.currentAreaId = '';
       $scope.layout = 'full';
       $scope.tagged = true;
@@ -71,6 +71,7 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','D
 
     $scope.getNewCollectionArea = function(areaId, index) {
 
+      $scope.search = '';
       $scope.Data.currentAreaIndex = index;
       $scope.selectedSubjectIndex = null;
       $scope.Data.currentSubjectIndex = $scope.selectedSubjectIndex;
@@ -159,6 +160,7 @@ collectionControllers.controller('SingleCollectionCtrl',
       $scope.init();
 
     }]);
+
 
 collectionControllers.controller('FilterCollectionsCtrl',
   ['$scope',

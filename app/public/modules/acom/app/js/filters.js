@@ -36,3 +36,4 @@ collectionFilters.filter('collectionFilter', function() {
     return filtered;
   };
 });
+

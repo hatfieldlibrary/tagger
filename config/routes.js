@@ -116,6 +116,21 @@ module.exports = function(app,config,passport){
       '.html'
     );
   });
+
+
+  app.get('/commons/info/:name', function(req, res) {
+
+    var name = req.params.name;
+
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/info/' +
+      name +
+      '.html'
+    );
+  });
+
   // requests for an angular directive template.
   app.get('/commons/components/:name', function(req, res) {
 
@@ -142,18 +157,8 @@ module.exports = function(app,config,passport){
       '.html'
     );
   });
-  app.get('/commons/info/:name', function(req, res) {
 
-    var name = req.params.name;
 
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/info/' +
-      name +
-      '.html'
-    );
-  });
   app.get('/commons/error/:name', function(req, res) {
 
     var name = req.params.name;
@@ -176,6 +181,7 @@ module.exports = function(app,config,passport){
       '/index.html'
     );
   });
+
   // This catch-all is required by html5mode.
   app.get('/commons/*', function(req, res) {
 

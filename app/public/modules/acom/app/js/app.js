@@ -72,6 +72,11 @@ collectionsApp.config(['$routeProvider','$locationProvider',
           return 'commons/partials/' + params.name;
         }
       }).
+      when('/commons/info/:name', {
+        templateUrl: function(params) {
+          return 'commons/info/' + params.name;
+        }
+      }).
       when('/commons/:name', {
         templateUrl: function(params) {
           return 'commons/partials/' + params.name;

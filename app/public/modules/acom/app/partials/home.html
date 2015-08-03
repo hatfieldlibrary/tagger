@@ -1,9 +1,7 @@
 <div class="level-container" ng-controller="CollectionsHomeCtrl">
   <div class="row ac-animate">
     <div class="sidebar small-12 medium-3 large-3  ac-opaque hide-for-small-down columns">
-
       <ul class="collection with-header area-menu">
-
         <li class="collection-header"><h5>Choose Area</h5></li>
         <li class="collection-item" ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}"
             ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea(item.id, $index); "
@@ -23,23 +21,22 @@
         </li>
         <li class="collection-header link-header" style="padding: 0;"><a class="button z-depth-1" style="width:100%;height:100%;" href="commons/all">See everything&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
       </ul>
-
       <nav class="left-nav home hide-for-small-down">
         <ul>
           <li class="child">
-            <a href="/" title="home">About the Commons</a>
+            <a href="/commons/info/about" title="home">About</a>
           </li>
           <li class="child">
-            <a href="#" title="archives">Starting a Collection</a>
+            <a href="/commons/info/start" title="archives">Starting a Collection</a>
           </li>
           <li class="child ">
-            <a href="/about/staff" title="staff">Submitting a Thesis</a>
+            <a href="/commons/info/thesis" title="staff">Submitting a Thesis</a>
           </li>
           <li class="child ">
-            <a href="#" title="testlink">File Formats</a>
+            <a href="/commons/info/recommendedformat" title="File Formats">File Formats</a>
           </li>
           <li class="child">
-            <a href="about/">Intellectual Property</a>
+            <a href="/commons/info/copyright">Intellectual Property</a>
           </li>
           <li class="child">
             <a href="about/">Data Management</a>
@@ -53,7 +50,7 @@
           <div class="panel" >
             <div class="row">
               <div class="small-12 medium-6 large-6 column">
-                <span style="font-size: 0.95rem;color: #999;">COLLECTION AREA</span>
+                <span style="font-size: 0.95rem;color: #837F75;">COLLECTION AREA</span>
                 <h2>{{area.title}}</h2>
               </div>
               <div ng-if="subjectLength > 0" class="small-12 medium-6 large-6 column hide-for-small-down  tag-box text-right">
@@ -85,19 +82,19 @@
             </div>
           </div>
         </div>
-        <!--<area-box id="{{currentAreaId}}"
-                 title="{{area.title}}"
-                 description="{{area.description}}"
-                 url="{{area.url}}"
-                 searchUrl="{{area.searchUrl}}"
-                 subjectName="{{subjectName}}"
-                 subjectId="{{subjectId}}"></area-box>   -->
       </div>
       <div class="row">
         <div class="small-12 columns" style="min-height: 900px;">
           <div class="row" style="margin-bottom: 15px;">
             <div class="small-6 columns" style="padding-left: 25px;">
-              <h5 style="color: #791716;margin-top: 0;">Items</h5>
+           <!--   <h5 style="color: #791716;margin-top: 0;">Items</h5>     -->
+              <div class="row">
+                <div ng-show="collections.length > 10" class="ng-hide">
+                  <div class="small-12 end columns">
+                    <input type="text" placeholder="Type here to find title in list" ng-model="search">
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="ac-view-toggle small-6 columns hide-for-small-down text-right">
               <span style="font-size: 0.9rem;color: #999;">toggle view:&nbsp; </span>
@@ -107,30 +104,17 @@
                  ng-class="{active: 'list' === viewType}"><i class="fa fa-align-justify"></i></a>
             </div>
           </div>
+
           <div class="row">
-            <div class="small-12 stack medium-12 columns " ng-if="viewType == 'card'" ng-repeat="collection in collections">
-              <collection-card  id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
+            <div class="small-12 stack medium-12 columns" ng-if="viewType == 'card'" ng-repeat="collection in collections | filter: {collection:{title:search}}">
+              <collection-card  ng-animate="'animate'" id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
             </div>
-            <div class="small-12  columns" ng-if="viewType == 'list'" ng-repeat="collection in collections">
-              <collection-list  title="{{collection.collection.title}}" id="{{collection.collection.id}}" restricted=collection.collection.restricted></collection-list>
+            <div class="small-12  columns" ng-if="viewType == 'list'" ng-repeat="collection in collections|  filter: {collection:{title:search}}">
+              <collection-list  ng-animate="'animate'" title="{{collection.collection.title}}" id="{{collection.collection.id}}" restricted=collection.collection.restricted></collection-list>
             </div>
           </div>
         </div>
       </div>
-      <!--
-      <ul class="pagination">
-        <li class="arrow unavailable"><a href="">&laquo;</a></li>
-        <li class="current"><a href="">1</a></li>
-        <li><a href="">2</a></li>
-        <li><a href="">3</a></li>
-        <li><a href="">4</a></li>
-        <li class="unavailable"><a href="">&hellip;</a></li>
-        <li><a href="">12</a></li>
-        <li><a href="">13</a></li>
-        <li class="arrow"><a href="">&raquo;</a></li>
-      </ul>
-
-    -->
     </div>
     <ng-include src="'commons/partials/mobile-nav'"></ng-include>
   </div>

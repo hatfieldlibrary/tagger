@@ -1,26 +1,23 @@
 
-<div class="row  show-for-small-up">
-  <div class="small-8 columns">
-    <ul class="breadcrumbs">
-      <li><i class="fa fa-home"></i> <a href="/commons/home">Academic Commons</a></li>
-      <li><a href="" class="current">Recommended Formats</a></li>
-    </ul>
-  </div>
-  <div class="small-12 medium-4 large-4 columns text-right">
-    <a href="/commons/home"><img src="/images/academiccommons_lg.png"></a>
-  </div>
-</div>
+<div class="level-container">
+  <div class="row ac-animate">
+    <ng-include src="'commons/info/formats-sidebar'"></ng-include>
 
-<div class="row  show-for-small-up">
-  <div class="large-8 medium-8 small-12 columns page-header">
-    <h2>Recommended File Formats</h2>
-  </div>
-</div>
-
-
-<div class="row">
-  <div class="large-8 medium-8 small-12 columns">
-    <div class="content-justify">
+    <div class="user-markup small-12 large-9  columns" style="min-height: 800px;">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="File Formats">
+            Formats
+          </a>
+        </li>
+      </ul>
+      <h1>Recommended File Formats</h1>
       <!-- this page borrows heavily from http://repositories.lib.utexas.edu/recommended_file_formats -->
       <p>
         Any file format can be submitted to the Academic Commons. However, the file formats below are strongly recommended.</p>
@@ -30,7 +27,7 @@
       </p>
 
       <table style="width:100%;border: 1px solid #ccc;" summary="A list of the file formats that are recommended when you submit work to the Academic Commons.">
-        <tr class="head">
+        <tr style="background: #ccc;">
           <td><a href="http://www.digitalpreservation.gov/formats/content/text_preferences.shtml">Textual Formats</a></td><!-- http://www.digitalpreservation.gov/formats/content/text_preferences.shtml -->
           <td>Extensions</td>
         </tr>
@@ -55,7 +52,7 @@
           <td>.csv</td>
         </tr>
 
-        <tr class="header"><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/still_preferences.shtml">Image / Graphic Formats</a></td></tr>
+        <tr style="background: #ccc;"><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/still_preferences.shtml">Image / Graphic Formats</a></td></tr>
 
         <tr>
           <td>TIFF</td>
@@ -71,7 +68,7 @@
           <td>.jpg, .jpeg</td>
         </tr>
 
-        <tr class="header"><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/sound_preferences.shtml">Audio Formats</a></td></tr>
+        <tr style="background: #ccc;" ><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/sound_preferences.shtml">Audio Formats</a></td></tr>
 
         <tr>
           <td>AIFF</td>
@@ -84,7 +81,7 @@
         </tr>
         <!--  mp3 okay at LC! http://www.digitalpreservation.gov/formats/fdd/fdd000105.shtml -->
 
-        <tr class="header"><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/video_preferences.shtml">Video Formats</a></td></tr> <!-- http://www.digitalpreservation.gov/formats/content/video_preferences.shtml-->
+        <tr style="background: #ccc;"><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/video_preferences.shtml">Video Formats</a></td></tr> <!-- http://www.digitalpreservation.gov/formats/content/video_preferences.shtml-->
         <!-- maybe Motion JPEG2000 in the future-->
         <tr>
           <td>MPEG-2 / MPEG-4 AVC</td>
@@ -101,9 +98,7 @@
 
     </div>
   </div>
-
-  <ng-include src="'/commons/info/side'"></ng-include>
-
 </div>
+
 
 

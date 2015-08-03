@@ -1,66 +1,54 @@
 
-  <div class="row  show-for-small-up">
-    <div class="small-8 columns">
-      <ul class="breadcrumbs">
-        <li><i class="fa fa-home"></i> <a href="/commons/home">Academic Commons</a></li>
-        <li><a href="" class="current">Submit Thesis</a></li>
+<div class="level-container">
+  <div class="row ac-animate">
+    <ng-include src="'commons/info/thesis-sidebar'"></ng-include>
+
+    <div class="user-markup small-12 large-9  columns" style="min-height: 800px;">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="Submit Senior Thesis">
+            Submit Senior Thesis
+          </a>
+        </li>
       </ul>
-    </div>
-    <div class="small-12 medium-4 large-4 columns text-right" >
-      <a href="/commons/home"><img src="/images/academiccommons_lg.png"></a>
-    </div>
-  </div>
-
-  <div class="row  show-for-small-up">
-    <div class="large-8 medium-8 small-12 columns page-header">
-      <h2>Thesis Submission</h2>
-    </div>
-  </div>
-
-
-
-  <div class="row collapse">
-    <div class="large-8 medium-8 small-12 columns">
-      <div class="content-justify">
-
-        <div id="media">
-          <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="640" height="498" id="csSWF">
-            <param name="movie" value="ac-upload-directions-2012_controller.swf" />
+      <h1>Submitting Your Senior Thesis</h1>
+      <p class="teaser">The video below describes how to submit your senior thesis.  The page in the video looks different from the page that you will be using, but the steps described are the same.</p>
+      <div id="media">
+        <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="640" height="498" id="csSWF">
+          <param name="movie" value="commons/extras/student/ac-upload-directions-2012_controller.swf" />
+          <param name="quality" value="best" />
+          <param name="bgcolor" value="#1a1a1a" />
+          <param name="allowfullscreen" value="true" />
+          <param name="scale" value="showall" />
+          <param name="allowscriptaccess" value="always" />
+          <param name="flashvars" value="autostart=false&thumb=FirstFrame.png&thumbscale=45&color=0x000000,0x000000" />
+          <!--[if !IE]>-->
+          <object type="application/x-shockwave-flash" data="commons/extras/student/ac-upload-directions-2012_controller.swf" width="640" height="498">
             <param name="quality" value="best" />
             <param name="bgcolor" value="#1a1a1a" />
             <param name="allowfullscreen" value="true" />
             <param name="scale" value="showall" />
             <param name="allowscriptaccess" value="always" />
             <param name="flashvars" value="autostart=false&thumb=FirstFrame.png&thumbscale=45&color=0x000000,0x000000" />
-            <!--[if !IE]>-->
-            <object type="application/x-shockwave-flash" data="ac-upload-directions-2012_controller.swf" width="640" height="498">
-              <param name="quality" value="best" />
-              <param name="bgcolor" value="#1a1a1a" />
-              <param name="allowfullscreen" value="true" />
-              <param name="scale" value="showall" />
-              <param name="allowscriptaccess" value="always" />
-              <param name="flashvars" value="autostart=false&thumb=FirstFrame.png&thumbscale=45&color=0x000000,0x000000" />
-              <!--<![endif]-->
-              <div id="noUpdate">
-                <p>The Camtasia Studio video content presented here requires JavaScript to be enabled and the  latest version of the Adobe Flash Player. If you are using a browser with JavaScript disabled please enable it now. Otherwise, please update your version of the free Adobe Flash Player by <a href="http://www.adobe.com/go/getflashplayer">downloading here</a>. </p>
-              </div>
-              <!--[if !IE]>-->
-            </object>
             <!--<![endif]-->
+            <div id="noUpdate">
+              <p>The Camtasia Studio video content presented here requires JavaScript to be enabled and the  latest version of the Adobe Flash Player. If you are using a browser with JavaScript disabled please enable it now. Otherwise, please update your version of the free Adobe Flash Player by <a href="http://www.adobe.com/go/getflashplayer">downloading here</a>. </p>
+            </div>
+            <!--[if !IE]>-->
           </object>
-        </div>
-
-
+          <!--<![endif]-->
+        </object>
       </div>
 
 
     </div>
-    <ng-include src="'/commons/info/side'"></ng-include>
 
   </div>
 
 </div>
-
-
-</body>
-</html>
