@@ -104,7 +104,7 @@ module.exports = function(app,config,passport){
 
   /* Static Angularjs module routes.  Used by the Academic Commons public site. */
   // request for partials
-  app.get('/commons/partials/:name', function(req, res) {
+  app.get('/partials/:name', function(req, res) {
 
     var name = req.params.name;
 
@@ -118,7 +118,20 @@ module.exports = function(app,config,passport){
   });
 
 
-  app.get('/commons/info/:name', function(req, res) {
+  app.get('/info/data/:name', function(req, res) {
+
+    var name = req.params.name;
+
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/info/data/' +
+      name +
+      '.html'
+    );
+  });
+
+  app.get('/info/:name', function(req, res) {
 
     var name = req.params.name;
 
@@ -132,7 +145,7 @@ module.exports = function(app,config,passport){
   });
 
   // requests for an angular directive template.
-  app.get('/commons/components/:name', function(req, res) {
+  app.get('/components/:name', function(req, res) {
 
     var name = req.params.name;
 
@@ -141,20 +154,6 @@ module.exports = function(app,config,passport){
       config.modulePath +
       '/components/' +
       name
-    );
-  });
-  // requests for static files that contain no angular directives
-
-  app.get('/commons/grants/:name', function(req, res) {
-
-    var name = req.params.name;
-
-    res.sendFile(
-      config.root +
-      config.modulePath +
-      '/grants/' +
-      name +
-      '.html'
     );
   });
 
@@ -191,6 +190,8 @@ module.exports = function(app,config,passport){
       '/index.html'
     );
   });
+
+
 
 };
 

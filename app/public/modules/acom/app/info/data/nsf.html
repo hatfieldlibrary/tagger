@@ -1,28 +1,23 @@
 
+<div class="level-container" ng-controller="JumpToCtrl">
+  <div class="row ac-animate">
+    <ng-include src="'/info/data-sidebar'"></ng-include>
 
-<div class="row  show-for-small-up">
-  <div class="small-8 columns">
-    <ul class="breadcrumbs">
-      <li><i class="fa fa-home"></i> <a href="/commons/home">Academic Commons</a></li>
-      <li><a href="" class="current">NSF Guidelines</a></li>
-    </ul>
-  </div>
-  <div class="small-12 medium-4 large-4 columns text-right">
-    <a href="/commons/home"><img src="/images/academiccommons_lg.png"></a>
-  </div>
-</div>
-
-<div class="row  show-for-small-up">
-  <div class="large-8 medium-8 small-12 columns page-header">
-    <h2>NSF Guidelines</h2>
-  </div>
-</div>
-
-<div class="row ">
-  <div class="large-8 medium-8 small-12 columns">
-    <div class="content-justify">
-
-
+    <div class="user-markup small-12 large-9  columns" style="min-height: 800px;">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="National Science Foundation">
+            NSF
+          </a>
+        </li>
+      </ul>
+      <h1>National Science Foundation</h1>
       <p>All NSF proposals with a due date of
 
         January 15, 2011 or later must include a <a href="http://www.nsf.gov/pubs/policydocs/pappguide/nsf11001/gpg_2.jsp#dmp" target=_new>Data Management Plan</a>, no longer than two pages, that describes the PI&#8217;s plans for managing data and sharing
@@ -53,7 +48,7 @@
         procedures and capabilities for data storage and maintenance. Your plan
         is the most important information; if it fills the two pages, you can put the
         institutional information in the Project Description, as part of the
-        Intellectual Merit or Broader Impacts. See <a href="institution.html">Willamette University data management services</a> for relevant information.</p>
+        Intellectual Merit or Broader Impacts. See <a href="commons/info/data/institution">Willamette University data management services</a> for relevant information.</p>
       <p >Data Management Plans
         will be submitted through <a href="https://www.fastlane.nsf.gov/index.jsp" target=_new>Fastlane</a> as
         a supplementary documents; Fastlane will not accept proposals that lack
@@ -64,15 +59,13 @@
       <h3>Creating a Data Management Plan</h3>
       <p> Topics to cover in a written plan include the following.</p>
       <ol>
-        <li><p>description
-          of the project: purpose of the research, organizations and staff
-          involved</p></li>
-        <li><p>description
-          of data to be collected,  method of collection, its nature and format
-
-          <div class="panel">As you consider this topic, you may find it helpful to consult a <a href="http://libraries.mit.edu/guides/subjects/data-management/evaluate.html" target=_new>further set of questions</a> from MIT.
+        <li><p>Description of the project: purpose of the research, organizations and staff involved.</p></li>
+        <li><p>Description of data to be collected,  method of collection, its nature and format.</p>
+          <div class="panel">
+          <p>As you consider this topic, you may find it helpful to consult this <a href="http://libraries.mit.edu/guides/subjects/data-management/evaluate.html" target=_new> set of questions</a> from MIT.
             The type and quantity of data produced, the audience, the frequency of changes or updates and the
-            length of time data will be retained all affect your data plan -- and the degree to which University or external data services might contribute to the project.</div>
+            length of time data will be retained all affect your data plan -- and the degree to which University or external data services might contribute to the project.</p>
+        </div>
           </p>
         </li>
 
@@ -101,7 +94,7 @@
           <div class="panel">
             <p>Short-term storage and backup can be managed by an individual or team.  Long-term storage, over a period of years or decades,
               is a more difficult problem that usually requires  support from the university or other organization.</p>
-            <p>For a quick overview, see <a href="storage.html">Storage and Backup</a> considerations.</p>
+            <p>For a quick overview, see <a href="commons/info/data/storage">Storage and Backup</a> considerations.</p>
             <p>Note that ideally, three backup copies of data are maintained: the original, a second external copy located on campus, and a third copy off-site. Willamette University options include:</p>
             <ul>
               <li style="font-size: 12px;"> External storage media connected to a PC or other device.  This is often a good solution for short-term storage and backup. Willamette University staff can advise and support researchers who use this option. </li>
@@ -111,7 +104,7 @@
               <li style="font-size: 12px;">Data deposited in the Academic Commons.  This data resides on Willamette University's storage area network (SAN).
                 Backup tapes are subsequently moved to an off-site storage facility. The University's data management strategy includes permanent backup of all data in the Academic Commons.</p>  </li>
             </ul>
-            <p>Beyond the university, a <a href="repositories.html">subject-specific repository</a> or journal publisher Web site may be a good long-term storage strategy for some  data.</p>
+            <p>Beyond the university, a <a href="commons/info/data/repositories">subject-specific repository</a> or journal publisher Web site may be a good long-term storage strategy for some  data.</p>
             <p>Questions about local storage options?<br />
               &nbsp;- Contact Cheryl Cramer (<b>email</b> <a
                 href ="mailto:cramerc@willamette.edu">cramerc@willamette.edu</a>; <b>phone</b>
@@ -123,7 +116,7 @@
           how you will make the data available for public use and potential secondary uses&nbsp;-&nbsp;</p>
           <div class="panel">
             <p>The Internet provides a variety of formal and ad hoc ways to make data available, including posting online via a project or institutional web site, submitting data to a journal publisher, or depositing data in a subject-specific data repository or local institutional repository.</p>
-            <p>See this list of <a href="repositories.html">subject-specific data repositories</a>.</p>
+            <p>See this list of <a href="commons/info/data/repositories">subject-specific data repositories</a>.</p>
             <p> Locally, the Academic Commons DSpace repository is a good way to publish, manage, and preserve research data. <a href="http://www.dspace.org/" target=_new>DSpace</a> is a widely adopted platform for building open digital repositories at colleges and universities.  The Willamette University  service provides file access
               controls and a third-party, persistent URL service for citing and linking to data.   Access restrictions and embargo periods for data can be applied
               as requested by the researcher and data files easily downloaded by either authorized users or the public.   DSpace records are indexed by Internet
@@ -138,7 +131,7 @@
           <div class="panel">
             <p>Changing file formats is a key consideration in preserving data.  Certain formats are more likely to survive the test of time or be more easily migrated to new formats when the need arises. </p>
             <p>See these <a href="http://libraries.mit.edu/guides/subjects/data-management/formats.html" target=_new>general guidelines for file formats</a> from MIT.</p>
-            <p>Locally, the Academic Commons DSpace service supports long-term access to selected file formats.   Most  "supported"  formats are standards-based, non-proprietary and uncompressed. As such, these formats are more easily migrated to  new file formats of the future.   The Academic Commons <a href="../preservation.php"> list of supported formats</a> is subject to revision.</p>
+            <p>Locally, the Academic Commons DSpace service supports long-term access to selected file formats.   Most  "supported"  formats are standards-based, non-proprietary and uncompressed. As such, these formats are more easily migrated to  new file formats of the future.   The Academic Commons <a href="commons/info/preservation"> list of supported formats</a> is subject to revision.</p>
 
             <p>In addition,
               checksums for detecting corrupted data are routinely run for all files in the Academic Commons DSpace repository.  Files will be refreshed by Hatfield Library and Willamette Integrated Technology Services staff as required.        </p>
@@ -148,7 +141,7 @@
         </li>
         <li><p>description of any arrangements that might be needed to protect participant confidentiality or intellectual property; any other legal or ethical considerations&nbsp;-&nbsp</p>
           <div class="panel">
-            <p><b>Data security:</b> There are <a href="security.html">several factors to consider</a> in keeping data secure.
+            <p><b>Data security:</b> There are <a href="commons/info/data/security">several factors to consider</a> in keeping data secure.
               Whenever data is accessible via the Internet or the Willamette University local area network,
               password access controls are a minimal security requirement.
               Access to files in the Academic Commons can be password restricted to the PI, the project team, or opened to the public.
@@ -165,16 +158,6 @@
       </ol>
       <p>&nbsp;</p>
 
-
     </div>
-
   </div>
-
-  <ng-include src="'/commons/info/side'"></ng-include>
 </div>
-
-
-
-
-
-

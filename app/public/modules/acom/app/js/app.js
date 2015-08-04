@@ -58,35 +58,28 @@ collectionsApp.config(['$routeProvider','$locationProvider',
 
     $routeProvider.
 
-      when('/commons/home/:id', {
-        templateUrl: 'commons/partials/home'
-      }).
       when('/commons/collec/:id', {
-        templateUrl: 'commons/partials/collec/'
+        templateUrl: '/partials/collec/'
       }).
       when('/commons/all', {
-        templateUrl: 'commons/partials/filter/'
+        templateUrl: '/partials/filter/'
       }).
       when('/commons/partials/:name', {
         templateUrl: function(params) {
-          return 'commons/partials/' + params.name;
+          return '/partials/' + params.name;
+        }
+      }).
+      when('/commons/info/data/:name', {
+        templateUrl: function(params) {
+          return '/info/data/' + params.name;
         }
       }).
       when('/commons/info/:name', {
         templateUrl: function(params) {
-          return 'commons/info/' + params.name;
+          return '/info/' + params.name;
         }
-      }).
-      when('/commons/:name', {
-        templateUrl: function(params) {
-          return 'commons/partials/' + params.name;
-        }
-      }).
-      when('/commons', {
-        templateUrl: 'commons/partials/home'
-      }).
-      otherwise({
-        templateUrl: 'commons/partials/home'
+      }).when('/commons', {
+        templateUrl: '/partials/home'
       });
 
     /*.
@@ -144,7 +137,8 @@ collectionsApp.factory('Data', function() {
     currentAreaIndex: 0,
     currentSubjectIndex: null,
     currentSubjectId: null,
-    currentSubjectName: ''};
+    currentSubjectName: '',
+    currentId: null};
 });
 
 // This adds foundation 5 support and sets user agent

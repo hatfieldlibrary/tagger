@@ -14,6 +14,7 @@ var app = express();
 require('./config/express')(app, config);
 // configure passport and session
 require('./config/authenticate')(app, config, passport);
+
 // configure routes
 require('./config/routes')(app, config, passport);
 
@@ -28,8 +29,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-
-
 /// error handlers
 // development error handler
 // will print stacktrace
@@ -43,6 +42,7 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
     });
   });
 }
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {

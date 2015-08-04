@@ -1,26 +1,23 @@
-<div class="row  show-for-small-up">
-  <div class="small-8 columns">
-    <ul class="breadcrumbs">
-      <li><i class="fa fa-home"></i> <a href="/commons/home">Academic Commons</a></li>
-      <li><a href="" class="current">Data Management</a></li>
-    </ul>
-  </div>
-  <div class="small-12 medium-4 large-4 columns text-right">
-    <a href="/commons/home"><img src="/images/academiccommons_lg.png"></a>
-  </div>
-</div>
 
-<div class="row  show-for-small-up">
-  <div class="large-8 medium-8 small-12 columns page-header">
-    <h2>Data Management Resources</h2>
-  </div>
-</div>
+<div class="level-container" ng-controller="JumpToCtrl">
+  <div class="row ac-animate">
+    <ng-include src="'/info/data-sidebar'"></ng-include>
 
-
-<div class="row">
-  <div class="large-8 medium-8 small-12 columns">
-    <div class="content-justify">
-
+    <div class="user-markup small-12 large-9  columns" style="min-height: 800px;">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="Institutional Resources">
+            Institutional Resources
+          </a>
+        </li>
+      </ul>
+      <h1>Institutional Resources</h1>
       <p> The Mark O. Hatfield Library and Willamette Integrated Technology
 
         Services offer resources and services to help manage your digital data.&nbsp; The following
@@ -147,9 +144,6 @@
         &lt;Description.provenance&gt; field of the DSpace record.<br>
 
     </div>
-
   </div>
-  <ng-include src="'/commons/info/side'"></ng-include>
 </div>
-
 

@@ -2,8 +2,8 @@
 
 var collectionControllers = angular.module('collectionControllers', []);
 
-collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','Data','CollectionsByArea','CollectionBySubject','SubjectsByArea','AreaById',
-  function($scope, $location, Data, CollectionsByArea, CollectionsBySubject, SubjectsByArea, AreaById ) {
+collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','$anchorScroll','Data','CollectionsByArea','CollectionBySubject','SubjectsByArea','AreaById',
+  function($scope, $location,$anchorScroll, Data, CollectionsByArea, CollectionsBySubject, SubjectsByArea, AreaById ) {
 
 
     $scope.viewType = 'card';
@@ -27,20 +27,23 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','D
       $scope.subjectName = '';
       $scope.activeState = false;
 
-      if ($scope.Data.currentSubjectIndex === null ) {
+      if ($scope.Data.currentSubjectIndex === null) {
         // query only for area when the stored subject
         // id is null.
         $scope.currentAreaId = $scope.mainAreaMenu[$scope.Data.currentAreaIndex].id;
         areaQuery($scope.currentAreaId);
         // query by subject is stored subject id is non-null.
       } else {
-
         $scope.currentAreaId = $scope.mainAreaMenu[$scope.Data.currentAreaIndex].id;
         subjectQuery($scope.currentAreaId, $scope.Data);
       }
-      $scope.subjects =  SubjectsByArea.query({id: $scope.currentAreaId});
+      $scope.subjects = SubjectsByArea.query({id: $scope.currentAreaId});
 
 
+    };
+
+    $scope.setCurrentItem = function(id) {
+      $scope.Data.currentId = id;
     };
 
     var areaQuery = function(areaId) {
@@ -69,9 +72,11 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','D
 
     };
 
+
     $scope.getNewCollectionArea = function(areaId, index) {
 
       $scope.search = '';
+      $scope.Data.currentId = null;
       $scope.Data.currentAreaIndex = index;
       $scope.selectedSubjectIndex = null;
       $scope.Data.currentSubjectIndex = $scope.selectedSubjectIndex;
@@ -125,12 +130,37 @@ collectionControllers.controller('CollectionsHomeCtrl', ['$scope','$location','D
   }
 ]);
 
+collectionControllers.controller('JumpToCtrl', ['$scope','$location',
+  '$anchorScroll',
+  'Data',
+  function ($scope,$location,$anchorScroll,Data) {
+
+
+    $scope.init = function() {
+      $scope.jumpTo(Data.currentId);
+    };
+
+    $scope.jumpTo = function(id) {
+      if (id !== null) {
+        $location.hash(id);
+
+      } else {
+        $location.hash('top');
+      }
+      $anchorScroll();
+    };
+
+    $scope.init();
+
+  }]);
+
 collectionControllers.controller('SingleCollectionCtrl',
   ['$scope',
     '$location',
+    '$anchorScroll',
     'Data',
     'CollectionById',
-    function($scope,$location,Data,CollectionById) {
+    function($scope,$location,$anchorScroll,Data,CollectionById) {
 
       var path = $location.path();
       var components = path.split('/');
@@ -138,7 +168,14 @@ collectionControllers.controller('SingleCollectionCtrl',
       $scope.collection = {};
       $scope.Data = Data;
       $scope.init = function () {
+        $scope.Data.currentId = $scope.id;
+        $scope.toTop();
         $scope.collection = CollectionById.query({id: $scope.id});
+      };
+
+      $scope.toTop = function() {
+        $location.hash('top');
+        $anchorScroll();
       };
 
       $scope.isStaticLink = function(link) {

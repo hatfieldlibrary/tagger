@@ -24,7 +24,7 @@
       <nav class="left-nav home hide-for-small-down">
         <ul>
           <li class="child">
-            <a href="/commons/info/about" title="home">About</a>
+            <a href="/commons/info/about" title="home">About the Commons</a>
           </li>
           <li class="child">
             <a href="/commons/info/start" title="archives">Starting a Collection</a>
@@ -39,7 +39,10 @@
             <a href="/commons/info/copyright">Intellectual Property</a>
           </li>
           <li class="child">
-            <a href="about/">Data Management</a>
+            <a href="/commons/info/dpl">Production Lab</a>
+          </li>
+          <li class="child">
+            <a href="commons/info/data/nsf">Data Management</a>
           </li>
         </ul>
       </nav>
@@ -107,6 +110,7 @@
 
           <div class="row">
             <div class="small-12 stack medium-12 columns" ng-if="viewType == 'card'" ng-repeat="collection in collections | filter: {collection:{title:search}}">
+              <jump-to id="{{collection.collection.id}}"></jump-to>
               <collection-card  ng-animate="'animate'" id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
             </div>
             <div class="small-12  columns" ng-if="viewType == 'list'" ng-repeat="collection in collections|  filter: {collection:{title:search}}">
@@ -116,6 +120,6 @@
         </div>
       </div>
     </div>
-    <ng-include src="'commons/partials/mobile-nav'"></ng-include>
+    <ng-include src="'/partials/mobile-nav'"></ng-include>
   </div>
 </div>
