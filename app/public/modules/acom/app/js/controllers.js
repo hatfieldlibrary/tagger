@@ -350,6 +350,20 @@ collectionControllers.controller('SimpleSearchCtrl', ['$scope', '$location', fun
 
 }]);
 
+collectionControllers.controller('BrowseListCtrl', ['$scope', 'BrowseListRequest', function($scope, BrowseListRequest) {
+  $scope.collection = '';
+  $scope.init = function () {
+
+  };
+  $scope.list = BrowseListRequest.query();
+
+  $scope.submitQuery = function (query) {
+    var href = 'http://libmedia.willamette.edu/cview/' + query.area + '.html#!browse:search:' + query.collections + '/all^' + query.terms.item.title + '^any^and!';
+    window.location.href = href;
+  };
+
+}]);
+
 /*
  collectionControllers.controller('BrowseListCtrl', ['$scope', 'BrowseListRequest', function($scope, BrowseListRequest) {
  $scope.collection = '';
