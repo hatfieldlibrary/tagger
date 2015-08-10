@@ -1,6 +1,7 @@
 node_modules
 resources/images/full
 resources/images/thumb
+app/public/modules/acom/dist
 app/bower_components/
 app/public/modules/acom/app/css/main.css
 app/public/modules/acom/app/css/main.css.map
@@ -12,3 +13,4 @@ app/public/modules/acom/dist
 .sass-cache
 .idea/workspace.xml                    g
 .idea/misc.xml
+.DS_Store

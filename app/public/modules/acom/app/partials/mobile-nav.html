@@ -2,23 +2,24 @@
 
 <div class="off-canvas-nav right-off-canvas-menu">
 
-  <form action="http://www.willamette.edu/search/index1.html" class="global-search" id="cse-search-box">
-    <input name="cx" type="hidden" value="011125815161069797886:grzkhoi3q9s">
-    <input name="cof" type="hidden" value="FORID:10"> <input name="ie" type="hidden" value="UTF-8">
-    <input autocomplete="off" class="keywords" id="qallwu" name="qallwu" placeholder="Search" type="search">
-    <span class="fa fa-search"></span></form>
-
 
   <nav class="main-nav-small">
+    <h6 style="color:#fff;">Collections</h6>
     <ul>
       <li ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}" ng-click="setSelectedArea($index);setSelectedSubject(null);" ng-class="{active: $index === Data.currentAreaIndex}"  style="font-family: franklin-gothic-urw-cond,sans-serif;font-size: 1.5rem; font-weight: 500; color: #c0ac7e;height:45px;"><a class="off-canvas-toggle right-off-canvas-toggle" href="#">{{item.title}}</a></li>
       <li>&nbsp;</li>
+
+      <h6 style="color:#fff;">Other Links</h6>
       <li>
-        <a href="http://library.willamette.edu" title="Directions" class="main-nav-small-link">
-          Library Home
+        <a href="http://library.willamette.edu" title="Library Home" class="main-nav-small-link">
+          Hatfield Library
         </a>
       </li>
-
+      <li>
+        <a href="http://library.willamette.edu/archives" title="Archives" class="main-nav-small-link">
+          University Archives
+        </a>
+      </li>
       <li>
         <a href="http://www.willamette.edu" title="Willamette Home" class="main-nav-small-link">
           Willamette Home
@@ -28,42 +29,6 @@
   </nav>
 
 
-
-  <nav class="secondary-nav-small">
-    <ul>
-
-      <li>
-        <a href="http://willamette.edu/internal/students/index.html" title="Students" class="secondary-nav-small-link">
-          Students
-        </a>
-      </li>
-
-      <li>
-        <a href="http://willamette.edu/internal/faculty-staff/index.html" title="Faculty &amp; Staff" class="secondary-nav-small-link">
-          Faculty &amp; Staff
-        </a>
-      </li>
-
-      <li>
-        <a href="http://willamette.edu/parents/index.html" title="Parents" class="secondary-nav-small-link">
-          Parents
-        </a>
-      </li>
-
-      <li>
-        <a href="http://willamette.edu/alumni/index.html" title="Alumni" class="secondary-nav-small-link">
-          Alumni
-        </a>
-      </li>
-
-      <li>
-        <a href="http://willamette.edu/internal/community/index.html" title="Community" class="secondary-nav-small-link">
-          Community
-        </a>
-      </li>
-
-    </ul>
-  </nav>
 
 </div>
 
