@@ -11,7 +11,7 @@
 
   <nav class="main-nav-small">
     <ul>
-      <li ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}" ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea(item.id, $index);" ng-class="{active: $index === Data.currentAreaIndex}"  style="font-family: franklin-gothic-urw-cond,sans-serif;font-size: 1.5rem; font-weight: 500; color: #c0ac7e;height:45px;"><a href="#">{{item.title}}</a></li>
+      <li ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}" ng-click="setSelectedArea($index);setSelectedSubject(null);" ng-class="{active: $index === Data.currentAreaIndex}"  style="font-family: franklin-gothic-urw-cond,sans-serif;font-size: 1.5rem; font-weight: 500; color: #c0ac7e;height:45px;"><a class="off-canvas-toggle right-off-canvas-toggle" href="#">{{item.title}}</a></li>
       <li>&nbsp;</li>
       <li>
         <a href="http://library.willamette.edu" title="Directions" class="main-nav-small-link">

@@ -131,6 +131,19 @@ module.exports = function(app,config,passport){
     );
   });
 
+  app.get('/info/student/:name', function(req, res) {
+
+    var name = req.params.name;
+
+    res.sendFile(
+      config.root +
+      config.modulePath +
+      '/info/student/' +
+      name +
+      '.html'
+    );
+  });
+
   app.get('/info/:name', function(req, res) {
 
     var name = req.params.name;
@@ -190,8 +203,6 @@ module.exports = function(app,config,passport){
       '/index.html'
     );
   });
-
-
 
 };
 

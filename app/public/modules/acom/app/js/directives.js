@@ -38,25 +38,35 @@ collectionDirectives.directive('collectionCard', function() {
     scope: {
       id: '@',
       title: '@',
-      url: '@',
+      collType: '@',
       restricted: '=restricted',
       description: '@'
     },
     restrict: 'E',
+    controller: 'CollectionsHomeCtrl',
     transclude: false,
     templateUrl: '/components/collectionCard.html'
   };
 });
 
-collectionDirectives.directive('jumpTo', function() {
-    return {
-      scope: {
-        id: '@'
-      },
-      restrict: 'E',
-      controller: 'JumpToCtrl',
-      templateUrl: 'components/jumpto.html'
-    };
+// used to detect when ng-repeat has completed.  Throws
+// event.
+collectionDirectives.directive('lastRepeat', function($timeout) {
+  return {
+    restrict: 'A',
+    link: function (scope) {
+      if (scope.$last === true) {
+        // timeout w/ zero delay assures
+        // the ng-repeat to which this directive
+        // applies has finished rendering
+        // before an event is emitted. Standard
+        // javascript trick.
+        $timeout(function () {
+          scope.$emit('ngRepeatFinished');
+        });
+      }
+    }
+  }
 });
 
 collectionDirectives.directive('areaBox', function() {

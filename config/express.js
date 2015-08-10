@@ -30,7 +30,7 @@ module.exports = function(app, config) {
   app.use('/images', express.static(config.root + config.resourcePath + '/images'));
   app.use('/fonts', express.static(config.root + config.modulePath + '/fonts'));
   app.use('/commons/info/images', express.static(config.root + config.modulePath + '/info/images'));
-  app.use('/commons/extras/student', express.static(config.root + config.modulePath + '/extras/student'));
+  app.use('/info/student/swf', express.static(config.root + config.modulePath + '/info/student/swf'));
   app.use('/commons/robots.txt', express.static(config.root + config.modulePath + '/robots.txt'));
 
   // development

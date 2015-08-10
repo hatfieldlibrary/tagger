@@ -4,7 +4,7 @@
       <ul class="collection with-header area-menu">
         <li class="collection-header"><h5>Choose Area</h5></li>
         <li class="collection-item" ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}"
-            ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea(item.id, $index); "
+            ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea($index); "
             ng-class="{active: $index === Data.currentAreaIndex}">
           {{item.title}}
         </li>
@@ -62,7 +62,7 @@
                     <span class="stack-label">Using subject tag:</span>
                   </li>
                   <li>
-                    <a ng-click="setSelectedSubject(null);getNewCollectionArea(currentAreaId, Data.currentAreaIndex)" class="button round tiny">{{subjectName}} &nbsp;<i class="fa fa-times"></i></a>
+                    <a ng-click="setSelectedSubject(null);getNewCollectionArea(Data.currentAreaIndex)" class="button round tiny">{{subjectName}} &nbsp;<i class="fa fa-times"></i></a>
                   </li>
                 </ul>
               </div>
@@ -91,7 +91,7 @@
           <div class="row" style="margin-bottom: 15px;">
             <div class="small-6 columns" style="padding-left: 25px;">
            <!--   <h5 style="color: #791716;margin-top: 0;">Items</h5>     -->
-              <div class="row">
+              <div class="row hide-for-small-down">
                 <div ng-show="collections.length > 10" class="ng-hide">
                   <div class="small-12 end columns">
                     <input type="text" placeholder="Type here to find title in list" ng-model="search">
@@ -109,9 +109,9 @@
           </div>
 
           <div class="row">
-            <div class="small-12 stack medium-12 columns" ng-if="viewType == 'card'" ng-repeat="collection in collections | filter: {collection:{title:search}}">
-              <jump-to id="{{collection.collection.id}}"></jump-to>
-              <collection-card  ng-animate="'animate'" id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" id="{{collection.id}}" restricted=collection.collection.restricted></collection-card>
+            <div class="small-12 stack medium-12 columns" ng-if="viewType == 'card'" last-repeat ng-repeat="collection in collections | filter: {collection:{title:search}}">
+              <div id="c{{collection.collection.id}}"></div>
+              <collection-card  ng-animate="'animate'" id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" coll-type="{{collection.collection.ctype}}" restricted=collection.collection.restricted></collection-card>
             </div>
             <div class="small-12  columns" ng-if="viewType == 'list'" ng-repeat="collection in collections|  filter: {collection:{title:search}}">
               <collection-list  ng-animate="'animate'" title="{{collection.collection.title}}" id="{{collection.collection.id}}" restricted=collection.collection.restricted></collection-list>

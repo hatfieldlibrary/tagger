@@ -59,7 +59,8 @@ collectionsApp.config(['$routeProvider','$locationProvider',
     $routeProvider.
 
       when('/commons/collec/:id', {
-        templateUrl: '/partials/collec/'
+        templateUrl: '/partials/collec/',
+        reloadOnSearch: false
       }).
       when('/commons/all', {
         templateUrl: '/partials/filter/'
@@ -74,12 +75,18 @@ collectionsApp.config(['$routeProvider','$locationProvider',
           return '/info/data/' + params.name;
         }
       }).
+      when('/commons/info/student/:name', {
+        templateUrl: function(params) {
+          return '/info/student/' + params.name;
+        }
+      }).
       when('/commons/info/:name', {
         templateUrl: function(params) {
           return '/info/' + params.name;
         }
       }).when('/commons', {
-        templateUrl: '/partials/home'
+        templateUrl: '/partials/home',
+        reloadOnSearch: false
       });
 
     /*.
@@ -138,7 +145,8 @@ collectionsApp.factory('Data', function() {
     currentSubjectIndex: null,
     currentSubjectId: null,
     currentSubjectName: '',
-    currentId: null};
+    currentId: null,
+    currentView: 'card'};
 });
 
 // This adds foundation 5 support and sets user agent
