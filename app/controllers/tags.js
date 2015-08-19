@@ -22,6 +22,9 @@ exports.create = function(req, res) {
             where: {
               name: {
                 eq: tagName
+              },
+              areaId: {
+                eq: areaId
               }
             }
           }
@@ -31,13 +34,13 @@ exports.create = function(req, res) {
           });
       },
       areas: function (callback) {
-      db.Area.findAll({
-        attributes: ['id', 'title']
-      }).complete(callback)
-        .error(function (err) {
-          console.log(err);
-        });
-    }
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
     },
     function (err, result) {
       if (err) {

@@ -43,7 +43,7 @@ collectionDirectives.directive('collectionCard', function() {
       description: '@'
     },
     restrict: 'E',
-    controller: 'CollectionsHomeCtrl',
+    controller: 'CardCtrl',
     transclude: false,
     templateUrl: '/components/collectionCard.html'
   };
@@ -66,7 +66,7 @@ collectionDirectives.directive('lastRepeat', function($timeout) {
         });
       }
     }
-  }
+  };
 });
 
 collectionDirectives.directive('areaBox', function() {

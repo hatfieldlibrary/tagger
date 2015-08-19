@@ -73,14 +73,12 @@ collectionControllers.controller('CollectionsHomeCtrl',
         $scope.currentAreaId = $scope.mainAreaMenu[$scope.Data.currentAreaIndex].id;
 
         if ($scope.Data.currentSubjectIndex === null) {
-
           // query only for area when the stored subject
           // id is null.
           $scope.area = AreaById.query({id: $scope.currentAreaId});
           $scope.collections = CollectionsByArea.query({id: $scope.currentAreaId});
 
         } else {
-
           // query by subject is stored subject id is non-null.
           subjectQuery($scope.currentAreaId, $scope.Data);
         }
@@ -146,6 +144,7 @@ collectionControllers.controller('CollectionsHomeCtrl',
 
       $scope.getNewCollectionArea = function(index) {
 
+        console.log('getting collections for new area');
         $scope.search = '';
         $scope.Data.currentId = null;
         $scope.Data.currentAreaIndex = index;
@@ -222,6 +221,14 @@ collectionControllers.controller('JumpToCtrl', ['Data',
     scrollToTop();
 
   }]);
+
+collectionControllers.controller('CardCtrl', ['$scope',
+  function($scope) {
+      $scope.isCollection = function(type) {
+         return isCollection(type);
+      };
+  }
+]);
 
 collectionControllers.controller('SingleCollectionCtrl',
   ['$scope',
