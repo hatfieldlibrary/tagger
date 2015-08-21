@@ -1,0 +1,32 @@
+@import "../helpers/_mixins";
+
+.three-column {
+
+	@include bp(medium-up) {
+
+		article {
+			.callout-image {
+				width: 60%;
+				float: left;
+			}
+			.callout-content {
+				width: 40%;
+				float: left;
+			}
+		}
+
+	}
+
+	@include bp(large-up) {
+
+		article {
+			.callout-image,
+			.callout-content {
+				width: 100%;
+				float: none;
+			}
+		}
+
+	}
+
+}

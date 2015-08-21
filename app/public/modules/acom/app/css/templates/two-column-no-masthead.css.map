@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "two-column-no-masthead.css",
+	"sources": [
+		"../../../../../scss/templates/two-column-no-masthead.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "",
+	"names": []
+}

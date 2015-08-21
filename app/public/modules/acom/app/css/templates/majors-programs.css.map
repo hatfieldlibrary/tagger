@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "majors-programs.css",
+	"sources": [
+		"../../../../../scss/templates/majors-programs.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "",
+	"names": []
+}

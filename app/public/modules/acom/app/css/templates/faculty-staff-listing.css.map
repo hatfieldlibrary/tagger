@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "faculty-staff-listing.css",
+	"sources": [
+		"../../../../../scss/templates/faculty-staff-listing.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "",
+	"names": []
+}
