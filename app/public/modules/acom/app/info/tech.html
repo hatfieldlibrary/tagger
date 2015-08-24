@@ -22,28 +22,30 @@
         Specifically, we value individuals and interactions over processes and tools, focus on collaboration with academic colleagues, and respond to change through
         continuous development.  </p>
         <p>We have a small staff, so we also choose projects judiciously and with an emphasis on sustainability and broadest possible impact.</p>
-      <p>Much of the software that we develop for the Academic Commons can be found in the <a href="https://github.com/hatfieldlibrary">Hatfield Library GitHub</a> site.</p>
+      <p>Much of the software that we develop for the Academic Commons can be found in the <a href="https://github.com/hatfieldlibrary">Hatfield Library GitHub</a> site.
+      We also maintain a local repository of all code.</p>
       <h3>Repository Systems</h3>
       <p>Currently, data in the Academic Commons resides in three locations.  </p>
       <ul>
         <li>A DSpace institutional repository</li>
         <li>A local CONTENTdm digital asset management system</li>
-        <li>A custom eXist XML database</li>
+        <li>Custom eXist XML databases</li>
         <li>A Kaltura Community Edition media site</li>
       </ul>
       <p>We have developed meaningful expertise in using these systems.</p>
       <p>The eXist XML database is a custom project, with scripts for preprocessing and injesting METS and ALTO files, custom indexing and a REST API for querying the content.  These were designed as a
-      simpler alternative to the Chronicle of America project developed by the Library of Congress.  They support both NDNP projects and the output of simple, in-house METS/ALTO scanning projects using ABBYY Finereader.</p>
+      lighter weight alternative to the National Digital Newspaper Program (NDNP) software created by the Library of Congress.  They support both NDNP projects and the output of simple, in-house METS/ALTO scanning projects using ABBYY Finereader.</p>
       <p>These multiple repository systems present distinct challenges for integration into a single service interface. We increasingly depend on APIs and an evolving set capabilities to manage the user experience. </p>
       <h3>User Experience</h3>
       <p>We develop the user experience using a number of tools and frameworks. The Academic Commons site is a single page AngularJS application. It retrieves collection and subject information
-      through a REST interface programmed in Node.js, using Node.js middleware (Express, Sequelize, Passport, etc.) The University Archives site makes use of the same Node.js backend service.</p>
-      <p>The user interface for CONTENTdm and eXist-db collections is programmed in Google Web Toolkit.  This uses a Java backend service to communicate with the two repositories.</p>
-      <p>The user interface for DSpace is currently the XMLUI.  We are considering use of the DSpace API to develop a new user experience that is better adapted to our use case.</p>
+      through a REST interface programmed in Node.js, using Node.js middleware (Express, Sequelize, Passport, etc.). The University Archives site makes use of the same Node.js backend service.</p>
+      <p>The user interface for CONTENTdm and eXist-db collections is programmed in Google Web Toolkit (GWT). It provides a number of configurable features, including image export, OAUTH2 and CAS authentication, advanced search, embedded video players, image viewers,
+        word-highlighting for ALTO page coordinated, a comment feature and more. The GWT client uses a Java backend service to communicate with the two repositories.</p>
+      <p>The user interface for DSpace is currently the XMLUI.  We are considering the DSpace API as a possible path to a new user experience better adapted to our use case.</p>
       <p>All Academic Commons projects aspire to be mobile ready, and we largely succeed in meeting this goal.</p>
       <h3>Exhibit Software</h3>
-      <p>In addition to working to build richer digital collections and artifacts, we provide a number of tools to support the creation of interpretive, mutlimedia experiences.</p>
-      <p>Our first effort focused on Pachyderm 2.0 and was funded by an NEH Digital Humanities Startup Grant.  As a Flash-based, template authoring tool that is no longer under development, Pachyderm is no longer in use,
+      <p>In addition to working to build richer digital collections and artifacts, we provide tools that support the creation of interpretive, multimedia experiences.</p>
+      <p>Our first effort focused on Pachyderm 2.0 and was funded by an NEH Digital Humanities Startup Grant.  Pachyderm is a Flash-based, template authoring tool that is no longer under active development. We have discontinued use,
       but several projects authored using this tool can be found in the Academic Commons and on the Hallie Ford Museum of Art webiste.</p>
       <p>Our substitute for Pachyderm is Omeka.  We can customize and modify Omeka behavior as required by a given project.</p>
       <p>We have also developed and AngularJS application, based on Foundation for Apps, that allows users with limited technical skills to author web-based exhibits that are optimized for touch screen kiosks used

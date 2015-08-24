@@ -8,10 +8,7 @@ The public AngularJS module is the Academic Commons web site.
 
 ### Setup
 
-To get started with development, clone the project into your working directory. For example:
-
-    git init
-    git pull https://mspalti@stash.app.willamette.edu/scm/ac/backend.git
+To get started with development, clone the project into your working directory.
 
 Next, install the dependencies:
 
@@ -48,8 +45,8 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
        port: 3000,
        mysql: {
          db: 'acomtags_development',
-         user: 'mspalti',
-         password: 'coffee',
+         user: 'username',
+         password: 'userpassword',
          host: 'localhost',
          port: 3306,
          dialect: 'mysql'
@@ -59,8 +56,8 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
        taggerImageDir: '/usr/local/taggerImages',
        modulePath: '/public/modules/acom/app',
        resourcePath: '/public/modules/acom/app',
-       googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-       googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+       googleClientId: 'google-client-id-here',
+       googleClientSecret: 'google-client-secret',
        googleCallback: 'http://localhost:3000/auth/google/callback',
        nodeEnv: env
      }

@@ -24,7 +24,6 @@ describe('Collections Browse', function(){
     beforeEach(module('collectionServices'));
     beforeEach(module('collectionAnimations'));
     beforeEach(inject(function ( $rootScope, $controller, Collections, TagInfo) {
-
       // The collectionsServices module uses ngResource.  Rather than mock
       // $httpbackend, use the jasmine spyOn method to detect service calls
       // and return mock data.  Must be set before the $controller that calls
