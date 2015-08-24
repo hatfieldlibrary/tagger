@@ -110,7 +110,7 @@ var config = {
     resourcePath: '/public/modules/acom2/dist',
     googleClientId: 'your-google-client-id',
     googleClientSecret: 'your-google-client-secret',
-    googleCallback: 'http://libapps.willamette.edu:3000/auth/google/callback',
+    googleCallback: 'http://express.domain.edu:3000/auth/google/callback',
     nodeEnv: env
   }
 };
