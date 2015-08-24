@@ -12,8 +12,8 @@ mixin tagLink(tag)
                 =tag.type
     else
         .small-1.columns.id-color
-            label Type:&nbsp
-                =tag.type
+            label Area:&nbsp
+                =tag.areaId
 
 block content
     .row
@@ -28,33 +28,33 @@ block content
 
 
     #createModal.reveal-modal.small(data-reveal)
-        h3 Create Tag
+      .row
+      .small-10.columns
+        h3.left= title
         form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/tag/create")
-            .row
-                .large-10.columns
-                    label Tag Name
-            .row
-                .large-10.columns
-                    input(type="text", size=60 name="name")
+          .row
+            .large-10.columns
+              label Tag Name
+          .row
+            .large-10.columns
+              input(type="text", size=60 name="name")
 
-            .row
-                .large-10.columns
-                    label Tag URL
+          .row
+            .large-10.columns
+              input(type="text", size=60 name="url")
+          .row
+            .large-10.columns
+              label Areas
+          .row
+            .large-10.columns
+              for area in areas
+                input(type="radio", name="areaId", value=area.id)
+                | <label>#{area.title} &nbsp;&nbsp;</label>
 
-            .row
-                .large-10.columns
-                    input(type="text", size=60 name="url")
-            .row
-                .large-10.columns
-                    input(type="radio", name="type", value="adm" )
-                    | <label>Administrative Area &nbsp;&nbsp;</label>
-                    input(type="radio", name="type", value="sub")
-                    | <label>Subject </label>
-
-            p
-            .row
-                .large-10.columns
-                    input(type='submit', value='Create Tag')
+          p
+          .row
+            .large-10.columns
+              input(type='submit', value='Create Tag')
          a(class="close-reveal-modal") &#215;
 
         a(class="close-reveal-modal") &#215;

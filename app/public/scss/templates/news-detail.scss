@@ -1,0 +1,29 @@
+.news-detail {
+
+	h1 {
+		margin-bottom: 0;
+	}
+
+	.content-slider {
+		margin-top: 0;
+		margin-bottom: em-calc(55);
+	}
+
+	.news-detail-content {
+
+		p {
+			font-size: em-calc(19);
+			&.teaser {
+				font-size: em-calc(28);
+			}
+		}
+
+	}
+
+	.news-detail-aside {
+		.callout:first-child {
+			margin-top: 0;
+		}
+	}
+
+}

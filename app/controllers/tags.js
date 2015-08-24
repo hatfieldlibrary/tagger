@@ -10,7 +10,7 @@ exports.create = function(req, res) {
 
   var tagName = req.body.name;
   var tagUrl = req.body.url;
-  var tagType = req.body.type;
+  var areaId = req.body.areaId;
 
 
   // async not really required here
@@ -22,6 +22,9 @@ exports.create = function(req, res) {
             where: {
               name: {
                 eq: tagName
+              },
+              areaId: {
+                eq: areaId
               }
             }
           }
@@ -29,15 +32,27 @@ exports.create = function(req, res) {
           .error(function (err) {
             console.log(err);
           });
+      },
+      areas: function (callback) {
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
       }
-    }, function (err, result) {
-      if (err) { console.log(err); }
+    },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
       if (result.check === null) {
+        console.log('creating tag');
         db.Tag.create(
           {
             name: tagName,
             url: tagUrl,
-            type: tagType
+            areaId: areaId
             /*jshint unused:false*/
           }).success(function (items) {
             db.Tag.findAll()
@@ -45,6 +60,7 @@ exports.create = function(req, res) {
                 res.render('tagIndex', {
                   title: 'Tags',
                   tags: tags,
+                  areas: result.areas,
                   exists: false
 
                 });
@@ -61,6 +77,7 @@ exports.create = function(req, res) {
             res.render('tagIndex', {
               title: 'Tags',
               tags: tags,
+              areas: result.areas,
               exists: true
             });
           }).error(function (err) {
@@ -106,7 +123,7 @@ exports.tagUpdate = function (req, res) {
   var tagId = req.body.id;
   var tagName = req.body.name;
   var tagUrl = req.body.url;
-  var tagType = req.body.type;
+  var areaId = req.body.areaId;
   async.series (
     {
       update: function (callback) {
@@ -114,7 +131,7 @@ exports.tagUpdate = function (req, res) {
           {
             name: tagName,
             url: tagUrl,
-            type: tagType
+            areaId: areaId
           },
           {
             id: {
@@ -131,12 +148,21 @@ exports.tagUpdate = function (req, res) {
           .error(function(err) {
             console.log(err);
           });
+      },
+      areas: function (callback) {
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
       }
     },
     function (err, result) {
       res.render('tagIndex', {
         title: 'Tags',
-        tags: result.tags
+        tags: result.tags,
+        areas: result.areas
       });
     }
   );
@@ -223,3 +249,25 @@ exports.tagList = function(req, res) {
     });
 
 };
+
+exports.subjectsByArea = function(req, res) {
+
+  var areaId = req.params.id;
+
+  db.Tag.findAll( {
+    where: {
+      areaId: {
+        eq: areaId
+      }
+    },
+    attributes: ['id','name'],
+    order: [['name', 'ASC']]
+  }).success( function(tags) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(tags));
+
+  });
+};
+

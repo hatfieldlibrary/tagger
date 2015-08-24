@@ -1,0 +1,4 @@
+
+    <a ng-repeat="sub in subjects" ng-click="setSelectedSubject($index);getCollectionsBySubject(sub.id, areaId)"
+       ng-class="{active: $index === selectedSubjectIndex}">{{sub.name}}</a>
+

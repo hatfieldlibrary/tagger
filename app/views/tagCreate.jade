@@ -6,7 +6,7 @@ block content
         .small-10.columns
 
             h1.left= title
-            form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/tag/update")
+            form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/tag/create")
                 .row
                     .large-10.columns
                         label Tag Name
@@ -17,20 +17,14 @@ block content
                 .row
                     .large-10.columns
                         input(type="text", size=60 name="url")
-
                 .row
-                    .large-10.columns
-                        input(type="radio", name="type", value="adm" checked=collType=='adm')
-                        | <label>Administrative Area &nbsp;&nbsp;</label>
-                        input(type="radio", name="type", value="sub" checked=collType=='sub')
-                        | <label>Subject </label>
-
+                  .large-10.columns
+                    label Areas
                 .row
-                    .large-10.columns
-                        input(type="radio", name="type", value="adm" checked=tag.type=='adm')
-                        | <label>Administrative Area &nbsp;&nbsp;</label>
-                        input(type="radio", name="type", value="sub" checked=tag.type=='sub')
-                        | <label>Subject </label>
+                  .large-10.columns
+                    for area in areas
+                      input(type="radio", name="areaId", value=area.areaId)
+                      | <label>#{area.name} &nbsp;&nbsp;</label>
 
                 p
                 .row

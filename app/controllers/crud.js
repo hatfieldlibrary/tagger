@@ -29,14 +29,57 @@ exports.index = function(req, res){
 
 
 exports.tagIndex = function(req, res) {
-
-  db.Tag.findAll({
-    order: [['name', 'ASC']]
-  })
-    .success(function(tags) {
+  async.parallel (
+    {
+      tags: function (callback) {
+        db.Tag.findAll({
+          order: [['name', 'ASC']]
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      },
+      areas: function (callback) {
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    }, function(err,rd) {
       res.render('tagIndex', {
         title: 'Tags',
-        tags: tags
+        tags: rd.tags,
+        areas: rd.areas
+      });
+    });
+};
+
+exports.areaIndex = function(req, res) {
+
+  db.Area.findAll({
+    order: [['title', 'ASC']]
+  })
+    .success(function(areas) {
+      res.render('areaIndex', {
+        title: 'Areas',
+        areas: areas
+      });
+    }).error(function(err) {
+      console.log(err);
+    });
+};
+
+exports.categoryIndex = function(req, res) {
+
+  db.Category.findAll({
+    order: [['title', 'ASC']]
+  })
+    .success(function(categories) {
+      res.render('categoryIndex', {
+        title: 'Category',
+        categories: categories
       });
     }).error(function(err) {
       console.log(err);
@@ -104,6 +147,52 @@ exports.collUpdate = function(req, res) {
             console.log(err);
           });
       },
+      categories: function(callback) {
+        db.Category.findAll().complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      currentCategory: function(callback) {
+        db.CategoryTarget.find(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            },
+            include : [db.Category],
+            attributes: ['Category.title','Category.id']
+          }
+        ).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      areaData: function(callback) {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            },
+            include : [db.Area],
+            attributes: ['Area.title','Area.id']
+          }
+        ).complete(callback).error(function(err) {
+            console.log(err);
+          });
+      },
+      areas: function(callback) {
+        db.Area.findAll(
+          {
+            attributes: ['id','title']
+          }
+        ).complete(callback).error(function(err) {
+            console.log(err);
+          });
+      },
       typeData: function(callback)
       {
         db.ItemContentTarget.findAll(
@@ -125,6 +214,11 @@ exports.collUpdate = function(req, res) {
       var collectionData = rd.collectionData;
       var tags = rd.tagData;
       var types = rd.typeData;
+      var categories = rd.categories;
+      var currentCategory = rd.currentCategory;
+      var areas = rd.areaData;
+      var availableAreas = rd.areas;
+      console.log('test ' +collectionData.restricted);
       res.render('collectionUpdate', {
         title: 'Update Collection',
         collName: collectionData.title,
@@ -135,36 +229,88 @@ exports.collUpdate = function(req, res) {
         collItems: collectionData.getCollectionObject.items,
         collDates: collectionData.getCollectionObject.dates,
         collType: collectionData.getCollectionObject.ctype,
+        searchType: collectionData.getCollectionObject.repoType,
+        //categoryId: collectionData.getCollectionObject.categoryId,
+        restricted: collectionData.restricted,
         collId: collectionData.id,
         tags: tags,
+        categories: categories,
+        currentCategory: currentCategory,
+        areas: areas,
+        availableAreas: availableAreas,
         types: types
       });
     }
   );
 };
 
-
+ // not in use...
 exports.tagCreate = function(req, res) {
-  res.render('tagCreate', {
-    title: 'Create Tag'
-  });
+  db.Area.findAll(
+    {
+      attributes: ['title','id']
+    }
+  ).success(function(areas) {
+      res.render('tagCreate', {
+        title: 'Create Tag',
+        areas: areas
+      });
+    });
 };
 
 exports.tagUpdate = function (req, res) {
   var tagId = req.params.id;
-  db.Tag.find(
+  async.parallel (
+    {
+      tag: function (callback) {
+        db.Tag.find(
+          {
+            where: {
+              id: {
+                eq: tagId
+              }
+            },
+            attributes: ['id','name','url','areaId']
+          }).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      areas: function (callback) {
+        db.Area.findAll({
+          attributes: ['id', 'title']
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function(err, rd) {
+      var tag = rd.tag;
+      var areas = rd.areas;
+      res.render('tagUpdate', {
+        title: 'Tags',
+        tag: tag,
+        areas: areas
+      });
+    });
+};
+
+exports.areaUpdate = function (req, res) {
+  var areaId = req.params.id;
+  db.Area.find(
     {
       where: {
         id: {
-          eq: tagId
+          eq: areaId
         }
       },
-      attributes: ['id','name','url','type']
+      attributes: ['id','title','linkLabel','url','searchUrl','description']
     }
-  ).success(function(tag) {
-      res.render('tagUpdate', {
-        title: 'Update Tag',
-        tag: tag
+  ).success(function(area) {
+      res.render('areaUpdate', {
+        title: 'Update Area',
+        area: area
       });
     }
   ).error(function(err) {
@@ -172,6 +318,27 @@ exports.tagUpdate = function (req, res) {
     });
 };
 
+exports.categoryUpdate = function (req, res) {
+  var catId = req.params.id;
+  db.Category.find(
+    {
+      where: {
+        id: {
+          eq: catId
+        }
+      },
+      attributes: ['id','title','linkLabel','url','secondaryUrl','description']
+    }
+  ).success(function(categories) {
+      res.render('categoryUpdate', {
+        title: 'Update Category',
+        category: categories
+      });
+    }
+  ).error(function(err) {
+      console.log(err);
+    });
+};
 
 exports.contentCreate = function(req, res) {
   res.render('contentCreate', {
@@ -228,3 +395,5 @@ exports.collUp  = function(req, res) {
       console.log(err);
     });
 };
+
+

@@ -1,0 +1,12 @@
+.faculty-portrait {
+	display: block;
+	width: 100%;
+	max-width: 25em;
+	margin: 0 auto;
+	text-align: center;
+
+	@include bp(large-up) {
+		max-width: none;
+	}
+
+}

@@ -1,0 +1,332 @@
+
+<div class="level-container" ng-controller="JumpToCtrl">
+  <div class="row ac-animate">
+    <ng-include src="'/info/formats-sidebar'"></ng-include>
+
+    <div class="user-markup small-12 large-9  columns" style="min-height: 800px;">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="Preservation">
+            Preservation
+          </a>
+        </li>
+      </ul>
+      <h1>Preservation Policy</h1>
+      <p>When submitting files to the Academic Commons, consider using one of the <a  href="commons/info/recommendedformat">supported and recommended formats</a>. The much longer list below
+        includes additional file formats and the level of preservation support that they receive. The support levels are:</p>
+
+
+      <p><strong>Supported</strong>: The format is recognized. We are reasonably confident that files in this format can be migrated to a future  format or standard. This  format is recommended whenever it is appropriate for your data. </p>
+      <p><strong>Known</strong>: The format is recognized. We promise to preserve the bitstream as-is. We will consider migrating these files to future formats if it can be done efficiently and effectively. </p>
+      <p><strong>Unknown:</strong> Any file in an unknown format is by definition one that cannot be migrated to a future format. The Academic Commons will preserve the bitstream as-is. </p>
+      <p align="center"><b>Academic Commons File Support Levels</b></p>
+
+      <table style="width: 100%;border: 1px solid #ccc;" summary="This is a list of file formats with the level of support we provide for migrating these file formats
+        to future formats.">
+        <tr style="background: #ccc;">
+          <td>Description</td>
+          <td>Extensions</td>
+          <td>Level</td>
+        </tr>
+        <tr style="background: #ccc;"><td colspan="3">Audio</td></tr>
+        <tr>
+          <td>AIFF</td>
+          <td>aiff, aif, aifc</td>
+          <td>supported</td>
+        </tr>
+        <tr>
+          <td>audio/basic</td>
+          <td>au, snd</td>
+          <td>known</td>
+        </tr>
+        <tr>
+          <td>MPEG Audio</td>
+          <td>mpa, abs, mpeg</td>
+          <td>supported</td>
+        </tr>
+        <tr>
+          <td>RealAudio</td>
+          <td>ra, ram</td>
+          <td>known</td>
+        </tr>
+        <tr>
+          <td>WAV</td>
+          <td>wav</td>
+          <td>supported</td>
+        </tr>
+
+        <tr style="background: #ccc;"><td colspan="3">Applications</td></tr>
+
+        <tr>
+          <td>Adobe PDF</td>
+          <td>pdf</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>DWG (Autocad drawing format)</td>
+          <td></td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>DXF (Autocad drawing exchange format)</td>
+          <td></td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>FMP3 (Filemaker Pro)</td>
+          <td>fm</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>GIS ESRI Shape File</td>
+          <td><span style='mso-spacerun:yes'> </span>shp dbf</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>GIS ESRI Export formats</td>
+          <td>e00</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>LateX</td>
+          <td>latex</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>MapInfo Formats</td>
+          <td></td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>MARC</td>
+          <td>marc, mrc</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>Mathematica</td>
+          <td>ma</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>Microsoft Excel</td>
+          <td>xls</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>Microsoft Powerpoint</td>
+          <td>ppt</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>Microsoft Project</td>
+          <td>mpp, mpx, mpd</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>Microsoft Word</td>
+          <td>doc</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>Microsoft Visio</td>
+          <td>vsd</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>OpenDocument Spreadsheet</td>
+          <td>ods</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>OpenDocument Presentaion</td>
+          <td>odp</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>OpenDocuments Writer</td>
+          <td>odt</td>
+          <td>known</td>
+        </tr>
+        <tr>
+          <td>Photoshop</td>
+          <td>psd, pdd</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>Postscript</td>
+          <td>ps, eps, ai</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>SDTS (spatial data trans stand)</td>
+          <td></td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>SGML</td>
+          <td>sgm, sgml</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>TeX</td>
+          <td>tex</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>TeX dvi</td>
+          <td>dvi</td>
+          <td>known</td>
+        </tr>
+
+
+        <tr>
+          <td>WordPerfect</td>
+          <td>wpd</td>
+          <td>known</td>
+        </tr>
+
+        <tr style="background: #ccc;"><td colspan="3">Image</td></tr>
+
+        <tr>
+          <td>BMP</td>
+          <td>bmp</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>GIF</td>
+          <td>gif</td>
+          <td>supported</td>
+        </tr>
+        <tr>
+          <td>JPEG</td>
+          <td>jpeg, jpg</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>JPEG 2000</td>
+          <td>jp2</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>PNG</td>
+          <td>png</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>Photo CD</td>
+          <td>pcd</td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>TIFF</td>
+          <td>tiff, tif</td>
+          <td>supported</td>
+        </tr>
+
+        <tr style="background: #ccc;"><td colspan="3">Text (US-ASCII, UTF-8)</td></tr>
+
+        <tr>
+          <td>Comma-Separated Values</td>
+          <td>.csv</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>GIS GML (xml)</td>
+          <td></td>
+          <td>known</td>
+        </tr>
+
+        <tr>
+          <td>HTML</td>
+          <td>html, htm</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>Plain Text</td>
+          <td>txt</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>Rich Text Format</td>
+          <td>rtf</td>
+          <td>supported</td>
+        </tr>
+
+        <tr>
+          <td>XML</td>
+          <td>xml</td>
+          <td>supported</td>
+        </tr>
+
+        <tr style="background: #ccc;"><td colspan="3">Video</td></tr>
+
+        <tr>
+          <td>MPEG-2 / MPEG-4 AVC</td>
+          <td>mpeg, mpg, mpe, mp4</td>
+          <td>supported</td>
+        </tr>
+        <tr>
+          <td>Video Quicktime</td>
+          <td>mov, qt</td>
+          <td>known</td>
+        </tr>
+
+
+
+
+
+        <tr style="background: #ccc;"><td colspan="3">&nbsp;</td></tr>
+
+        <tr>
+          <td>Unknown</td>
+          <td>(anything not listed)</td>
+          <td>unknown</td>
+        </tr>
+
+      </table>
+      <br />
+      <p>If you have questions regarding these formats please contact the Community Collections <a href=mailto:mspalti@willamette.edu>coordinator</a>. To read more about the digital media preserviation, see the <a href="http://www.digitalpreservation.gov/">Library of Congress Digital Preservation</a> page, and their <a href="http://www.digitalpreservation.gov/formats/intro/intro.shtml">Sustainability of Digital Formats</a> information.  </p>
+    </div>
+
+  </div>
+</div>
+
+
+
+

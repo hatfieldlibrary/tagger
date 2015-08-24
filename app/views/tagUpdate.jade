@@ -22,11 +22,10 @@ block content
                         input(type="text", size=60 name="url" value=tag.url)
 
                 .row
-                    .large-10.columns
-                        input(type="radio", name="type", value="adm" checked=tag.type=='adm')
-                        | <label>Administrative Area &nbsp;&nbsp;</label>
-                        input(type="radio", name="type", value="sub" checked=tag.type=='sub')
-                        | <label>Subject </label>
+                  .large-10.columns
+                    for area in areas
+                      input(type="radio", name="areaId", value=area.id checked=tag.areaId==area.id)
+                      | <label>#{area.title} &nbsp;&nbsp;</label>
 
                 .row
                     .large-10.columns
@@ -40,9 +39,8 @@ block content
 
         #deleteModal.reveal-modal.small(data-reveal)
             h3 Delete Tag
-            p Are you sure you want to delete this tah?
+            p Are you sure you want to delete this tag?
             a(href="/admin/tag/delete/"+tag.id) Yes, delete this tag
             a(class="close-reveal-modal") &#215;
 
-            script
-                $(document).foundation()
+            script $(document).foundation()

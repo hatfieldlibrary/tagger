@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "news-landing.css",
+	"sources": [
+		"../../../../../scss/templates/news-landing.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "",
+	"names": []
+}

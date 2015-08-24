@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "home-page.css",
+	"sources": [
+		"../../../../../scss/templates/home-page.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "",
+	"names": []
+}

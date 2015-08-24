@@ -16,10 +16,10 @@ module.exports = function (grunt) {
 
     pkg: grunt.file.readJSON('package.json'),
     app:    'app',
-    client: 'public/modules/acom',
-    dist:   'public/modules/acom/dist',
     config: 'config',
-    public: 'public',
+    client: 'app/public/modules/acom',
+    dist:   'app/public/modules/acom/dist',
+    public: 'app/public',
 
     express: {
       options: {
@@ -53,6 +53,7 @@ module.exports = function (grunt) {
           debug: true
         }
       }
+
     },
 
 
@@ -86,19 +87,21 @@ module.exports = function (grunt) {
         tasks: ['sass']
       },
       sass: {
-        files: '<%= client %>/app/scss/**/*.scss',
+        files: '<%= public %>/scss/**/*.scss',
         tasks: ['sass']
       },
       module: {
         files: [
+          // admin
           '<%= public %>/stylesheets/{,*//*}*.css',
           '<%= public %>/javascripts/{,*//*}*.js',
+          // public view
           '<%= client %>/app/**/*.html',
-          '/Users/mspalti/git/acomtags/public/modules/acom/app/css/local.css',
-          '!<%= client %>/app/bower_components/**',
           '<%= client %>/app/js/**/*.js',
           '<%= client %>/app/*.css',
-          '<%= client %>/app/**/*.{jpg,gif,svg,jpeg,png}'
+          '<%= client %>/app/**/*.{jpg,gif,svg,jpeg,png}',
+          // exclude bower components
+          '!<%= client %>/app/bower_components/**'
         ],
         // tasks: ['newer:jshint','express:dev', 'wait'],
         options: {
@@ -108,9 +111,11 @@ module.exports = function (grunt) {
       },
       express: {
         files: [
+          '!<%= client %>/**/*.js',
           '<%= app %>/**/*.js',
           'config/*.js',
-          'server.js'
+          'server.js',
+
         ],
         tasks: ['newer:jshint', 'express:dev', 'wait'],
         options: {
@@ -145,7 +150,7 @@ module.exports = function (grunt) {
         src: [
           'app/controllers/*.js',
           'app/models/*.js',
-          'app/config/*.js',
+          'config/*.js',
           '<%= client %>/app/js/*.js'
         ]
       }
@@ -161,21 +166,6 @@ module.exports = function (grunt) {
       }
     },
 
-    mochaTest: {
-      options: {
-        reporter: 'spec',
-        ui: 'bdd',
-        slow: true
-      },
-      src: ['test/{,*/}*.js']
-    },
-
-    env: {
-      test: {
-        NODE_ENV: 'test'
-      }
-    } ,
-
     clean: {
       server: '.tmp',
       dist: {
@@ -184,19 +174,19 @@ module.exports = function (grunt) {
     },
 
     copy: {
+      // copy to the public ui dist directory
       client: {
         files: [{
           expand: true,
           cwd:'<%= client %>/app',
-          src: ['js/*.js','extras/**','images/**','*.txt', '**/*.html', '!**/*.scss', '!bower_components/**'],
+          src: ['js/*.js','info/**','images/**','*.txt', '**/*.html', '!**/*.scss', '!bower_components/**'],
           dest: '<%= dist %>'
         } , {
           expand: true,
-          flatten: true,
+          flatten: false,
           cwd:'<%= client %>/app',
-          src: ['bower_components/font-awesome/fonts/**'],
-          dest: '<%= dist %>/css/fonts/',
-          filter: 'isFile'
+          src: ['fonts/**'],
+          dest: '<%= dist %>'
         }, {
           expand: true,
           flatten: true,
@@ -204,55 +194,31 @@ module.exports = function (grunt) {
           src: ['bower_components/modernizr/modernizr.js' ],
           dest: '<%= dist %>/js/vendor',
           filter: 'isFile'
-
-        }
+        }, {
+            expand: true,
+            flatten: false,
+            cwd:'<%= client %>/app',
+            src: ['css/font-awesome/**','css/i/**','css/icomoon/**','css/materialize/**' ],
+            dest: '<%= dist %>'
+          }
         ]
-      },
-      server: {
-        files: [{
-          expand: true,
-          flatten: true,
-          cwd: '<%= client %>/app',
-          src: ['css/app.css'],
-          dest: '<%= public %>/stylesheets',
-          filter: 'isFile'
-        }]
       }
     },
 
     concat: {
-      libraries: {
-        flatten: true,
-        src:[
-          '<%= client %>/app/bower_components/angular/angular.js',
-          '<%= client %>/app/bower_components/angular-animate/angular-animate.js',
-          '<%= client %>/app/bower_components/angular-resource/angular-resource.js',
-          '<%= client %>/app/bower_components/angular-route/angular-route.js',
-          '<%= client %>/app/bower_components/jquery/dist/jquery.js',
-          '<%= client %>/app/bower_components/foundation/js/vendor/jquery.cookie.js',
-          '<%= client %>/app/bower_components/jquery.placeholder/jquery.placeholder.js',
-          '<%= client %>/app/bower_components/foundation/js/vendor/fastclick.js',
-          '<%= client %>/app/bower_components/rem-unit-polyfill/js/rem.js'],
-        dest: '<%= dist %>/js/vendor/libraries.js'
-      },
-      foundation: {
+      server: {
         flatten: true,
         src: [
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.accordian.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.dropdown.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.offcanvas.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.tab.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.topbar.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.tooltip.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.equalizer.js',
-          '<%= client %>/app/bower_components/foundation/js/foundation/foundation.magellan.js'],
-        dest: '<%= dist %>/js/vendor/foundation.js'
-      },
-      css: {
-        flatten: true,
-        src: ['<%= client %>/app/css/*.css', '!*.min.css'],
-        dest: '<%= dist %>/css/app.css'
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.accordian.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.dropdown.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.offcanvas.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.tab.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.topbar.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.tooltip.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
+          '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
+        dest: '<%= app %>/public/javascripts/vendor/foundation.js'
       }
     },
 
@@ -281,16 +247,6 @@ module.exports = function (grunt) {
       options: {
         preserveComments: 'some',
         mangle: false
-      },
-      target:
-      {
-        files: [{
-          expand: true,
-          cwd: '<%= dist %>/js/vendor',
-          src: '*.js',
-          ext: '.min.js',
-          dest: '<%= dist %>/js/vendor'
-        }]
       }
     },
 
@@ -312,7 +268,7 @@ module.exports = function (grunt) {
     bowerInstall: {
       target: {
         src: [
-          'public/modules/acom/app/index.html'
+          '<%= client %>/app/index.html'
         ],
         exclude: [
           'jasmine',
@@ -331,19 +287,76 @@ module.exports = function (grunt) {
       }
     },
 
+    mocha: {
+      all: {
+        options: {
+          //   reporter: 'spec',
+          ui: 'bdd',
+          slow: true,
+          run: true
+        }
+      },
+      src: ['<%= app %>/test/{,*/}*.js']
+    },
+
+    env: {
+      test: {
+        NODE_ENV: 'test'
+      }
+    },
+
     sass: {
       options: {
+        sourceMap: true,
         includePaths: [
-          '<%= client %>/app/bower_components/foundation/scss',
-          '<%= client %>/app/scss/**/*.scss']
+          '<%= public %>/scss/**/*.scss']
       },
       dist: {
         options: {
           outputStyle: 'compressed'
         },
+        files: [{
+          expand: true,
+          cwd: '<%= public %>/scss',
+          src: ['**/*.scss'],
+          dest: '<%= client %>/app/css',
+          ext: '.css'
+        }]
+      }
+    },
+    modernizr: {
+
+      dist: {
+        devFile: '<%= app %>/bower_components/modernizr/modernizr.js',
+        outputFile: '<%= client %>/app/js/plugins/modernizr.optimized.js',
+        extra: {
+          shiv: true,
+          printshiv: false,
+          load: true,
+          mq: false,
+          cssclasses: true
+        },
+        extensibility: {
+          addtest: false,
+          prefixed: false,
+          teststyles: false,
+          testprops: false,
+          testallprops: false,
+          hasevents: false,
+          prefixes: false,
+          domprefixes: false
+        },
+        uglify: true,
+        tests: [],
+        parseFiles: true,
         files: {
-          '<%= client %>/app/css/app.css': '<%= client %>/app/scss/app.scss'
-        }
+          src: ['<%= client %>/app/js/**/*.js',
+            '<%= client %>/app/css/**/*.css',
+            '<%= public %>/sass/**/*.scss'
+          ]
+        },
+        matchCommunityTests: false,
+        customTests: []
       }
     }
 
@@ -365,10 +378,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-bower-install');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
-
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-modernizr');
+  grunt.loadNpmTasks('grunt-mocha');
   files = grunt.config('watch.js.files');
   files = grunt.file.expand(files);
-  grunt.loadNpmTasks('grunt-karma');
+
 
 
   grunt.registerTask('wait', function () {
@@ -380,20 +395,27 @@ module.exports = function (grunt) {
     }, 500);
   });
   grunt.registerTask('serverTest', function() {
-    return grunt.task.run([
+     grunt.task.run([
       'env:test',
-      'mochaTest'
+      'mocha'
     ]);
   });
+  grunt.registerTask('test', ['karma']);
   grunt.registerTask('bower-install', ['bowerInstall']);
   grunt.registerTask('validate-js', ['jshint']);
-  grunt.registerTask('test', ['karma']);
   grunt.registerTask('compile-sass', ['sass']);
   grunt.registerTask('develop', function () {
     grunt.task.run([
       'clean:server',
       'compile-sass',
-      'copy:server',
+      //'concat:serverlibs',
+      //'concat:serverfoundation',
+      // Uncomment the following uglify task if you
+      // want to test javascript libs for admin
+      // mode. It takes a while to complete, which
+      // is why it is commented out here. The task
+      // is included by default when you publish.
+      // 'uglify:server',
       'express:dev',
       'bower-install',
       'open',
@@ -409,16 +431,19 @@ module.exports = function (grunt) {
     ]);
   });
   grunt.registerTask('publish', [
+    'useminPrepare',
     'compile-sass',
     'clean:dist',
-    'validate-js',
-    'useminPrepare',
-    'copy:client',
     'concat',
+    'validate-js',
+    'modernizr:dist',
+    'bower-install',
+    'copy:client',
     'newer:imagemin',
     'cssmin',
     'uglify',
-    'copy:server',
-    'usemin']);
+    'usemin',
+
+    ]);
 
 };

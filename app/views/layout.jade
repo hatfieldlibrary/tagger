@@ -5,25 +5,33 @@ html
     link(rel='stylesheet', href='/stylesheets/app.css')
     link(rel='stylesheet', href='/stylesheets/jquery-ui-1.11.2-min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(type='text/javascript', src='/javascripts/vendor/modernizr.js')
     script(type='text/javascript', src='/javascripts/vendor/libraries.min.js')
-    script(type='text/javascript', src='/javascripts/vendor/jquery-ui-1.11.2.js')
+    script(type='text/javascript', src='/javascripts/vendor/modernizr.js')
     script(type='text/javascript', src='/javascripts/vendor/foundation.min.js')
-    script(type='text/javascript', src='/javascripts/application.js')
 
   body
-      .contain-to-grid.fixed(style="background: #294750;height:60px;padding-top: 10px;")
-        nav.top-bar('data-topbar')
-            ul.title-area
-                li.name: a(href="/")
-                    img(src="/img/tagger.png")
-            section.top-bar-section
-            ul.left
-                li: a(href="/admin/", class="button radius") Manage Collections
-            ul.left
-                li: a(href="/admin/tag/view", class="button radius") Manage Tags
-            ul.left
-                li: a(href="/admin/content/view", class="button radius") Content Types
-      p  &nbsp;
-      p  &nbsp;
-      block content
+    .contain-to-grid.fixed(style="background: #294750;height:60px;padding-top: 10px;")
+      nav.top-bar('data-topbar')
+        ul.title-area
+          li.name: a(href="/")
+            img(src="/img/tagger.png")
+        section.top-bar-section
+        ul.left
+          li: a(href="/admin/", class="button radius") Collections
+        ul.left
+          li: a(href="/admin/tag/view", class="button radius") Tags
+        ul.left
+          li: a(href="/admin/content/view", class="button radius") Content Types
+        ul.left
+          li: a(href="/admin/category/view", class="button radius") Categories
+        ul.left
+          li: a(href="/admin/area/view", class="button radius") Areas
+    p  &nbsp;
+    p  &nbsp;
+    block content
+
+
+
+    script(type='text/javascript', src='/javascripts/application.js')
+
+

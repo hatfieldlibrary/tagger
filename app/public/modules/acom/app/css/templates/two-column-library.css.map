@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "two-column-library.css",
+	"sources": [
+		"../../../../../scss/templates/two-column-library.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "",
+	"names": []
+}

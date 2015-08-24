@@ -1,0 +1,113 @@
+.home-poi-slider {
+
+	.poi-content {
+		margin: 3em 6em;
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		@include bp(xxlarge-up) {
+			margin: 5em 8em;
+		}
+
+	}
+
+	.watermark, .poi-content-inner {
+		float: left;
+	}
+
+	.watermark {
+		width: 20%;
+	}
+
+	.poi-content-inner {
+		width: 80%;
+		padding: 1.5em 15% 0 1.5em;
+
+		@include bp(xlarge-up) {
+			padding: 2em 20% 0 2em;
+		}
+
+	}
+
+	.headline, .text {
+		color: $white;
+	}
+
+	.headline {
+		margin: 0 0 0.25em;
+		@include em_fontsize(36px);
+
+		@include bp(xlarge-up) {
+			@include em_fontsize(42px);
+		}
+
+		@include bp(xxlarge-up) {
+			@include em_fontsize(48px);
+		}
+
+	}
+
+	.text {
+
+		@include bp(xlarge-up) {
+			@include em_fontsize(18px);
+		}
+
+		@include bp(xxlarge-up) {
+			@include em_fontsize(20px);
+		}
+
+	}
+
+	.bx-wrapper .bx-controls-direction {
+
+		a {
+			margin-top: -25px;
+			width: 29px;
+			height: 50px;
+			background-color: transparent;
+
+			&:hover {
+				background-position: 0;
+				.no-touch & {
+					background-position: 0;
+				}
+			}
+
+			&:hover, &:focus, &:visited {
+				background-color: transparent;
+				.no-touch & {
+					background-color: transparent;
+				}
+			}
+
+		}
+
+		.bx-prev, .bx-next {
+			background-size: 100%;
+		}
+
+		.bx-prev {
+			margin-left: 2em;
+			background-image: url(i/home-poi-slider-arrow-left.png);
+
+			&:hover {
+				margin-left: 1.125em;
+			}
+
+		}
+
+		.bx-next {
+			margin-right: 2em;
+			background-image: url(i/home-poi-slider-arrow-right.png);
+
+			&:hover {
+				margin-right: 1.125em;
+			}
+
+		}
+
+	}
+
+}

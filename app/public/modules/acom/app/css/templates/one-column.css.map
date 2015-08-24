@@ -1,0 +1,10 @@
+{
+	"version": 3,
+	"file": "one-column.css",
+	"sources": [
+		"../../../../../scss/templates/one-column.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "",
+	"names": []
+}

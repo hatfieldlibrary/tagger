@@ -1,0 +1,55 @@
+@import "../helpers/_mixins";
+
+.four-column {
+
+	@include bp(medium-up) {
+
+		.large-4 {
+
+			.callout-image {
+				width: 60%;
+			}
+
+			.callout-content {
+				width: 40%;
+			}
+
+			.callout-image, .callout-content {
+
+				@include bp(medium-up) {
+					float: left;
+				}
+
+			}
+
+			.callout-graphic {
+				.callout-image {
+					width: 100%;
+				}
+			}
+
+		}
+
+	}
+
+	@include bp(large-up) {
+
+		.large-4 {
+
+			.callout-image,
+			.callout-content {
+				width: 100%;
+				float: none;
+			}
+
+			.callout-graphic {
+				.callout-image {
+					width: 100%;
+				}
+			}
+
+		}
+
+	}
+
+}

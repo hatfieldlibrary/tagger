@@ -1,5 +1,5 @@
 var path = require('path'),
-  rootPath = path.normalize(__dirname + '/..' ),
+  rootPath = path.normalize(__dirname + '/../app' ),
   env = process.env.NODE_ENV || 'development';
 
 var config = {
@@ -92,10 +92,10 @@ var config = {
     },
     uid: 'node',
     gid: 'node',
-    port: 3000,
+    port: 3001,
     redisPort: 6379,
     mysql: {
-      db: 'acomtags',
+      db: 'acomtags2',
       user: 'tagger',
       password: 'c0fFee12',
       host: 'libdb.willamette.edu',
@@ -105,8 +105,8 @@ var config = {
     convert: '/usr/bin/convert',
     identify: '/usr/bin/identify',
     taggerImageDir: '/var/taggerImages',
-    modulePath: '/public/modules/acom/dist',
-    resourcePath: '/public/modules/acom/dist',
+    modulePath: '/public/modules/acom2/dist',
+    resourcePath: '/public/modules/acom2/dist',
     googleClientId: '85240803633-rqnjpf9qt2129irc52flfofnu9les0r9.apps.googleusercontent.com',
     googleClientSecret: 'uHqX6CXvjNejGd80bnjiiqD9',
     googleCallback: 'http://libapps.willamette.edu:3000/auth/google/callback',

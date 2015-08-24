@@ -1,0 +1,45 @@
+.instagram-grid {
+	margin: 0 auto;
+	max-width: em-calc($homepage-max-width);
+
+	.columns {
+		padding: 0;
+
+		&.clear-left {
+			@include bp(medium-up) {
+				clear: left;
+			}
+		}
+
+		&.mobile-hidden {
+			display: none;
+
+			@include bp(medium-up) {
+				display: block;
+			}
+			
+		}
+
+	}
+
+	img {
+		width: 100%;
+	}
+
+	.mobile-extra {
+
+		&.mobile-hidden {
+			display: block;
+
+			@include bp(medium-up) {
+				display: none;
+			}
+		
+		}
+
+		@include bp(medium-up) {
+			display: none;
+		}
+	}
+	
+}

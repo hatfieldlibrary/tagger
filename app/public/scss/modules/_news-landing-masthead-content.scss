@@ -1,0 +1,13 @@
+.news-landing-masthead-content {
+	padding: 1em 0 2em;
+	background-color: $gray-85;
+
+	@include bp(medium-up) {
+		padding: 1em 0 3em;
+	}
+
+	@include bp(large-up) {
+		padding: 3em 0;
+	}
+
+}

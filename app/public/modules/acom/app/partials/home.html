@@ -1,0 +1,126 @@
+<div class="level-container" ng-controller="CollectionsHomeCtrl">
+  <div class="row ac-animate">
+    <div class="sidebar small-12 medium-3 large-3  ac-opaque hide-for-small-down columns">
+      <ul class="collection with-header area-menu">
+        <li class="collection-header"><h5>Choose Area</h5></li>
+        <li class="collection-item" ng-repeat="item in mainAreaMenu" role="{{Data.currentAreaIndex}}"
+            ng-click="setSelectedArea($index);setSelectedSubject(null);getNewCollectionArea($index); "
+            ng-class="{active: $index === Data.currentAreaIndex}">
+          {{item.title}}
+        </li>
+        <li class="collection-header hide-for-small-down">
+          <h5>Choose subject</h5>
+        </li>
+        <li class="collection-item lowercase hide-for-small-down" style="border-bottom: none;">
+          <ul class="inline-list sub">
+            <li ng-repeat="sub in subjects">
+              <a ng-click="setSelectedSubject($index);getCollectionsBySubject(sub.id, currentAreaId, sub.name)"
+                 ng-class="{active: $index === selectedSubjectIndex}">{{sub.name}}</a>
+            </li>
+          </ul>
+        </li>
+        <li class="collection-header link-header" style="padding: 0;"><a class="button z-depth-1" style="width:100%;height:100%;" href="commons/all">See everything&nbsp;&nbsp;<i class="fa fa-angle-double-right"></i></a></li>
+      </ul>
+      <nav class="left-nav home hide-for-small-down">
+        <ul>
+          <li class="child">
+            <a href="/commons/info/thesis" title="staff">Submit Research</a>
+          </li>
+          <li class="child">
+            <a href="/commons/info/start" title="archives">Start a Collection</a>
+          </li>
+          <li class="child">
+            <a href="/commons/info/dpl">Production Lab</a>
+          </li>
+          <li class="child">
+            <a href="commons/info/data/nsf">Data Management</a>
+          </li>
+          <li class="child ">
+            <a href="/commons/info/recommendedformat" title="File Formats">File Formats</a>
+          </li>
+          <li class="child">
+            <a href="/commons/info/copyright">Intellectual Property</a>
+          </li>
+
+          <li class="child">
+            <a href="/commons/info/about" title="home">About the Commons</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="main-column small-12 medium-9 large-9 columns animate-show" ng-show="collections.length > 0" >
+      <div class="row"  >
+        <div class="small-12 column ac-opaque">
+          <div class="panel" >
+            <div class="row">
+              <div class="small-12 medium-6 large-6 column">
+                <span style="font-size: 0.95rem;color: #837F75;">COLLECTION AREA</span>
+                <h2>{{area.title}}</h2>
+              </div>
+              <div ng-if="subjectLength > 0" class="small-12 medium-6 large-6 column hide-for-small-down  tag-box text-right">
+                <ul>
+                  <li>
+                    <span class="stack-label">Using subject tag:</span>
+                  </li>
+                  <li>
+                    <a ng-click="setSelectedSubject(null);getNewCollectionArea(Data.currentAreaIndex)" class="button round tiny">{{subjectName}} &nbsp;<i class="fa fa-times"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div style="width: 100%; border-top: 1px solid rgba(160,160,160,0.2); padding-top: 16px; padding-left: 15px;">
+              <div class="row">
+                <p class="teaser" style="padding-right: 20px;">{{area.description}}</p>
+                <p ng-if="area.linkLabel.length > 0">
+                  <a class="button radius" href="{{area.url}}" targt="_blank">{{area.linkLabel}}</a>
+                </p>
+                <form ng-if="area.searchUrl.length > 0" name="simpleForm" ng-controller="AcomHomeSearchCtrl" ng-submit="submitQuery(query)" method="get" action="{{area.searchUrl}}">
+                  <div class="large-5 medium-5 small-6 left">
+                    <input type="text" ng-model="query.terms" placeholder="Search terms" ng-keyup="$event.keyCode == 13 &amp;&amp; submitQuery(query)" class="ng-pristine ng-valid">
+                  </div>
+                  <div class="large-1 medium-1 small-2 left end">
+                    <a href="#" class="postfix radius" style="background-color:#3faab2;border: none; color: #fff;"><i class="fa fa-search"></i></a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-12 columns" style="min-height: 900px;">
+          <div class="row" style="margin-bottom: 15px;">
+            <div class="small-6 columns" style="padding-left: 25px;">
+           <!--   <h5 style="color: #791716;margin-top: 0;">Items</h5>     -->
+              <div class="row hide-for-small-down">
+                <div ng-show="collections.length > 10" class="ng-hide">
+                  <div class="small-12 end columns">
+                    <input type="text" placeholder="Type here to filter the list below" ng-model="search">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ac-view-toggle small-6 columns hide-for-small-down text-right">
+              <span style="font-size: 0.9rem;color: #999;">toggle view:&nbsp; </span>
+              <a ng-click="setView('card', card)"
+                 ng-class="{active: 'card' === viewType}"><i class="fa fa-th"></i></a>
+              <a ng-click="setView('list', list)"
+                 ng-class="{active: 'list' === viewType}"><i class="fa fa-align-justify"></i></a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="small-12 stack medium-12 columns" ng-if="viewType == 'card'" last-repeat ng-repeat="collection in collections | filter: {collection:{title:search}}">
+              <div id="c{{collection.collection.id}}"></div>
+              <collection-card  ng-animate="'animate'" id="{{collection.collection.id}}" title="{{collection.collection.title}}" description="{{collection.collection.description}}" coll-type="{{collection.collection.ctype}}" restricted=collection.collection.restricted></collection-card>
+            </div>
+            <div class="small-12  columns" ng-if="viewType == 'list'" ng-repeat="collection in collections|  filter: {collection:{title:search}}">
+              <collection-list  ng-animate="'animate'" title="{{collection.collection.title}}" id="{{collection.collection.id}}" restricted=collection.collection.restricted></collection-list>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-include src="'/partials/mobile-nav'"></ng-include>
+  </div>
+</div>

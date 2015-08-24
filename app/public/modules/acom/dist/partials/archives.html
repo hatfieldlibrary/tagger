@@ -1,0 +1,308 @@
+
+<div class="row  show-for-small-up" >
+    <div class="small-8 columns">
+        <ul class="breadcrumbs">
+            <li><i class="fa fa-home"></i> <a href="http://library.willamette.edu/archives">University Archives</a></li>
+            <li><a href="/commons/archives" class="current">Archives Collections</a></li>
+        </ul>
+    </div>
+    <div class="small-12 medium-4 large-4 columns text-right" >
+        <a href="/commons"><img src="/images/academiccommons_lg.png"></a>
+    </div>
+
+</div>
+<div class="row">
+
+    <div class="large-7 medium-7 small-12 columns page-header">
+        <h2>University Archives Collections</h2>
+        <!--<h5 class="subheader justify">The Willamette University Archives collects, preserves and makes available University records of enduring value and primary source materials focusing on the Northwest.</h5> -->
+        <!-- <h5 style="padding: 30px 0;">Read more about <a href="">Willamette University Archives collections</a>.</h5> -->
+    </div>
+    <div class="large-1 medium-1 columns"></div>
+
+</div>
+
+<!--
+<div class="row" >
+    <div class="large-6 medium-6 small-12 columns">
+        <h4>Browse by collection area</h4>
+    </div>
+    <div class="large-6 medium-6 small-12 columns">
+        <h4>Browse collections by subject</h4>
+    </div>
+
+</div>
+-->
+<div class="row collapse">
+
+    <div class="large-6 medium-6 small-12 columns " ng-controller="SubjectCtrl" style="border: 1px solid #fff;height:533px;background:#fff;" >
+        <div class="row" style=" background: #fff;">
+        <div class="small-12  columns" style="padding-bottom: 0.2rem;" ng-controller="QuickSearchHiddenFieldsCtrl" ng-submit="submitQuery(query)">
+            <div class="row collapse" >
+                <div class="columns small-12"></div>
+                <div class="large-12 medium-12 small-12 columns">
+                    <h5>
+                        <a href="/commons/collections/1" class=" ">Browse all collections <i class="fa fa-arrow-right"></i></a>
+                    </h5>
+                </div>
+            </div>
+            <div class="row collapse" style="padding-top:5px;">
+                <div class="large-8  medium-8 small-10 columns">
+                    <input type="hidden" ng-init="query.area='archives'">
+                    <input type="hidden" ng-init="query.collections='aphotos,manuscripts,glee,pnaa,eads'"/>
+                    <input type="text" ng-model="query.terms" placeholder="Search archives collections" ng-keyup="$event.keyCode == 13 && submitQuery(query)" />
+                </div>
+                <div class="large-2 medium-2 small-2  columns end">
+                    <a href="#" ng-click="submitQuery(query)" class="postfix button  radius"><i class="fa fa-search"></i></a>
+                </div>
+            </div>
+
+        </div>
+            </div>
+        <div class="row" style="margin-top:8px;">
+            <div class="small-12 columns">
+
+                <h3 style="border-top: 1px dotted #ccc;padding-top: 20px;">Collections by subject</h3>
+            </div>
+            <div class="row collapse">
+            <div class="large-6 medium-4 small-12 columns">
+                <div ng-repeat="sub in subjects.slice(0, Math.ceil(subjects.length / 2))" class="small-12 columns">
+                    <div class="row " style="padding-top: 10px;padding-bottom: 10px;">
+                        <a href="/commons/collections/{{sub.id}}" class="collection-link">{{sub.label}}</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Array slice end cases. If a single element remains in array then subjects.length * 2/3 + 1 == subjects.length -->
+            <div class="large-6 medium-6 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 !== subjects.length">
+                <div ng-repeat="sub in subjects.slice(Math.ceil(subjects.length / 2) + 1, Math.ceil(subjects.length * .5))" class="small-12 columns">
+                    <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                        <a href="/commons/collections/{{sub.id}}" class="collection-link">{{sub.label}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="large-6 medium-6 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 === subjects.length">
+                <div ng-repeat="sub in subjects.slice(Math.ceil(subjects.length / 2), Math.ceil(subjects.length * .5))" class="small-12 columns">
+                    <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                        <a href="/commons/collections/{{sub.id}}" class="collection-link">{{sub.label}}</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Array slice end cases. If a single element remains in array then subjects.length * 2/3 + 1 == subjects.length -->
+            <div class="large-6 medium-6 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 !== subjects.length">
+                <div  ng-repeat="sub in subjects.slice(Math.ceil(subjects.length * .5) , subjects.length)" class="small-12 columns">
+                    <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                        <a href="/commons/collections/{{sub.id}}" class="collection-link">{{sub.label}}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="large-6 medium-6 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 === subjects.length">
+                <div  ng-repeat="sub in subjects.slice(subjects.length - 1, subjects.length)"  class="small-12 columns">
+                    <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                        <a href="/commons/collections/{{sub.id}}" class="collection-link">{{sub.label}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        <div class="row "  style="background: #fff;margin-top: 35px;">
+            <div class="row">
+                <div class="small-12 columns">
+                    <h3 style="border-top: 1px dotted #ccc;padding-top: 20px;">Collections by item type</h3>
+                </div>
+            </div>
+
+            <div class="small-12" ng-controller="TypeCtrl">
+                <div class="row collapse">
+                <div class="large-6 medium-6 small-12 columns">
+                    <div ng-repeat="type in types.slice(0, Math.ceil(types.length / 2))" class="small-12 columns">
+                        <div class="row " style="padding-top: 10px;padding-bottom: 10px;">
+                            <a href="/commons/collections/type/{{type.id}}" class="collection-link">{{type.label}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="large-6 medium-6 small-12 columns">
+                    <div ng-repeat="type in types.slice(Math.ceil(types.length / 2) + 1, Math.ceil(types.length * .5))" class="small-12 columns">
+                        <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                            <a href="/commons/collections/type/{{type.id}}" class="collection-link">{{type.label}}</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Array slice end cases. If a single element remains in array then subjects.length * 2/3 + 1 == subjects.length -->
+                <div class="large-6 medium-46small-12 columns" ng-if="Math.ceil(types.length * .5) + 1 !== types.length">
+                    <div  ng-repeat="type in types.slice(Math.ceil(types.length * .5) , types.length)" class="small-12 columns">
+                        <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                            <a href="/commons/collections/type/{{type.id}}" class="collection-link">{{type.label}}</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="large-6 medium-6 small-12 columns" ng-if="Math.ceil(types.length * .5) + 1 === types.length">
+                    <div  ng-repeat="type in types.slice(types.length -1, types.length)"  class="small-12 columns">
+                        <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                            <a href="/commons/collections/type/{{type.id}}" class="collection-link">{{type.label}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+
+    </div>
+    <div class="large-6 medium-6 small-12 columns " style="padding: 0; background: #fff;margin-top:40px" data-equalizer-watch="">
+        <div class="row collapse" >
+            <div class="large-6 medium-6 small-12 columns">
+                <a href="/commons/collections/2" class="active-panel">
+
+                    <div class="clear-panel" style="border-right: 1px solid #768C98;margin-bottom: 0px; height: 58px;" data-equalizer-watch="">
+                        <h6>University History &amp; Records</h6>
+
+                    </div>
+                    <div style="position:relative;">
+                        <img class="hide-for-small-down" src="/images/ChloeAureliaClarkeWillson.jpg">
+
+                    </div>
+                </a>
+            </div>
+            <div class="large-6 medium-6 small-12 columns">
+                <a href="/commons/collections/5" class="active-panel">
+
+                    <div class="clear-panel" style="margin-bottom: 0px; height: 58px;" data-equalizer-watch="">
+                        <h6>Congressional &amp; Political</h6>
+
+                    </div>
+                    <div style="position:relative;">
+                        <img class="hide-for-small-down" src="/images/MarkHatfield.jpg">
+
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row collapse">
+            <div class="large-6 medium-6 small-12 columns">
+                <a href="/commons/collections/3" class="active-panel">
+
+                    <div class="clear-panel" style="border-right: 1px solid #768C98;margin-bottom: 0px; height: 58px;" data-equalizer-watch="">
+
+                        <h6>Personal Collections</h6>
+                    </div>
+                    <div style="position:relative;">
+                        <img class="hide-for-small-down" src="/images/GroupstepsofEatonHall.png">
+
+                    </div>
+                </a>
+            </div>
+            <div class="large-6 medium-6 small-12 columns">
+
+                <a href="/commons/collections/4" class="active-panel">
+                    <div class="clear-panel" style="margin-bottom: 0px; height: 58px;" data-equalizer-watch="">
+
+                        <h6>Pacific Northwest Artists</h6>
+                    </div>
+                    <div style="position:relative;">
+                        <img class="hide-for-small-down" src="/images/TheSkyandtheLand.jpg">
+
+                    </div>
+
+                </a>
+            </div>
+        </div>
+        <div class="row collapse">
+            <div class="small-12 column">
+                <h5 class="subheader justify">The <a href="http://library.willamette.edu/archives">Willamette University Archives</a> collects, preserves and makes available University records of enduring value and primary source materials focusing on the Northwest.</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>&nbsp;</p>
+<!--
+<div class="row">
+<div class="small-12 columns">
+  <h4>Browse collections by subject</h4>
+</div>
+</div>
+
+<div class="row collapse">
+<div class="small-12 columns panel" style="padding: 20px 20px 20px 0;" ng-controller="SubjectCtrl">
+
+  <div class="large-4 medium-4 small-12 columns">
+      <div ng-repeat="sub in subjects.slice(0, Math.ceil(subjects.length / 2))" class="small-12 columns">
+          <div class="row " style="padding-top: 10px;padding-bottom: 10px;">
+              <a href="/#/collections/{{sub.id}}">{{sub.label}}</a>
+          </div>
+      </div>
+  </div>
+
+  <div class="large-4 medium-4 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 !== subjects.length">
+      <div ng-repeat="sub in subjects.slice(Math.ceil(subjects.length / 2) + 1, Math.ceil(subjects.length * .5))" class="small-12 columns">
+          <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+              <a href="/#/collections/{{sub.id}}">{{sub.label}}</a>
+          </div>
+      </div>
+  </div>
+  <div class="large-4 medium-4 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 === subjects.length">
+      <div ng-repeat="sub in subjects.slice(Math.ceil(subjects.length / 2), Math.ceil(subjects.length * .5))" class="small-12 columns">
+          <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+              <a href="/#/collections/{{sub.id}}">{{sub.label}}</a>
+          </div>
+      </div>
+  </div>
+
+  <div class="large-4 medium-4 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 !== subjects.length">
+      <div  ng-repeat="sub in subjects.slice(Math.ceil(subjects.length * .5) + 1, subjects.length)" class="small-12 columns">
+          <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+              <a href="/#/collections/{{sub.id}}">{{sub.label}}</a>
+          </div>
+      </div>
+  </div>
+  <div class="large-4 medium-4 small-12 columns" ng-if="Math.ceil(subjects.length * .5) + 1 === subjects.length">
+      <div  ng-repeat="sub in subjects.slice(subjects.length - 1, subjects.length)"  class="small-12 columns">
+          <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+              <a href="/#/collections/{{sub.id}}">{{sub.label}}</a>
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+  -->
+    <!--
+<p>&nbsp;</p>
+
+<div class="row">
+    <div class="small-12 columns">
+        <h4>Browse collections by item type</h4>
+    </div>
+</div>
+<div class="row collapse">
+    <div class="small-12 columns panel" style="padding: 20px 20px 20px 0;" ng-controller="TypeCtrl">
+        <div class="large-4 medium-4 small-12 columns">
+            <div ng-repeat="sub in types.slice(0, Math.ceil(types.length / 3))" class="small-12 columns">
+                <div class="row " style="padding-top: 10px;padding-bottom: 10px;">
+                    <a href="http://127.0.0.1:3000/rest/type/getInfo/{{sub.id}}">{{sub.label}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="large-4 medium-4 small-12 columns">
+            <div ng-repeat="sub in types.slice(Math.ceil(types.length / 3) + 1, Math.ceil(types.length * 2/3))" class="small-12 columns">
+                <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                    <a href="http://127.0.0.1:3000/rest/type/getInfo/{{sub.id}}">{{sub.label}}</a>
+                </div>
+            </div>
+        </div>
+        <!-- Array slice end cases. If a single element remains in array then subjects.length * 2/3 + 1 == subjects.length -->
+  <!--      <div class="large-4 medium-4 small-12 columns" ng-if="Math.ceil(types.length * 2/3) + 1 !== types.length">
+            <div  ng-repeat="sub in types.slice(Math.ceil(types.length * 2/3) + 1, types.length)" class="small-12 columns">
+                <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                    <a href="http://127.0.0.1:3000/rest/type/getInfo/{{sub.id}}">{{sub.label}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="large-4 medium-4 small-12 columns" ng-if="Math.ceil(types.length * 2/3) + 1 === types.length">
+            <div  ng-repeat="sub in types.slice(types.length - 1, types.length)"  class="small-12 columns">
+                <div class="row" style="padding-top: 10px;padding-bottom: 10px;">
+                    <a href="http://127.0.0.1:3000/rest/type/getInfo/{{sub.id}}">{{sub.label}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        -->

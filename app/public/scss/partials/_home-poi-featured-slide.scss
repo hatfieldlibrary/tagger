@@ -1,0 +1,32 @@
+.home-poi-featured-slide {
+	position: relative;
+
+	.slide-image {
+		max-width: 100%;
+		width: 100%;
+	}
+
+	.columns {
+		padding: 0 1.5em;
+	}
+
+	.title {
+		margin: 0.75em 0;
+		text-align: center;
+		@include em_fontsize(20px);
+	}
+
+	.headline {
+		margin: 0.125em 0;
+		@include em_fontsize(36px);
+	}
+
+	.text {
+		margin: 0.25em 0 1em;
+	}
+
+	.see-all {
+		margin: 1em 0;
+	}
+
+}

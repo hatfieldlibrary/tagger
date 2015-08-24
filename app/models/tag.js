@@ -20,14 +20,18 @@ module.exports =  function(sequelize, DataTypes) {
               type: DataTypes.STRING(255),
               allowNull: true
             },
-            type: {
-                type: DataTypes.STRING(3),
-                allowNull: false
+            areaId: {
+              type: DataTypes.INTEGER(2),
+              allowNull: true
             }
         },  {
             getterMethods: {
                 getContentObject: function() {
-                    return {'id': this.getDataValue('id'), 'name': this.getDataValue('name'), 'url': this.getDataValue('url'), 'type': this.getDataValue('type')};
+                    return {'id': this.getDataValue('id'),
+                      'name': this.getDataValue('name'),
+                      'url': this.getDataValue('url'),
+                      'areaId': this.getDataValue('areaId')
+                    };
                 }
             },
             setterMethods: {

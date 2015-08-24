@@ -8,13 +8,13 @@ var express = require('express'),
 
 global.db = require('./app/models');
 var config = require('./config/environment');
-
 var app = express();
 
 // configure express
 require('./config/express')(app, config);
 // configure passport and session
 require('./config/authenticate')(app, config, passport);
+
 // configure routes
 require('./config/routes')(app, config, passport);
 
@@ -29,8 +29,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-
-
 /// error handlers
 // development error handler
 // will print stacktrace
@@ -44,6 +42,7 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
     });
   });
 }
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
@@ -54,6 +53,10 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
+
+
+// This is needed when running from IDE
+module.exports = app;
 
 // Snyc database if not in test mode
 if (config.nodeEnv !== 'test') {
@@ -103,6 +106,4 @@ function startServer() {
 
 }
 
-// This is needed when running from IDE
-module.exports = app;
 

@@ -1,0 +1,100 @@
+.masthead-slider {
+
+	li {
+		display: none;
+		&:first-child {
+			display: block;
+		}
+	}
+
+	&.masthead {
+
+		.masthead-content-box {
+
+			&.top-left {
+				@include bp(large-up) {
+					left: em-calc(75);
+				}
+				@include bp(xxlarge-up) {
+					left: 0;
+				}
+			}
+
+			&.top-right {
+				@include bp(large-up) {
+					right: em-calc(75);
+				}
+				@include bp(xxlarge-up) {
+					right: 0;
+				}
+			}
+
+			&.bottom-left {
+				@include bp(large-up) {
+					left: em-calc(75);
+				}
+				@include bp(xxlarge-up) {
+					left: 0;
+				}
+			}
+
+			&.bottom-right {
+				@include bp(large-up) {
+					right: em-calc(75);
+				}
+				@include bp(xxlarge-up) {
+					right: 0;
+				}
+			}
+		}
+
+	}
+
+	.bx-wrapper {
+		.bx-controls-direction {
+
+			a {
+				margin-top: 0;
+				top: 11%;
+
+				@include bp(wildcard-up, 22em) {
+					margin-top: 0;
+					top: 13%;
+				}
+
+				@include bp(wildcard-up, 25em) {
+					margin-top: 0;
+					top: 15%;
+				}
+
+				@include bp(wildcard-up, 30em) {
+					margin-top: 0;
+					top: 20%;
+				}
+
+				@include bp(wildcard-up, 35em) {
+					margin-top: 0;
+					top: 24%;
+				}
+
+				@include bp(wildcard-up, 40em) {
+					margin-top: 0;
+					top: 27%;
+				}
+
+				@include bp(medium-up) {
+					margin-top: 0;
+					top: 39%;
+				}
+
+				@include bp(large-up) {
+					margin-top: 0;
+					top: 53%;
+				}
+
+			}
+
+		}
+	}
+
+}

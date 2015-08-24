@@ -1,164 +1,231 @@
 extends layout
 block content
 
-    script var idValue;
-    script jQuery(function() { var availableTags; var availableTypes; getTags(function(data) {availableTags = data;jQuery( "#tagNames" ).autocomplete({source: availableTags,select: function (event, ui) {jQuery("#tagNames").val(ui.item.label);idValue = ui.item.id;}});});getTypes(function(data) { availableTypes = data;jQuery( "#typeNames" ).autocomplete({source: availableTypes,select: function (event, ui) {jQuery("#typeNames").val(ui.item.label); idValue = ui.item.id;}});});});
-    .row
-        .small-2.columns
-        .small-10.columns(style="padding-left: 0;")
+  script var idValue;
 
-            h1.left= title
-            a.button.small.alert.radius.right(href="#" data-reveal-id="deleteModal") Delete this Collection
+  .row
+    .small-2.columns
+    .small-10.columns(style="padding-left: 0;")
 
-    .row
-        .small-2.columns
-            p
-            a(class="th radius", href="/images/full/"+collImg)
-                img(src="/resources/img/thumb/"+collImg)
-            .small-text-center
-                a(href="#" data-reveal-id="uploadModal") Upload Image
-                p
+      h1.left= title
+      a.button.small.alert.radius.right(href="#" data-reveal-id="deleteModal") Delete this Collection
 
-                .label.secondary(style="white-space:normal;") Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
+  .row
+    .small-2.columns
+      p
+      a(class="th radius", href="/images/full/"+collImg)
+        img(src="/resources/img/thumb/"+collImg)
+      .small-text-center
+        a(href="#" data-reveal-id="uploadModal") Upload Image
+        p
 
-        .small-10.columns
-            form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/collection/update")
-                .row
-                    .small-12.columns
-                        label Collection Name
+        .label.secondary(style="white-space:normal;") Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
 
+    .small-10.columns
+      form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/collection/update")
+        .row
+          .small-12.columns
+            label Collection Name
 
-                .row
-                    .small-10.columns
-                        input(type="text", class="small-8" name="name", value=collName)
-                    .small-2.columns
-                p
-                .row
-                    .small-12.columns
-                        label Collection URL
-                .row
-                    .small-10.columns
-                        input(type="text", class="small-10 columns", name="url", value=collUrl)
-                    .small-2.columns
-                p
-                .row
-                    .small-12.columns
-                        label Collection Browse Type (static link or list pulldown)
-                .row
-                    .small-10.columns
-                        input(type="radio", name="browseType", value="link" checked=collBrowseType=='link')
-                        | <label>Link &nbsp;&nbsp;</label>
-                        input(type="radio", name="browseType", value="list" checked=collBrowseType=='list')
-                        | <label>List </label>
-                        .small-2.columns
-                p
-                .row
-                    .small-12.columns
-                        label Collection Description
-                .row
-                    .small-10.columns
-                        textarea(rows=7, class="small-12 columns", name="description")=collDesc
-                    .small-2.columns
-                p
-                .row
-                    .small-12.columns
-                        label Coverage Dates
-                    .small-8.columns
-                        input(type="text", class="small-12", name="dates" value=collDates)
-                    .small-4.columns
-                p
-                .row
-                    .small-12.columns
-                        label Number of Items
-                .row
-                    .small-8.columns
-                        input(type="text", class="small-12 columns", name="items" value=collItems)
-                    .small-4.columns
-                p
-                .row
-                    .small-10.columns
-                        input(type="radio", name="ctype", value="ead" checked=collType=='ead')
-                        | <label>Finding Aid &nbsp;&nbsp;</label>
+        .row
+          .small-10.columns
+            input(type="text", class="small-8" name="name", value=collName)
+          .small-2.columns
+        p
 
-                        input(type="radio", name="ctype", value="dig" checked=collType=='dig')
-                        | <label>Digital Collection </label>
-                        input(type="radio", name="ctype", value="itm" checked=collType=='itm')
-                        | <label>Single Item &nbsp;&nbsp;</label>
-                    .small-2.columns
+        .row
+          .small-12.columns
+            label Restricted Access
+        .row
+          .small-10.columns
+            input(type="radio", name="restricted", value="1" checked=restricted==1)
+            | <label>Yes &nbsp;&nbsp;</label>
+            input(type="radio", name="restricted", value="" checked=restricted==0)
+            | <label>No </label>
+            .small-2.columns
+        p
+        .row
+          .small-12.columns
+            label Collection URL
+        .row
+          .small-10.columns
+            input(type="text", class="small-10 columns", name="url", value=collUrl)
+          .small-2.columns
 
-                    input(type="hidden" name="id" value=collId)
-                p
-                .row
-                    .small-10.columns
-                        input(type="submit" value="Update Collection")
-                p &nbsp;
-    .row
-        .small-2.columns  &nbsp;
-        .small-10.columns(style="padding-left: 0;padding-right:0;")
-            .panel
-                .label.medium.success.radius Current Tags &nbsp;&nbsp;(click "x" to remove)
-                p
-                .row
-                each tag in tags
-                    label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
-                        a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
-                p &nbsp;
-                p
-                .ui-widget
-                form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/tag", id="tagForm")
+        p
 
-                    .small-12.columns
-                    label(for="tagNames") Add Tag Here
-                    .row
-                    .small-10.columns
-                    input(type="text" id="tagNames" name='tagName')
-                    input(type="hidden" name='collid' value=collId)
-                    input(type="hidden" id="tagId" name='tagid')
-                    p
-                    input(type="submit", value="Add tag to this collection")
+        .row
+          .small-12.columns
+            label Collection Browse Type (static link or list pulldown)
+        .row
+          .small-10.columns
+            input(type="radio", name="browseType", value="link" checked=collBrowseType=='link')
+            | <label>Link &nbsp;&nbsp;</label>
+            input(type="radio", name="browseType", value="list" checked=collBrowseType=='list')
+            | <label>List </label>
+            .small-2.columns
+        p
+        .row
+          .small-12.columns
+            label Collection Description
+        .row
+          .small-10.columns
+            textarea(rows=7, class="small-12 columns", name="description")=collDesc
+          .small-2.columns
+        p
+        .row
+          .small-12.columns
+            label Coverage Dates
+          .small-8.columns
+            input(type="text", class="small-12", name="dates" value=collDates)
+          .small-4.columns
+        p
+        .row
+          .small-12.columns
+            label Number of Items
+        .row
+          .small-8.columns
+            input(type="text", class="small-12 columns", name="items" value=collItems)
+          .small-4.columns
+        p
+        .row
+          .small-10.columns
+            input(type="radio", name="ctype", value="ead" checked=collType=='ead')
+            | <label>Finding Aid &nbsp;&nbsp;</label>
+            input(type="radio", name="ctype", value="dig" checked=collType=='dig')
+            | <label>Digital Collection </label>
+            input(type="radio", name="ctype", value="itm" checked=collType=='itm')
+            | <label>Single Item &nbsp;&nbsp;</label>
+          .small-2.columns
+        p
+        .row
+          .small-12.columns
+            label Areas
+        .row
+          .small-10.columns
+            for area in availableAreas
+              - var checked = false;
+              - for(var i = 0; i < areas.length; i++ ) {
+              - if (areas[i].id === area.id) {
+              - checked = true;
+              -}
+              -}
+              input(type="checkbox", name="areas", value=area.id, checked=checked)
+              |<label>#{area.title}&nbsp;&nbsp;</label>
 
+          .small-2.columns
+        .row
+          .small-12.columns
+            label Search Type
+              .row
+                .small-10.columns
+                  - var options = [{value:'DEFAULT', label: 'Search & Browse'}, {value: 'BROWSE', label: 'Browse Only'}, {value: 'SEARCH', label: 'Search Only'}];
+                  select(name="repoType")
+                    for option in options
+                      if (option.value === searchType)
+                        option(value=option.value selected) #{option.label}
+                      else
+                        option(value=option.value) #{option.label}
+                .small-2.columns
+                p
+          input(type="hidden" name="id" value=collId)
+        p
+        .row
+          .small-10.columns
+            input(type="submit" value="Update Collection")
             p &nbsp;
+      p This is bad.  But, for now...linking category requires round trip to server.
+      form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/category/link")
+        .row
+          .small-12.columns
+            label Category
+            .row
+              .small-10.columns
+                select(name="catId")
+                  for cat in categories
+                    if (currentCategory !== null)
+                     if (cat.id === currentCategory.id )
+                        option(value=cat.id selected) #{cat.title}
+                      else
+                        option(value=cat.id) #{cat.title}
+                    else
+                      option(value=cat.id) #{cat.title}
+                input(type="hidden" name="collId" value=collId)
+            .small-2.columns
+             p
+            .small-12.columns
+            input(type="submit" value="Update Category")
+      p &nbsp;
+      p &nbsp;
     .row
-        .small-2.columns  &nbsp;
-        .small-10.columns(style="padding-left: 0;padding-right:0;")
-            .panel
-                .label.medium.success.radius Current Content Types &nbsp;&nbsp;(click "x" to remove)
-                p
-                .row
-                each type in types
-                    label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
-                        a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
-                p &nbsp;
-                p
-                .ui-widget
-                form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/type", id="typeForm")
-                    .small-12.columns
-                    label(for="typeNames") Add Content Type Here
-                    .row
-                    .small-10.columns
-                    input(type="text" id="typeNames" name='typeName')
-                    input(type="hidden" name='collid' value=collId)
-                    input(type="hidden" id="typeId" name='typeid')
-                    p
-                    input(type="submit", value="Add type to this collection")
+      .small-2.columns  &nbsp;
+      .small-10.columns(style="padding-left: 0;padding-right:0;")
+        .panel
+          .label.medium.success.radius Current Tags &nbsp;&nbsp;(click "x" to remove)
+          p
+          .row
+          each tag in tags
+            label.small.round.left(style="padding-right: 50px;")=tag.selectedValues.name
+              a(href="/admin/collection/remove/tag/"+collId+"/"+tag.selectedValues.id) &nbsp;&nbsp;&#215;
+          p &nbsp;
+          p
+          .ui-widget
+          form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/tag", id="tagForm")
+
+            .small-12.columns
+            label(for="tagNames") Add Tag Here
+            .row
+            .small-10.columns
+            input(type="text" id="tagNames" name='tagName')
+            input(type="hidden" name='collid' value=collId)
+            input(type="hidden" id="tagId" name='tagid')
             p
+            input(type="submit", value="Add tag to this collection")
+
+        p &nbsp;
+    .row
+      .small-2.columns  &nbsp;
+      .small-10.columns(style="padding-left: 0;padding-right:0;")
+        .panel
+          .label.medium.success.radius Current Content Types &nbsp;&nbsp;(click "x" to remove)
+          p
+          .row
+          each type in types
+            label.small.round.left(style="padding-right: 50px;")=type.selectedValues.name
+              a(href="/admin/collection/remove/type/"+collId+"/"+type.selectedValues.id) &nbsp;&nbsp;&#215;
+          p &nbsp;
+          p
+          .ui-widget
+          form(method="post" enctype='application/x-www-form-urlencoded', action="/admin/collection/type", id="typeForm")
+            .small-12.columns
+            label(for="typeNames") Add Content Type Here
+            .row
+            .small-10.columns
+            input(type="text" id="typeNames" name='typeName')
+            input(type="hidden" name='collid' value=collId)
+            input(type="hidden" id="typeId" name='typeid')
+            p
+            input(type="submit", value="Add type to this collection")
+        p
 
 
 
-        #deleteModal.reveal-modal.small(data-reveal)
-            h3 Delete Collection
-            p Are you sure you want to delete this collection?
-            a(href="/admin/collection/delete/"+collId) Yes, delete this collection
-            a(class="close-reveal-modal") &#215;
-
-        #uploadModal.reveal-modal.small(data-reveal)
-            form(action="/admin/collection/image", method="post", enctype="multipart/form-data")
-                input(type="hidden", name="id", value=collId)
-                input(type="file", name="image")
-                input(type="submit" value="upload")
-            a(class="close-reveal-modal") &#215;
 
 
+    #deleteModal.reveal-modal.small(data-reveal)
+      h3 Delete Collection
+      p Are you sure you want to delete this collection?
+      a(href="/admin/collection/delete/"+collId) Yes, delete this collection
+      a(class="close-reveal-modal") &#215;
 
-    script $(document).foundation()
-    script jQuery(document).ready( function() { jQuery("#tagForm").submit( function (event) { if (idValue === undefined) { event.preventDefault(); } else { jQuery('#tagId').val(idValue); } }); jQuery("#typeForm").submit(function (event) { if (idValue === undefined) { event.preventDefault(); } else { jQuery('#typeId').val(idValue); } }); });
+    #uploadModal.reveal-modal.small(data-reveal)
+      form(action="/admin/collection/image", method="post", enctype="multipart/form-data")
+        input(type="hidden", name="id", value=collId)
+        input(type="file", name="image")
+        input(type="submit" value="upload")
+      a(class="close-reveal-modal") &#215;
+
+
+
+  script $(document).foundation()
+  script(type='text/javascript', src='/javascripts/tagger.js')
