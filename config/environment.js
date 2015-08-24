@@ -9,13 +9,13 @@ var config = {
     app: {
       name: 'acomtags'
     },
-    uid: 'mspalti',
-    gid: 'staff',
+    uid: 'user-uid',
+    gid: 'user-gid',
     port: 3000,
     mysql: {
       db: 'acomtags_development',
-      user: 'mspalti',
-      password: 'coffee',
+      user: 'user-name',
+      password: 'user-passwd',
       host: 'localhost',
       port: 3306,
       dialect: 'mysql'
@@ -25,10 +25,11 @@ var config = {
     taggerImageDir: '/usr/local/taggerImages',
     modulePath: '/public/modules/acom/app',
     resourcePath: '/public/modules/acom/app',
-    googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-    googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+    googleClientId: 'your-google-client-id',
+    googleClientSecret: 'your-google-client-secret',
     googleCallback: 'http://localhost:3000/auth/google/callback',
     nodeEnv: env
+
   },
 
   runlocal: {
@@ -36,13 +37,13 @@ var config = {
     app: {
       name: 'acomtags'
     },
-    uid: 'mspalti',
-    gid: 'staff',
+    uid: 'user-uid',
+    gid: 'user-gid',
     port: 3000,
     mysql: {
       db: 'acomtags_development',
-      user: 'mspalti',
-      password: 'coffee',
+      user: 'user-name',
+      password: 'user-passwd',
       host: 'localhost',
       port: 3306,
       dialect: 'mysql'
@@ -52,8 +53,8 @@ var config = {
     taggerImageDir: '/usr/local/taggerImages',
     modulePath: '/public/modules/acom/dist',
     resourcePath: '/public/modules/acom/dist',
-    googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-    googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+    googleClientId: 'your-google-client-id',
+    googleClientSecret: 'your-google-client-secret',
     googleCallback: 'http://localhost:3000/auth/google/callback',
     nodeEnv: env
   },
@@ -63,13 +64,13 @@ var config = {
     app: {
       name: 'acomtags'
     },
-    uid: 'mspalti',
-    gid: 'staff',
+    uid: 'user-uid',
+    gid: 'user-gid',
     port: 3000,
     mysql: {
       db: 'acomtags_test',
-      user: 'mspalti',
-      password: 'coffee',
+      user: 'user-name',
+      password: 'user-passwd',
       host: 'localhost',
       port: 3306,
       dialect: 'mysql'
@@ -79,8 +80,8 @@ var config = {
     taggerImageDir: '/var/taggerImages',
     modulePath: '/public/modules/acom/app',
     resourcePath: '/public/modules/acom/app',
-    googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-    googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+    googleClientId: 'your-google-client-id',
+    googleClientSecret: 'your-google-client-secret',
     googleCallback: 'http://localhost:3000/auth/google/callback',
     nodeEnv: env
   },
@@ -96,9 +97,9 @@ var config = {
     redisPort: 6379,
     mysql: {
       db: 'acomtags2',
-      user: 'tagger',
-      password: 'c0fFee12',
-      host: 'libdb.willamette.edu',
+      user: 'production-user-name',
+      password: 'production-user-passwd',
+      host: 'host.domain.edu',
       port: 3306,
       dialect: 'mariadb'
     },
@@ -107,8 +108,8 @@ var config = {
     taggerImageDir: '/var/taggerImages',
     modulePath: '/public/modules/acom2/dist',
     resourcePath: '/public/modules/acom2/dist',
-    googleClientId: '85240803633-rqnjpf9qt2129irc52flfofnu9les0r9.apps.googleusercontent.com',
-    googleClientSecret: 'uHqX6CXvjNejGd80bnjiiqD9',
+    googleClientId: 'your-google-client-id',
+    googleClientSecret: 'your-google-client-secret',
     googleCallback: 'http://libapps.willamette.edu:3000/auth/google/callback',
     nodeEnv: env
   }

@@ -41,13 +41,13 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
        app: {
          name: 'acomtags'
        },
-       uid: 'mspalti',
-       gid: 'staff',
+       uid: 'user-uid',
+       gid: 'user-gid',
        port: 3000,
        mysql: {
          db: 'acomtags_development',
-         user: 'mspalti',
-         password: 'coffee',
+         user: 'user-name',
+         password: 'user-passwd',
          host: 'localhost',
          port: 3306,
          dialect: 'mysql'
@@ -57,8 +57,8 @@ The application uses Sequelize as the ORM.  Database tables are defined in the a
        taggerImageDir: '/usr/local/taggerImages',
        modulePath: '/public/modules/acom/app',
        resourcePath: '/public/modules/acom/app',
-       googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-       googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+       googleClientId: 'your-google-client-id',
+       googleClientSecret: 'your-google-client-secret',
        googleCallback: 'http://localhost:3000/auth/google/callback',
        nodeEnv: env
      }
