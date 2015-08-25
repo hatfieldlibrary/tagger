@@ -267,7 +267,7 @@ collectionControllers.controller('SingleCollectionCtrl',
 
       $scope.toTop = function() {
         var elem = $('#top');
-        $('body').animate({scrollTop: elem.offset().top}, 'fast');
+        $('body').animate({scrollTop: elem.offset().top}, 0);
       };
 
 
