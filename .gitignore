@@ -8,9 +8,8 @@ app/public/modules/acom/app/css/main.css.map
 app/public/modules/acom/app/css/level.css
 app/public/modules/acom/app/css/level.css.map
 app/public/stylesheets/app.css
-app/public/modules/acom/dist
 .tmp
 .sass-cache
-.idea/workspace.xml                    g
+.idea/workspace.xml
 .idea/misc.xml
 .DS_Store
