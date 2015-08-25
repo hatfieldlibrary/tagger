@@ -4,7 +4,7 @@ var collectionControllers = angular.module('collectionControllers', []);
 
 var scrollToTop = function() {
   var elem = $('#top');
-  $('body').animate({scrollTop: elem.offset().top}, 'fast');
+  $('body').animate({scrollTop: elem.offset().top}, 0);
 };
 
 // These objects are set manually.  The
@@ -90,19 +90,19 @@ collectionControllers.controller('CollectionsHomeCtrl',
       $scope.scrollTo = function() {
         var top = $('#top');
         // scroll only if currentId for item is defined
-        if ($scope.Data.currentId !== null) {
+        if ($scope.Data.currentScrollPosition !== null) {
           var elem = $('#c' + $scope.Data.currentId);
           if (elem.length) {
             var pos = elem.parent().prevAll().length;
             // don't scroll if position index less than 5
-            if (pos > 4) {
-              $('body').animate({scrollTop: elem.offset().top - 90}, 'fast');
+            if (pos > 2) {
+              $('body').animate({scrollTop: Data.currentScrollPosition}, 0);
             } else {
-              $('body').animate({scrollTop: top.offset().top}, 'fast');
+              $('body').animate({scrollTop: top.offset().top}, 0);
             }
           }
         } else {
-          $('body').animate({scrollTop: top.offset().top}, 'fast');
+          $('body').animate({scrollTop: top.offset().top}, 0);
         }
       };
 
@@ -225,13 +225,18 @@ collectionControllers.controller('JumpToCtrl', ['Data',
 collectionControllers.controller('CardCtrl', ['$scope', 'Data',
   function($scope, Data) {
 
+    $scope.Data = Data;
+
     $scope.setPosition = function() {
-          $('document').scrollTop();
+
+      // use jquery to capture and store the current scroll position
+      Data.currentScrollPosition = $(document).scrollTop();
+
     };
 
     $scope.isCollection = function(type) {
-         return isCollection(type);
-      };
+      return isCollection(type);
+    };
   }
 ]);
 
