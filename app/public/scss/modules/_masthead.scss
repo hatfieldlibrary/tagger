@@ -52,114 +52,31 @@
 
   }
 
-  .library-content-box {
+  .ac-content-box {
+
 
     &.top-left {
       @include bp(large-up) {
         left: em-calc(25);
-        top: 16%;
+        top: 20%;
       }
       @include bp(xlarge-up) {
         left: 0;
       }
     }
-
-    &.top-right {
-      @include bp(large-up) {
-        right: em-calc(25);
-        top: 5%;
-      }
-      @include bp(xlarge-up) {
-        right: 0;
-      }
-    }
-
-    &.bottom-left {
-      @include bp(large-up) {
-        left: em-calc(25);
-        bottom: 36.5%;
-      }
-      @include bp(xlarge-up) {
-        left: 0;
-      }
-    }
-
-    &.bottom-right {
-      @include bp(large-up) {
-        right: em-calc(25);
-        bottom: 12.5%;
-      }
-      @include bp(xlarge-up) {
-        right: 0;
-      }
-    }
-
     @include bp(large-up) {
       position: absolute;
     }
 
   }
 
-
-  .library-secondary-content-box {
-
-    a, a:visited {
-      color: $blue-chill;
-    }
-
-    &.top-left {
-      @include bp(large-up) {
-        left: em-calc(25);
-        top: 8.2%;
-      }
-      @include bp(xlarge-up) {
-        left: 0;
-      }
-    }
-
-    &.top-right {
-
-      @include bp(large-up) {
-        right: em-calc(25);
-        top: 25%;
-      }
-      @include bp(xlarge-up) {
-        right: 100px;
-      }
-    }
-
-    &.bottom-left {
-      @include bp(large-up) {
-        left: em-calc(25);
-        bottom: 56.5%;
-      }
-      @include bp(xlarge-up) {
-        left: 0;
-      }
-    }
-
-    &.bottom-right {
-      @include bp(large-up) {
-        right: em-calc(25);
-        bottom: 12.5%;
-      }
-      @include bp(xlarge-up) {
-        right: 0;
-      }
-    }
-
-
-    @include bp(large-up) {
-      position: absolute;
-    }
-  }
 
 
   .library-secondary-nav {
     @include bp(medium-up) {
 
       padding: 0;
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: rgba(0, 0, 0, 0.45);
       height: em-calc(43);
 
       width: 100%;

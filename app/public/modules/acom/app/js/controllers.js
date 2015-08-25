@@ -222,9 +222,14 @@ collectionControllers.controller('JumpToCtrl', ['Data',
 
   }]);
 
-collectionControllers.controller('CardCtrl', ['$scope',
-  function($scope) {
-      $scope.isCollection = function(type) {
+collectionControllers.controller('CardCtrl', ['$scope', 'Data',
+  function($scope, Data) {
+
+    $scope.setPosition = function() {
+          $('document').scrollTop();
+    };
+
+    $scope.isCollection = function(type) {
          return isCollection(type);
       };
   }

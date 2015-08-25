@@ -146,7 +146,9 @@ collectionsApp.factory('Data', function() {
     currentSubjectId: null,
     currentSubjectName: '',
     currentId: null,
-    currentView: 'card'};
+    currentView: 'card',
+    currentScrollPosition: null
+  };
 });
 
 // This adds foundation 5 support and sets user agent
