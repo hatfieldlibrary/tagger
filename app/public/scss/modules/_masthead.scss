@@ -58,7 +58,7 @@
     &.top-left {
       @include bp(large-up) {
         left: em-calc(25);
-        top: 20%;
+        top: 18%;
       }
       @include bp(xlarge-up) {
         left: 0;
@@ -76,7 +76,7 @@
     @include bp(medium-up) {
 
       padding: 0;
-      background-color: rgba(0, 0, 0, 0.45);
+      background-color: rgba(0, 0, 0, 0.70);
       height: em-calc(43);
 
       width: 100%;
