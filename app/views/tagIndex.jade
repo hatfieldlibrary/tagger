@@ -1,0 +1,62 @@
+extends layout
+
+mixin tagLink(tag)
+    .small-10.columns
+        a(href='/admin/form/tag/update/'+tag.id)=tag.name
+    .small-1.columns
+        label ID:&nbsp;
+            =tag.id
+    if tag.type === 'sub'
+        .small-1.columns.type-color
+            label Type:&nbsp
+                =tag.type
+    else
+        .small-1.columns.id-color
+            label Area:&nbsp
+                =tag.areaId
+
+block content
+    .row
+        a.button.small.radius.right.success(href="#" data-reveal-id="createModal") Create Tag
+        h1= title
+        p Click on title link to edit the tag.
+            if exists
+                .label.alert A tag with this name already exists
+
+        each tag in tags
+            .row.result-row: +tagLink(tag)
+
+
+    #createModal.reveal-modal.small(data-reveal)
+      .row
+      .small-10.columns
+        h3.left= title
+        form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/tag/create")
+          .row
+            .large-10.columns
+              label Tag Name
+          .row
+            .large-10.columns
+              input(type="text", size=60 name="name")
+
+          .row
+            .large-10.columns
+              input(type="text", size=60 name="url")
+          .row
+            .large-10.columns
+              label Areas
+          .row
+            .large-10.columns
+              for area in areas
+                input(type="radio", name="areaId", value=area.id)
+                | <label>#{area.title} &nbsp;&nbsp;</label>
+
+          p
+          .row
+            .large-10.columns
+              input(type='submit', value='Create Tag')
+         a(class="close-reveal-modal") &#215;
+
+        a(class="close-reveal-modal") &#215;
+
+    script $(document).foundation();

@@ -1,0 +1,47 @@
+extends layout
+mixin catLink(category)
+  .small-10.columns
+    a(href='/admin/form/category/update/' + category.id)=category.title
+  .small-1.columns
+    label ID:&nbsp;
+      =category.id
+
+block content
+  .row
+    a.button.small.radius.right.success(href="#" data-reveal-id="createModal") Create Category
+    h1= title
+    p Categories provide users with contextual information about a collection.
+    p For example, if a digital collection is part of a larger grouping, such as the Pacific Northwest Artist's Archive (PNAA), the category provides additional information about the PNAA.
+    h5 Click on title link to edit the category.
+      if exists
+        .label.alert A category with this name already exists
+    each category in categories
+      .row.result-row: +catLink(category)
+  #createModal.reveal-modal.small(data-reveal)
+    h3 Create Category
+    form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/category/create")
+      .row
+        .large-10.columns
+          label Category Name
+      .row
+        .large-10.columns
+          input(type="text", size=60 name="title")
+      .row
+        .large-10.columns
+          label Category URL
+      .row
+        .large-10.columns
+          input(type="text", size=60 name="url")
+      .row
+        .large-10.columns
+          label Category Description
+      .row
+        .large-10.columns
+          textarea(rows=7, class="small-12 columns", name="description")
+      p
+      .row
+        .large-10.columns
+          input(type='submit', value='Create Category')
+    a(class="close-reveal-modal") &#215;
+    a(class="close-reveal-modal") &#215;
+  script $(document).foundation();

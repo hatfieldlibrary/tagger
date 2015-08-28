@@ -1,0 +1,68 @@
+.faculty-list-results {
+
+	ul {
+		margin: 0;
+		padding: 0;
+
+		li {
+			margin: 0.75em 0 0;
+			padding: 0.75em !important;
+			background-color: $ecru-25;
+
+			&.light-bg {
+				background-color: lighten($ecru-25, 5%);
+			}
+
+		}
+
+	}
+
+	.name {
+		margin: em-calc(10) 0 em-calc(5) 0;
+
+		@include bp(wildcard-up, 28.5em) {
+			margin: em-calc(5) 0;
+		}
+	}
+
+	.title, .email, .news-link {
+		@include bp(medium-up) {
+			@include em_fontsize(18px);
+		}
+	}
+
+	.email, .news-link {
+		display: block;
+	}
+
+	.title, .email {
+		line-height: 1.375;
+	}
+
+	.title {
+		// word-break: break-all; // FF Fix
+	}
+
+	.news-link {
+		margin: 1.5em 0 0.5em;
+	}
+
+	.faculty-portrait {
+		@include bp(wildcard-up, 28.5em) {
+			float: left;
+			width: 35%;
+		}
+		@include bp(wildcard-up, 36em) {
+			// @include em_width(200px);
+		}
+	}
+
+	.faculty-details {
+		@include bp(wildcard-up, 28.5em) {
+			margin: 0 0 0 2.5%;
+			float: right;
+			width: 62.5%;
+		}
+	}
+
+}

@@ -1,0 +1,105 @@
+
+<div class="level-container" ng-controller="JumpToCtrl">
+  <div class="row ac-animate">
+    <ng-include src="'/info/formats-sidebar'"></ng-include>
+
+    <div class="user-markup small-12 large-9  columns" style="min-height: 800px;">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="File Formats">
+            Formats
+          </a>
+        </li>
+      </ul>
+      <h1>Recommended File Formats</h1>
+      <!-- this page borrows heavily from http://repositories.lib.utexas.edu/recommended_file_formats -->
+      <p>
+        Any file format can be submitted to the Academic Commons. However, the file formats below are strongly recommended.</p>
+      <p>These formats are widely-used, well-understood and stable.
+        They facilitate long-term preservation efforts, which include migration to future file formats when possible.
+
+      </p>
+
+      <table style="width:100%;border: 1px solid #ccc;" summary="A list of the file formats that are recommended when you submit work to the Academic Commons.">
+        <tr style="background: #ccc;">
+          <td><a href="http://www.digitalpreservation.gov/formats/content/text_preferences.shtml">Textual Formats</a></td><!-- http://www.digitalpreservation.gov/formats/content/text_preferences.shtml -->
+          <td>Extensions</td>
+        </tr>
+        <tr>
+          <td>PDF/A</td><!-- http://www.digitalpreservation.gov/formats/fdd/fdd000125.shtml-->
+          <td>.pdf</td>
+        </tr>
+        <tr>
+          <td>Other PDF formats</td>
+          <td>.pdf</td>
+        </tr>
+        <tr>
+          <td>Plain Text (US-ASCII, UTF-8)</td>
+          <td>.txt</td>
+        </tr>
+        <tr>
+          <td>XML <br/>Includes EPUB, XHTML, OpenDocument Format</td> <!-- http://www.digitalpreservation.gov/formats/fdd/fdd000171.shtml -->
+          <td>.xml, .epub, .od</td><!-- http://en.wikipedia.org/wiki/OpenDocument-->
+        </tr>
+        <tr>
+          <td>Comma-Separated Values</td>
+          <td>.csv</td>
+        </tr>
+
+        <tr style="background: #ccc;"><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/still_preferences.shtml">Image / Graphic Formats</a></td></tr>
+
+        <tr>
+          <td>TIFF</td>
+          <td>.tif, .tiff</td>
+        </tr>
+
+        <tr>
+          <td>JPEG 2000</td>
+          <td>.jp2</td>
+        </tr>
+        <tr>
+          <td>JPEG</td>
+          <td>.jpg, .jpeg</td>
+        </tr>
+
+        <tr style="background: #ccc;" ><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/sound_preferences.shtml">Audio Formats</a></td></tr>
+
+        <tr>
+          <td>AIFF</td>
+          <td>.aiff, .aif, .aifc</td>
+        </tr>
+
+        <tr>
+          <td>WAVE</td>
+          <td>.wav</td>
+        </tr>
+        <!--  mp3 okay at LC! http://www.digitalpreservation.gov/formats/fdd/fdd000105.shtml -->
+
+        <tr style="background: #ccc;"><td colspan="2"><a href="http://www.digitalpreservation.gov/formats/content/video_preferences.shtml">Video Formats</a></td></tr> <!-- http://www.digitalpreservation.gov/formats/content/video_preferences.shtml-->
+        <!-- maybe Motion JPEG2000 in the future-->
+        <tr>
+          <td>MPEG-2 / MPEG-4 AVC</td>
+          <td>.mpeg, .mpg, .mpe, .mp4</td>
+        </tr>
+
+
+
+      </table>
+      <br/>
+      <p>For a more complete list of supported formats, see the <a href="/commons/info/preservation">Academic Commons Preservation Policy</a>.</p>
+      <p>If you have questions regarding these file recommendations please contact <a href=mailto:samato@willamette.edu>Sara Amato</a>, Digital Asset Management Librarian.</p>
+
+
+    </div>
+    <ng-include src="'/partials/mobile-about-nav'"></ng-include>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,24 @@
+.callout-contact-faculty-detail {
+
+	.office-hours {
+		display: block;
+		line-height: 1.5;
+
+		.title {
+			font-weight: bold; /* Fallback */
+			font-weight: 700;
+		}
+		
+	}
+
+	.links {
+		margin: 1em 0;
+
+		a {
+			display: block;
+			margin: 0.5em 0;
+		}
+
+	}
+
+}

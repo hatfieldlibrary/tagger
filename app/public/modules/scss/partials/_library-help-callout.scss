@@ -1,0 +1,26 @@
+.library-help-callout {
+
+  padding-top: 0;
+  padding-bottom: 40px;
+  text-align: center;
+
+  .help-icon {
+    font-size: 5em;
+    color: $blue-chill-80;
+    display:inline-block;
+    @include transition-property(all);
+    @include transition-duration(0.30s);
+
+    &:hover {
+      color: $blue-chill;
+      text-decoration: none;
+    }
+    &:visited {
+      color: $blue-chill-80;
+      &:hover {
+        color: $blue-chill;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,32 @@
+.search-results-search {
+	margin: 0.75em 0;
+
+	&.search-bar {
+
+		input {
+
+			@include bp(medium-up) {
+				width: 16em;
+			}
+
+			@include bp(large-up) {
+				width: 12em;
+			}
+
+			@include bp(xlarge-up) {
+				width: 21em;
+			}
+
+		}
+
+		select {
+
+			@include bp(medium-up) {
+				width: 11em;
+			}
+
+		}
+
+	}
+
+}

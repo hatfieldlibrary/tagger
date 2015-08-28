@@ -1,0 +1,104 @@
+.library-secondary-content-box {
+
+
+  a.button
+   {
+
+    background-color: $dark-tan;
+    border-color: $dark-tan;
+    width: em-calc(200);
+    color: $sidecar;
+    margin-bottom: 0;
+    @include transition-property(all);
+    @include transition-duration(0.30s);
+
+    &:hover {
+      background-color: darken($dark-tan, 5);
+      text-decoration: none;
+      color: $sidecar;
+    }
+    &:visited {
+      background-color: $dark-tan;
+      color: $sidecar;
+      &:hover {
+        background-color: darken($dark-tan, 5);
+      }
+    }
+    @include bp(medium-only) {
+      float: left;
+      margin-left: 15px;
+    }
+
+    .fa {
+      color: $ecru;
+    }
+
+  }
+
+  .library-hours-content-box {
+
+    text-align: left;
+    padding: em-calc(25) em-calc(15) em-calc(30);
+    margin: 0;
+
+    .title,
+    .content,
+    .link {
+      font-family: $heading-font;
+      padding: 0;
+      margin: 0 0 em-calc(10) 0;
+    }
+
+    .title {
+      font-size: em-calc(20);
+      font-weight: bold; /* Fallback */
+      font-weight: 500;
+      line-height: 1em;
+      color: $gray-20;
+    }
+
+    .content {
+      font-size: em-calc(16);
+      color: $white;
+    }
+
+    .link {
+      font-weight: 500;
+      font-size: em-calc(16);
+      text-transform: uppercase;
+      color: $blue-chill-70;
+    }
+
+    @include bp (large-up) {
+
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: em-calc(65) em-calc(30) em-calc(65);
+      width: em-calc(200);
+
+    }
+
+    @include bp (xlarge-up) {
+
+      padding: em-calc(65) em-calc(30) em-calc(65);
+      width: em-calc(200);
+      border-top: $dark-tan-80 6px solid;
+
+      .title {
+        font-size: em-calc(22);
+      }
+
+      .content,
+      .link {
+        font-size: em-calc(18);
+      }
+
+    }
+
+    @include bp(medium-only) {
+      float: right;
+      text-align: right;
+      margin-right: 15px;
+    }
+
+  }
+}

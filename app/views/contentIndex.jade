@@ -1,0 +1,35 @@
+extends layout
+
+mixin tagLink(tag)
+    .small-4.columns
+        a(href='/admin/form/content/update/'+tag.id)=tag.name
+    .small-2.columns
+        label Content ID:&nbsp;
+            =tag.id
+
+block content
+    .row
+        a.button.small.radius.right.success(href="#" data-reveal-id="createModal") Create Type
+        h1= title
+
+    each tag in tags
+        .row.result-row: +tagLink(tag)
+
+    #createModal.reveal-modal.small(data-reveal)
+        h3 Create Content Type
+        form(method="post", enctype='application/x-www-form-urlencoded' action="/admin/content/create")
+            .row
+                .large-10.columns
+                    label Content Type
+            .row
+                .large-10.columns
+                    input(type="text", size=60 name="name")
+                p
+            .row
+                .large-10.columns
+                    input(type='submit', value='Create New Type')
+            a(class="close-reveal-modal") &#215;
+        a(class="close-reveal-modal") &#215;
+
+    script $(document).foundation();
+

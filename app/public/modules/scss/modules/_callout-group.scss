@@ -1,0 +1,44 @@
+.callout-group {
+
+	.callout {
+
+		.lt-ie10 & {
+			float: left;
+		}
+
+		&:last-of-type {
+			@include bp(medium-up) {
+				margin-right: 0 !important;
+			}
+		}
+
+		&.no-image {
+			background-image: url(i/callout-image-placeholder.png);
+			background-position: bottom right;
+			background-repeat: no-repeat;
+		}
+
+		.callout-image,
+		.callout-content {
+			width: 100%;
+			float: none;
+		}
+
+		@include bp(medium-up) {
+			width: 32.8%;
+			margin: 0 0.8% 0 0 !important;
+			@include align-items(stretch);
+		}
+
+	}
+
+	@include bp(medium-up) {
+		margin: 1.5em 0 0.5em;
+		@include display-flex;
+	}
+
+}
+
+.callout-group-button .button {
+	margin: 0;
+}

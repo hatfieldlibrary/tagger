@@ -1,0 +1,36 @@
+.social-media-icons {
+	text-align: center;
+	li {
+		display: inline-block;
+		@include em_margin(0px, 4px, 6px, 0px);
+		&:last-child {
+			@include em_margin(0px);
+		}
+	}
+	a {
+		display: block;
+		width: 42px;
+		height: 42px;
+		background-color: $ecru;
+		color: $white;
+		@include em_padding(6px);
+		@include em_fontsize(24px);
+		@include border-radius(42px);
+		&:hover, &:focus {
+			text-decoration: none;
+		}
+		&:hover {
+			background-color: darken($ecru, 8%);
+		}
+		> span {
+			display: none;
+		}
+		@include bp(medium-up) {
+			width: 52px;
+			height: 52px;
+			@include em_padding(5px);
+			@include em_fontsize(32px);
+			@include border-radius(52px);
+		}
+	}
+}

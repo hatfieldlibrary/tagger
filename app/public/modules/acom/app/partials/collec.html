@@ -1,0 +1,101 @@
+<div class="level-container" ng-controller="SingleCollectionCtrl">
+  <div class="row ac-animate">
+    <ng-include src="'/partials/global-sidebar'"></ng-include>
+    <div class="main-column small-12 large-9  columns" style="min-height: 800px;">
+      <ul class="breadcrumbs clearfix">
+        <li>
+          <a href="/commons" title="Academic Commons">
+            <span class="home"><i class="fa fa-home"></i></span>
+            Academic Commons
+          </a>
+        </li>
+        <li>
+          <a href="#" title="{{collection.collection.title}}">
+            {{collection.collection.title}}
+          </a>
+        </li>
+      </ul>
+      <div class="row animate-show" ng-show="collection.collection.title.length > 0">
+        <div class="small-12 column ac-opaque">
+          <div class="panel">
+            <div class="row">
+              <div class="small-12 medium-3 column">
+                <div class="th pull-left" style="margin-top: 10px;"><img src="resources/img/thumb/{{collection.collection.image}}"></div>
+              </div>
+              <div class="small-12 medium-9 column" >
+                <h2>{{collection.collection.title }}</h2>
+                <p >{{collection.collection.description}}</p>
+              </div>
+            </div>
+            <div class="row ac-box" style="margin-left: 0; margin-right: 0;">
+              <div class="small-12  container column">
+                <div class="row" style="margin-top: 10px;margin-bottom: 0;">
+                  <div class="small-12 medium-4 large-6 column text-left">
+                    <div ng-if="collection.collection.searchType==='DEFAULT' || collection.collection.searchType==='BROWSE'">
+                      <a ng-if="isStaticLink(collection.collection.browseType) && isCollection(collection.collection.collType)" href="{{collection.collection.url}}" class="button radius" target="_blank">Browse Collection&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                      <a ng-if="isStaticLink(collection.collection.browseType) && !isCollection(collection.collection.collType)" href="{{collection.collection.url}}" class="button radius" target="_blank">View Item&nbsp;&nbsp;<i class="fa fa-external-link"></i></a>
+                    </div>
+                    <div ng-if="isBrowseList(collection.collection.browseType)" ng-controller="BrowseListCtrl">
+                      <input type="hidden" ng-init="query.area='collegian'">
+                      <input type="hidden" ng-init="query.collections='collegian'"/>
+                      <select ng-model="query.terms" ng-options="item.item.title for item in list.result" ng-change="submitQuery(query)">
+                        <option value="">Browse by year</option>
+                      </select>
+                      <p>&nbsp;</p>
+                    </div>
+                    <search-form-simple ng-if="collection.collection.searchType==='DEFAULT' || collection.collection.searchType==='SEARCH'" name="{{collection.collection.title}}"  url="{{collection.collection.url}}"></search-form-simple>
+                  </div>
+                  <div class="small-12 medium-4 large-4 column">
+                    <div class="row">
+                      <div class="small-12 column">
+                        <ul>
+                          <li ng-if="collection.collection.dates.length > 0">
+                            <span class="ac-label">Dates: </span> {{collection.collection.dates}}
+                          </li>
+                          </li>
+                          <li ng-if="collection.collection.items.length > 0">
+                            <span class="ac-label">Item count: </span> {{collection.collection.items}}
+                          </li>
+                          <li>
+                            <span class="ac-label">Content Types: </span>
+                            <span ng-repeat="type in collection.contentTypes">
+                            <span  class="has-tip" title="Images" data-tooltip data-options="hover_delay: 50;" aria-haspopup="true">
+                              <i ng-if="type.ItemContentId==1" class="fa fa-picture-o" ></i>
+                              <i ng-if="type.ItemContentId==2" class="fa fa-file-pdf-o"></i>
+                              <i ng-if="type.ItemContentId==3" class="fa fa-file-o"></i>
+                              <i ng-if="type.ItemContentId==4" class="fa fa-film"></i>
+                              <i ng-if="type.ItemContentId==5" class="fa fa-file-text-o"></i>
+                            </span>
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="small-12 column">
+                    <img src="images/site/academiccommons_site.png">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row ac-moreabout">
+              <div class="small-12 column">
+                <h4>More about this collection</h4>
+                <p ng-if="collection.category.description.length == 0"><span class="label round alert">Collection category is undefined.  Contact administrator.</span></p>
+                <p ng-if="collection.category.description.length > 0">{{collection.category.description}}</p>
+                <p ng-if="collection.category.linkLabel.length > 0">
+                  <a class="button radius" target="_blank" href="{{collection.category.url}}">{{collection.category.linkLabel}}</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-include src="'/partials/mobile-nav'"></ng-include>
+</div>
+

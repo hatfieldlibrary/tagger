@@ -1,0 +1,23 @@
+.masthead-story-tile-blue-quote {
+	background-color: $blue-chill;
+	font-family: $heading-font;
+	font-weight: bold; /* Fallback */
+	font-weight: 500;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+
+	p {
+		color: $white;
+		line-height: 1.5;
+		@include em_fontsize(15px);
+
+		@include bp(medium-up) {
+			@include em_fontsize(18px);
+		}
+
+		@include bp(large-up) {
+			@include em_fontsize(22px);
+		}
+	}
+
+}

@@ -1,0 +1,10 @@
+.ac-view-toggle {
+  a {
+    color: #999;
+  }
+  a {
+    &.active {
+      color: #791716;
+    }
+  }
+}

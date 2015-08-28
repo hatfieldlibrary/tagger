@@ -1,0 +1,53 @@
+extends layout
+
+mixin collectionLink(col)
+    .small-3.columns
+        a(href='/admin/form/collection/update/'+col.id)=col.title
+    .small-8.columns
+        p= col.description
+    .small-1.columns
+        label ID:&nbsp;
+            =col.id
+
+
+block content
+    .row
+        a.button.small.radius.right.success(href="#" data-reveal-id="createModal") Create Collection
+        h1= title
+        p Click on the title link to edit a collection.
+        each col in collections
+            .row.result-row: +collectionLink(col)
+
+
+    #createModal.reveal-modal.small(data-reveal)
+        h3 Create Tag
+        form(method="post", enctype='application/x-www-form-urlencoded', action="/admin/collection/create")
+            .row
+                .large-10.columns
+                    label Collection Name
+            .row
+                .large-10.columns
+                    input(type="text", class="large-10" name="name", value=collName)
+            p
+            .row
+                .large-10.columns
+                    label Collection URL
+            .row
+                .large-10.columns
+                    input(type="text", class="large-10 columns", name="url", value=collUrl)
+            p
+            .row
+                .large-10.columns
+                    label Collection Description
+            .row
+                .large-10.columns
+                    textarea(rows=7, class="large-10 ", name="description")=collDesc
+            p
+            .row
+                .large-10.columns
+                    input(type="submit" value="Create Collection")
+
+            a(class="close-reveal-modal") &#215;
+
+        a(class="close-reveal-modal") &#215;
+    script  $(document).foundation();
