@@ -31,6 +31,9 @@
     text-transform: uppercase;
     color: $blue-chill-70;
   }
+  @include bp (medium-only) {
+    padding: em-calc(10) em-calc(25) em-calc(15);
+  }
 
   @include bp (large-up) {
 

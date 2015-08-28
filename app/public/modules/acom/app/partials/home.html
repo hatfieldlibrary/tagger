@@ -48,9 +48,17 @@
         </ul>
       </nav>
     </div>
-    <div class="main-column small-12 medium-9 large-9 columns animate-show" ng-show="collections.length > 0" >
-      <div class="row"  >
+
+    <div class="main-column small-12 medium-9 large-9 columns ">
+      <div class="hide-for-large-up">
+       <div ng-hide="collections.$resolved" class="css-load-container">
+      <div class="sp sp-circle"></div>
+      <div class="loader-label">Loading ...</div>
+       </div>
+      </div>
+      <div class="row animate-show" ng-show="collections.length > 0">
         <div class="small-12 column ac-opaque">
+
           <div class="panel" >
             <div class="row">
               <div class="small-12 medium-6 large-6 column">
