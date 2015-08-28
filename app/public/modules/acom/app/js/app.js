@@ -48,7 +48,7 @@ collectionsApp.config(['$httpProvider', function ($httpProvider) {
       };
     }];
 
-  $httpProvider.responseInterceptors.push(interceptor);
+  $httpProvider.interceptors.push(interceptor);
 
 }]);
 
