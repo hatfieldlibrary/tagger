@@ -2,36 +2,32 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/app.css')
-    link(rel='stylesheet', href='/stylesheets/jquery-ui-1.11.2-min.css')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    script(type='text/javascript', src='/javascripts/vendor/libraries.min.js')
-    script(type='text/javascript', src='/javascripts/vendor/modernizr.js')
-    script(type='text/javascript', src='/javascripts/vendor/foundation.min.js')
+    link(rel="stylesheet", href="/stylesheets/jquery-ui-1.11.2-min.css")
+    link(rel="stylesheet", href="../bower_components/angular-material/angular-material.min.css")
+    link(rel="stylesheet", href="/stylesheets/style.css")
+    link(rel="stylesheet", href="https://fonts.googleapis.com/icon?family=Material+Icons")
+
 
   body
-    .contain-to-grid.fixed(style="background: #294750;height:60px;padding-top: 10px;")
-      nav.top-bar('data-topbar')
-        ul.title-area
-          li.name: a(href="/")
-            img(src="/img/tagger.png")
-        section.top-bar-section
-        ul.left
-          li: a(href="/admin/", class="button radius") Collections
-        ul.left
-          li: a(href="/admin/tag/view", class="button radius") Tags
-        ul.left
-          li: a(href="/admin/content/view", class="button radius") Content Types
-        ul.left
-          li: a(href="/admin/category/view", class="button radius") Categories
-        ul.left
-          li: a(href="/admin/area/view", class="button radius") Areas
-    p  &nbsp;
-    p  &nbsp;
-    block content
+    div(layout-fill)&attributes({layout:"column"})
+      md-toolbar
+        div.md-toolbar-tools
+          span Tagger
+          span(flex)
+          md-list
+            md-list-item(ng-style="{'display':'inline'}")
+              span.md-subhead role: admin
+            md-list-tiem(ng-style="{'display':'inline'}")
+              span.md-subhead area: all
+
+      block content
 
 
+    script(type="text/javascript", src="../bower_components/angular/angular.min.js")
+    script(type="text/javascript", src="../bower_components/angular-animate/angular-animate.min.js")
+    script(type="text/javascript", src="../bower_components/angular-aria/angular-aria.min.js")
+    script(type="text/javascript", src="../bower_components/angular-material/angular-material.min.js")
+    script(type="text/javascript", src="/javascripts/app/app.js")
 
-    script(type='text/javascript', src='/javascripts/application.js')
 
 

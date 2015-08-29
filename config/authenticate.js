@@ -11,6 +11,7 @@ var session = require('express-session'),
   RedisStore = require('connect-redis')(session);
 
 
+
 module.exports = function(app, config, passport) {
 
   // For development, use express-session in lieu of Redisstore.
@@ -63,6 +64,7 @@ module.exports = function(app, config, passport) {
       callbackURL: GOOGLE_CALLBACK
     },
     function (accessToken, refreshToken, profile, done) {
+
       // asynchronous verification
       process.nextTick(function () {
         // attempt to retrieve user by their Google profile
@@ -77,8 +79,7 @@ module.exports = function(app, config, passport) {
         }).success(function (user, err) {
           // if email lookup succeeded, pass the user id to passport callback
           if (user) {
-            console.log(user);
-            return done(err, user.dataValues.id);
+            return done(err, profile);
           }
           // otherwise pass null (unauthenticated)
           done(null, null);

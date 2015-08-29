@@ -17,10 +17,13 @@ exports.index = function(req, res){
     {
       order: [['title', 'ASC']]
     }
-  ).success(function(cols) {
-      res.render('index', {
-        title: 'Collections',
-        collections: cols
+  ).success(function() {
+      res.render('materialOverview', {
+        title: 'Overview',
+        user: req.user.displayName,
+        picture: req.user._json.picture
+        //,
+       // collections: cols
       });
     }).error(function(err) {
       console.log(err);
