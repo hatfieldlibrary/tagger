@@ -88,6 +88,10 @@ module.exports = function(app, config, passport) {
     }
   ));
 
+  app.isAuthenticated = function (req, res, next) {
+    if (req.isAthenticated()) {return true;}
+    return false;
+  };
 
 // Route middleware ensures user is authenticated.
 // Use this middleware on any resource that needs to be protected.  If

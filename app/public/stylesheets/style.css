@@ -1,45 +1,14 @@
 
-
-.result-row  {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-top: 1px solid #ccc;
+.md-button.md-fab.md-mini {
+  line-height: inherit;
 }
-
-.title {
-    float: left;
-    width: 30%;
+.local-hue-1 {
+  background-color: #00695c !important;
+  color: #eee !important;
 }
-
-.desc {
-    float: left;
-    width: 60%;
+.local-hue-2-background {
+  background-color: #00695c !important;
 }
-
-form .row label {
-    color: #748099;
-}
-
-.id-color label {
-    color: #ac2c2c;
-}
-.type-color label {
-    color: #54BD69;
-}
-
-.login {
-    padding: 50px;
-    font-family: Helvetica, Arial, Verdana, sans-serif;
-    font-size: 1.5em;
-    border: 1px solid #eee;
-    width: 300px;
-    margin: 0 auto;
-}
-.login a {
-    text-decoration: none;
-}
-.login-message {
-    font-family: Helvetica, Arial, Verdana, sans-serif;
-    font-size: 0.9em;
-    padding: 20px;
+.margin-override {
+  margin: 0;
 }

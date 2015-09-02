@@ -15,18 +15,84 @@ html
           span Tagger
           span(flex)
           md-list
-            md-list-item(ng-style="{'display':'inline'}")
-              span.md-subhead role: admin
-            md-list-tiem(ng-style="{'display':'inline'}")
-              span.md-subhead area: all
 
-      block content
+            md-list-item(ng-style="{'display':'inline'}")
+              span.md-subhead role: Administrator
+
+            md-list-item(ng-style="{'display':'inline'}")
+              span.md-subhead area: &nbsp;
+                md-input-container(class="md-no-float" style="display:inline-block")
+                  md-select(ng-model="someModel" placeholder="University Archives")
+                    md-option University Archives
+                    md-option Student Research
+                    md-option Hallie Ford Museum
+
+      div(layout="row")
+        if user
+          md-sidenav(style="height: 450px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
+
+            md-toolbar(class="md-default-theme")
+              md-card(class="local-hue-1 margin-override")
+                md-card-content
+                  md-list
+                    md-list-item.contact-item
+                      img.md-avatar(src="#{picture}")
+                    md-list-item
+                      div.md-subhead #{user}
+            md-content
+              md-list
+                md-list-item
+                  md-button(class="md-no-style md-button md-default-theme" )
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons home
+                      div.list-group-item-text Overview
+                        div.md-ripple-container
+                md-list-item.md-active
+                  md-button(class="md-no-style md-button md-default-theme" )
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons content_copy
+                      div.list-group-item-text Collections
+                        div.md-ripple-container
+                md-list-item
+                  md-button(class="md-no-style md-button md-default-theme" tabindex="0")
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons block
+                      div.list-group-item-text Restrictions
+                        div.md-ripple-container
+                md-list-item
+                  md-button(class="md-no-style md-button md-default-theme" tabindex="0")
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons link
+                      div.list-group-item-text Tags
+                        div.md-ripple-container
+                md-list-item
+                  md-button(class="md-no-style md-button md-default-theme" tabindex="0")
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons flag
+                      div.list-group-item-text Categories
+                        div.md-ripple-container
+                md-list-item
+                  md-button(class="md-no-style md-button md-default-theme" tabindex="0")
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons public
+                      div.list-group-item-text Areas
+                        div.md-ripple-container
+          block content
+        else
+          block content
 
 
     script(type="text/javascript", src="../bower_components/angular/angular.min.js")
     script(type="text/javascript", src="../bower_components/angular-animate/angular-animate.min.js")
     script(type="text/javascript", src="../bower_components/angular-aria/angular-aria.min.js")
     script(type="text/javascript", src="../bower_components/angular-material/angular-material.min.js")
+    script(type="text/javascript", src="/javascripts/app/controllers.js")
     script(type="text/javascript", src="/javascripts/app/app.js")
 
 
