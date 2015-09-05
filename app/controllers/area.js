@@ -163,3 +163,4 @@ exports.getAreas = function(req, res) {
 
   });
 };
+

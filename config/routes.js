@@ -99,8 +99,9 @@ module.exports = function(app,config,passport){
   app.use('/rest/subjects/byArea/:id',      tag.subjectsByArea);
   app.use('/rest/area/byId/:id',            area.areaById);
   app.use('/rest/areas',                    area.getAreas);
-
-
+  app.use('/rest/collection/tags/:id',   collection.tagsForCollection);
+  app.use('/rest/collection/types/:id',   collection.typesForCollection);
+  app.use('/rest/categories/byArea/:areaId', category.categoriesByArea);
 
   /* Static Angularjs module routes.  Used by the Academic Commons public site. */
   // request for partials

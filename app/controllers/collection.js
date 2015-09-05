@@ -73,6 +73,56 @@ var processCollectionResult = function(coll, res) {
     });
 };
 
+exports.tagsForCollection = function (req, res) {
+
+  var collId = req.params.id;
+
+  db.TagTarget.findAll(
+    {
+      where: {
+        CollectionId: {
+          eq: collId
+        }
+      },
+      include : [db.Tag],
+      attributes: ['Tag.name','Tag.id']
+    }).success( function(tags) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify(tags));
+
+    }).error(function(err) {
+      console.log(err);
+    });
+
+};
+
+exports.typesForCollection = function (req, res) {
+
+  var collId = req.params.id;
+
+  db.ItemContentTarget.findAll(
+    {
+      where: {
+        CollectionId: {
+          eq: collId
+        }
+      },
+      include: [db.ItemContent]
+    }
+  ).success(function(types) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify(types));
+    })
+    .error(function (err) {
+      console.log(err);
+    })
+
+};
+
 exports.collectionsByArea = function (req, res) {
 
   var areaId = req.params.id;
@@ -179,6 +229,7 @@ exports.collectionById = function(req, res) {
         result.collection.items = collection.items;
         result.collection.browseType = collection.browseType;
         result.collection.collType = collection.ctype;
+        result.collection.restricted = collection.restricted;
         result.collection.searchType = collection.repoType;
       })
       .error(function (err) {
@@ -500,24 +551,24 @@ exports.update = function(req, res) {
           });
       },
       /*dropCategoryTarget: function(callback) {
-        db.CategoryTarget.destroy({
-          CollectionId: {
-            eq: collId
-          }
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      addCategoryTarget: function(callback) {
-        db.CategoryTarget.create({
-          CollectionId: collId,
-          CategoryId: categoryId
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },  */
+       db.CategoryTarget.destroy({
+       CollectionId: {
+       eq: collId
+       }
+       }).complete(callback)
+       .error(function(err) {
+       console.log(err);
+       });
+       },
+       addCategoryTarget: function(callback) {
+       db.CategoryTarget.create({
+       CollectionId: collId,
+       CategoryId: categoryId
+       }).complete(callback)
+       .error(function(err) {
+       console.log(err);
+       });
+       },  */
       home: function (callback) {
         db.Collection.findAll(
           {

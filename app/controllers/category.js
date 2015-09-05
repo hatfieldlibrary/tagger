@@ -9,6 +9,7 @@ exports.create = function(req, res) {
   var catUrl = req.body.url;
   var secondUrl = req.body.secondUrl;
   var catDesc = req.body.description;
+  var areaId = req.body.area;
   // First create the new category. Then retrieve the
   // updated category list and pass it to the view.
   async.series (
@@ -19,6 +20,7 @@ exports.create = function(req, res) {
           url: catUrl,
           secondaryUrl: secondUrl,
           description: catDesc,
+          areaId: areaId,
         }).complete(callback)
           .error(function(err) {
             console.log(err);
@@ -27,7 +29,7 @@ exports.create = function(req, res) {
       home: function (callback) {
         db.Category.findAll(
           {
-            attributes: ['id','title', 'url','secondaryUrl', 'description'],
+            attributes: ['id','title', 'url','secondaryUrl', 'description', 'areaId'],
             order: [['title', 'ASC']]
           }
         ).complete(callback)
@@ -54,6 +56,7 @@ exports.update = function(req, res) {
   var catDesc = req.body.description;
   var catLink = req.body.linkLabel;
   var catId = req.body.id;
+  var area = req.body.area;
 
   // First update the collection. Then retrieve the updated
   // collection list and pass it to the view.
@@ -66,6 +69,7 @@ exports.update = function(req, res) {
             linkLabel: catLink,
             secondaryUrl: secondUrl,
             description: catDesc,
+            areaId: area,
           },
           {
             id: {
@@ -76,7 +80,7 @@ exports.update = function(req, res) {
       home: function (callback) {
         db.Category.findAll(
           {
-            attributes: ['id','title', 'url','linkLabel', 'secondaryUrl', 'description'],
+            attributes: ['id','title', 'url','linkLabel', 'secondaryUrl', 'description', 'areaId'],
             order: [['title', 'ASC']]
           }
         ).complete(callback);
@@ -113,7 +117,7 @@ exports.delete = function(req, res) {
       home: function(callback) {
         db.Category.findAll(
           {
-            attributes: ['id','title', 'url', 'secondaryUrl', 'description'],
+            attributes: ['id','title', 'url', 'secondaryUrl', 'description', 'areaId'],
             order: [['title', 'ASC']]
           }
         ).complete(callback)
@@ -166,4 +170,27 @@ exports.addCategoryTarget = function (req, res) {
     });
 
 
+};
+exports.categoriesByArea = function (req, res) {
+
+  var areaId = req.param.areaId;
+
+  db.Category.findAll( {
+    where: {
+      areaId: {
+        eq: areaId
+      }
+    },
+    include: [
+      { model: db.CategoryTarget} ],
+    order: [['title', 'ASC']]
+  }).success( function(categories) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(categories));
+
+  }).error(function(err) {
+    console.log(err);
+  });
 };

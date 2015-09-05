@@ -144,7 +144,6 @@ collectionControllers.controller('CollectionsHomeCtrl',
 
       $scope.getNewCollectionArea = function(index) {
 
-        console.log('getting collections for new area');
         $scope.search = '';
         $scope.Data.currentId = null;
         $scope.Data.currentAreaIndex = index;
