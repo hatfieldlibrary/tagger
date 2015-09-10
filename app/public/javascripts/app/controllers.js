@@ -5,6 +5,7 @@ var taggerControllers = angular.module('taggerControllers', []);
 
 taggerControllers.controller('CollectionCtrl',
   ['$scope', '$resource','CollectionsByArea','CollectionById','TagsForCollection','TypesForCollection', 'Data',
+
     function($scope, $resource, CollectionsByArea, CollectionById, TagsForCollection, TypesForCollection,  Data ) {
 
 
@@ -18,20 +19,13 @@ taggerControllers.controller('CollectionCtrl',
       $scope.init = function(id) {
 
         Data.currentAreaIndex = id;
-
         $scope.areas = Data.areas;
-
-
         $scope.collectionList = CollectionsByArea.query({id: id});
-
         $scope.collectionList.$promise.then(function(data) {
 
-
           $scope.getCollectionById(data[0].CollectionId);
-
           $scope.collectionTags = TagsForCollection
             .query({id: data[0].CollectionId});
-
           $scope.collectionTypes = TypesForCollection
             .query({id: data[0].CollectionId});
 
@@ -39,7 +33,9 @@ taggerControllers.controller('CollectionCtrl',
       };
 
       $scope.getTagsForCollection = function(id) {
+
         $scope.collectionTags = TagsForCollection(id);
+
       };
 
       $scope.getCollectionById = function(id) {
@@ -49,28 +45,138 @@ taggerControllers.controller('CollectionCtrl',
       };
 
 
+      $scope.showDialog = showDialog;
 
-      $scope.testData = {
-        title: 'Chloe Clarke Willson journal ',
-        description: 'The Chloe Clarke Willson journal documents Willson\'s journey aboard ' +
-        'the ship Lausanne and her experiences as a Methodist missionary teacher at the Oregon Institute ' +
-        '(later Willamette University) in Salem, Oregon. The Chloe Clarke Willson journal documents Willson\'s journey aboard ' +
-        'the ship Lausanne and her experiences as a Methodist missionary teacher at the Oregon Institute ' +
-        '(later Willamette University) in Salem, Oregon.',
-        category: "Personal Collections",
-        area: 'University Archives',
-        dates: '1839-1849',
-        count: '1',
-        itemType: 'item',
-        contentType: 'document',
-        browseType: 'link',
-        searchType: 'browse_only',
-        restricted: "no",
-        url: 'http://libmedia.willamette.edu/cview/archives.html#!doc:page:manuscripts/1645',
-        thumbnail: 'http://libmedia.willamette.edu/resources/img/thumb/ChloeAureliaClarkeWillson.png',
-        tags: ['cheese', 'rhubarb'],
-        categories:['document', 'image']
-      };
+      // Internal showDialog method.
+      // Based on Angular Material dialog example.
+      function showDialog($event, message) {
+
+        var parentEl = angular.element(document.body);
+        // Show a dialog with the specified options.
+        $mdDialog.show({
+          parent: parentEl,
+          targetEvent: $event,
+          template: message,
+          controller: DialogController
+        });
+
+        // The mdDialog service runs in an isolated scope.
+        // It should be possible to use the mdDialog service and it's
+        // inner controller with the multiple controllers in this project.
+        // However, each context will require unique methods and events.
+        // At least initially, let's create separate local controllers
+        // and dialog services for each of the otter controllers.
+        // Once complete, perhaps merge into a single member function.
+        function DialogController($rootScope, $scope, $mdDialog, CategoryAdd, CategoryList, Data) {
+
+          $scope.Data = Data;
+
+          $scope.deleteCategory = function(id) {
+
+            var result = CategoryDelete.save({id: id});
+
+            result.$promise.then(function(data) {
+              if (data.status === 'success') {
+
+                toast("Category Deleted");
+                // $scope.getCategoryList();
+                // after retrieving new category list, we need
+                // to update the category currently in view.
+                $scope.getCategoryListAndUpdate();
+                $scope.closeDialog();
+
+              }
+
+            });
+
+          };
+
+          $scope.addCategory = function(title) {
+
+            var result = CategoryAdd.save({title: title});
+
+            result.$promise.then(function(data) {
+
+              if (data.status === 'success') {
+                toast("Category Added");
+                $scope.getCategoryList(data.id);
+                $scope.closeDialog();
+
+              }
+
+            });
+          };
+
+          $scope.getCategoryList = function(id) {
+
+            // update Data service
+            Data.categories  = CategoryList.query();
+            // broadcast event from rootScope so that
+            // CategoryCtrl will update list with the
+            // new category.
+            Data.categories.$promise.then(function () {
+
+              $rootScope.$broadcast('categoriesUpdate', {categories: Data.categories, id: id });
+
+            });
+
+          };
+
+          $scope.getCategoryListAndUpdate = function () {
+
+            Data.categories  = CategoryList.query();
+            Data.categories.$promise.then(function () {
+
+              $scope.broadcastDelete();
+
+            });
+
+          };
+
+          $scope.broadcastDelete = function() {
+
+            $rootScope.$broadcast('categoriesUpdateAfterDelete', Data.categories);
+            $rootScope.$broadcast('categoryUpdate', Data.categories[0].id);
+
+          };
+
+          $scope.closeDialog = function() {
+            $mdDialog.hide();
+          }
+
+        }
+      }
+
+      // Using the Angular Material toast service.
+      // As written, this function requires read/write access
+      // to the scope object.  It's not obvious how one might
+      // call this method from multiple controllers.  So this
+      // appears where needed.
+      function toast(content) {
+
+        $scope.toastPosition = {
+          bottom: false,
+          top: true,
+          left: false,
+          right: true
+        };
+
+        $scope.getToastPosition = function () {
+          return Object.keys($scope.toastPosition)
+            .filter(function (pos) {
+              return $scope.toastPosition[pos];
+            })
+            .join(' ');
+        };
+
+        $mdToast.show(
+          $mdToast.simple()
+            .content(content)
+            .position($scope.getToastPosition())
+            .hideDelay(3000)
+        );
+
+      }
 
       $scope.init(5);
 
@@ -195,6 +301,9 @@ taggerControllers.controller('CategoryCtrl', [
 
     };
 
+    // Dialog Messages
+
+    // Add category
     $scope.addMessage =
       '<md-dialog aria-label="Category dialog" style="width: 450px;">' +
       '  <md-dialog-content>'+
@@ -213,6 +322,7 @@ taggerControllers.controller('CategoryCtrl', [
       '  </div>' +
       '</md-dialog>';
 
+    // delete category
     $scope.deleteMessage =
       '<md-dialog aria-label="Delete dialog" style="width: 450px;">' +
       '  <md-dialog-content>'+
@@ -231,10 +341,14 @@ taggerControllers.controller('CategoryCtrl', [
       '  </div>' +
       '</md-dialog>';
 
+
     $scope.showDialog = showDialog;
-    // internal method
+
+    // Internal showDialog method.
+    // Based on Angular Material dialog example.
     function showDialog($event, message) {
       var parentEl = angular.element(document.body);
+      // Show a dialog with the specified options.
       $mdDialog.show({
         parent: parentEl,
         targetEvent: $event,
@@ -242,7 +356,13 @@ taggerControllers.controller('CategoryCtrl', [
         controller: DialogController
       });
 
-      // this needs to be updated for category
+      // The mdDialog service runs in an isolated scope.
+      // It should be possible to use the mdDialog service and it's
+      // inner controller with other controllers in the project.
+      // However, each context will require unique methods and events.
+      // At least initially, let's create separate local controllers
+      // and dialog services for each of the otter controllers.
+      // Once complete, perhaps merge into a single member function.
       function DialogController($rootScope, $scope, $mdDialog, CategoryAdd, CategoryList, Data) {
 
         $scope.Data = Data;
@@ -255,7 +375,7 @@ taggerControllers.controller('CategoryCtrl', [
             if (data.status === 'success') {
 
               toast("Category Deleted");
-             // $scope.getCategoryList();
+              // $scope.getCategoryList();
               // after retrieving new category list, we need
               // to update the category currently in view.
               $scope.getCategoryListAndUpdate();
@@ -325,10 +445,13 @@ taggerControllers.controller('CategoryCtrl', [
 
     $scope.areas = Data.areas;
 
+    // Using the Angular Material toast service.
+    // As written, this function requires read/write access
+    // to the scope object.  It's not obvious how one might
+    // call this method from multiple controllers.  So where
+    // needed, this reappears in other controllers.
     function toast(content) {
 
-      // likely to be using this again. Needs to become a directive
-      // or shared method.
       $scope.toastPosition = {
         bottom: false,
         top: true,
@@ -360,4 +483,6 @@ taggerControllers.controller('CategoryCtrl', [
   }
 
 ]);
+
+
 
