@@ -35,7 +35,23 @@ module.exports = function(app,config,passport){
   app.get('/login', crud.login);
   app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
   app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
+
+  // Collections
+  app.get('/admin/collections', ensureAuthenticated, collection.index);
+
+  // Categories
+  app.get('/admin/category', ensureAuthenticated, category.getOverview);
+  app.get('/rest/category/:id', ensureAuthenticated, category.getCategory);
+  app.get('/rest/category/show/list', ensureAuthenticated, category.listCategories);
+  app.get('/rest/category/byArea/:id', ensureAuthenticated, category.listCategoriesByArea);
+  app.post('/rest/category/add', ensureAuthenticated, category.add);
+  app.post('/rest/category/update', ensureAuthenticated, category.update);
+  app.post('/rest/category/delete', ensureAuthenticated, category.delete);
+
+  //unused category route
   app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);
+
+
   app.get('/admin/area/view', ensureAuthenticated, crud.areaIndex);
   app.get('/admin/form/collection', ensureAuthenticated, crud.index);
   app.get('/admin/form/collection/create', ensureAuthenticated, crud.collCreate);
@@ -101,7 +117,7 @@ module.exports = function(app,config,passport){
   app.use('/rest/areas',                    area.getAreas);
   app.use('/rest/collection/tags/:id',   collection.tagsForCollection);
   app.use('/rest/collection/types/:id',   collection.typesForCollection);
-  app.use('/rest/categories/byArea/:areaId', category.categoriesByArea);
+ // app.use('/rest/categories/byArea/:areaId', category.categoriesByArea);
 
   /* Static Angularjs module routes.  Used by the Academic Commons public site. */
   // request for partials

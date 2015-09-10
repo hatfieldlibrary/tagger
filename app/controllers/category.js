@@ -48,7 +48,58 @@ exports.create = function(req, res) {
   );
 };
 
+exports.add = function(req, res ) {
+
+  var title = req.body.title;
+
+  db.Category.create({
+    title: title
+  }).success(function(result) {
+    console.log(result);
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({status: 'success', id: result.id}));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
 exports.update = function(req, res) {
+
+  console.log(req.body);
+  var title = req.body.title;
+  var url = req.body.url;
+  var description = req.body.description;
+  var linkLabel = req.body.linkLabel;
+  var id = req.body.id;
+  var areaId = req.body.areaId;
+  console.log("Got id " + id);
+  db.Category.update({
+      title: title,
+      url: url,
+      linkLabel: linkLabel,
+      description: description,
+      areaId: areaId
+    },
+    {
+      id: {
+        eq: id
+      }
+    }).success(function() {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({status: 'success'}));
+    }).error(function(err) {
+      console.log(err);
+    });
+
+};
+
+
+exports.oldupdate = function(req, res) {
 
   var catName = req.body.title;
   var catUrl = req.body.url;
@@ -96,8 +147,26 @@ exports.update = function(req, res) {
   );
 };
 
-
 exports.delete = function(req, res) {
+
+  var catId = req.body.id;
+
+  db.Category.destroy({
+    id: {
+      eq: catId
+    }
+  }).success(function() {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({ status: 'success', id: catId }));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+exports.olddelete = function(req, res) {
 
   var catId = req.params.id;
   // First delete the collection. Then retrieve the updated
@@ -171,9 +240,10 @@ exports.addCategoryTarget = function (req, res) {
 
 
 };
-exports.categoriesByArea = function (req, res) {
 
-  var areaId = req.param.areaId;
+exports.listCategoriesByArea = function (req, res) {
+
+  var areaId = req.params.areaId;
 
   db.Category.findAll( {
     where: {
@@ -194,3 +264,52 @@ exports.categoriesByArea = function (req, res) {
     console.log(err);
   });
 };
+
+exports.listCategories = function(req, res) {
+
+  db.Category.findAll({
+    attributes: ['id','title'],
+    order: [['title', 'ASC']]
+  }).success(function(categories) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(categories));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+exports.getCategory = function( req, res) {
+
+  var categoryId = req.params.id;
+
+  db.Category.find({
+    where: {
+      id: {
+        eq: categoryId
+      }
+    }
+
+  }).success( function(category) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(category));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+exports.getOverview = function(req, res) {
+  console.log(req.user);
+  res.render('categoryOverview', {
+    title: 'Categories',
+    user: req.user.displayName,
+    picture: req.user._json.picture
+  });
+};
+
+

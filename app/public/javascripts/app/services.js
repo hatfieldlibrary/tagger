@@ -2,8 +2,9 @@
 'use strict';
 
 var host = 'http://localhost:3000/rest/';
+var adminhost = 'http://localhost:3000/admin/';
 //var host = 'http://libmedia.willamette.edu/acomrest2/';
-
+//var adminhost = 'http://localhost:3000/taggerAdmin/';
 var taggerServices = angular.module('taggerServices', ['ngResource']);
 
 taggerServices.factory('CollectionsByArea', ['$resource',
@@ -43,5 +44,39 @@ taggerServices.factory('AreaList', ['$resource',
     return $resource(host + 'areas', {}, {
       query: {method:'GET', isArray: true}
     });
+  }
+]);
+
+taggerServices.factory('Category', ['$resource',
+  function($resource) {
+    return $resource(host + 'category/:id', {}, {
+      query: {method:'GET', isArray: false}
+    });
+  }
+]);
+
+taggerServices.factory('CategoryList', ['$resource',
+  function($resource) {
+    return $resource(host + 'category/show/list', {}, {
+      query: {method:'GET', isArray: true}
+    });
+  }
+]);
+
+taggerServices.factory('CategoryUpdate', ['$resource',
+  function($resource) {
+    return $resource(host + 'category/update');
+  }
+]);
+
+taggerServices.factory('CategoryAdd', ['$resource',
+  function($resource) {
+    return $resource(host + 'category/add');
+  }
+]);
+
+taggerServices.factory('CategoryDelete', ['$resource',
+  function($resource) {
+    return $resource(host + 'category/delete');
   }
 ]);

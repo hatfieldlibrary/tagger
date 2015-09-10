@@ -950,3 +950,14 @@ exports.browseList = function(req, res) {
   });
   request.end();
 };
+
+exports.index = function(req, res){
+
+
+  res.render('collectionOverview', {
+    title: 'Overview',
+    user: req.user.displayName,
+    picture: req.user._json.picture
+  });
+
+};

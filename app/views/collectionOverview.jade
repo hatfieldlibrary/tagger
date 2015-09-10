@@ -1,15 +1,21 @@
 extends layout
+
 block content
+
   md-content(layout="row", layout-align="start start", flex, ng-controller="CollectionCtrl")
     md-content(layout="column" flex="75")
       md-card.flex(flex, style="height: 990px;")
         div(ng-if="collectionList.$resolved")
+
         md-toolbar.md_primary
           .md-toolbar-tools
-            i.material-icons(flex="20") content_copy
+            span(flex="20")
+              i.material-icons(style="color: #80CBC4;") content_copy
+              span.md-subhead Collections
             h3.md-display-1 {{collection.collection.title}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection") <i class="material-icons">delete</i>
+
         md-card-content
           div(layout="row", layout-align="start start")
             div(flex="20" )
@@ -17,16 +23,22 @@ block content
               div(layout="column", style="height:770px;")
                 md-content(flex)
                   md-list
+
                   div(ng-repeat="col in collectionList")
                     md-list-item
+
                       md-button(class="md-no-style md-button  md-default-theme", style="min-height: 47px;" ng-click="getCollectionById(col.collection.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
                           div.md-ripple-container
                     md-divider
+
+
+
             md-content(layout-padding flex="80" style="padding-left: 20px;")
               div(flex)
                 md-button(class="md-raised md-accent" style="float:right;") Update This Collection
                 h3(class="md-title" style="margin-top: 10px;") Edit Collection
+
               md-input-container
                 label Collection Name
                 input(type="text", ng-model="collection.collection.title")
@@ -50,6 +62,7 @@ block content
               md-input-container
                 label URL
                 input(type="text", ng-model="collection.collection.url")
+
               div(style="margin-bottom: 5px;")
                 div.md-caption Item Type
                 md-radio-group(layout="row" ng-model="collection.collection.collType")
@@ -89,7 +102,10 @@ block content
                   div(flex="25")
                     md-radio-button(aria-label="Restricted" value="SEARCH" flex="15" style="display: inline") Search Only
                   span(flex)
+
+
     md-content(layout="column" flex="25")
+
       md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
@@ -104,6 +120,8 @@ block content
               img(style="max-width: 120px;" src="http://libmedia.willamette.edu/resources/img/thumb/{{collection.collection.image}}")
             md-card-content
               span.md-caption Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
+
+
       md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
@@ -121,6 +139,7 @@ block content
               md-chips(ng-model="collectionTags")
                 md-chip-template {{$chip.name}}
                 md-button.md-chip-remove Close
+
       md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
@@ -138,6 +157,7 @@ block content
               md-chips(ng-model="collectionTypes")
                 md-chip-template {{$chip.itemContent.name}}
                 md-button.md-chip-remove Close
+
       md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
@@ -146,5 +166,9 @@ block content
             span(flex)
         md-card-content
           md-input-container(class="md-no-float" style="display:inline-block")
-            md-select(ng-model="areas" placeholder="Select Area")
-              md-option(ng-repeat="area in areas" ng-selected="area.id") {{area.title}}
+
+              md-select(ng-model="areas" placeholder="Select Area")
+                md-option(ng-repeat="area in areas" ng-selected="area.id") {{area.title}}
+
+
+
