@@ -7,7 +7,7 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") flag
+              i.material-icons(style="color: #80CBC4;") image
               span.md-subhead Content Types
             h2.md-display-2 {{content.title}}
             span(flex)
@@ -34,6 +34,6 @@ block content
                 input(type="text", ng-model="type.title")
               md-input-container
                 label Type Icon (Material icon name:  e.g. shopping_basket )
-                input(type="text", ng-model="type.title")
+                input(type="text", ng-model="type.icon")
           div.md-panel Material Icons: https://www.google.com/design/icons/
     md-content(layout="column" flex="25")
