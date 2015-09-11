@@ -47,6 +47,32 @@ taggerServices.factory('AreaList', ['$resource',
   }
 ]);
 
+taggerServices.factory('AreaById', ['$resource',
+  function( $resource) {
+    return $resource(host + 'area/byId/:id', {}, {
+        query: {method:'GET', isArray: false}
+      });
+  }
+]);
+
+taggerServices.factory('AreaAdd', ['$resource',
+  function($resource) {
+    return $resource(host + 'area/add');
+  }
+]);
+
+taggerServices.factory('AreaDelete', ['$resource',
+  function($resource) {
+    return $resource(host + 'area/delete');
+  }
+]);
+
+taggerServices.factory('AreaUpdate', ['$resource',
+  function($resource) {
+    return $resource(host + 'area/update');
+  }
+]);
+
 taggerServices.factory('Category', ['$resource',
   function($resource) {
     return $resource(host + 'category/:id', {}, {

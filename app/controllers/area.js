@@ -46,7 +46,50 @@ exports.create = function(req, res) {
   );
 };
 
-exports.update = function(req, res) {
+exports.add =function (req, res) {
+
+  var title = req.body.title;
+
+  db.Area.create({
+    title: title
+  }).success(function(result) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({ status: 'success', id: result.id }));
+  });
+
+};
+
+exports.update = function (req, res) {
+  var title = req.body.title;
+  var url = req.body.url;
+  var searchUrl = req.body.searchUrl;
+  var description = req.body.description;
+  var linkLabel = req.body.linkLabel;
+  var id = req.body.id;
+
+  db.Area.update({
+      title: title,
+      url: url,
+      linkLabel: linkLabel,
+      searchUrl: searchUrl,
+      description: description
+    },
+    {
+      id: {
+        eq: id
+      }
+    }).success(function(result) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({ status: 'success', id: result.id }));
+    });
+};
+
+
+exports.oldupdate = function(req, res) {
 
   var title = req.body.title;
   var url = req.body.url;
@@ -93,7 +136,23 @@ exports.update = function(req, res) {
 };
 
 
-exports.delete = function(req, res) {
+exports.delete = function (req , res) {
+
+  var id = req.body.id;
+
+  db.Area.destroy({
+    id: {
+      eq: id
+    }
+  }).success(function(result) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({ status: 'success'}));
+  });
+};
+
+exports.olddelete = function(req, res) {
 
   var areaId = req.params.id;
   // First delete the collection. Then retrieve the updated
@@ -161,6 +220,15 @@ exports.getAreas = function(req, res) {
     res.setHeader('Access-Control-Allow-Origin','*');
     res.end(JSON.stringify(tags));
 
+  });
+};
+
+exports.getOverview = function(req, res) {
+  console.log(req.user);
+  res.render('areaOverview', {
+    title: 'Areas',
+    user: req.user.displayName,
+    picture: req.user._json.picture
   });
 };
 

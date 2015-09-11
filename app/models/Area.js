@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       description: {
         type: DataTypes.STRING(4096),
-        allowNull: false
+        allowNull: true
       }
     },  {
       getterMethods: {

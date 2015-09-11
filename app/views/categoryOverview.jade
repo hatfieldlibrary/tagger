@@ -23,7 +23,7 @@ block content
                   md-list
                     div(ng-repeat="cat in categories")
                       md-list-item
-                        md-button(class="md-no-style md-button  md-default-theme", style="min-height: 47px;" ng-click="getCategory(cat.id);")
+                        md-button(class="md-no-style md-button  md-default-theme", style="min-height: 47px;" ng-click="resetCategory(cat.id);")
                           div(class="list-group-item-text md-subhead layout-fill") {{cat.title}}
                             div.md-ripple-container
                   md-divider
