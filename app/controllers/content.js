@@ -6,12 +6,102 @@
 var async = require('async');
 
 exports.getOverview = function(req, res) {
-  console.log(req.user);
+
   res.render('contentOverview', {
     title: 'Categories',
     user: req.user.displayName,
     picture: req.user._json.picture
   });
+};
+
+exports.add = function( req, res) {
+
+  var name = req.body.title;
+
+  async.parallel (
+    {
+      // Check to see if content type already exists.
+      check: function (callback) {
+        console.log('checking existence of content type');
+        db.ItemContent.find(
+          {
+            where: {
+              name: {
+                eq: name
+              }
+            }
+          }
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      if (result.check === null) {
+        // Add new content type
+        db.ItemContent.create({name: name
+        }).success(function (result) {
+          // JSON response
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Access-Control-Allow-Origin','*');
+          res.end(JSON.stringify({status: 'success', id: result.id}));
+        })
+          .error(function (err) {
+            console.log(err);
+          });
+
+      } else {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.end(JSON.stringify({status: 'failure'}));
+
+      }
+    }
+
+  );
+};
+
+exports.getTypeById = function( req, res) {
+
+  var id = req.params.id;
+
+  db.ItemContent.find({
+    where: {
+      id: {
+        eq: id
+      }
+    }
+
+  }).success( function(type) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(type));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+exports.listTypes = function(req, res) {
+
+  db.ItemContent.findAll({
+    attributes: ['id','name'],
+    order: [['name', 'ASC']]
+  }).success(function(types) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(types));
+  }).error(function(err) {
+    console.log(err);
+  });
+
 };
 
 
@@ -115,6 +205,28 @@ exports.contentUpdate = function (req, res) {
 };
 
 exports.delete = function (req, res) {
+
+  var contentId = req.body.id;
+
+  db.ItemContent.destroy(
+    {
+      id: {
+        eq: contentId
+      }
+    }).success(function() {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.end(JSON.stringify({status: 'success'}));
+
+      }).
+      error(function(err) {
+          console.log(err);
+      });
+
+};
+
+exports.olddelete = function (req, res) {
 
   var contentId = req.params.id;
   async.series (

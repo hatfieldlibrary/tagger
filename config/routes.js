@@ -30,7 +30,7 @@ module.exports = function(app,config,passport){
     passport.authenticate('google', { successRedirect: '/admin',
       failureRedirect: '/login' }));
 
-  // Administration routes.
+  // TAGGER ROUTES
   app.get('/admin', ensureAuthenticated, crud.index);
   app.get('/login', crud.login);
   app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
@@ -48,8 +48,6 @@ module.exports = function(app,config,passport){
   app.post('/rest/category/update', ensureAuthenticated, category.update);
   app.post('/rest/category/delete', ensureAuthenticated, category.delete);
 
-
-
   // AREAS
   app.get('/admin/area', ensureAuthenticated, area.getOverview);
   app.use('/rest/area/byId/:id', area.areaById);  // used by public and admin views, no authentication
@@ -60,6 +58,13 @@ module.exports = function(app,config,passport){
 
   // CONTENT TYPES
   app.get('/admin/content', ensureAuthenticated, content.getOverview);
+  app.use('/rest/content/byId/:id', ensureAuthenticated, content.getTypeById);
+  app.use('/rest/content/show/list', ensureAuthenticated, content.listTypes);
+  app.post('/rest/content/add', ensureAuthenticated, content.add);
+  app.post('/rest/content/delete', ensureAuthenticated, content.delete);
+ // app.post('/rest/content/update', ensureAuthenticated, content.update);
+
+
 
   //unused category route
   app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);

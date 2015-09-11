@@ -106,3 +106,31 @@ taggerServices.factory('CategoryDelete', ['$resource',
     return $resource(host + 'category/delete');
   }
 ]);
+
+taggerServices.factory('ContentType', ['$resource',
+  function($resource) {
+    return $resource(host + 'content/byId/:id', {}, {
+      query: {method:'GET', isArray: false}
+    });
+  }
+]);
+
+taggerServices.factory('ContentTypeList', ['$resource',
+  function($resource) {
+    return $resource(host + 'content/show/list', {}, {
+      query: {method:'GET', isArray: true}
+    });
+  }
+]);
+
+taggerServices.factory('ContentTypeAdd', ['$resource',
+  function($resource) {
+    return $resource(host + 'content/add');
+  }
+]);
+
+taggerServices.factory('ContentTypeDelete', ['$resource',
+  function($resource) {
+    return $resource(host + 'content/delete');
+  }
+]);

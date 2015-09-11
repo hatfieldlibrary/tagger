@@ -27,7 +27,9 @@ taggerApp.factory('Data', function() {
     areas: [],
     currentAreaIndex: 0,
     currentCategoryIndex: 0,
-    categories: []
+    categories: [],
+    currentContentIndex: 0,
+    contentTypes: []
   };
 });
 

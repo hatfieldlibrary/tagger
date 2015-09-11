@@ -53,8 +53,7 @@ exports.create = function(req, res) {
             name: tagName,
             url: tagUrl,
             areaId: areaId
-            /*jshint unused:false*/
-          }).success(function (items) {
+          }).success(function () {
             db.Tag.findAll()
               .success(function (tags) {
                 res.render('tagIndex', {

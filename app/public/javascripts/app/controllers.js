@@ -107,9 +107,7 @@ taggerControllers.controller('CollectionCtrl', [
       // At least initially, let's create separate local controllers
       // and dialog services for each of the otter controllers.
       // Once complete, perhaps merge into a single member function.
-      function DialogController($rootScope, $scope, $mdDialog, CategoryAdd, CategoryList, Data) {
-
-        $scope.Data = Data;
+      function DialogController($rootScope, $scope, $mdDialog, CategoryAdd, CategoryList, CategoryDelete, Data) {
 
         $scope.deleteCategory = function(id) {
 
@@ -364,7 +362,7 @@ taggerControllers.controller('AreaCtrl', [
       // At least initially, let's create separate local controllers
       // and dialog services for each of the otter controllers.
       // Once complete, perhaps merge into a single member function.
-      function DialogController($rootScope, $scope, $mdDialog, AreaDelete, AreaAdd, AreaList, Data) {
+      function DialogController($rootScope, $scope, $mdDialog, AreaAdd, AreaList, AreaDelete, Data) {
 
         $scope.Data = Data;
 
@@ -501,7 +499,7 @@ taggerControllers.controller('CategoryCtrl', [
 
 
     $scope.Data = Data.categories;
-    $scope.areas = Data.areas;
+    //$scope.areas = Data.areas;
 
     // Categories initialization, called on load.
     $scope.init = function() {
@@ -630,9 +628,8 @@ taggerControllers.controller('CategoryCtrl', [
       // At least initially, let's create separate local controllers
       // and dialog services for each of the otter controllers.
       // Once complete, perhaps merge into a single member function.
-      function DialogController($rootScope, $scope, $mdDialog, CategoryAdd, CategoryList, Data) {
+      function DialogController($rootScope, $scope, $mdDialog, CategoryAdd, CategoryList, CategoryDelete, Data) {
 
-        $scope.Data = Data;
 
         $scope.deleteCategory = function(id) {
 
@@ -757,6 +754,299 @@ taggerControllers.controller('CategoryCtrl', [
   }
 
 ]);
+
+
+
+/*
+ *
+ *  CONTENT TYPES CONTROLLER
+ *
+ */
+
+taggerControllers.controller('ContentCtrl', [
+
+  '$rootScope',
+  '$scope',
+  '$mdDialog',
+  '$mdToast',
+  '$animate',
+  'ContentTypeList',
+  'ContentType',
+  // 'ContentTypeUpdate',
+  // 'ContentTypeDelete',
+  'ContentTypeAdd',
+  'Data',
+
+  function(
+    $rootScope,
+    $scope,
+    $mdDialog,
+    $mdToast,
+    $animate,
+    ContentTypeList,
+    ContentType,
+    ContentTypeAdd,
+    Data) {
+
+
+    $scope.Data = Data;
+    //$scope.areas = Data.areas;
+
+    // Categories initialization, called on load.
+    $scope.init = function() {
+
+      $scope.contentTypes = ContentTypeList.query();
+      // Wait for response. Then in the shared Data service,
+      // update the category array and set the current
+      // index to the first item in the category list.
+      $scope.contentTypes
+        .$promise
+        .then(function(data) {
+          $scope.Data.contentTypes = data;
+          if (data.length > 0) {
+            Data.currentContentIndex = data[0].id;
+            console.log($scope.Data.currentContentIndex);
+            $scope.resetType(data[0].id);
+          }
+        });
+
+    };
+
+    // Watch for changes in Data service
+    $scope.$watch(function(scope) { return scope.Data.contentTypes },
+      function(newValue, oldValue) {
+        $scope.contentTypes = newValue;
+      }
+    );
+
+    // Listen for categories update event.
+    $scope.$on('contentUpdate', function(event, data) {
+      console.log(data);
+      $scope.contentTypes = Data.contentTypes;
+      Data.currentContentIndex =data.id;
+      console.log($scope.Data.currentContentIndex);
+      $scope.resetType(data.id);
+    });
+
+    // reset the current category
+    $scope.resetType = function(id) {
+
+      Data.currentContentIndex = id;
+      console.log($scope.Data.currentContentIndex);
+      $scope.contentType = ContentType.query({id: id});
+
+    };
+
+
+    // Update the category fields.
+    $scope.updateType = function() {
+
+      var success = ContentTypeUpdate.save({
+
+        id: $scope.contentType.id,
+        title: $scope.contentType.title,
+        description: $scope.contentType.description,
+        areaId: $scope.contentType.areaId,
+        linkLabel: $scope.contentType.linkLabel,
+        url: $scope.contentType.url
+
+      });
+
+      success.$promise.then(function(data) {
+
+        if (data.status === 'success') {
+          // Toast upon success
+          toast("Content Type Updated");
+        }
+      })
+
+    };
+
+    // Dialog Messages
+    // Add category
+    $scope.addMessage =
+      '<md-dialog aria-label="Content Type dialog" style="width: 450px;">' +
+      '  <md-dialog-content>'+
+      '    <h3 class="md-display-1">New Content Type</h3>' +
+      '      <md-input-container class="md-default-theme md-input-has-value">'  +
+      '         <label for="input_4">Name</label><input type="text" ng-model="content.title" class="ng-pristine ng-valid md-input ng-touched" id="input_4" tabindex="0" aria-invalid="false" style="">'  +
+      '       </md-input-container>'  +
+      '  </md-dialog-content>' +
+      '  <div class="md-actions">' +
+      '    <md-button ng-click="closeDialog()" class="md-primary">' +
+      '      Cancel' +
+      '    </md-button>' +
+      '    <md-button ng-click="addContentType(content.title)" class="md-primary">' +
+      '      Add Content Type' +
+      '    </md-button>' +
+      '  </div>' +
+      '</md-dialog>';
+
+    // delete category
+    $scope.deleteMessage =
+      '<md-dialog aria-label="Delete dialog" style="width: 450px;">' +
+      '  <md-dialog-content>'+
+      '    <h3 class="md-display-1">Delete Category</h3>' +
+      '      <md-input-container class="md-default-theme md-input-has-value">'  +
+      '        Delete this content type?'  +
+      '       </md-input-container>'  +
+      '  </md-dialog-content>' +
+      '  <div class="md-actions">' +
+      '    <md-button ng-click="closeDialog()" class="md-primary">' +
+      '      Cancel' +
+      '    </md-button>' +
+      '    <md-button ng-click="deleteContentType(Data.currentContentIndex)" class="md-primary">' +
+      '      Delete Content Type' +
+      '    </md-button>' +
+      '  </div>' +
+      '</md-dialog>';
+
+
+    $scope.showDialog = showDialog;
+
+    // The internal showDialog method.
+    // Based on Angular Material dialog example.
+    function showDialog($event, message) {
+      var parentEl = angular.element(document.body);
+      // Show a dialog with the specified options.
+      $mdDialog.show({
+        parent: parentEl,
+        targetEvent: $event,
+        template: message,
+        controller: DialogController
+      });
+
+      // The mdDialog service runs in an isolated scope.
+      // It should be possible to use the mdDialog service and it's
+      // inner controller with other controllers in the project.
+      // However, each context will require unique methods and events.
+      // At least initially, let's create separate local controllers
+      // and dialog services for each of the otter controllers.
+      // Once complete, perhaps merge into a single member function.
+      function DialogController($rootScope, $scope, $mdDialog, ContentTypeAdd, ContentTypeList, ContentTypeDelete, Data) {
+
+        // add Data service to scope dialog
+        $scope.Data = Data;
+        $scope.deleteContentType = function(id) {
+
+          console.log('deleting ' + id);
+          var result = ContentTypeDelete.save({id: id});
+
+          result.$promise.then(function(data) {
+            if (data.status === 'success') {
+
+              toast("Content Type Deleted");
+              // After retrieving new category list, we need
+              // to update the category currently in view.
+              // This method is designed to take an id
+              // parameter.  But if this is null, it
+              // uses the id of the first category in the
+              // updated list. That's what we want in the
+              // case of deletions.
+              $scope.getContentList(null);
+              $scope.closeDialog();
+
+            }
+
+          });
+
+        };
+
+        // Called when user selects add category
+        // in the dialog.
+        $scope.addContentType = function(title) {
+
+          var result = ContentTypeAdd.save({title: title});
+
+          result.$promise.then(function(data) {
+
+            if (data.status === 'success') {
+              console.log(data);
+              toast("Content Type Added");
+              // Update the category list. The
+              // id parameter will be used to select
+              // the newly added category for editing.
+              $scope.getContentList(data.id);
+              // Does what you'd expect.
+              $scope.closeDialog();
+
+            }
+
+          });
+        };
+
+        // Retrieves a new category list.  On return, broadcasts event
+        // to the rootScope, passing references to the new category
+        // list and the id param passed into the method. If the id param
+        // is null, broadcasts the id of the first item listed in the
+        // new category array. This cause a view to update with the new
+        // category list and an item in the edit panel.
+        $scope.getContentList = function(id) {
+
+          // Update the shared Data service
+          Data.contentTypes  = ContentTypeList.query();
+          // Wait for callback.
+          Data.contentTypes.$promise.then(function () {
+            // Deleting a category doesn't generate
+            // a new id. In that case, expect the
+            // id to be null. Update the view using the
+            // id of the first item in the updated category
+            // list.
+            if (id === null) {
+
+              id = Data.contentTypes[0].id;
+
+            }
+
+            $rootScope.$broadcast('contentUpdate', {id: id });
+
+
+          });
+
+        };
+
+        $scope.closeDialog = function() {
+          // This does what you'd expect.
+          $mdDialog.hide();
+        }
+
+      }
+    }
+
+    // Using the Angular Material toast service.
+    // As written, this function requires read/write access
+    // to the scope object.  It's not obvious how one might
+    // call this method from multiple controllers.  So where
+    // needed, this reappears in other controllers.
+    function toast(content) {
+
+      $scope.toastPosition = {
+        bottom: false,
+        top: true,
+        left: false,
+        right: true
+      };
+
+      $scope.getToastPosition = function () {
+        return Object.keys($scope.toastPosition)
+          .filter(function (pos) {
+            return $scope.toastPosition[pos];
+          })
+          .join(' ');
+      };
+
+      $mdToast.show(
+        $mdToast.simple()
+          .content(content)
+          .position($scope.getToastPosition())
+          .hideDelay(3000)
+      );
+
+    }
+
+    $scope.init();
+
+  }]);
 
 
 
