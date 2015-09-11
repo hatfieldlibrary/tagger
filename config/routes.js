@@ -36,10 +36,10 @@ module.exports = function(app,config,passport){
   app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
   app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
 
-  // Collections
+  // COLLECTIONS
   app.get('/admin/collections', ensureAuthenticated, collection.index);
 
-  // Categories
+  // CATEGORIES
   app.get('/admin/category', ensureAuthenticated, category.getOverview);
   app.get('/rest/category/:id', ensureAuthenticated, category.getCategory);
   app.get('/rest/category/show/list', ensureAuthenticated, category.listCategories);
@@ -48,10 +48,21 @@ module.exports = function(app,config,passport){
   app.post('/rest/category/update', ensureAuthenticated, category.update);
   app.post('/rest/category/delete', ensureAuthenticated, category.delete);
 
+
+
+  // AREAS
+  app.get('/admin/area', ensureAuthenticated, area.getOverview);
+  app.use('/rest/area/byId/:id', area.areaById);  // used by public and admin views, no authentication
+  app.use('/rest/areas',         area.getAreas);  // used by public and admin views, no authentication
+  app.post('/rest/area/add', ensureAuthenticated, area.add);
+  app.post('/rest/area/delete', ensureAuthenticated, area.delete);
+  app.post('/rest/area/update', ensureAuthenticated, area.update);
+
+  // CONTENT TYPES
+  app.get('/admin/content', ensureAuthenticated, content.getOverview);
+
   //unused category route
   app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);
-
-
   app.get('/admin/area/view', ensureAuthenticated, crud.areaIndex);
   app.get('/admin/form/collection', ensureAuthenticated, crud.index);
   app.get('/admin/form/collection/create', ensureAuthenticated, crud.collCreate);
@@ -75,8 +86,8 @@ module.exports = function(app,config,passport){
   app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);
   app.post('/admin/tag/create', ensureAuthenticated, tag.create);
   app.post('/admin/tag/update', ensureAuthenticated, tag.tagUpdate);
-  app.post('/admin/area/create', ensureAuthenticated, area.create);
-  app.post('/admin/area/update', ensureAuthenticated, area.update);
+//  app.post('/admin/area/create', ensureAuthenticated, area.create);
+ // app.post('/admin/area/update', ensureAuthenticated, area.update);
   app.get('/admin/area/delete/:id', ensureAuthenticated, area.delete);
   app.get('/admin/target/create', ensureAuthenticated, target.create);
   app.post('/admin/content/create', ensureAuthenticated, content.create);
@@ -113,8 +124,7 @@ module.exports = function(app,config,passport){
   app.use('/rest/collection/byArea/:id',    collection.collectionsByArea);
   app.use('/rest/collection/bySubject/:id/area/:areaId', collection.collectionsBySubject);
   app.use('/rest/subjects/byArea/:id',      tag.subjectsByArea);
-  app.use('/rest/area/byId/:id',            area.areaById);
-  app.use('/rest/areas',                    area.getAreas);
+
   app.use('/rest/collection/tags/:id',   collection.tagsForCollection);
   app.use('/rest/collection/types/:id',   collection.typesForCollection);
  // app.use('/rest/categories/byArea/:areaId', category.categoriesByArea);

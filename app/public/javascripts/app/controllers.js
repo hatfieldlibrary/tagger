@@ -5,7 +5,12 @@ var taggerControllers = angular.module('taggerControllers', []);
 
 
 
-// Top level layout controller.
+/*
+ *
+ *  TOP-LEVEL LAYOUT CONTROLLER
+ *
+ */
+
 taggerControllers.controller('LayoutCtrl', ['$scope', 'Data', 'AreaList', function($scope, Data, AreaList) {
 
   $scope.areas = AreaList.query();
@@ -15,7 +20,13 @@ taggerControllers.controller('LayoutCtrl', ['$scope', 'Data', 'AreaList', functi
 
 
 
-// Collections controller
+
+/*
+ *
+ *  COLLECTIONS CONTROLLER
+ *
+ */
+
 taggerControllers.controller('CollectionCtrl', [
 
   '$scope',
@@ -198,7 +209,12 @@ taggerControllers.controller('CollectionCtrl', [
 
 
 
-// Areas controller
+/*
+ *
+ *  AREAS CONTROLLER
+ *
+ */
+
 taggerControllers.controller('AreaCtrl', [
 
   '$rootScope',
@@ -450,7 +466,13 @@ taggerControllers.controller('AreaCtrl', [
 
 
 
-// Category controller
+
+/*
+ *
+ *  CATEGORIES CONTROLLER
+ *
+ */
+
 taggerControllers.controller('CategoryCtrl', [
   '$rootScope',
   '$scope',

@@ -28,7 +28,7 @@ html
 
       div(layout="row")
         if user
-          md-sidenav(style="height: 450px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
+          md-sidenav(style="height: 850px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
 
             md-toolbar(class="md-default-theme")
               md-card(class="local-hue-1 margin-override")
@@ -67,6 +67,13 @@ html
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons link
                       div.list-group-item-text Tags
+                        div.md-ripple-container
+                md-list-item
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/content" tabindex="0")
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons flag
+                      div.list-group-item-text Content Types
                         div.md-ripple-container
                 md-list-item
                   md-button(class="md-no-style md-button md-default-theme" href="/admin/category" tabindex="0")

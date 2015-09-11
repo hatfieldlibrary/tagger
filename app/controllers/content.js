@@ -5,6 +5,16 @@
 
 var async = require('async');
 
+exports.getOverview = function(req, res) {
+  console.log(req.user);
+  res.render('contentOverview', {
+    title: 'Categories',
+    user: req.user.displayName,
+    picture: req.user._json.picture
+  });
+};
+
+
 exports.create = function(req, res) {
 
   var cName = req.body.name;
