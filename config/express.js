@@ -21,6 +21,7 @@ module.exports = function(app, config) {
   app.use('/img', express.static(config.root + '/public/images'));
   app.use('/javascripts', express.static(config.root + '/public/javascripts'));
   app.use('/javascripts/vendor', express.static(config.root + '/public/javascripts/vendor'));
+  app.use('/admin/templates', express.static(config.root + '/public/templates'));
   app.use('/stylesheets', express.static( config.root + '/public/stylesheets'));
   // collection images
   app.use('/resources/img', express.static(config.taggerImageDir));

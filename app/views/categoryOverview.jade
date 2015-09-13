@@ -9,28 +9,32 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") flag
-              span.md-subhead Categories
+              i.material-icons(style="color: #80CBC4;") library_books
+              span.md-subhead GROUPS
             h2.md-display-2 {{category.title}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Category" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
          md-card-content
           div(layout="row", layout-align="start start")
             div(flex="20" )
-              md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="showDialog($event, addMessage)") Add New Category
+              md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="showDialog($event, addMessage)") Add New Group
               div(layout="column", style="height:770px;")
                 md-content(flex)
                   md-list
                     div(ng-repeat="cat in categories")
                       md-list-item
-                        md-button(class="md-no-style md-button  md-default-theme", style="min-height: 47px;" ng-click="resetCategory(cat.id);")
+                        md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': cat.id==Data.currentCategoryIndex}" style="min-height: 47px;" ng-click="resetCategory(cat.id);")
                           div(class="list-group-item-text md-subhead layout-fill") {{cat.title}}
                             div.md-ripple-container
                   md-divider
             md-content(layout-padding flex="80" style="padding-left: 20px;")
+              div(flex="80" class="md-subhead")
+                span Collections can belong to a single #[em Collection Group]. A Collection Group provides specific
+                |  information about the current collection and related collections.
+              div(flex)
               div(flex)
                 md-button(class="md-raised md-accent" style="float:right;" ng-click="updateCategory()") Update Category
-                h3(class="md-title" style="margin-top: 10px;") Edit Collection
+                h3(class="md-title" style="margin-top: 10px;") Edit Category
               md-input-container
                 label Collection Name
                 input(type="text", ng-model="category.title")

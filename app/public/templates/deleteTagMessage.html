@@ -1,0 +1,17 @@
+<md-dialog aria-label="Add tag" style="width: 450px;">
+  <md-dialog-content>
+    <h3 class="md-display-1">Delete Category</h3>
+    <md-input-container class="md-default-theme md-input-has-value">
+      Delete this Tag?
+     </md-input-container>
+   </md-dialog-content>
+  <div class="md-actions">
+    <md-button ng-click="closeDialog()" class="md-primary">
+      Cancel
+    </md-button>
+    <md-button ng-click="deleteTag(Data.currentTagIndex)" class="md-primary">
+      Delete Tag
+    </md-button>
+   </div>
+</md-dialog>
+

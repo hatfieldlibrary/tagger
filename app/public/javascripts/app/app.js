@@ -22,17 +22,6 @@ taggerApp.config(function($mdThemingProvider) {
 
 });
 
-taggerApp.factory('Data', function() {
-  return {
-    areas: [],
-    currentAreaIndex: 0,
-    currentCategoryIndex: 0,
-    categories: [],
-    currentContentIndex: 0,
-    contentTypes: []
-  };
-});
-
 // manually bootstrap angular here
 
 angular.element(document).ready(function() {

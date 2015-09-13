@@ -39,32 +39,38 @@ module.exports = function(app,config,passport){
   // COLLECTIONS
   app.get('/admin/collections', ensureAuthenticated, collection.index);
 
-  // CATEGORIES
-  app.get('/admin/category', ensureAuthenticated, category.getOverview);
-  app.get('/rest/category/:id', ensureAuthenticated, category.getCategory);
-  app.get('/rest/category/show/list', ensureAuthenticated, category.listCategories);
-  app.get('/rest/category/byArea/:id', ensureAuthenticated, category.listCategoriesByArea);
-  app.post('/rest/category/add', ensureAuthenticated, category.add);
-  app.post('/rest/category/update', ensureAuthenticated, category.update);
-  app.post('/rest/category/delete', ensureAuthenticated, category.delete);
-
   // AREAS
-  app.get('/admin/area', ensureAuthenticated, area.getOverview);
-  app.use('/rest/area/byId/:id', area.areaById);  // used by public and admin views, no authentication
-  app.use('/rest/areas',         area.getAreas);  // used by public and admin views, no authentication
+  app.get('/admin/area', ensureAuthenticated, area.overview);
+  app.use('/rest/area/byId/:id', area.byId);  // used by public and admin views, no authentication
+  app.use('/rest/areas',         area.list);  // used by public and admin views, no authentication
   app.post('/rest/area/add', ensureAuthenticated, area.add);
   app.post('/rest/area/delete', ensureAuthenticated, area.delete);
   app.post('/rest/area/update', ensureAuthenticated, area.update);
 
+  // CATEGORIES
+  app.get('/admin/category', ensureAuthenticated, category.overview);
+  app.get('/rest/category/byId/:id', ensureAuthenticated, category.byId);
+  app.get('/rest/category/show/list', ensureAuthenticated, category.list);
+  app.get('/rest/category/byArea/:id', ensureAuthenticated, category.listByArea);
+  app.post('/rest/category/add', ensureAuthenticated, category.add);
+  app.post('/rest/category/update', ensureAuthenticated, category.update);
+  app.post('/rest/category/delete', ensureAuthenticated, category.delete);
+
   // CONTENT TYPES
-  app.get('/admin/content', ensureAuthenticated, content.getOverview);
-  app.use('/rest/content/byId/:id', ensureAuthenticated, content.getTypeById);
-  app.use('/rest/content/show/list', ensureAuthenticated, content.listTypes);
+  app.get('/admin/content', ensureAuthenticated, content.overview);
+  app.use('/rest/content/byId/:id', ensureAuthenticated, content.byId);
+  app.use('/rest/content/show/list', ensureAuthenticated, content.list);
   app.post('/rest/content/add', ensureAuthenticated, content.add);
   app.post('/rest/content/delete', ensureAuthenticated, content.delete);
- // app.post('/rest/content/update', ensureAuthenticated, content.update);
+  app.post('/rest/content/update', ensureAuthenticated, content.update);
 
-
+  // TAGS
+  app.get('/admin/tag', ensureAuthenticated, tag.overview);
+  app.use('/rest/tag/byId/:id', ensureAuthenticated, tag.byId);
+  app.use('/rest/tag/show/list', ensureAuthenticated, tag.list);
+  app.post('/rest/tag/add', ensureAuthenticated, tag.add);
+  app.post('/rest/tag/delete', ensureAuthenticated, tag.delete);
+  app.post('/rest/tag/update', ensureAuthenticated, tag.update);
 
   //unused category route
   app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);
@@ -96,7 +102,7 @@ module.exports = function(app,config,passport){
   app.get('/admin/area/delete/:id', ensureAuthenticated, area.delete);
   app.get('/admin/target/create', ensureAuthenticated, target.create);
   app.post('/admin/content/create', ensureAuthenticated, content.create);
-  app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
+  //app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
   app.get('/admin/content/delete/:id', ensureAuthenticated, content.delete);
   app.post('/admin/category/create', ensureAuthenticated, category.create);
   app.post('/admin/category/update', ensureAuthenticated, category.update);

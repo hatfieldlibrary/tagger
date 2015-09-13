@@ -2,50 +2,77 @@
 
 var async = require('async');
 
+exports.overview = function(req, res) {
+  console.log(req.user);
+  res.render('categoryOverview', {
+    title: 'Categories',
+    user: req.user.displayName,
+    picture: req.user._json.picture
+  });
+};
 
-exports.create = function(req, res) {
+exports.list = function(req, res) {
 
-  var catName = req.body.title;
-  var catUrl = req.body.url;
-  var secondUrl = req.body.secondUrl;
-  var catDesc = req.body.description;
-  var areaId = req.body.area;
-  // First create the new category. Then retrieve the
-  // updated category list and pass it to the view.
-  async.series (
-    {
-      create: function (callback) {
-        db.Category.create({
-          title: catName,
-          url: catUrl,
-          secondaryUrl: secondUrl,
-          description: catDesc,
-          areaId: areaId,
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function (callback) {
-        db.Category.findAll(
-          {
-            attributes: ['id','title', 'url','secondaryUrl', 'description', 'areaId'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
+  db.Category.findAll({
+    attributes: ['id','title'],
+    order: [['title', 'ASC']]
+  }).success(function(categories) {
+    console.log('found categoes');
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(categories));
+  }).error(function(err) {
+    console.log('lost categoes');
+    console.log(err);
+  });
+
+};
+
+exports.listByArea = function (req, res) {
+
+  var areaId = req.params.areaId;
+
+  db.Category.findAll( {
+    where: {
+      areaId: {
+        eq: areaId
       }
     },
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.render('categoryIndex', {
-        title: 'Categories',
-        categories: result.home
-      });
+    include: [
+      { model: db.CategoryTarget} ],
+    order: [['title', 'ASC']]
+  }).success( function(categories) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(categories));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+exports.byId = function( req, res) {
+
+  var categoryId = req.params.id;
+
+  db.Category.find({
+    where: {
+      id: {
+        eq: categoryId
+      }
     }
-  );
+
+  }).success( function(category) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(category));
+  }).error(function(err) {
+    console.log(err);
+  });
+
 };
 
 exports.add = function(req, res ) {
@@ -98,6 +125,74 @@ exports.update = function(req, res) {
 
 };
 
+exports.delete = function(req, res) {
+
+  var catId = req.body.id;
+
+  db.Category.destroy({
+    id: {
+      eq: catId
+    }
+  }).success(function() {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({ status: 'success', id: catId }));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+
+
+
+
+exports.create = function(req, res) {
+
+  var catName = req.body.title;
+  var catUrl = req.body.url;
+  var secondUrl = req.body.secondUrl;
+  var catDesc = req.body.description;
+  var areaId = req.body.area;
+  // First create the new category. Then retrieve the
+  // updated category list and pass it to the view.
+  async.series (
+    {
+      create: function (callback) {
+        db.Category.create({
+          title: catName,
+          url: catUrl,
+          secondaryUrl: secondUrl,
+          description: catDesc,
+          areaId: areaId,
+        }).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      },
+      home: function (callback) {
+        db.Category.findAll(
+          {
+            attributes: ['id','title', 'url','secondaryUrl', 'description', 'areaId'],
+            order: [['title', 'ASC']]
+          }
+        ).complete(callback)
+          .error(function(err) {
+            console.log(err);
+          });
+      }
+    },
+    function(err, result) {
+      if (err) { console.log(err); }
+      res.render('categoryIndex', {
+        title: 'Categories',
+        categories: result.home
+      });
+    }
+  );
+};
+
 
 exports.oldupdate = function(req, res) {
 
@@ -147,24 +242,7 @@ exports.oldupdate = function(req, res) {
   );
 };
 
-exports.delete = function(req, res) {
 
-  var catId = req.body.id;
-
-  db.Category.destroy({
-    id: {
-      eq: catId
-    }
-  }).success(function() {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify({ status: 'success', id: catId }));
-  }).error(function(err) {
-    console.log(err);
-  });
-
-};
 
 exports.olddelete = function(req, res) {
 
@@ -241,75 +319,9 @@ exports.addCategoryTarget = function (req, res) {
 
 };
 
-exports.listCategoriesByArea = function (req, res) {
 
-  var areaId = req.params.areaId;
 
-  db.Category.findAll( {
-    where: {
-      areaId: {
-        eq: areaId
-      }
-    },
-    include: [
-      { model: db.CategoryTarget} ],
-    order: [['title', 'ASC']]
-  }).success( function(categories) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(categories));
 
-  }).error(function(err) {
-    console.log(err);
-  });
-};
 
-exports.listCategories = function(req, res) {
-
-  db.Category.findAll({
-    attributes: ['id','title'],
-    order: [['title', 'ASC']]
-  }).success(function(categories) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(categories));
-  }).error(function(err) {
-    console.log(err);
-  });
-
-};
-
-exports.getCategory = function( req, res) {
-
-  var categoryId = req.params.id;
-
-  db.Category.find({
-    where: {
-      id: {
-        eq: categoryId
-      }
-    }
-
-  }).success( function(category) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(category));
-  }).error(function(err) {
-    console.log(err);
-  });
-
-};
-
-exports.getOverview = function(req, res) {
-  console.log(req.user);
-  res.render('categoryOverview', {
-    title: 'Categories',
-    user: req.user.displayName,
-    picture: req.user._json.picture
-  });
-};
 
 

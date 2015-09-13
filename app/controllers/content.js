@@ -5,13 +5,51 @@
 
 var async = require('async');
 
-exports.getOverview = function(req, res) {
+exports.overview = function(req, res) {
 
   res.render('contentOverview', {
     title: 'Categories',
     user: req.user.displayName,
     picture: req.user._json.picture
   });
+};
+
+exports.byId = function( req, res) {
+
+  var id = req.params.id;
+
+  db.ItemContent.find({
+    where: {
+      id: {
+        eq: id
+      }
+    }
+
+  }).success( function(type) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(type));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+exports.list = function(req, res) {
+
+  db.ItemContent.findAll({
+    attributes: ['id','name'],
+    order: [['name', 'ASC']]
+  }).success(function(types) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(types));
+  }).error(function(err) {
+    console.log(err);
+  });
+
 };
 
 exports.add = function( req, res) {
@@ -66,43 +104,58 @@ exports.add = function( req, res) {
   );
 };
 
-exports.getTypeById = function( req, res) {
+exports.update = function (req, res) {
 
-  var id = req.params.id;
+  var id = req.body.id;
+  var name = req.body.name;
+  var icon = req.body.icon;
 
-  db.ItemContent.find({
-    where: {
+  db.ItemContent.update(
+    {
+      name: name,
+      icon: icon
+    },
+    {
       id: {
         eq: id
       }
-    }
+    }).success(function() {
+      console.log('success');
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({status: 'success'}))
+    }).error(function(err) {
+      console.log(err);
+    });
+};
 
-  }).success( function(type) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(type));
-  }).error(function(err) {
-    console.log(err);
-  });
+exports.delete = function (req, res) {
+
+  var contentId = req.body.id;
+
+  db.ItemContent.destroy(
+    {
+      id: {
+        eq: contentId
+      }
+    }).success(function() {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({status: 'success'}));
+
+    }).
+    error(function(err) {
+      console.log(err);
+    });
 
 };
 
-exports.listTypes = function(req, res) {
 
-  db.ItemContent.findAll({
-    attributes: ['id','name'],
-    order: [['name', 'ASC']]
-  }).success(function(types) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(types));
-  }).error(function(err) {
-    console.log(err);
-  });
 
-};
+
+
 
 
 exports.create = function(req, res) {
@@ -167,16 +220,22 @@ exports.create = function(req, res) {
   );
 };
 
-exports.contentUpdate = function (req, res) {
+
+
+
+
+exports.oldcontentUpdate = function (req, res) {
 
   var contentId = req.body.id;
   var contentName = req.body.name;
+  var contentIcon = req.boyd.icon;
   async.series (
     {
       update: function (callback) {
         db.ItemContent.update(
           {
-            name: contentName
+            name: contentName,
+            icon: icon
           },
           {
             id: {
@@ -204,27 +263,6 @@ exports.contentUpdate = function (req, res) {
   );
 };
 
-exports.delete = function (req, res) {
-
-  var contentId = req.body.id;
-
-  db.ItemContent.destroy(
-    {
-      id: {
-        eq: contentId
-      }
-    }).success(function() {
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin','*');
-        res.end(JSON.stringify({status: 'success'}));
-
-      }).
-      error(function(err) {
-          console.log(err);
-      });
-
-};
 
 exports.olddelete = function (req, res) {
 

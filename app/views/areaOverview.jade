@@ -7,8 +7,8 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") flag
-              span.md-subhead Areas
+              i.material-icons(style="color: #80CBC4;") public
+              span.md-subhead AREAS
             h2.md-display-2 {{area.title}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
@@ -21,11 +21,13 @@ block content
                   md-list
                     div(ng-repeat="area in areas")
                       md-list-item
-                        md-button(class="md-no-style md-button  md-default-theme", style="min-height: 47px;" ng-click="resetArea(area.id);")
+                        md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': area.id==Data.currentAreaIndex}" style="min-height: 47px;" ng-click="resetArea(area.id);")
                           div(class="list-group-item-text md-subhead layout-fill") {{area.title}}
                             div.md-ripple-container
                     md-divider
             md-content(layout-padding flex="80" style="padding-left: 20px;")
+              div(flex="70" class="md-subhead") #[em Areas] are at the top of the organizational model and are the most general way to group collections. A collection can be assigned to multiple Areas.
+                div(flex)
               div(flex)
                 md-button(class="md-raised md-accent" style="float:right;" ng-click="updateArea()") Update Area
                 h3(class="md-title" style="margin-top: 10px;") Edit Area

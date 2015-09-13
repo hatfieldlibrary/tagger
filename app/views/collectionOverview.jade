@@ -10,8 +10,8 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") content_copy
-              span.md-subhead Collections
+              i.material-icons(style="color: #80CBC4;") collections
+              span.md-subhead COLLECTIONS
             h3.md-display-1 {{collection.collection.title}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection") <i class="material-icons">delete</i>
@@ -27,7 +27,7 @@ block content
                   div(ng-repeat="col in collectionList")
                     md-list-item
 
-                      md-button(class="md-no-style md-button  md-default-theme", style="min-height: 47px;" ng-click="getCollectionById(col.collection.id);")
+                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': tag.id==Data.currentTagIndex}" style="min-height: 47px;" ng-click="getCollectionById(col.collection.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
                           div.md-ripple-container
                     md-divider

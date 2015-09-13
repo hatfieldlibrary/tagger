@@ -6,6 +6,7 @@ html
     link(rel="stylesheet", href="../bower_components/angular-material/angular-material.min.css")
     link(rel="stylesheet", href="/stylesheets/style.css")
     link(rel="stylesheet", href="https://fonts.googleapis.com/icon?family=Material+Icons")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css")
 
 
   body
@@ -51,7 +52,7 @@ html
                   md-button(class="md-no-style md-button md-default-theme" href="/admin/collections")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
-                        i.material-icons content_copy
+                        i.material-icons collections
                       div.list-group-item-text Collections
                         div.md-ripple-container
                 md-list-item
@@ -62,11 +63,11 @@ html
                       div.list-group-item-text Restrictions
                         div.md-ripple-container
                 md-list-item
-                  md-button(class="md-no-style md-button md-default-theme" tabindex="0")
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/tag" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons link
-                      div.list-group-item-text Tags
+                      div.list-group-item-text Subject Tags
                         div.md-ripple-container
                 md-list-item
                   md-button(class="md-no-style md-button md-default-theme" href="/admin/content" tabindex="0")
@@ -79,8 +80,8 @@ html
                   md-button(class="md-no-style md-button md-default-theme" href="/admin/category" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
-                        i.material-icons flag
-                      div.list-group-item-text Categories
+                        i.material-icons library_books
+                      div.list-group-item-text Collection Groups
                         div.md-ripple-container
                 md-list-item
                   md-button(class="md-no-style md-button md-default-theme" href="/admin/area" tabindex="0")

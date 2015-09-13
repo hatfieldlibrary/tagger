@@ -8,7 +8,7 @@ block content
           .md-toolbar-tools
             span(flex="20")
               i.material-icons(style="color: #80CBC4;") image
-              span.md-subhead Content Types
+              span.md-subhead TYPES
             h2.md-display-2 {{contentType.name}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
@@ -21,20 +21,25 @@ block content
                   md-list
                     div(ng-repeat="type in contentTypes")
                       md-list-item
-                        md-button(class="md-no-style md-button  md-default-theme", style="min-height: 47px;" ng-click="resetType(type.id);")
+                        md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': type.id==Data.currentContentIndex}" style="min-height: 47px;" ng-click="resetType(type.id);")
                           div(class="list-group-item-text md-subhead layout-fill") {{type.name}}
                             div.md-ripple-container
                     md-divider
             md-content(layout-padding flex="80" style="padding-left: 20px;")
+              div(flex="80" class="md-subhead")
+                span #[em Content Types] are essentially media or file types and should be thought of in those terms. This in mind, it may sometimes be helpful to create more general types, e.g. Document and Transcribed Document.
               div(flex)
-                md-button(class="md-raised md-accent" style="float:right;" ng-click="updateContent()") Update Content Type
+              div(flex)
+                md-button(class="md-raised md-accent" style="float:right;" ng-click="updateContentType()") Update Content Type
                 h3(class="md-title" style="margin-top: 10px;") Edit Content Type
               md-input-container
                 label Type Name
                 input(type="text", ng-model="contentType.name")
               md-input-container
-                label Type Icon (Material icon name:  e.g. shopping_basket )
+                label Type Icon (Fontawesome icon name:  e.g. fa_bus )
                 input(type="text", ng-model="contentType.icon")
-          div.md-panel Material Icons:
-            a(href="https://www.google.com/design/icons/", target="_blank") https://www.google.com/design/icons/
+              div(ng-if="contentType.icon")
+                i(class="fa {{contentType.icon}}")
+          div.md-panel Fontawesome Icons:
+            a(href="https://fortawesome.github.io/Font-Awesome/icons/", target="_blank")  https://fortawesome.github.io/Font-Awesome/icons/
     md-content(layout="column" flex="25")
