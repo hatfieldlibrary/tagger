@@ -5,6 +5,7 @@ var host = 'http://localhost:3000/rest/';
 var adminhost = 'http://localhost:3000/admin/';
 //var host = 'http://libmedia.willamette.edu/acomrest2/';
 //var adminhost = 'http://localhost:3000/taggerAdmin/';
+
 var taggerServices = angular.module('taggerServices', ['ngResource']);
 
 
@@ -198,6 +199,7 @@ taggerServices.factory('TagTargetAdd', ['$resource',
 
 
 // SHARED DATA SERVICE
+// Injected into most Tagger controllers.
 taggerServices.factory('Data', function() {
   return {
     areas: [],
@@ -212,6 +214,10 @@ taggerServices.factory('Data', function() {
 });
 
 // TOAST SERVICE
+// Using the Angular Material mdToast
+// directive throughout the application.
+// This toast service takes a single
+// message parameter.
 taggerServices.factory('TaggerToast', [
 
   '$mdToast',
@@ -248,6 +254,13 @@ taggerServices.factory('TaggerToast', [
 
 
 // DIALOG SERVICE
+// Using the Angular Material mdDialog directive
+// for add and delete operations. mdDialog has
+// it's own scope.  Defining the controller here
+// to include add/delete methods for the app.
+// Upon success, it updates the shared Data
+// service and broadcasts update event to
+// rootScope.
 taggerServices.factory('TaggerDialog', [
 
   '$rootScope',

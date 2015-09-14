@@ -132,7 +132,7 @@ taggerControllers.controller('TagCtrl', [
     $scope.tags = Data.tags;
 
     $scope.init = function() {
-      $scope.tags =TagList.query();
+      $scope.tags = TagList.query();
       $scope.tags
         .$promise
         .then(function (data) {
@@ -146,6 +146,13 @@ taggerControllers.controller('TagCtrl', [
 
     // init view
     $scope.init();
+
+    // Watch for changes in Data service
+    $scope.$watch(function(scope) { return scope.Data.tags },
+      function(newValue, oldValue) {
+        $scope.tags = newValue;
+      }
+    );
 
     // Listen for event from dialog update
     $scope.$on('tagsUpdate', function() {
@@ -185,12 +192,6 @@ taggerControllers.controller('TagCtrl', [
 
     };
 
-    // Watch for changes in Data service
-    $scope.$watch(function(scope) { return scope.Data.tags },
-      function(newValue, oldValue) {
-        $scope.tags = newValue;
-      }
-    );
 
     // Tag dialogs
     $scope.showDialog = showDialog;
@@ -412,7 +413,7 @@ taggerControllers.controller('CategoryCtrl', [
         if (data.status === 'success') {
           $scope.Data.categories = CategoryList.query();
           // Toast upon success
-          toast("Category Updated");
+          TaggerToast("Category Updated");
         }
       })
 
