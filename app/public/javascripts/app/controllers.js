@@ -58,21 +58,25 @@ taggerControllers.controller('CollectionCtrl', [
     $scope.Data = Data;
     $scope.areas = Data.areas;
     $scope.collectionList = [];
-    $scope.collection = {title: 'test'};
 
 
     $scope.$watch(function() { return Data.areas },
       function(newValue) {
         $scope.areas = newValue;
-        console.log($scope.areas);
       }
     );
 
     $scope.$watch(function() { return Data.currentAreaIndex },
-      function(newValue) {
-        if (newValue !== null) {
+      function(newValue, oldValue) {
+        // this is the initial page load
+        if (oldValue === null) {
           $scope.Data.currentAreaIndex = newValue;
           $scope.init();
+        } else {
+          // this is a subsequent area update
+          if (newValue !== null) {
+            $scope.Data.currentAreaIndex = newValue;
+          }
         }
       }
     );
@@ -80,27 +84,27 @@ taggerControllers.controller('CollectionCtrl', [
     $scope.$watch(function() { return Data.collections},
       function() {
         $scope.collectionList = Data.collections;
-        console.log($scope.collectionList);
+        console.log('coll list ' + $scope.collectionList);
       });
 
 
     // Initialization method called on load.
     $scope.init = function() {
-
-      $scope.collectionList = CollectionsByArea.query({areaId: $scope.Data.currentAreaIndex});
-      $scope.collectionList.$promise.then(function(data) {
-        if (typeof data !== 'undefined')     {
-          if (data.length > 0) {
-            $scope.getCollectionById(data[0].CollectionId);
+      if ($scope.Data.currentAreaIndex !== null ) {
+        $scope.collectionList = CollectionsByArea.query({areaId: $scope.Data.currentAreaIndex});
+        $scope.collectionList.$promise.then(function (data) {
+          if (typeof data !== 'undefined') {
+            $scope.collection = data[0].collection;
           }
-        }
-        /*
-         $scope.collectionTags = TagsForCollection
-         .query({id: data[0].CollectionId});
-         $scope.collectionTypes = TypesForCollection
-         .query({id: data[0].CollectionId});    */
 
-      });
+          /*
+           $scope.collectionTags = TagsForCollection
+           .query({id: data[0].CollectionId});
+           $scope.collectionTypes = TypesForCollection
+           .query({id: data[0].CollectionId});    */
+
+        });
+      }
     };
 
     $scope.getCollectionArea = function(id) {
@@ -130,12 +134,9 @@ taggerControllers.controller('CollectionCtrl', [
 // Collection dialogs
     $scope.showDialog = showDialog;
     function showDialog($event, message) {
-         alert('a');
       TaggerDialog($event, message);
     }
 
-
-//$scope.init();
 
   }]);
 
@@ -592,6 +593,14 @@ taggerControllers.controller('ContentCtrl', [
 
   }]);
 
+
+
+/*
+ *
+ *  TAG AREA CONTROLLER
+ *
+ */
+
 taggerControllers.controller('TagAreasCtrl', [
 
   '$scope',
@@ -621,6 +630,11 @@ taggerControllers.controller('TagAreasCtrl', [
         }
       }
     );
+
+    $scope.$watch(function() { return Data.areas},
+      function(newValue) {
+           $scope.areas = newValue;
+      });
 
     $scope.getCurrentAreaTargets = function(id) {
 
@@ -672,7 +686,6 @@ taggerControllers.controller('TagAreasCtrl', [
 
     function findAreaById(areaId) {
       for (var i = 0; i < $scope.areaTargets.length; i++) {
-        console.log($scope.areaTargets[i].AreaId);
         if ($scope.areaTargets[i].AreaId === areaId) {
           return true;
         }

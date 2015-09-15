@@ -108,51 +108,55 @@ exports.update = function(req, res) {
 exports.add = function(req, res) {
 
 
-  var chainer = new db.Sequelize.Utils.QueryChainer();
-
   var title = req.body.title;
   var areaId = req.body.areaId;
-  console.log('adding collection ' + title);
-  var result = {};
-
-  // First create the new collection. Then retrieve the
+  var newCollectionId;
 
 
-  // probably needs to be async series
-  chainer.add(
-    db.Collection.create({
-      title: title
-
-    }).success(function(coll) {
-         result.collection = coll;
-    }).error(function(err) {
-      console.log(err);
-    })
-  );
-  chainer.add(
-    db.AreaTarget.create({
-      CollectionId: result.collection.id,
-      AreaId: areaId
-    }).error(function(err) {
-      console.log(err);
-    })
-  );
-  chainer.add(
-    db.Collection.findAll({
-        order: [['title', 'ASC']]
-      }).success(function(collections) {
-         result.collection = collections;
-      }).error(function(err) {
-      console.log(err);
-    })
-  );
-  chainer.run()
-    .success(function() {
-      result.status = 'success';
+  async.series({
+      addCollection: function(callback) {
+        db.Collection.create({
+          title: title
+        }).success(function(coll) {
+           newCollectionId = coll.id;
+           callback(null, coll)
+        }).error(function(err) {
+          console.log(err);
+        });
+      },
+      addArea: function(callback) {
+        db.AreaTarget.create({
+          CollectionId: newCollectionId,
+          AreaId: areaId
+        }).success(function(result) {
+          callback(null, result);
+        }).error(function(err) {
+          console.log(err);
+        });
+      },
+      collections: function(callback) {
+        db.AreaTarget.findAll({
+          where: {
+            AreaId: {
+              eq: areaId
+            }
+          },
+          include: [db.Collection],
+          order: [['title', 'ASC']]
+        }).success(function(colls) {
+          callback(null, colls);
+        }).error(function(err) {
+          console.log(err);
+        });
+      }
+    }, function(err, results) {
+      // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(result));
-    })
+      res.end(JSON.stringify({ status: 'success', collections: results.collections}));
+    }
+  );
+
 
 
 };

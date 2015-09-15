@@ -19,7 +19,7 @@ block content
         md-card-content
           div(layout="row", layout-align="start start")
             div(flex="20" )
-              md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="showDialog($event, addMessage)") Add New Area
+              md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="showDialog($event, addMessage)") Add Collection
               div(layout="column", style="height:770px;")
                 md-content(flex)
                   md-list
@@ -41,11 +41,11 @@ block content
 
               md-input-container
                 label Collection Name
-                input(type="text", ng-model="collection.collection.title")
+                input(type="text", ng-model="collection.title")
               md-input-container
                 label Description  &nbsp;
                   span(class="md-subhead md-default") maxuimum characters 450 (current {{testData.description.length}})
-                textarea(type="textarea", ng-trim="false", ng-model="collection.collection.description", maxlength="450")
+                textarea(type="textarea", ng-trim="false", ng-model="collection.description", maxlength="450")
               md-input-container
                 label Collection Category
                 md-select(ng-model="testData.category" placeholder="Select a Category")
@@ -55,17 +55,17 @@ block content
                   md-option(value="Exhibits") Exhibits
               md-input-container
                 label Coverage Dates
-                input(type="text", ng-model="collection.collection.dates")
+                input(type="text", ng-model="collection.dates")
               md-input-container
                 label Item Count
-                input(type="text", ng-model="collection.collection.items")
+                input(type="text", ng-model="collection.items")
               md-input-container
                 label URL
-                input(type="text", ng-model="collection.collection.url")
+                input(type="text", ng-model="collection.url")
 
               div(style="margin-bottom: 5px;")
                 div.md-caption Item Type
-                md-radio-group(layout="row" ng-model="collection.collection.collType")
+                md-radio-group(layout="row" ng-model="collection.collType")
                   div(flex="25")
                     md-radio-button(aria-label="Unrestricted" value="dig" style="display: inline") Collection
                   div(flex="25")
@@ -76,7 +76,7 @@ block content
               md-divider
               div(style="margin-top: 10px; margin-bottom: 15px;")
                 div.md-caption Access Restriction
-                md-radio-group(layout="row" ng-model="collection.collection.restricted")
+                md-radio-group(layout="row" ng-model="collection.restricted")
                   div(flex="25")
                     md-radio-button(aria-label="Unrestricted" value=true flex="15" style="display: inline") Unrestricted
                   div(flex="25")
@@ -85,7 +85,7 @@ block content
               md-divider
               div(style="margin-top: 10px; margin-bottom: 15px;")
                 div.md-caption Link Type
-                md-radio-group(layout="row" ng-model="collection.collection.browseType")
+                md-radio-group(layout="row" ng-model="collection.browseType")
                   div(flex="25")
                     md-radio-button(aria-label="Unrestricted" value="link" flex="15" style="display: inline") Link
                   div(flex="25")
@@ -94,7 +94,7 @@ block content
               md-divider
               div(style="margin-top: 10px; margin-bottom: 35px;")
                 div.md-caption Search Type
-                md-radio-group(layout="row" ng-model="collection.collection.searchType")
+                md-radio-group(layout="row" ng-model="collection.searchType")
                   div(flex="25")
                     md-radio-button(aria-label="Unrestricted" value="DEFAULT" flex="15" style="display: inline") Search & Browse
                   div(flex="25")
@@ -117,7 +117,7 @@ block content
         md-card-content
           div(layout="row")
             md-card(flex="40" style="margin:0;max-width: 120px")
-              img(style="max-width: 120px;" src="http://libmedia.willamette.edu/resources/img/thumb/{{collection.collection.image}}")
+              img(style="max-width: 120px;" src="http://libmedia.willamette.edu/resources/img/thumb/{{collection.image}}")
             md-card-content
               span.md-caption Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
 

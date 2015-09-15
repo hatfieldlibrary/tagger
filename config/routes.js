@@ -28,11 +28,11 @@ module.exports = function(app,config,passport){
   // If authentication failed, redirect the login page.  Otherwise, redirect
   // to the admin page page.
   app.get('/auth/google/callback',
-    passport.authenticate('google', { successRedirect: '/admin',
+    passport.authenticate('google', { successRedirect: '/admin/',
       failureRedirect: '/login' }));
 
   // TAGGER ROUTES
-  app.get('/admin', ensureAuthenticated, collection.overview);
+  app.get('/admin/', ensureAuthenticated, collection.overview);
   app.get('/login', crud.login);
   app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
   app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
