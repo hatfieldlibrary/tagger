@@ -18,7 +18,7 @@ exports.index = function(req, res){
       order: [['title', 'ASC']]
     }
   ).success(function() {
-      res.render('materialOverview', {
+      res.render('collectionOverview', {
         title: 'Overview',
         user: req.user.displayName,
         picture: req.user._json.picture

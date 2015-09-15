@@ -44,7 +44,7 @@ block content
             <i class="material-icons">bookmark</i>
             h3.md-display-1 Areas
             span(flex)
-        md-card-content
+        md-card-content(ng-controller="TagAreasCtrl")
           div(layout="column", class="md-subhead") Select the Areas in which this Tag will appear.
             md-container
-              md-checkbox(ng-repeat="area in areas", aria-label="Areas" value="area.id" ng-checked="") {{area.title}}
+              md-checkbox(ng-repeat="area in areas", aria-label="Areas" value="area.id" ng-checked="isChosen(area.id)" ng-click="update(area.id)") {{area.title}}

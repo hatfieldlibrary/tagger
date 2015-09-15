@@ -3,7 +3,7 @@
 var async = require('async');
 
 exports.overview = function(req, res) {
-  console.log(req.user);
+
   res.render('areaOverview', {
     title: 'Areas',
     user: req.user.displayName,

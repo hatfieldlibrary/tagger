@@ -13,8 +13,12 @@ var taggerControllers = angular.module('taggerControllers', []);
 
 taggerControllers.controller('LayoutCtrl', ['$scope', 'Data', 'AreaList', function($scope, Data, AreaList) {
 
+  $scope.Data = Data;
   $scope.areas = AreaList.query();
-  Data.areas = $scope.areas;
+  $scope.areas.$promise.then(function(data) {
+    Data.currentAreaIndex = $scope.areas[0].id;
+    Data.areas = data;
+  });
 
 }]);
 
@@ -33,8 +37,10 @@ taggerControllers.controller('CollectionCtrl', [
   '$resource',
   'CollectionsByArea',
   'CollectionById',
+  'CollectionUpdate',
   'TagsForCollection',
   'TypesForCollection',
+  'TaggerDialog',
   'Data',
 
   function(
@@ -42,57 +48,94 @@ taggerControllers.controller('CollectionCtrl', [
     $resource,
     CollectionsByArea,
     CollectionById,
+    CollectionUpdate,
     TagsForCollection,
     TypesForCollection,
+    TaggerDialog,
     Data ) {
 
 
-    $scope.getCollectionArea = function(id) {
+    $scope.Data = Data;
+    $scope.areas = Data.areas;
+    $scope.collectionList = [];
+    $scope.collection = {title: 'test'};
 
-      $scope.collectionList = CollectionsByArea.query({id: id});
 
-    };
+    $scope.$watch(function() { return Data.areas },
+      function(newValue) {
+        $scope.areas = newValue;
+        console.log($scope.areas);
+      }
+    );
+
+    $scope.$watch(function() { return Data.currentAreaIndex },
+      function(newValue) {
+        if (newValue !== null) {
+          $scope.Data.currentAreaIndex = newValue;
+          $scope.init();
+        }
+      }
+    );
+
+    $scope.$watch(function() { return Data.collections},
+      function() {
+        $scope.collectionList = Data.collections;
+        console.log($scope.collectionList);
+      });
+
 
     // Initialization method called on load.
-    $scope.init = function(id) {
+    $scope.init = function() {
 
-      Data.currentAreaIndex = id;
-      $scope.areas = Data.areas;
-      $scope.collectionList = CollectionsByArea.query({id: id});
+      $scope.collectionList = CollectionsByArea.query({areaId: $scope.Data.currentAreaIndex});
       $scope.collectionList.$promise.then(function(data) {
-
-        $scope.getCollectionById(data[0].CollectionId);
-        $scope.collectionTags = TagsForCollection
-          .query({id: data[0].CollectionId});
-        $scope.collectionTypes = TypesForCollection
-          .query({id: data[0].CollectionId});
+        if (typeof data !== 'undefined')     {
+          if (data.length > 0) {
+            $scope.getCollectionById(data[0].CollectionId);
+          }
+        }
+        /*
+         $scope.collectionTags = TagsForCollection
+         .query({id: data[0].CollectionId});
+         $scope.collectionTypes = TypesForCollection
+         .query({id: data[0].CollectionId});    */
 
       });
     };
 
-    $scope.getTagsForCollection = function(id) {
+    $scope.getCollectionArea = function(id) {
 
-      $scope.collectionTags = TagsForCollection(id);
+    //  $scope.collectionList = CollectionsByArea.query({id: id});
 
     };
 
+    /*
+     $scope.getTagsForCollection = function(id) {
+
+     $scope.collectionTags = TagsForCollection(id);
+
+     };
+     */
     $scope.getCollectionById = function(id) {
 
-      $scope.collection = CollectionById.query({id: id});
+    //  $scope.collection = CollectionById.query({id: id});
 
     };
 
 
-    $scope.showDialog = showDialog;
+// Tag dialog messages
+    $scope.addMessage = 'templates/addCollectionMessage.html';
+    $scope.deleteMessage = 'templates/deleteCollectionMessage.html';
 
-    // Collection dialogs
+// Collection dialogs
     $scope.showDialog = showDialog;
     function showDialog($event, message) {
+         alert('a');
       TaggerDialog($event, message);
     }
 
 
-    $scope.init(5);
+//$scope.init();
 
   }]);
 
@@ -128,7 +171,6 @@ taggerControllers.controller('TagCtrl', [
     Data  ) {
 
     $scope.Data = Data;
-    $scope.areas = Data.areas;
     $scope.tags = Data.tags;
 
     $scope.init = function() {
@@ -191,7 +233,6 @@ taggerControllers.controller('TagCtrl', [
       })
 
     };
-
 
     // Tag dialogs
     $scope.showDialog = showDialog;
@@ -469,7 +510,6 @@ taggerControllers.controller('ContentCtrl', [
     ContentTypeAdd,
     Data) {
 
-
     $scope.Data = Data;
     $scope.contentTypes = Data.contentTypes;
 
@@ -512,7 +552,6 @@ taggerControllers.controller('ContentCtrl', [
       if (id !== null) {
         Data.currentContentIndex = id;
       }
-
       $scope.contentType = ContentType.query({id: Data.currentContentIndex});
 
     };
@@ -551,8 +590,95 @@ taggerControllers.controller('ContentCtrl', [
     $scope.addMessage = 'templates/addContentMessage.html';
     $scope.deleteMessage = 'templates/deleteContentMessage.html';
 
+  }]);
+
+taggerControllers.controller('TagAreasCtrl', [
+
+  '$scope',
+  'TagTargets',
+  'TagTargetRemove',
+  'TagTargetAdd',
+  'TaggerToast',
+  'Data',
+
+  function(
+    $scope,
+    TagTargets,
+    TagTargetRemove,
+    TagTargetAdd,
+    TaggerToast,
+    Data ) {
+
+    // Areas have been added to shared Data object
+    // by the LayoutCtrl.
+    $scope.areas = Data.areas;
+    $scope.areaTargets = [];
+
+    $scope.$watch(function() { return Data.currentTagIndex },
+      function(newValue, oldValue) {
+        if (newValue !== null) {
+          $scope.getCurrentAreaTargets(newValue);
+        }
+      }
+    );
+
+    $scope.getCurrentAreaTargets = function(id) {
+
+      $scope.areaTargets = TagTargets.query({tagId: id});
+
+    };
 
 
+    $scope.isChosen = function(areaId) {
+
+      return findAreaById(areaId);
+
+    };
+
+
+    $scope.update = function(areaId) {
+
+
+      if ($scope.areaTargets !== undefined) {
+
+        // If the area id of the selected checkbox is a
+        // aleady a target, then delete the area target.
+        if (findAreaById(areaId)) {
+
+          var result = TagTargetRemove.query({ tagId: Data.currentTagIndex, areaId: areaId }) ;
+
+          result.$promise.then(function(data) {
+            if (data.status == 'success') {
+              $scope.areaTargets = result.areaTargets;
+              TaggerToast('Tag removed from area.')
+            }
+          });
+        }
+        // If the area id of the selected item is
+        // not a target already, add a new area target.
+        else {
+          var result = TagTargetAdd.query({ tagId: Data.currentTagIndex, areaId: areaId });
+
+          result.$promise.then(function(data) {
+            if (data.status == 'success') {
+              $scope.areaTargets = result.areaTargets;
+              TaggerToast('Tag added to Area.')
+            }
+          });
+        }
+      }
+
+    };
+
+    function findAreaById(areaId) {
+      for (var i = 0; i < $scope.areaTargets.length; i++) {
+        console.log($scope.areaTargets[i].AreaId);
+        if ($scope.areaTargets[i].AreaId === areaId) {
+          return true;
+        }
+      }
+      return false;
+    }
 
   }]);
 

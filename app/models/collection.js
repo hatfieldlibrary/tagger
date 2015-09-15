@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       url: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
       },
       browseType: {
         type: DataTypes.STRING(4),
@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       description: {
         type: DataTypes.STRING(4096),
-        allowNull: false
+        allowNull: true
       },
       dates: {
         type: DataTypes.STRING(60),

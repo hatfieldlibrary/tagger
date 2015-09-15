@@ -4,6 +4,7 @@ module.exports = function(app,config,passport){
 
   var crud = require('../app/controllers/crud');
   var tag = require('../app/controllers/tags');
+  var tagTarget = require('../app/controllers/tagTarget.js');
   var area = require('../app/controllers/area');
   var content = require('../app/controllers/content');
   var collection = require('../app/controllers/collection');
@@ -31,13 +32,18 @@ module.exports = function(app,config,passport){
       failureRedirect: '/login' }));
 
   // TAGGER ROUTES
-  app.get('/admin', ensureAuthenticated, crud.index);
+  app.get('/admin', ensureAuthenticated, collection.overview);
   app.get('/login', crud.login);
   app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
   app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
 
   // COLLECTIONS
-  app.get('/admin/collections', ensureAuthenticated, collection.index);
+  app.get('/admin/collections', ensureAuthenticated, collection.overview);
+  app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
+  app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
+  app.post('/rest/collection/add', ensureAuthenticated, collection.add);
+  app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
+  app.post('/rest/collection/update', ensureAuthenticated, collection.update);
 
   // AREAS
   app.get('/admin/area', ensureAuthenticated, area.overview);
@@ -72,6 +78,10 @@ module.exports = function(app,config,passport){
   app.post('/rest/tag/delete', ensureAuthenticated, tag.delete);
   app.post('/rest/tag/update', ensureAuthenticated, tag.update);
 
+  app.get('/rest/tag/targets/byId/:tagId', ensureAuthenticated, tagTarget.getAreaTargets);
+  app.get('/rest/tag/:tagId/add/area/:areaId', ensureAuthenticated, tagTarget.addTarget);
+  app.get('/rest/tag/:tagId/remove/area/:areaId', ensureAuthenticated, tagTarget.removeTarget);
+
   //unused category route
   app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);
   app.get('/admin/area/view', ensureAuthenticated, crud.areaIndex);
@@ -88,8 +98,8 @@ module.exports = function(app,config,passport){
   app.get('/admin/collection/delete/:id', ensureAuthenticated, collection.delete);
   app.post('/admin/collection/tag', ensureAuthenticated, collection.addTag);
   app.post('/admin/collection/type', ensureAuthenticated, collection.addType);
-  app.post('/admin/collection/create', ensureAuthenticated, collection.create);
-  app.post('/admin/collection/update', ensureAuthenticated, collection.update);
+//  app.post('/admin/collection/create', ensureAuthenticated, collection.create);
+//  app.post('/admin/collection/update', ensureAuthenticated, collection.update);
   // need to pass application configuration to imageUpdate controller.
   app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
     collection.updateImage(res, req, config);

@@ -19,7 +19,7 @@ block content
         md-card-content
           div(layout="row", layout-align="start start")
             div(flex="20" )
-              md-button(class="md-raised md-accent" style="margin-top: 15px;") Add New Collection
+              md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="showDialog($event, addMessage)") Add New Area
               div(layout="column", style="height:770px;")
                 md-content(flex)
                   md-list
@@ -136,9 +136,9 @@ block content
                   label Add Tag
                   input(type="text")
             md-container
-              md-chips(ng-model="collectionTags")
-                md-chip-template {{$chip.name}}
-                md-button.md-chip-remove Close
+             // md-chips(ng-model="collectionTags")
+             //   md-chip-template {{$chip.name}}
+              //  md-button.md-chip-remove Close
 
       md-card.flex(flex)
         md-toolbar.md_primary
@@ -154,9 +154,9 @@ block content
                   label Add Item Type
                   input(type="text")
             md-container
-              md-chips(ng-model="collectionTypes")
-                md-chip-template {{$chip.itemContent.name}}
-                md-button.md-chip-remove Close
+             // md-chips(ng-model="collectionTypes")
+             //   md-chip-template {{$chip.itemContent.name}}
+             //   md-button.md-chip-remove Close
 
       md-card.flex(flex)
         md-toolbar.md_primary

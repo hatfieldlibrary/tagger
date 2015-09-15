@@ -2,13 +2,190 @@
 
 var async = require('async');
 
+
+
+// new admin interface
+exports.overview = function(req, res){
+
+  res.render('collectionOverview', {
+    title: 'Overview',
+    user: req.user.displayName,
+    picture: req.user._json.picture
+  });
+
+};
+
+exports.list = function (req, res) {
+
+  var areaId = req.params.areaId;
+
+  db.AreaTarget.findAll({
+    where:
+    {
+      AreaId: {
+        eq: areaId
+      }
+    },
+    order: [['title', 'ASC']],
+    include: [db.Collection]
+
+  }).success( function(collections) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(collections));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+
+exports.byId = function(req, res) {
+
+  var collId = req.params.id;
+
+  db.Collection.find(
+    {
+      where: {
+        id: {
+          eq: collId
+        }
+      }
+    }
+  ).success(function(collection) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify(collection));
+    })
+    .error(function (err) {
+      console.log(err);
+    })
+};
+
+exports.update = function(req, res) {
+
+  var collName = req.body.name;
+  var collUrl = req.body.url;
+  var collBrowseType = req.body.browseType;
+  var collDesc = req.body.description;
+  var collId = req.body.id;
+  var collDates = req.body.dates;
+  var collItems = req.body.items;
+  var collType = req.body.ctype;
+  var repoType = req.body.repoType;
+  var restricted = req.body.restricted;
+
+  db.Collection.update({
+      title: collName,
+      url: collUrl,
+      browseType: collBrowseType,
+      description: collDesc,
+      dates: collDates,
+      items: collItems,
+      ctype: collType,
+      repoType: repoType,
+      restricted: restricted
+    },
+    {
+      id: {
+        eq: collId
+      }
+    }).success(function(result){
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({ status: 'success' }));
+    })
+    .error(function (err) {
+      console.log(err);
+    });
+
+
+};
+
+exports.add = function(req, res) {
+
+
+  var chainer = new db.Sequelize.Utils.QueryChainer();
+
+  var title = req.body.title;
+  var areaId = req.body.areaId;
+  console.log('adding collection ' + title);
+  var result = {};
+
+  // First create the new collection. Then retrieve the
+
+
+  // probably needs to be async series
+  chainer.add(
+    db.Collection.create({
+      title: title
+
+    }).success(function(coll) {
+         result.collection = coll;
+    }).error(function(err) {
+      console.log(err);
+    })
+  );
+  chainer.add(
+    db.AreaTarget.create({
+      CollectionId: result.collection.id,
+      AreaId: areaId
+    }).error(function(err) {
+      console.log(err);
+    })
+  );
+  chainer.add(
+    db.Collection.findAll({
+        order: [['title', 'ASC']]
+      }).success(function(collections) {
+         result.collection = collections;
+      }).error(function(err) {
+      console.log(err);
+    })
+  );
+  chainer.run()
+    .success(function() {
+      result.status = 'success';
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify(result));
+    })
+
+
+};
+
+exports.delete = function (req, res) {
+  var id = req.body.id;
+
+  db.Collection.destroy({
+    id: {
+      eq: id
+    }
+  }).success(function() {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({ status: 'success'}));
+  }).error(function (err) {
+    console.log(err);
+  });
+};
+
+
+// end new admin interface
+
+
+
+// chain queries to retrieve other tags associated with each collection
 var processCollectionResult = function(coll, res) {
 
   var count = coll.count;
   var collList = [],
     chainer = new db.Sequelize.Utils.QueryChainer();
 
-  // chain queries to retrieve other tags associated with each collection
   coll.rows.forEach(function(entry) {
 
     var tmpColl = entry.collection.getCollectionObject;
@@ -431,7 +608,7 @@ exports.getEadBySubject = function(req, res) {
 };
 
 
-exports.create = function(req, res) {
+exports.oldcreate = function(req, res) {
 
   var collName = req.body.name;
   var collUrl = req.body.url;
@@ -484,7 +661,7 @@ exports.create = function(req, res) {
   );
 };
 
-exports.update = function(req, res) {
+exports.oldupdate = function(req, res) {
 
   var collName = req.body.name;
   var collUrl = req.body.url;

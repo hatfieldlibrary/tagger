@@ -13,7 +13,7 @@ var taggerServices = angular.module('taggerServices', ['ngResource']);
 
 taggerServices.factory('CollectionsByArea', ['$resource',
   function($resource){
-    return $resource(host + 'collection/byArea/:id', {}, {
+    return $resource(host + 'collection/show/list/:areaId', {}, {
       query: {method:'GET', isArray:true}
     });
   }
@@ -26,6 +26,26 @@ taggerServices.factory('CollectionById', ['$resource',
     });
   }
 ]);
+
+taggerServices.factory('CollectionAdd', ['$resource',
+  function($resource) {
+    return $resource(host + 'collection/add');
+  }
+]);
+
+taggerServices.factory('CollectionDelete', ['$resource',
+  function($resource) {
+    return $resource(host + 'collection/delete');
+  }
+]);
+
+
+taggerServices.factory('CollectionUpdate', ['$resource',
+  function($resource) {
+    return $resource(host + 'collection/update');
+  }
+]);
+
 
 taggerServices.factory('TagsForCollection', ['$resource',
   function($resource) {
@@ -189,13 +209,30 @@ taggerServices.factory('TagUpdate', ['$resource',
   }
 ]);
 
+// Tag area services
 taggerServices.factory('TagTargetAdd', ['$resource',
 
   function Resource($resource) {
-    return $resource(host + 'tag/update');
+    return $resource(host + 'tag/:tagId/add/area/:areaId',{} ,{
+      query: {method: 'GET', isArray: false}
+    });
   }
-
 ]);
+
+taggerServices.factory('TagTargetRemove', ['$resource',
+  function Resource($resource) {
+    return $resource(host + 'tag/:tagId/remove/area/:areaId', {} ,{
+      query: {method: 'GET', isArray: false}
+    });
+  }]);
+
+taggerServices.factory('TagTargets', ['$resource',
+  function Resource($resource) {
+    return $resource(host + 'tag/targets/byId/:tagId', {} ,{
+      query: {method: 'GET', isArray: true}
+    });
+  }]);
+
 
 
 // SHARED DATA SERVICE
@@ -203,13 +240,15 @@ taggerServices.factory('TagTargetAdd', ['$resource',
 taggerServices.factory('Data', function() {
   return {
     areas: [],
-    currentAreaIndex: 0,
-    currentCategoryIndex: 0,
+    currentAreaIndex: null,
+    currentCategoryIndex: null,
     categories: [],
-    currentContentIndex: 0,
+    currentContentIndex: null,
     contentTypes: [],
     tags: [],
-    currentTagIndex: 0
+    currentTagIndex: null,
+    collections: [],
+    currentCollectionIndex: null
   };
 });
 
@@ -310,6 +349,8 @@ taggerServices.factory('TaggerDialog', [
       ContentTypeList,
       ContentTypeAdd,
       ContentTypeDelete,
+      CollectionAdd,
+      CollectionsByArea,
       TaggerToast,
       Data) {
 
@@ -514,29 +555,6 @@ taggerServices.factory('TaggerDialog', [
 
       };
 
-      // Called when user selects add category
-      // in the dialog.
-      $scope.addContentType = function(title) {
-
-        var result = ContentTypeAdd.save({title: title});
-
-        result.$promise.then(function(data) {
-
-          if (data.status === 'success') {
-
-            TaggerToast("Content Type Added");
-            // Update the category list. The
-            // id parameter will be used to select
-            // the newly added category for editing.
-            $scope.getContentList(data.id);
-            // Does what you'd expect.
-            $scope.closeDialog();
-
-          }
-
-        });
-      };
-
       // Retrieves a new category list.  On return, broadcasts event
       // to the rootScope, passing references to the new category
       // list and the id param passed into the method. If the id param
@@ -568,14 +586,79 @@ taggerServices.factory('TaggerDialog', [
 
       };
 
+      // Called when user selects add category
+      // in the dialog.
+      $scope.addContentType = function(title) {
 
-      $scope.closeDialog = function () {
-        $mdDialog.hide();
+        var result = ContentTypeAdd.save({title: title});
+
+        result.$promise.then(function (data) {
+
+          if (data.status === 'success') {
+
+            TaggerToast("Content Type Added");
+            // Update the category list. The
+            // id parameter will be used to select
+            // the newly added category for editing.
+            $scope.getContentList(data.id);
+            // Does what you'd expect.
+            $scope.closeDialog();
+
+          }
+
+        });
       };
 
-    }
+      $scope.addCollection = function(title) {
+
+        var result = CollectionAdd.save({title: title, areaId: Data.currentAreaIndex});
+        result.$promise.then(function(data) {
+
+          if (data.status === 'success') {
+
+            TaggerToast("Collection Added");
+            // Update the category list. The
+            // id parameter will be used to select
+            // the newly added category for editing.
+            $scope.getCollectionList(data.id);
+            // Does what you'd expect.
+            $scope.closeDialog();
+
+          }
+        });
+      };
+
+      $scope.getCollectionList = function(id) {
+
+        // Update the shared Data service
+        Data.collections  = CollectionsByArea.query({areaId: Data.currentAreaIndex});
+        // Wait for callback.
+        Data.collections.$promise.then(function () {
+
+          // Deleting a category doesn't generate
+          // a new id. In that case, expect the
+          // id to be null. Update the view using the
+          // id of the first item in the updated category
+          // list.
+          if (id === null) {
+            Data.currentCollectionIndex = Data.collections[0].id;
+
+          }  else {
+            Data.currentCollectionIndex = id;
+          }
+
+        });
+
+      };
 
 
-  }]);
+      $scope.closeDialog = function () {
+          $mdDialog.hide();
+        };
+
+      }
+
+
+    }]);
 
 

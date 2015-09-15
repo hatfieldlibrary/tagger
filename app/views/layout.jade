@@ -24,10 +24,11 @@ html
               span.md-subhead area: &nbsp;
                 md-input-container(class="md-no-float" style="display:inline-block")
                   md-select(ng-model="areas" placeholder="Select Area")
-                    md-option(ng-repeat="area in areas" ng-selected="area.id") {{area.title}}
+                    md-option(ng-repeat="area in areas" ng-selected="Data.currentAreaIndex == area.id") {{area.title}}
 
 
-      div(layout="row")
+      div(layout="row" style="max-width: 2000px;")
+
         if user
           md-sidenav(style="height: 850px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
 
