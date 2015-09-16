@@ -182,35 +182,27 @@ exports.add = function(req, res) {
 
 exports.updateImage = function (req, res, config) {
 
-  var fs = require('fs'),
-    multiparty = require('multiparty'),
-    magick = require('imagemagick');
+  //https://github.com/danialfarid/ng-file-upload
+  // https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
 
-
+  // paths for imagemagick and image dirctory
   var convert = config.convert,
     identify = config.identify,
     imagePath = config.taggerImageDir;
 
-  var form = new multiparty.Form( );
+  var fs = require('fs'),
+    multiparty = require('multiparty'),
+    magick = require('imagemagick');
 
 
   magick.identify.path = identify;
   magick.convert.path = convert;
 
 
-  //var form = new multiparty.Form();
+  var form = new multiparty.Form();
   var imageName;
   var id;
-
   form.parse(req, function (err, fields, files) {
-    console.log(files);
-
-    //https://github.com/danialfarid/ng-file-upload
-    // https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
-
-    // paths for imagemagick and image dirctory
-
-    //form.parse(req, function (err, fields, files) {
     //file = req.files.file;
    // console.log(files.image);
 
@@ -218,11 +210,12 @@ exports.updateImage = function (req, res, config) {
     fs.readFile(files.file[0].path, function (err, data) {
 
       imageName = files.file[0].originalFilename;
+      console.log(fields);
       id = fields.id;
       console.log(imageName);
       if (!imageName) {
         console.log('Image name not defined');
-       // res.redirect('/');
+        res.redirect('/');
         res.end();
 
       } else {
@@ -235,7 +228,8 @@ exports.updateImage = function (req, res, config) {
         fs.writeFile(fullPath, data, function (err) {
           if (err) {
             console.log(err);
-            res.redirect('/admin');
+           // res.redirect('/admin');
+            res.end();
           }
           else {
             console.log('ImageMagick at work');
@@ -245,7 +239,6 @@ exports.updateImage = function (req, res, config) {
                 width: 200
 
               },
-
               /*jshint unused:false */
               function (err, stdout, stderr) {
                 if (err) {
@@ -257,8 +250,9 @@ exports.updateImage = function (req, res, config) {
           }
         });
       }
-    })
-  })
+    });
+  });
+
 
   function updateDb(id) {
     db.Collection.update({
@@ -268,8 +262,8 @@ exports.updateImage = function (req, res, config) {
         id: {
           eq: id
         }
-       }
-
+      }
+      /*jshint unused:false*/
     ).success(function(err, result) {
         // JSON response
         res.setHeader('Content-Type', 'application/json');
@@ -283,7 +277,6 @@ exports.updateImage = function (req, res, config) {
 
   }
 };
-
 
 
 // end new admin interface
@@ -914,8 +907,6 @@ exports.olddelete = function(req, res) {
     }
   );
 };
-
-
 
 
 exports.addTag = function(req, res) {

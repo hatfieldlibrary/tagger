@@ -700,15 +700,12 @@ taggerServices.factory('TaggerDialog', [
       };
 
 
-
-
-
       $scope.uploadImage = function(file) {
 
-             alert('');
           Upload.upload({
             url: '/admin/collection/image',
             file: file,
+            fields: {id: Data.currentCollectionIndex}
           }).progress(function (evt) {
             var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
             console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
