@@ -66,31 +66,32 @@ exports.byId = function(req, res) {
 
 exports.update = function(req, res) {
 
-  var collName = req.body.name;
-  var collUrl = req.body.url;
-  var collBrowseType = req.body.browseType;
-  var collDesc = req.body.description;
-  var collId = req.body.id;
-  var collDates = req.body.dates;
-  var collItems = req.body.items;
-  var collType = req.body.ctype;
+  var id = req.body.id;
+  var title = req.body.title;
+  var url = req.body.url;
+  var browseType = req.body.browseType;
+  var description = req.body.description;
+  var dates = req.body.dates;
+  var items = req.body.items;
+  var ctype = req.body.ctype;
   var repoType = req.body.repoType;
   var restricted = req.body.restricted;
 
   db.Collection.update({
-      title: collName,
-      url: collUrl,
-      browseType: collBrowseType,
-      description: collDesc,
-      dates: collDates,
-      items: collItems,
-      ctype: collType,
+
+      title: title,
+      url: url,
+      browseType: browseType,
+      description: description,
+      dates: dates,
+      items: items,
+      ctype: ctype,
       repoType: repoType,
       restricted: restricted
     },
     {
       id: {
-        eq: collId
+        eq: id
       }
     }).success(function(result){
       // JSON response
@@ -104,6 +105,25 @@ exports.update = function(req, res) {
 
 
 };
+
+exports.delete = function (req, res) {
+
+  var id = req.body.id;
+
+  db.Collection.destroy({
+    id: {
+      eq: id
+    }
+  }).success(function() {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({ status: 'success'}));
+  }).error(function (err) {
+    console.log(err);
+  });
+};
+
 
 exports.add = function(req, res) {
 
@@ -153,30 +173,12 @@ exports.add = function(req, res) {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({ status: 'success', collections: results.collections}));
+      res.end(JSON.stringify({ status: 'success', id: newCollectionId, collections: results.collections}));
     }
   );
 
-
-
 };
 
-exports.delete = function (req, res) {
-  var id = req.body.id;
-
-  db.Collection.destroy({
-    id: {
-      eq: id
-    }
-  }).success(function() {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify({ status: 'success'}));
-  }).error(function (err) {
-    console.log(err);
-  });
-};
 
 
 // end new admin interface
@@ -770,7 +772,7 @@ exports.oldupdate = function(req, res) {
 };
 
 
-exports.delete = function(req, res) {
+exports.olddelete = function(req, res) {
 
   var collId = req.params.id;
   // First delete the collection. Then retrieve the updated
@@ -811,6 +813,9 @@ exports.delete = function(req, res) {
 
 exports.updateImage = function (req, res, config) {
 
+  //https://github.com/danialfarid/ng-file-upload
+  // https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
+
   // paths for imagemagick and image dirctory
   var convert = config.convert,
     identify = config.identify,
@@ -825,15 +830,15 @@ exports.updateImage = function (req, res, config) {
   magick.convert.path = convert;
 
 
-  var form = new multiparty.Form();
+  //var form = new multiparty.Form();
   var imageName;
   var id;
-  form.parse(req, function (err, fields, files) {
-
+  //form.parse(req, function (err, fields, files) {
+    file = req.files.file;
     console.log(files.image);
 
     // read in the temp file from the upload
-    fs.readFile(files.image[0].path, function (err, data) {
+    fs.readFile(file.image[0].path, function (err, data) {
 
       imageName = files.image[0].originalFilename;
       id = fields.id;
@@ -873,7 +878,7 @@ exports.updateImage = function (req, res, config) {
         });
       }
     });
-  });
+
 
   function updateDb(id) {
     db.Collection.update({
@@ -886,7 +891,10 @@ exports.updateImage = function (req, res, config) {
       }
       /*jshint unused:false*/
     ).success(function(err, result) {
-        res.redirect('/admin/form/collection/update/'+id);
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.end(JSON.stringify({status: 'success'}));
       }
     ).error(function(err) {
         console.log(err);

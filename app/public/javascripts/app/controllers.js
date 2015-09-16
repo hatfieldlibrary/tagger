@@ -41,6 +41,7 @@ taggerControllers.controller('CollectionCtrl', [
   'TagsForCollection',
   'TypesForCollection',
   'TaggerDialog',
+  'TaggerToast',
   'Data',
 
   function(
@@ -52,6 +53,7 @@ taggerControllers.controller('CollectionCtrl', [
     TagsForCollection,
     TypesForCollection,
     TaggerDialog,
+    TaggerToast,
     Data ) {
 
 
@@ -65,6 +67,7 @@ taggerControllers.controller('CollectionCtrl', [
         $scope.areas = newValue;
       }
     );
+
 
     $scope.$watch(function() { return Data.currentAreaIndex },
       function(newValue, oldValue) {
@@ -81,11 +84,18 @@ taggerControllers.controller('CollectionCtrl', [
       }
     );
 
+
+    $scope.$watch(function() {return Data.currentCollectionIndex},
+      function(newValue) {
+        $scope.getCollectionById(newValue);
+      });
+
+
     $scope.$watch(function() { return Data.collections},
       function() {
         $scope.collectionList = Data.collections;
-        console.log('coll list ' + $scope.collectionList);
-      });
+      }
+    );
 
 
     // Initialization method called on load.
@@ -94,6 +104,7 @@ taggerControllers.controller('CollectionCtrl', [
         $scope.collectionList = CollectionsByArea.query({areaId: $scope.Data.currentAreaIndex});
         $scope.collectionList.$promise.then(function (data) {
           if (typeof data !== 'undefined') {
+            Data.currentCollectionIndex = data[0].collection.id;
             $scope.collection = data[0].collection;
           }
 
@@ -107,9 +118,40 @@ taggerControllers.controller('CollectionCtrl', [
       }
     };
 
-    $scope.getCollectionArea = function(id) {
+    // Update tag
+    $scope.updateCollection = function() {
 
-    //  $scope.collectionList = CollectionsByArea.query({id: id});
+      var success = CollectionUpdate.save({
+
+        id: $scope.collection.id,
+        title: $scope.collection.title,
+        url: $scope.collection.url,
+        description: $scope.collection.description,
+        dates: $scope.collection.dates,
+        repoType: $scope.collection.repoType,
+        category: $scope.collection.category,
+        items: $scope.collection.items,
+        browseType: $scope.collection.browseType,
+        restricted: $scope.collection.restricted,
+        ctype: $scope.collection.ctype
+
+      });
+
+      success.$promise.then(function(data) {
+
+        if (data.status === 'success') {
+          // Toast upon success
+          TaggerToast("Collection Updated");
+        }
+      })
+
+    };
+
+
+    $scope.getCollectionArea = function(id) {
+      Data.currentCollectionIndex = id;
+      $scope.collectionList = CollectionsByArea.query({id: id});
+
 
     };
 
@@ -121,8 +163,8 @@ taggerControllers.controller('CollectionCtrl', [
      };
      */
     $scope.getCollectionById = function(id) {
-
-    //  $scope.collection = CollectionById.query({id: id});
+      $scope.Data.currentCollectionIndex = id;
+      $scope.collection = CollectionById.query({id: id});
 
     };
 
@@ -130,6 +172,7 @@ taggerControllers.controller('CollectionCtrl', [
 // Tag dialog messages
     $scope.addMessage = 'templates/addCollectionMessage.html';
     $scope.deleteMessage = 'templates/deleteCollectionMessage.html';
+    $scope.updateImageMessage = 'templates/updateImageMessage.html';
 
 // Collection dialogs
     $scope.showDialog = showDialog;
@@ -633,7 +676,7 @@ taggerControllers.controller('TagAreasCtrl', [
 
     $scope.$watch(function() { return Data.areas},
       function(newValue) {
-           $scope.areas = newValue;
+        $scope.areas = newValue;
       });
 
     $scope.getCurrentAreaTargets = function(id) {

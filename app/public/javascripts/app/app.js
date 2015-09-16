@@ -5,6 +5,7 @@ var app;
 // load modules
 var taggerApp = angular.module('taggerApp', [
   'ngMaterial',
+    'ngFileUpload',
     'taggerControllers',
     'taggerServices'
   ]

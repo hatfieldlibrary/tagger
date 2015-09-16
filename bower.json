@@ -11,6 +11,8 @@
     "angular": "~1.4.4",
     "angular-route": "~1.4.4",
     "angular-animate": "~1.4.4",
-    "angular-resource": "~1.4.4"
+    "angular-resource": "~1.4.4",
+    "ng-file-upload-shim": "~7.2.1",
+    "ng-file-upload": "~7.2.1"
   }
 }

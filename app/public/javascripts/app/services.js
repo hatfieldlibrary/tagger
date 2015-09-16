@@ -233,6 +233,26 @@ taggerServices.factory('TagTargets', ['$resource',
     });
   }]);
 
+taggerServices.factory('ImageUpload', ['$http', function($http) {
+
+  this.uploadFileToUrl = function(file){
+    var uploadUrl = '/admin/collection/image';
+    var fd = new FormData();
+    fd.append('file', file);
+    $http.post(uploadUrl, fd, {
+      transformRequest: angular.identity,
+      headers: {'Content-Type': undefined}
+    })
+      .success(function(){
+        return '{status: "success"}';
+      })
+      .error(function(err){
+        console.log(err)
+      });
+  }
+
+}]);
+
 
 
 // SHARED DATA SERVICE
@@ -302,11 +322,13 @@ taggerServices.factory('TaggerToast', [
 // rootScope.
 taggerServices.factory('TaggerDialog', [
 
+  'Upload',
   '$rootScope',
   '$mdDialog',
 
   function(
 
+    UpLoad,
     $rootScope,
     $mdDialog
 
@@ -350,8 +372,10 @@ taggerServices.factory('TaggerDialog', [
       ContentTypeAdd,
       ContentTypeDelete,
       CollectionAdd,
+      CollectionDelete,
       CollectionsByArea,
       TaggerToast,
+      Upload,
       Data) {
 
       $scope.deleteTag = function () {
@@ -628,12 +652,36 @@ taggerServices.factory('TaggerDialog', [
         });
       };
 
+      $scope.deleteCollection = function() {
+         console.log('id ' + Data.currentCollectionIndex);
+        var result = CollectionDelete.save({id: Data.currentCollectionIndex});
+
+        result.$promise.then(function(data) {
+          if (data.status === 'success') {
+
+            TaggerToast("Collection Deleted");
+            // After retrieving new category list, we need
+            // to update the category currently in view.
+            // This method is designed to take an id
+            // parameter.  But if this is null, it
+            // uses the id of the first category in the
+            // updated list. That's what we want in the
+            // case of deletions.
+            $scope.getCollectionList(null);
+            $scope.closeDialog();
+
+          }
+
+        });
+
+      };
+
       $scope.getCollectionList = function(id) {
 
         // Update the shared Data service
         Data.collections  = CollectionsByArea.query({areaId: Data.currentAreaIndex});
         // Wait for callback.
-        Data.collections.$promise.then(function () {
+        Data.collections.$promise.then(function (data) {
 
           // Deleting a category doesn't generate
           // a new id. In that case, expect the
@@ -649,6 +697,30 @@ taggerServices.factory('TaggerDialog', [
 
         });
 
+      };
+
+      $scope.uploadFiles = function(file) {
+        $scope.f = file;
+        if (file && !file.$error) {
+          file.upload = Upload.upload({
+            url: '/admin/collection/image',
+            file: file
+          });
+
+          file.upload.then(function (response) {
+            $timeout(function () {
+              file.result = response.data;
+            });
+          }, function (response) {
+            if (response.status > 0)
+              $scope.errorMsg = response.status + ': ' + response.data;
+          });
+
+          file.upload.progress(function (evt) {
+            file.progress = Math.min(100, parseInt(100.0 *
+              evt.loaded / evt.total));
+          });
+        }
       };
 
 

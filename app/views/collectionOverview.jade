@@ -14,7 +14,7 @@ block content
               span.md-subhead COLLECTIONS
             h3.md-display-1 {{collection.collection.title}}
             span(flex)
-            md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection") <i class="material-icons">delete</i>
+            md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
 
         md-card-content
           div(layout="row", layout-align="start start")
@@ -27,7 +27,7 @@ block content
                   div(ng-repeat="col in collectionList")
                     md-list-item
 
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': tag.id==Data.currentTagIndex}" style="min-height: 47px;" ng-click="getCollectionById(col.collection.id);")
+                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': tag.id==Data.currentTagIndex}" style="min-height: 47px;" ng-click="getCollectionById(col.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
                           div.md-ripple-container
                     md-divider
@@ -36,7 +36,7 @@ block content
 
             md-content(layout-padding flex="80" style="padding-left: 20px;")
               div(flex)
-                md-button(class="md-raised md-accent" style="float:right;") Update This Collection
+                md-button(class="md-raised md-accent" style="float:right;" ng-click="updateCollection()") Update This Collection
                 h3(class="md-title" style="margin-top: 10px;") Edit Collection
 
               md-input-container
@@ -65,7 +65,7 @@ block content
 
               div(style="margin-bottom: 5px;")
                 div.md-caption Item Type
-                md-radio-group(layout="row" ng-model="collection.collType")
+                md-radio-group(layout="row" ng-model="collection.ctype")
                   div(flex="25")
                     md-radio-button(aria-label="Unrestricted" value="dig" style="display: inline") Collection
                   div(flex="25")
@@ -87,14 +87,14 @@ block content
                 div.md-caption Link Type
                 md-radio-group(layout="row" ng-model="collection.browseType")
                   div(flex="25")
-                    md-radio-button(aria-label="Unrestricted" value="link" flex="15" style="display: inline") Link
+                    md-radio-button(aria-label="Link" value="link" flex="15" style="display: inline") Link
                   div(flex="25")
-                    md-radio-button(aria-label="Restricted" value="selection" flex="15" style="display: inline") Selection
+                    md-radio-button(aria-label="Selection" value="opts" flex="15" style="display: inline") Selection
                   span(flex)
               md-divider
               div(style="margin-top: 10px; margin-bottom: 35px;")
                 div.md-caption Search Type
-                md-radio-group(layout="row" ng-model="collection.searchType")
+                md-radio-group(layout="row" ng-model="collection.repoType")
                   div(flex="25")
                     md-radio-button(aria-label="Unrestricted" value="DEFAULT" flex="15" style="display: inline") Search & Browse
                   div(flex="25")
@@ -109,11 +109,11 @@ block content
       md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
-            <i class="material-icons">image</i>
+            i(class="material-icons") image
             h3.md-display-1 Image
             div(flex)
-              md-button(class="md-accent md-raised md-fab md-mini" style="float: right;")
-                <i class="material-icons">file_upload</i>
+              md-button(class="md-accent md-raised md-fab md-mini", ng-click="showDialog($event, updateImageMessage)", style="float: right;")
+                i(class="material-icons") file_upload
         md-card-content
           div(layout="row")
             md-card(flex="40" style="margin:0;max-width: 120px")

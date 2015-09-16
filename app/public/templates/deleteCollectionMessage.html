@@ -1,0 +1,16 @@
+<md-dialog aria-label="Delete dialog" style="width: 450px;">
+  <md-dialog-content>
+    <h3 class="md-display-1">Delete Collection</h3>
+    <md-input-container class="md-default-theme md-input-has-value">
+      Delete this Collection?
+    </md-input-container>
+  </md-dialog-content>
+  <div class="md-actions">
+    <md-button ng-click="closeDialog()" class="md-primary">
+      Cancel
+    </md-button>
+    <md-button ng-click="deleteCollection(Data.currentCollectionIndex)" class="md-primary">
+      Delete Collection
+    </md-button>
+  </div>
+</md-dialog>
