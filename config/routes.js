@@ -44,6 +44,9 @@ module.exports = function(app,config,passport){
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
   app.post('/rest/collection/update', ensureAuthenticated, collection.update);
+  app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
+    collection.updateImage(res, req, config);
+  });
 
   // AREAS
   app.get('/admin/area', ensureAuthenticated, area.overview);
@@ -101,9 +104,7 @@ module.exports = function(app,config,passport){
 //  app.post('/admin/collection/create', ensureAuthenticated, collection.create);
 //  app.post('/admin/collection/update', ensureAuthenticated, collection.update);
   // need to pass application configuration to imageUpdate controller.
-  app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
-    collection.updateImage(res, req, config);
-  });
+
   app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);
   app.post('/admin/tag/create', ensureAuthenticated, tag.create);
   app.post('/admin/tag/update', ensureAuthenticated, tag.tagUpdate);

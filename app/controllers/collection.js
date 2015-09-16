@@ -138,8 +138,8 @@ exports.add = function(req, res) {
         db.Collection.create({
           title: title
         }).success(function(coll) {
-           newCollectionId = coll.id;
-           callback(null, coll)
+          newCollectionId = coll.id;
+          callback(null, coll)
         }).error(function(err) {
           console.log(err);
         });
@@ -177,6 +177,111 @@ exports.add = function(req, res) {
     }
   );
 
+};
+
+
+exports.updateImage = function (req, res, config) {
+
+  var fs = require('fs'),
+    multiparty = require('multiparty'),
+    magick = require('imagemagick');
+
+
+  var convert = config.convert,
+    identify = config.identify,
+    imagePath = config.taggerImageDir;
+
+  var form = new multiparty.Form( );
+
+
+  magick.identify.path = identify;
+  magick.convert.path = convert;
+
+
+  //var form = new multiparty.Form();
+  var imageName;
+  var id;
+
+  form.parse(req, function (err, fields, files) {
+    console.log(files);
+
+    //https://github.com/danialfarid/ng-file-upload
+    // https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
+
+    // paths for imagemagick and image dirctory
+
+    //form.parse(req, function (err, fields, files) {
+    //file = req.files.file;
+   // console.log(files.image);
+
+    // read in the temp file from the upload
+    fs.readFile(files.file[0].path, function (err, data) {
+
+      imageName = files.file[0].originalFilename;
+      id = fields.id;
+      console.log(imageName);
+      if (!imageName) {
+        console.log('Image name not defined');
+       // res.redirect('/');
+        res.end();
+
+      } else {
+        // use imagemagick to transform the full image to thumbnail.
+        // write to thumb directory
+        var fullPath = imagePath + '/full/' + imageName;
+        var thumbPath = imagePath + '/thumb/' + imageName;
+        console.log(fullPath);
+
+        fs.writeFile(fullPath, data, function (err) {
+          if (err) {
+            console.log(err);
+            res.redirect('/admin');
+          }
+          else {
+            console.log('ImageMagick at work');
+            magick.resize({
+                srcPath: fullPath,
+                dstPath: thumbPath,
+                width: 200
+
+              },
+
+              /*jshint unused:false */
+              function (err, stdout, stderr) {
+                if (err) {
+                  console.log(err);
+                }
+                // update database even if the conversion fails
+                updateDb(id);
+              });
+          }
+        });
+      }
+    })
+  })
+
+  function updateDb(id) {
+    db.Collection.update({
+        image: imageName
+      },
+      {
+        id: {
+          eq: id
+        }
+       }
+
+    ).success(function(err, result) {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.end(JSON.stringify({status: 'success'}));
+      }
+    ).error(function(err) {
+        console.log(err);
+      }
+    );
+
+  }
 };
 
 
@@ -811,98 +916,7 @@ exports.olddelete = function(req, res) {
 };
 
 
-exports.updateImage = function (req, res, config) {
 
-  //https://github.com/danialfarid/ng-file-upload
-  // https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
-
-  // paths for imagemagick and image dirctory
-  var convert = config.convert,
-    identify = config.identify,
-    imagePath = config.taggerImageDir;
-
-  var fs = require('fs'),
-    multiparty = require('multiparty'),
-    magick = require('imagemagick');
-
-
-  magick.identify.path = identify;
-  magick.convert.path = convert;
-
-
-  //var form = new multiparty.Form();
-  var imageName;
-  var id;
-  //form.parse(req, function (err, fields, files) {
-    file = req.files.file;
-    console.log(files.image);
-
-    // read in the temp file from the upload
-    fs.readFile(file.image[0].path, function (err, data) {
-
-      imageName = files.image[0].originalFilename;
-      id = fields.id;
-      console.log(imageName);
-      if (!imageName) {
-        console.log('Image name not defined');
-        res.redirect('/');
-        res.end();
-
-      } else {
-        // use imagemagick to transform the full image to thumbnail.
-        // write to thumb directory
-        var fullPath = imagePath + '/full/' + imageName;
-        var thumbPath = imagePath + '/thumb/' + imageName;
-        console.log(fullPath);
-
-        fs.writeFile(fullPath, data, function (err) {
-          if (err) {
-            console.log(err);
-            res.redirect('/admin');
-          }
-          else {
-            console.log('ImageMagick at work');
-            magick.resize({
-                srcPath: fullPath,
-                dstPath: thumbPath,
-                width:   200
-
-              },
-              /*jshint unused:false */
-              function(err, stdout, stderr){
-                if (err) { console.log(err); }
-                // update database even if the conversion fails
-                updateDb(id);
-              });
-          }
-        });
-      }
-    });
-
-
-  function updateDb(id) {
-    db.Collection.update({
-        image: imageName
-      },
-      {
-        id: {
-          eq: id
-        }
-      }
-      /*jshint unused:false*/
-    ).success(function(err, result) {
-        // JSON response
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin','*');
-        res.end(JSON.stringify({status: 'success'}));
-      }
-    ).error(function(err) {
-        console.log(err);
-      }
-    );
-
-  }
-};
 
 exports.addTag = function(req, res) {
 

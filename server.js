@@ -4,7 +4,10 @@ var server;
 
 var express = require('express'),
   http = require('http'),
-  passport = require('passport');
+  passport = require('passport'),
+  multiparty = require('multiparty');
+
+
 
 global.db = require('./app/models');
 var config = require('./config/environment');

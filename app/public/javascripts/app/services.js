@@ -699,7 +699,26 @@ taggerServices.factory('TaggerDialog', [
 
       };
 
-      $scope.uploadFiles = function(file) {
+
+
+
+
+      $scope.uploadImage = function(file) {
+
+             alert('');
+          Upload.upload({
+            url: '/admin/collection/image',
+            file: file,
+          }).progress(function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+          }).success(function (data, status, headers, config) {
+            console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+          }).error(function (data, status, headers, config) {
+            console.log('error status: ' + status);
+          })
+        };
+        /*
         $scope.f = file;
         if (file && !file.$error) {
           file.upload = Upload.upload({
@@ -720,8 +739,8 @@ taggerServices.factory('TaggerDialog', [
             file.progress = Math.min(100, parseInt(100.0 *
               evt.loaded / evt.total));
           });
-        }
-      };
+        } */
+      //};
 
 
       $scope.closeDialog = function () {

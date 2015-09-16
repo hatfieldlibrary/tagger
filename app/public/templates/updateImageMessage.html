@@ -1,17 +1,20 @@
 <md-dialog>
-  <md-dialog-content>
+  <form name="form">
+    <md-dialog-content>
+
       <h3 class="md-display-1">Select Image to Upload</h3>
-    <p class="md-subhead">Select an image to upload as the icon for this collection.  Using .jpg or .png recommended.  </p>
-    <p>&nbsp;</p>
-    <button type="file" ngf-select="uploadFiles($file)"
-            accept="image/*" ngf-max-height="1000" ngf-max-size="1MB">
-      Select File</button>
+      <p class="md-subhead">Select an image to upload as the icon for this collection.  Using .jpg or .png recommended.  </p>
+      <p>&nbsp;</p>
+      <input type="file" ngf-select ng-model="picFile" name="file"
+             accept="image/*" ngf-max-size="2MB" required>
 
-    <p>&nbsp;</p>
-  </md-dialog-content>
-  <div class="md-actions">
-    <md-button ng-click="closeDialog()" class="md-primary">
-      Cancel
-
-  </div>
+      <p>&nbsp;</p>
+    </md-dialog-content>
+    <div class="md-actions">
+      <md-button ng-click="closeDialog()" class="md-primary">
+        Cancel
+      </md-button>
+      <md-button type="submit" ng-click="uploadImage(picFile)">Update Image</md-button>
+    </div>
+  </form>
 </md-dialog>
