@@ -41,12 +41,16 @@ module.exports = function(app,config,passport){
   app.get('/admin/collections', ensureAuthenticated, collection.overview);
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
   app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
+  app.use('/rest/collection/areas/:collId', ensureAuthenticated, collection.areas);
+
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
   app.post('/rest/collection/update', ensureAuthenticated, collection.update);
   app.post('/admin/collection/image', ensureAuthenticated, function (res, req) {
     collection.updateImage(res, req, config);
   });
+  app.get('/rest/collection/:collId/add/area/:areaId', ensureAuthenticated, collection.addAreaTarget);
+  app.get('/rest/collection/:collId/remove/area/:areaId', ensureAuthenticated, collection.removeAreaTarget);
 
   // AREAS
   app.get('/admin/area', ensureAuthenticated, area.overview);

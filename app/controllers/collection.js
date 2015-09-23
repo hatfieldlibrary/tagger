@@ -40,29 +40,255 @@ exports.list = function (req, res) {
   });
 };
 
+exports.areas = function (req, res) {
+
+  var collId = req.params.collId;
+
+  db.AreaTarget.findAll({
+    where: {
+      CollectionId: {
+        eq: collId
+      }
+    }
+  }).success( function (areas) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(areas));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+exports.addAreaTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var areaId = req.params.areaId;
+
+  async.series(
+    {
+      // Check to see if tag is already associated
+      // with area.
+      check: function (callback) {
+
+        db.AreaTarget.find(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              },
+              AreaId: {
+                eq: areaId
+              }
+            }
+          }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function (err, result) {
+
+      // if new
+      if (result.check === null) {
+
+        addArea(collId, areaId, res);
+
+      }
+      // if not new, just return the current list.
+      else {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            }
+          },
+          {attributes: ['AreaId']}
+        ).success = function (areas) {
+          // JSON response
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.end(JSON.stringify({status: 'exists', areaTargets: areas}));
+        }
+      }
+
+    });
+
+};
+
+function addArea(collId, areaId, res) {
+
+  async.series(
+    {
+      create: function (callback) {
+        db.AreaTarget.create(
+          {
+            CollectionId: collId,
+            AreaId: areaId
+          }
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+
+      },
+      areaList: function (callback) {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            }
+          },
+          {attributes: ['AreaId']}
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+
+    function (err, result) {
+      if (err) { console.log(err); }
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+
+    }
+  );
+}
+
+exports.removeAreaTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var areaId = req.params.areaId;
+
+  async.series(
+    {
+      create: function (callback) {
+        db.AreaTarget.destroy(  {
+            AreaId: {
+              eq: areaId
+            },
+            CollectionId: {
+              eq:collId
+            }
+          }
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+
+      },
+      areaList: function (callback) {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            }
+          },
+          {attributes: ['AreaId']}
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+
+    });
+};
 
 exports.byId = function(req, res) {
 
   var collId = req.params.id;
 
-  db.Collection.find(
-    {
-      where: {
-        id: {
-          eq: collId
-        }
+  async.series({
+      getCollection: function(callback) {
+        db.Collection.find(
+          {
+            where: {
+              id: {
+                eq: collId
+              }
+            }
+          }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      },
+      getCategory: function(callback) {
+        db.CategoryTarget.find(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            }
+          }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      },
+      getAreas: function(callback) {
+        db.AreaTarget.findAll({
+            where: {
+              CollectionId: {
+                eq: collId
+              }
+            }
+          }
+        ).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
       }
-    }
-  ).success(function(collection) {
+    },
+    function(err, result) {
+      var response = {};
+      var areas = [];
+      response.id = result.getCollection.id;
+      response.title = result.getCollection.title;
+      response.description = result.getCollection.description;
+      response.dates = result.getCollection.dates;
+      response.items = result.getCollection.items;
+      response.ctype = result.getCollection.ctype;
+      response.url = result.getCollection.url;
+      response.browseType = result.getCollection.browseType;
+      response.repoType = result.getCollection.repoType;
+      response.image = result.getCollection.image;
+      if (result.getCategory !== null) {
+        response.category = result.getCategory.CategoryId;
+      }
+      if (result.getAreas !== null) {
+
+        for (var i = 0; i < result.getAreas.length; i++) {
+          areas[0] = result.getAreas[i].AreaId;
+        }
+        response.areas = areas;
+      }
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(collection));
-    })
-    .error(function (err) {
-      console.log(err);
-    })
+      res.end(JSON.stringify(response));
+    });
 };
+
 
 exports.update = function(req, res) {
 
@@ -76,33 +302,81 @@ exports.update = function(req, res) {
   var ctype = req.body.ctype;
   var repoType = req.body.repoType;
   var restricted = req.body.restricted;
+  var category = req.body.category;
+  console.log('category value ' + category);
 
-  db.Collection.update({
+  async.series({
+      updateCollection: function(callback) {
+        db.Collection.update({
 
-      title: title,
-      url: url,
-      browseType: browseType,
-      description: description,
-      dates: dates,
-      items: items,
-      ctype: ctype,
-      repoType: repoType,
-      restricted: restricted
-    },
-    {
-      id: {
-        eq: id
+            title: title,
+            url: url,
+            browseType: browseType,
+            description: description,
+            dates: dates,
+            items: items,
+            ctype: ctype,
+            repoType: repoType,
+            restricted: restricted
+          },
+          {
+            id: {
+              eq: id
+            }
+          }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      },
+      checkCategory: function(callback) {
+        db.CategoryTarget.find({
+          where: {
+            CollectionId: {
+              eq: id
+            }
+          }
+        }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
       }
-    }).success(function(result){
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({ status: 'success' }));
-    })
-    .error(function (err) {
-      console.log(err);
-    });
+    },
+    function(err,result) {
+      // If no category exists for this collection,
+      // add new entry.
+      if (result.checkCategory === null) {
+        db.CategoryTarget.create({CollectionId: id, CategoryId: category})
+          .success(function() {
+            console.log('added new category target')
+            // JSON response
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(JSON.stringify({ status: 'success'}));
 
+          }).error(function (err) {
+            console.log(err);
+          });
+        // If category does exist, update to the current value.
+      } else {
+        db.CategoryTarget.update({
+            CategoryId: category
+          },
+          {
+            CollectionId: {
+              eq: id
+            }
+          }).success(function() {
+            console.log('updated category target');
+            // JSON response
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(JSON.stringify({ status: 'success'}));
+
+          }).error(function (err) {
+            console.log(err);
+          });
+      }
+    });
 
 };
 
@@ -204,7 +478,7 @@ exports.updateImage = function (req, res, config) {
   var id;
   form.parse(req, function (err, fields, files) {
     //file = req.files.file;
-   // console.log(files.image);
+    // console.log(files.image);
 
     // read in the temp file from the upload
     fs.readFile(files.file[0].path, function (err, data) {
@@ -228,7 +502,7 @@ exports.updateImage = function (req, res, config) {
         fs.writeFile(fullPath, data, function (err) {
           if (err) {
             console.log(err);
-           // res.redirect('/admin');
+            // res.redirect('/admin');
             res.end();
           }
           else {

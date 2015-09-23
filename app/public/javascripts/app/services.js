@@ -46,6 +46,13 @@ taggerServices.factory('CollectionUpdate', ['$resource',
   }
 ]);
 
+taggerServices.factory('AreasForCollection', ['$resource',
+  function($resource) {
+    return $resource(host + 'collection/areas/:collId', {}, {
+      query: {method:'GET', isArray: true}
+    });
+  }
+]);
 
 taggerServices.factory('TagsForCollection', ['$resource',
   function($resource) {
@@ -62,6 +69,22 @@ taggerServices.factory('TypesForCollection', ['$resource',
     });
   }
 ]);
+
+taggerServices.factory('AreaTargetAdd', ['$resource',
+
+  function Resource($resource) {
+    return $resource(host + 'collection/:collId/add/area/:areaId',{} ,{
+      query: {method: 'GET', isArray: false}
+    });
+  }
+]);
+
+taggerServices.factory('AreaTargetRemove', ['$resource',
+  function Resource($resource) {
+    return $resource(host + 'collection/:collId/remove/area/:areaId', {} ,{
+      query: {method: 'GET', isArray: false}
+    });
+  }]);
 
 // AREA
 
@@ -268,7 +291,8 @@ taggerServices.factory('Data', function() {
     tags: [],
     currentTagIndex: null,
     collections: [],
-    currentCollectionIndex: null
+    currentCollectionIndex: null,
+    currentThumbnailImage: null
   };
 });
 
@@ -636,6 +660,7 @@ taggerServices.factory('TaggerDialog', [
       $scope.addCollection = function(title) {
 
         var result = CollectionAdd.save({title: title, areaId: Data.currentAreaIndex});
+
         result.$promise.then(function(data) {
 
           if (data.status === 'success') {
@@ -653,7 +678,7 @@ taggerServices.factory('TaggerDialog', [
       };
 
       $scope.deleteCollection = function() {
-         console.log('id ' + Data.currentCollectionIndex);
+        console.log('id ' + Data.currentCollectionIndex);
         var result = CollectionDelete.save({id: Data.currentCollectionIndex});
 
         result.$promise.then(function(data) {
@@ -702,51 +727,54 @@ taggerServices.factory('TaggerDialog', [
 
       $scope.uploadImage = function(file) {
 
-          Upload.upload({
-            url: '/admin/collection/image',
-            file: file,
-            fields: {id: Data.currentCollectionIndex}
-          }).progress(function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-          }).success(function (data, status, headers, config) {
-            console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
-          }).error(function (data, status, headers, config) {
-            console.log('error status: ' + status);
-          })
-        };
-        /*
-        $scope.f = file;
-        if (file && !file.$error) {
-          file.upload = Upload.upload({
-            url: '/admin/collection/image',
-            file: file
-          });
+        Upload.upload({
+          url: '/admin/collection/image',
+          file: file,
+          fields: {id: Data.currentCollectionIndex}
+        }).progress(function (evt) {
+          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+          console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+        }).success(function (data, status, headers, config) {
+          Data.currentThumbnailImage =  config.file.name;
+          $rootScope.$broadcast('imageUpdate', {});
+          $scope.closeDialog();
+          console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+        }).error(function (data, status, headers, config) {
+          console.log('error status: ' + status);
+        })
+      };
+      /*
+       $scope.f = file;
+       if (file && !file.$error) {
+       file.upload = Upload.upload({
+       url: '/admin/collection/image',
+       file: file
+       });
 
-          file.upload.then(function (response) {
-            $timeout(function () {
-              file.result = response.data;
-            });
-          }, function (response) {
-            if (response.status > 0)
-              $scope.errorMsg = response.status + ': ' + response.data;
-          });
+       file.upload.then(function (response) {
+       $timeout(function () {
+       file.result = response.data;
+       });
+       }, function (response) {
+       if (response.status > 0)
+       $scope.errorMsg = response.status + ': ' + response.data;
+       });
 
-          file.upload.progress(function (evt) {
-            file.progress = Math.min(100, parseInt(100.0 *
-              evt.loaded / evt.total));
-          });
-        } */
+       file.upload.progress(function (evt) {
+       file.progress = Math.min(100, parseInt(100.0 *
+       evt.loaded / evt.total));
+       });
+       } */
       //};
 
 
       $scope.closeDialog = function () {
-          $mdDialog.hide();
-        };
+        $mdDialog.hide();
+      };
 
-      }
+    }
 
 
-    }]);
+  }]);
 
 

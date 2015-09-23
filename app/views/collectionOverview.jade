@@ -47,12 +47,10 @@ block content
                   span(class="md-subhead md-default") maxuimum characters 450 (current {{testData.description.length}})
                 textarea(type="textarea", ng-trim="false", ng-model="collection.description", maxlength="450")
               md-input-container
-                label Collection Category
-                md-select(ng-model="testData.category" placeholder="Select a Category")
-                  md-option(value="Political Papers") Political Papers
-                  md-option(value="Personal Collections") Personal Collections
-                  md-option(value="University Archives") University Archives
-                  md-option(value="Exhibits") Exhibits
+                label Collection Group
+                md-select(ng-model="collection.category" placeholder="Select a Collection Group")
+                  md-option(ng-repeat="category in categoryList" ng-value="category.id") {{category.title}}
+
               md-input-container
                 label Coverage Dates
                 input(type="text", ng-model="collection.dates")
@@ -117,7 +115,7 @@ block content
         md-card-content
           div(layout="row")
             md-card(flex="40" style="margin:0;max-width: 120px")
-              img(style="max-width: 120px;" src="http://libmedia.willamette.edu/resources/img/thumb/{{collection.image}}")
+              img(style="max-width: 120px;" src="/resources/img/thumb/{{collection.image}}")
             md-card-content
               span.md-caption Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
 
@@ -143,7 +141,7 @@ block content
       md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
-            <i class="material-icons">bookmark</i>
+            i(class="material-icons") image
             h3.md-display-1 Content Type
             span(flex)
         md-card-content
@@ -159,16 +157,15 @@ block content
              //   md-button.md-chip-remove Close
 
       md-card.flex(flex)
+        md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
-            i.material-icons public
-            h3.md-display-1 Area
+            i(class="material-icons") public
+            h3.md-display-1 Areas
             span(flex)
-        md-card-content
-          md-input-container(class="md-no-float" style="display:inline-block")
-
-              md-select(ng-model="areas" placeholder="Select Area")
-                md-option(ng-repeat="area in areas" ng-selected="area.id") {{area.title}}
-
+        md-card-content(ng-controller="CollectionAreasCtrl")
+          div(layout="column", class="md-subhead") Select the Areas in which this Collection will appear.
+            md-container
+              md-checkbox(ng-repeat="area in areas", aria-label="Areas" value="area.id" ng-checked="isChosen(area.id)" ng-click="update(area.id)") {{area.title}}
 
 
