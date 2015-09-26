@@ -10,7 +10,8 @@ exports.overview = function(req, res){
   res.render('collectionOverview', {
     title: 'Overview',
     user: req.user.displayName,
-    picture: req.user._json.picture
+    picture: req.user._json.picture,
+    areaId: req.user.areaId
   });
 
 };
@@ -61,6 +62,169 @@ exports.areas = function (req, res) {
 
 };
 
+exports.addTypeTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var typeId = req.params.typeId;
+
+  async.series ({
+      check: function (callback) {
+        db.ItemContentTarget.find(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              },
+              ItemContentId: {
+                eq: typeId
+              }
+            }
+          }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function (err, result) {
+      if (err) { console.log(err); }
+      if (result.check === null) {
+
+        db.ItemContentTarget.create(
+          {
+            CollectionId: collId,
+            ItemContentId: typeId
+          }
+        ).success(function() {
+            // JSON response
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(JSON.stringify({ status: 'success'}));
+          }).error(function (e) {
+            console.log(e);
+          });
+
+      } else {
+
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'exists'}));
+
+      }
+
+    }
+  );
+};
+
+exports.removeTypeTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var typeId = req.params.typeId;
+
+  db.ItemContentTarget.destroy(
+    {
+      ItemContentId: {
+        eq: typeId
+      },
+      CollectionId: {
+        eq:collId
+      }
+    }
+  ).success(function() {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({ status: 'success'}));
+    }).error(function (e) {
+      console.log(e);
+    });
+
+};
+
+exports.addTagTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var tagId = req.params.tagId;
+
+  async.series(
+    {
+      // Check to see if tag is already associated
+      // with area.
+      check: function (callback) {
+
+        db.TagTarget.find(
+          {
+            where: {
+              CollectionId: {
+                eq: collId
+              },
+              TagId: {
+                eq: tagId
+              }
+            }
+          }).complete(callback)
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function (err, result) {
+      if (err) { console.log(err); }
+      // if new, add target
+      if (result.check === null) {
+
+        db.TagTarget.create(
+          {
+            CollectionId: collId,
+            TagId: tagId
+          }
+        ).success(function() {
+            // JSON response
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin','*');
+            res.end(JSON.stringify({ status: 'success'}));
+          }).error(function (e) {
+            console.log(e);
+          });
+
+      } else {
+
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'exists'}));
+
+      }
+
+    });
+
+};
+
+exports.removeTagTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var tagId = req.params.tagId;
+
+  db.TagTarget.destroy(
+    {
+      TagId: {
+        eq: tagId
+      },
+      CollectionId: {
+        eq:collId
+      }
+    }
+  ).success(function() {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({ status: 'success'}));
+    }).error(function (e) {
+      console.log(e);
+    });
+
+};
+
 exports.addAreaTarget = function (req, res) {
 
   var collId = req.params.collId;
@@ -89,7 +253,7 @@ exports.addAreaTarget = function (req, res) {
       }
     },
     function (err, result) {
-
+      if (err) { console.log(err); }
       // if new
       if (result.check === null) {
 
@@ -262,16 +426,18 @@ exports.byId = function(req, res) {
     function(err, result) {
       var response = {};
       var areas = [];
-      response.id = result.getCollection.id;
-      response.title = result.getCollection.title;
-      response.description = result.getCollection.description;
-      response.dates = result.getCollection.dates;
-      response.items = result.getCollection.items;
-      response.ctype = result.getCollection.ctype;
-      response.url = result.getCollection.url;
-      response.browseType = result.getCollection.browseType;
-      response.repoType = result.getCollection.repoType;
-      response.image = result.getCollection.image;
+      if (result.getCollection !== null) {
+        response.id = result.getCollection.id;
+        response.title = result.getCollection.title;
+        response.description = result.getCollection.description;
+        response.dates = result.getCollection.dates;
+        response.items = result.getCollection.items;
+        response.ctype = result.getCollection.ctype;
+        response.url = result.getCollection.url;
+        response.browseType = result.getCollection.browseType;
+        response.repoType = result.getCollection.repoType;
+        response.image = result.getCollection.image;
+      }
       if (result.getCategory !== null) {
         response.category = result.getCategory.CategoryId;
       }
@@ -630,7 +796,7 @@ var processCollectionResult = function(coll, res) {
 
 exports.tagsForCollection = function (req, res) {
 
-  var collId = req.params.id;
+  var collId = req.params.collId;
 
   db.TagTarget.findAll(
     {
@@ -655,7 +821,7 @@ exports.tagsForCollection = function (req, res) {
 
 exports.typesForCollection = function (req, res) {
 
-  var collId = req.params.id;
+  var collId = req.params.collId;
 
   db.ItemContentTarget.findAll(
     {
@@ -677,6 +843,8 @@ exports.typesForCollection = function (req, res) {
     })
 
 };
+
+
 
 exports.collectionsByArea = function (req, res) {
 

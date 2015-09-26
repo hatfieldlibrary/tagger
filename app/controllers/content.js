@@ -10,7 +10,8 @@ exports.overview = function(req, res) {
   res.render('contentOverview', {
     title: 'Categories',
     user: req.user.displayName,
-    picture: req.user._json.picture
+    picture: req.user._json.picture,
+    areaId: req.user.areaId
   });
 };
 

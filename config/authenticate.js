@@ -70,15 +70,17 @@ module.exports = function(app, config, passport) {
         // attempt to retrieve user by their Google profile
         // email address
         db.Users.find({
-          attributes: ['id'],
+          attributes: ['id','area'],
           where: {
             email: {
               eq: profile._json.email
             }
           }
         }).success(function (user, err) {
+
           // if email lookup succeeded, pass the user id to passport callback
           if (user) {
+            profile.areaId = user.area;
             return done(err, profile);
           }
           // otherwise pass null (unauthenticated)

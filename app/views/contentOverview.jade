@@ -7,8 +7,8 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") image
-              span.md-subhead TYPES
+              i.material-icons image
+              span.md-subhead &nbsp;TYPES
             h2.md-display-2 {{contentType.name}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
@@ -31,15 +31,16 @@ block content
               div(flex)
               div(flex)
                 md-button(class="md-raised md-accent" style="float:right;" ng-click="updateContentType()") Update Content Type
-                h3(class="md-title" style="margin-top: 10px;") Edit Content Type
-              md-input-container
-                label Type Name
-                input(type="text", ng-model="contentType.name")
-              md-input-container
-                label Type Icon (Fontawesome icon name:  e.g. fa-bus )
-                input(type="text", ng-model="contentType.icon")
-              div(ng-if="contentType.icon")
-                i(class="fa {{contentType.icon}}")
+              div(flex)
+                p &nbsp;
+                md-input-container
+                  label Type Name
+                  input(type="text", ng-model="contentType.name")
+                md-input-container
+                  label Type Icon (Fontawesome icon name:  e.g. fa-bus )
+                  input(type="text", ng-model="contentType.icon")
+                div(ng-if="contentType.icon")
+                  i(class="fa {{contentType.icon}}")
           div.md-panel Fontawesome Icons:
             a(href="https://fortawesome.github.io/Font-Awesome/icons/", target="_blank")  https://fortawesome.github.io/Font-Awesome/icons/
     md-content(layout="column" flex="25")

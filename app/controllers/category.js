@@ -7,7 +7,8 @@ exports.overview = function(req, res) {
   res.render('categoryOverview', {
     title: 'Categories',
     user: req.user.displayName,
-    picture: req.user._json.picture
+    picture: req.user._json.picture,
+    areaId: req.user.areaId
   });
 };
 
@@ -39,8 +40,6 @@ exports.listByArea = function (req, res) {
         eq: areaId
       }
     },
-    include: [
-      { model: db.CategoryTarget} ],
     order: [['title', 'ASC']]
   }).success( function(categories) {
     // JSON response
@@ -95,7 +94,6 @@ exports.add = function(req, res ) {
 
 exports.update = function(req, res) {
 
-  console.log(req.body);
   var title = req.body.title;
   var url = req.body.url;
   var description = req.body.description;

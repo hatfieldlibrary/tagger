@@ -9,10 +9,11 @@ block content
 
         md-toolbar.md_primary
           .md-toolbar-tools
-            span(flex="20")
-              i.material-icons(style="color: #80CBC4;") collections
-              span.md-subhead COLLECTIONS
-            h3.md-display-1 {{collection.collection.title}}
+            span(flex="25")
+              i.material-icons() collections
+              span.md-subhead &nbsp;COLLECTIONS
+            span(flex="50")
+              h3.md-display-1 {{collection.title}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
 
@@ -27,7 +28,7 @@ block content
                   div(ng-repeat="col in collectionList")
                     md-list-item
 
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': tag.id==Data.currentTagIndex}" style="min-height: 47px;" ng-click="getCollectionById(col.id);")
+                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.collection.id==Data.currentCollectionIndex}" style="min-height: 47px;" ng-click="getCollectionById(col.collection.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
                           div.md-ripple-container
                     md-divider
@@ -108,7 +109,7 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             i(class="material-icons") image
-            h3.md-display-1 Image
+            h3.md-display-1 &nbsp;Image
             div(flex)
               md-button(class="md-accent md-raised md-fab md-mini", ng-click="showDialog($event, updateImageMessage)", style="float: right;")
                 i(class="material-icons") file_upload
@@ -124,15 +125,22 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             i.material-icons link
-            h3.md-display-1 Tags
+            h3.md-display-1 &nbsp;Tags
             span(flex)
         md-card-content
           div(layout="column")
-            md-input-container
-              div(layout="column")
+            md-input-container(ng-controller="TagFilterCtrl as ctrl")
+              div(layout="column" class="chips")
                 md-container
-                  label Add Tag
-                  input(type="text")
+                  label Add Tags
+                  md-chips(ng-model="ctrl.tagsForCollection",  md-autocomplete-snap="", md-require-match="true", md-on-append="ctrl.addTag($chip)", md-on-remove="ctrl.removeTag($chip)")
+                    md-autocomplete(md-selected-item="ctrl.selectedItem", md-min-length="1" md-search-text="ctrl.searchText", md-no-cache="true", md-items="item in ctrl.queryTags(ctrl.searchText)", md-item-text="item.tag", )
+                      span(md-highlight-text="ctrl.searchText") {{item.tag.name}}
+                    md-chip-template
+                      span {{$chip.name}}
+                    button(md-chip-remove="", class="md-primary taggerchip")
+                      md-icon(md-svg-icon="md-close")
+
             md-container
              // md-chips(ng-model="collectionTags")
              //   md-chip-template {{$chip.name}}
@@ -142,26 +150,27 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             i(class="material-icons") image
-            h3.md-display-1 Content Type
+            h3.md-display-1 &nbsp;Content Type
             span(flex)
         md-card-content
           div(layout="column")
-            md-input-container
-              div(layout="column")
+            md-input-container(ng-controller="ContentTypeFilterCtrl as ctrl")
+              div(layout="column" class="chips")
                 md-container
-                  label Add Item Type
-                  input(type="text")
-            md-container
-             // md-chips(ng-model="collectionTypes")
-             //   md-chip-template {{$chip.itemContent.name}}
-             //   md-button.md-chip-remove Close
+                  label Add Types
+                  md-chips(ng-model="ctrl.typesForCollection",  md-autocomplete-snap="", md-require-match="true", md-on-append="ctrl.addType($chip)", md-on-remove="ctrl.removeType($chip)")
+                    md-autocomplete(md-selected-item="ctrl.selectedItem", md-search-text="ctrl.searchText", md-no-cache="true", md-items="item in ctrl.queryTypes(ctrl.searchText)", md-item-text="item.tag", )
+                      span(md-highlight-text="ctrl.searchText") {{item.name}}
+                    md-chip-template
+                      span {{$chip.name}}
+                    button(md-chip-remove="", class="md-primary taggerchip")
+                      md-icon(md-svg-icon="md-close")
 
       md-card.flex(flex)
-        md-card.flex(flex)
         md-toolbar.md_primary
           .md-toolbar-tools
             i(class="material-icons") public
-            h3.md-display-1 Areas
+            h3.md-display-1 &nbsp;Areas
             span(flex)
         md-card-content(ng-controller="CollectionAreasCtrl")
           div(layout="column", class="md-subhead") Select the Areas in which this Collection will appear.

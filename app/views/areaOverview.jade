@@ -7,8 +7,8 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") public
-              span.md-subhead AREAS
+              i.material-icons public
+              span.md-subhead &nbsp;AREAS
             h2.md-display-2 {{area.title}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
@@ -30,7 +30,8 @@ block content
                 div(flex)
               div(flex)
                 md-button(class="md-raised md-accent" style="float:right;" ng-click="updateArea()") Update Area
-                h3(class="md-title" style="margin-top: 10px;") Edit Area
+                div(flex)
+                  p &nbsp;
               md-input-container
                 label Area Name
                 input(type="text", ng-model="area.title")

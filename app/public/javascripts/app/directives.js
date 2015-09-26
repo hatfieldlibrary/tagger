@@ -2,13 +2,16 @@
 
 var taggerDirectives  = angular.module('taggerDirectives', []);
 
-taggerDirectives.directive('dialogBox', function() {
-
+taggerDirectives.directive( 'elemReady', function( $parse ) {
   return {
-    restrict: 'E',
-    scope: {},
-    controller: 'CollectionsCtrl',
-    transclude: true,
-    templateUrl: '/components/collections.html'
-  };
+    restrict: 'A',
+    link: function( $scope, elem, attrs ) {
+      elem.ready(function(){
+        $scope.$apply(function(){
+          var func = $parse(attrs.elemReady);
+          func($scope);
+        })
+      })
+    }
+  }
 });

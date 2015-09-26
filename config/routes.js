@@ -10,6 +10,7 @@ module.exports = function(app,config,passport){
   var collection = require('../app/controllers/collection');
   var target = require('../app/controllers/target');
   var category = require('../app/controllers/category');
+  var users = require('../app/controllers/users');
   var ensureAuthenticated = app.ensureAuthenticated;
 
   /*jshint unused:false*/
@@ -41,8 +42,10 @@ module.exports = function(app,config,passport){
   app.get('/admin/collections', ensureAuthenticated, collection.overview);
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
   app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
+  app.use('/rest/collection/tags/:collId', collection.tagsForCollection); // public
+  app.use('/rest/collection/types/:collId', collection.typesForCollection);  // public
   app.use('/rest/collection/areas/:collId', ensureAuthenticated, collection.areas);
-
+  app.use('/rest/tags/byArea/:areaId', ensureAuthenticated, tag.tagByArea);
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
   app.post('/rest/collection/update', ensureAuthenticated, collection.update);
@@ -51,6 +54,10 @@ module.exports = function(app,config,passport){
   });
   app.get('/rest/collection/:collId/add/area/:areaId', ensureAuthenticated, collection.addAreaTarget);
   app.get('/rest/collection/:collId/remove/area/:areaId', ensureAuthenticated, collection.removeAreaTarget);
+  app.get('/rest/collection/:collId/add/tag/:tagId', ensureAuthenticated, collection.addTagTarget);
+  app.get('/rest/collection/:collId/remove/tag/:tagId', ensureAuthenticated, collection.removeTagTarget);
+  app.get('/rest/collection/:collId/add/type/:typeId', ensureAuthenticated, collection.addTypeTarget);
+  app.get('/rest/collection/:collId/remove/type/:typeId', ensureAuthenticated, collection.removeTypeTarget);
 
   // AREAS
   app.get('/admin/area', ensureAuthenticated, area.overview);
@@ -64,7 +71,7 @@ module.exports = function(app,config,passport){
   app.get('/admin/category', ensureAuthenticated, category.overview);
   app.get('/rest/category/byId/:id', ensureAuthenticated, category.byId);
   app.get('/rest/category/show/list', ensureAuthenticated, category.list);
-  app.get('/rest/category/byArea/:id', ensureAuthenticated, category.listByArea);
+  app.get('/rest/category/byArea/:areaId', ensureAuthenticated, category.listByArea);
   app.post('/rest/category/add', ensureAuthenticated, category.add);
   app.post('/rest/category/update', ensureAuthenticated, category.update);
   app.post('/rest/category/delete', ensureAuthenticated, category.delete);
@@ -84,6 +91,13 @@ module.exports = function(app,config,passport){
   app.post('/rest/tag/add', ensureAuthenticated, tag.add);
   app.post('/rest/tag/delete', ensureAuthenticated, tag.delete);
   app.post('/rest/tag/update', ensureAuthenticated, tag.update);
+
+  // USERS
+  app.get('/admin/users', ensureAuthenticated, users.overview);
+  app.use('/rest/users/list', ensureAuthenticated, users.list);
+  app.post('/rest/users/add', ensureAuthenticated, users.add);
+  app.post('/rest/users/delete', ensureAuthenticated, users.delete);
+  app.post('/rest/users/update', ensureAuthenticated, users.update);
 
   app.get('/rest/tag/targets/byId/:tagId', ensureAuthenticated, tagTarget.getAreaTargets);
   app.get('/rest/tag/:tagId/add/area/:areaId', ensureAuthenticated, tagTarget.addTarget);

@@ -9,8 +9,8 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") library_books
-              span.md-subhead GROUPS
+              i.material-icons library_books
+              span.md-subhead &nbsp;GROUPS
             h2.md-display-2 {{category.title}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Category" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
@@ -31,10 +31,11 @@ block content
               div(flex="80" class="md-subhead")
                 span Collections can belong to a single #[em Collection Group]. A Collection Group provides specific
                 |  information about the current collection and related collections.
-              div(flex)
+
               div(flex)
                 md-button(class="md-raised md-accent" style="float:right;" ng-click="updateCategory()") Update Category
-                h3(class="md-title" style="margin-top: 10px;") Edit Category
+                div(flex)
+                  p &nbsp;
               md-input-container
                 label Collection Name
                 input(type="text", ng-model="category.title")

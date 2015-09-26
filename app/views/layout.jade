@@ -11,20 +11,19 @@ html
 
   body(ng-cloak)
     div(layout-fill)&attributes({layout:"column"})
-      md-toolbar
+      md-toolbar()
         div.md-toolbar-tools
-          span Tagger
+          span
+            h2.md-display-4 Tagger
           span(flex)
           md-list(ng-controller="LayoutCtrl")
             md-list-item(ng-style="{'display':'inline'}")
-              span.md-subhead role: Administrator
-            md-list-item(ng-style="{'display':'inline'}")
-              span.md-subhead area: &nbsp;
+              span.md-subhead Area: &nbsp;
                 md-input-container(class="md-no-float" style="display:inline-block")
                   md-select(ng-model="areas" placeholder="Select Area")
-                    md-option(ng-repeat="area in areas" ng-selected="Data.currentAreaIndex == area.id") {{area.title}}
+                    md-option(ng-repeat="area in areas" ng-selected="Data.currentAreaIndex == area.id" ng-click="updateArea(area.id)") {{area.title}}
 
-      div(layout="row" style="max-width: 2000px;")
+      div(layout="row" style="max-width: 2000px;" ng-controller="LayoutCtrl")
         if user
           md-sidenav(style="height: 850px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
             md-toolbar(class="md-default-theme")
@@ -35,6 +34,8 @@ html
                       img.md-avatar(src="#{picture}")
                     md-list-item
                       div.md-subhead #{user}
+                        .md-caption(elem-ready="getRole(#{areaId})") {{role}}
+
             md-content
               md-list
                 md-list-item
@@ -86,6 +87,13 @@ html
                         i.material-icons public
                       div.list-group-item-text Areas
                         div.md-ripple-container
+                md-list-item
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/users" tabindex="0")
+                    div.md-list-item-inner
+                      md-icon( aria-hidden="true" style="margin: 10px;")
+                        i.material-icons group
+                      div.list-group-item-text Users
+                        div.md-ripple-container
           block content
         else
           block content
@@ -96,11 +104,12 @@ html
     script(type="text/javascript", src="../bower_components/angular-route/angular-route.js")
     script(type="text/javascript", src="../bower_components/angular-resource/angular-resource.js")
     script(type="text/javascript", src="../bower_components/angular-aria/angular-aria.min.js")
-    script(type="text/javascript", src="../bower_components/angular-material/angular-material.min.js")
+    script(type="text/javascript", src="../bower_components/angular-material/angular-material.js")
     script(type="text/javascript", src="../bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js")
     script(type="text/javascript", src="../bower_components/ng-file-upload/ng-file-upload.min.js")
     script(type="text/javascript", src="/javascripts/app/controllers.js")
     script(type="text/javascript", src="/javascripts/app/services.js")
+    script(type="text/javascript", src="/javascripts/app/directives.js")
     script(type="text/javascript", src="/javascripts/app/app.js")
 
 

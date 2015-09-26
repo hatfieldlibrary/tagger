@@ -7,8 +7,8 @@ block content
         md-toolbar.md_primary
           .md-toolbar-tools
             span(flex="20")
-              i.material-icons(style="color: #80CBC4;") link
-              span.md-subhead TAGS
+              i.material-icons link
+              span.md-subhead &nbsp;TAGS
             h2.md-display-2 {{tag.name}}
             span(flex)
             md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Tag" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
@@ -29,9 +29,9 @@ block content
               div(flex="80" class="md-subhead")
                 span Collections can be associated with one or more #[em Subject Tags]. A single Subject Tag can be used across multiple Areas. (A Tag must be assigned to at least one Area.)
               div(flex)
-              div(flex)
                 md-button(class="md-raised md-accent" style="float:right;" ng-click="updateTag()") Update Tag
-                h3(class="md-title" style="margin-top: 10px;") Edit Tag
+              div(flex)
+                p &nbsp;
               md-input-container
                 label Tag Name
                 input(type="text", ng-model="tag.name")

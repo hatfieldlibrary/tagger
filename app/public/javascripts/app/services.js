@@ -8,6 +8,32 @@ var adminhost = 'http://localhost:3000/admin/';
 
 var taggerServices = angular.module('taggerServices', ['ngResource']);
 
+// USERS
+
+taggerServices.factory('UserList', ['$resource',
+  function($resource) {
+    return $resource(host + 'users/list');
+  }
+]);
+
+taggerServices.factory('UserAdd', ['$resource',
+  function($resource) {
+    return $resource(host + 'users/add');
+  }
+]);
+
+taggerServices.factory('UserDelete', ['$resource',
+  function($resource) {
+    return $resource(host + 'users/delete');
+  }
+]);
+
+taggerServices.factory('UserUpdate', ['$resource',
+  function($resource) {
+    return $resource(host + 'users/update');
+  }
+]);
+
 
 // COLLECTION
 
@@ -56,7 +82,7 @@ taggerServices.factory('AreasForCollection', ['$resource',
 
 taggerServices.factory('TagsForCollection', ['$resource',
   function($resource) {
-    return $resource(host + 'collection/tags/:id', {}, {
+    return $resource(host + 'collection/tags/:collId', {}, {
       query: {method:'GET', isArray: true}
     });
   }
@@ -64,7 +90,7 @@ taggerServices.factory('TagsForCollection', ['$resource',
 
 taggerServices.factory('TypesForCollection', ['$resource',
   function($resource) {
-    return $resource(host + 'collection/types/:id', {}, {
+    return $resource(host + 'collection/types/:collId', {}, {
       query: {method:'GET', isArray: true}
     });
   }
@@ -85,6 +111,43 @@ taggerServices.factory('AreaTargetRemove', ['$resource',
       query: {method: 'GET', isArray: false}
     });
   }]);
+
+taggerServices.factory('TagsForArea', ['$resource', function Resource($resource) {
+  return $resource(host + 'tags/byArea/:areaId', {} ,{
+    query: {method: 'GET', isArray: true}
+  });
+}]);
+
+taggerServices.factory('CollectionTagTargetAdd', ['$resource',
+  function Resource($resource) {
+    return $resource(host + 'collection/:collId/add/tag/:tagId',{} ,{
+      query: {method: 'GET', isArray: false}
+    });
+  }
+]);
+
+taggerServices.factory('CollectionTagTargetRemove', ['$resource',
+  function Resource($resource) {
+    return $resource(host + 'collection/:collId/remove/tag/:tagId', {} ,{
+      query: {method: 'GET', isArray: false}
+    });
+  }]);
+
+taggerServices.factory('CollectionTypeTargetRemove', ['$resource',
+  function Resource($resource) {
+    return $resource(host + 'collection/:collId/remove/type/:typeId', {} ,{
+      query: {method: 'GET', isArray: false}
+    });
+  }]);
+
+taggerServices.factory('CollectionTypeTargetAdd', ['$resource',
+  function Resource($resource) {
+    return $resource(host + 'collection/:collId/add/type/:typeId', {} ,{
+      query: {method: 'GET', isArray: false}
+    });
+  }]);
+
+
 
 // AREA
 
@@ -141,6 +204,13 @@ taggerServices.factory('CategoryList', ['$resource',
     });
   }
 ]);
+
+taggerServices.factory('CategoryByArea', ['$resource',
+function($resource) {
+  return $resource(host + 'category/byArea/:areaId', {}, {
+    query: {method: 'Get', isArray: true}
+  })
+}]);
 
 taggerServices.factory('CategoryUpdate', ['$resource',
   function($resource) {
@@ -292,7 +362,11 @@ taggerServices.factory('Data', function() {
     currentTagIndex: null,
     collections: [],
     currentCollectionIndex: null,
-    currentThumbnailImage: null
+    currentThumbnailImage: null,
+    tagsForArea: [],
+    tagsForCollection: [],
+    typesForCollection: [],
+    userAreaId: null
   };
 });
 
@@ -408,11 +482,11 @@ taggerServices.factory('TaggerDialog', [
         result.$promise.then(function (data) {
           if (data.status === 'success') {
 
-            TaggerToast("Area Deleted");
+            TaggerToast("Tag Deleted");
             // after retrieving new area list, we need
             // to update the areas currently in view.
             $scope.getTagList(null);
-
+            $scope.closeDialog();
           }
 
         });
@@ -704,17 +778,18 @@ taggerServices.factory('TaggerDialog', [
       $scope.getCollectionList = function(id) {
 
         // Update the shared Data service
-        Data.collections  = CollectionsByArea.query({areaId: Data.currentAreaIndex});
+        var result  = CollectionsByArea.query({areaId: Data.currentAreaIndex});
         // Wait for callback.
-        Data.collections.$promise.then(function (data) {
+        result.$promise.then(function (data) {
 
+          Data.collections = data;
           // Deleting a category doesn't generate
           // a new id. In that case, expect the
           // id to be null. Update the view using the
           // id of the first item in the updated category
           // list.
           if (id === null) {
-            Data.currentCollectionIndex = Data.collections[0].id;
+            Data.currentCollectionIndex = Data.collections[0].collection.id;
 
           }  else {
             Data.currentCollectionIndex = id;
