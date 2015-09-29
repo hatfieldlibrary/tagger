@@ -17,6 +17,10 @@
   background: #f0f3fa;
 }
 
+.view-container {
+  max-width: 2000px;
+}
+
 .chips  .md-chip {
   position: relative;
   padding-right: 55px;

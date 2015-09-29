@@ -4,7 +4,7 @@
 var taggerControllers = angular.module('taggerControllers', []);
 
 
-function getRole(areaId) {
+function getUserRole(areaId) {
 
   if (areaId === 0) {
     return 'Administrator';
@@ -27,34 +27,26 @@ taggerControllers.controller('LayoutCtrl', [
   function(
     $scope,
     AreaList,
-    Data) {
+    Data ) {
 
     $scope.Data = Data;
     $scope.areas = AreaList.query();
     $scope.areas.$promise.then(function(data) {
-
       Data.areas = data;
       if (Data.currentAreaIndex === null) {
-
         Data.currentAreaIndex = $scope.areas[0].id;
       }
-
 
     });
 
     $scope.updateArea = function(id) {
-
       $scope.Data.currentAreaIndex = id;
       Data.currentAreaIndex = id;
-
-
     };
 
-
     $scope.getRole = function(areaId) {
-
       Data.userAreaId = areaId;
-      $scope.role = getRole(areaId);
+      $scope.role = getUserRole(areaId);
 
     };
 
@@ -493,31 +485,37 @@ taggerControllers.controller('CollectionCtrl', [
     // Watch for changes on shared context object.
     $scope.$watch(function() { return Data.areas },
       function(newValue) {
-        $scope.areas = newValue;
+        if (newValue != $scope.areas) {
+          $scope.areas = newValue;
+        }
       }
     );
 
     $scope.$watch(function() { return Data.currentAreaIndex },
       function(newValue, oldValue) {
         // this is the initial page load
-        if (oldValue === null) {
+        console.log(oldValue);
+        if (oldValue === newValue) {
           $scope.Data.currentAreaIndex = newValue;
+          $scope.collectionList = Data.collections;
           $scope.init();
         } else {
+
           // this is a subsequent area update
           if (newValue !== null) {
             $scope.Data.currentAreaIndex = newValue;
             $scope.collectionList = CollectionsByArea.query({areaId: newValue});
             $scope.collectionList.$promise.then(function (data) {
               if (typeof data !== 'undefined') {
+                Data.collections = data;
                 Data.currentCollectionIndex = data[0].collection.id;
                 $scope.collection = data[0].collection;
 
               }
             });
+            $scope.categoryList = CategoryByArea.query({areaId: Data.currentAreaIndex});
             $scope.tagsForArea = TagsForArea.query({areaId: $scope.Data.currentAreaIndex});
             $scope.tagsForArea.$promise.then(function (data) {
-              console.log(data);
               Data.tagsForArea = data;
             });
           }
@@ -554,11 +552,12 @@ taggerControllers.controller('CollectionCtrl', [
       Data.tagsForCollection = [];
       Data.typesForCollection = [];
 
-      if ($scope.Data.currentAreaIndex !== null ) {
-        $scope.collectionList = CollectionsByArea.query({areaId: $scope.Data.currentAreaIndex});
+      //if ($scope.Data.currentAreaIndex !== null ) {
+        $scope.collectionList = CollectionsByArea.query({areaId: Data.currentAreaIndex});
 
         $scope.collectionList.$promise.then(function (data) {
           if (typeof data !== 'undefined') {
+            Data.collections = data;
             Data.currentCollectionIndex = data[0].collection.id;
             $scope.collection = data[0].collection;
 
@@ -577,7 +576,7 @@ taggerControllers.controller('CollectionCtrl', [
 
 
         });
-      }
+     // }
     };
 
 

@@ -33,13 +33,13 @@ module.exports = function(app,config,passport){
       failureRedirect: '/login' }));
 
   // TAGGER ROUTES
-  app.get('/admin/', ensureAuthenticated, collection.overview);
+ // app.get('/admin/', ensureAuthenticated, crud.overview);
   app.get('/login', crud.login);
   app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
   app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
 
   // COLLECTIONS
-  app.get('/admin/collections', ensureAuthenticated, collection.overview);
+//  app.get('/admin/collections', ensureAuthenticated, collection.overview);
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
   app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
   app.use('/rest/collection/tags/:collId', collection.tagsForCollection); // public
@@ -169,8 +169,44 @@ module.exports = function(app,config,passport){
   app.use('/rest/collection/types/:id',   collection.typesForCollection);
  // app.use('/rest/categories/byArea/:areaId', category.categoriesByArea);
 
+
+
+  app.get('/admin/partials/:name', ensureAuthenticated, function(req, res) {
+
+    var name = req.params.name;
+    console.log('Handling request for collection partial!');
+    res.render(
+      config.root +
+      config.adminPath +
+      '/partials/'  +
+      name
+    );
+  });
+
+  // This catch-all is required by html5mode.
+  app.get('/admin/*', ensureAuthenticated, function(req, res) {
+
+    console.log('Handling request for layout');
+    res.render(
+      config.root +
+      config.adminPath +
+      '/layout',
+      {
+        title: 'Overview',
+        user: req.user.displayName,
+        picture: req.user._json.picture,
+        areaId: req.user.areaId
+      }
+    );
+  });
+
+
+
+
+
   /* Static Angularjs module routes.  Used by the Academic Commons public site. */
   // request for partials
+
   app.get('/partials/:name', function(req, res) {
 
     var name = req.params.name;
@@ -183,7 +219,6 @@ module.exports = function(app,config,passport){
       '.html'
     );
   });
-
 
   app.get('/info/data/:name', function(req, res) {
 
@@ -270,6 +305,8 @@ module.exports = function(app,config,passport){
       '/index.html'
     );
   });
+
+
 
 };
 

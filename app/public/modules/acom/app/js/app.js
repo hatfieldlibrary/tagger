@@ -89,51 +89,6 @@ collectionsApp.config(['$routeProvider','$locationProvider',
         reloadOnSearch: false
       });
 
-    /*.
-     when('/commons/collections/type/:id', {
-     templateUrl: 'commons/partials/typecollections'
-     }).
-     when('/commons/collection/byId/:id', {
-     templateUlr: 'commons/partials/collection'
-     }).
-     when ('/commons/archivesCollect/:id/:fld', {
-     templateUrl: 'commons/partials/archivesCollect'
-     }).
-     when('/commons/archivesCollect/:id/:fld/:tag', {
-     templateUrl: 'commons/partials/archivesCollect'
-     }).
-     when('/commons/info/:name', {
-     templateUrl: function(params) {
-     return '/commons/info/' + params.name;
-     }
-     }).
-     when('/commons/grants/:name', {
-     templateUrl: function(params) {
-     return '/commons/grants/' + params.name;
-     }
-     }).
-     when('/commons/error/:name', {
-     templateUrl: function(params) {
-     return 'commons/error/' + params.name;
-     }
-     }).
-     when('/commons/partials/:name', {
-     templateUrl: function(params) {
-     return 'commons/partials/' + params.name;
-     }
-     }).
-     when('/commons/:name', {
-     templateUrl: function(params) {
-     return 'commons/partials/' + params.name;
-     }
-     }).
-     when('/commons', {
-     templateUrl: 'commons/partials/home'
-     }).
-     otherwise({
-     templateUrl: 'commons/partials/home'
-     });
-     */
 
     $locationProvider.html5Mode(true).hashPrefix('!');
 

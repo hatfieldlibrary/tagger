@@ -23,6 +23,7 @@ var config = {
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
+    adminPath: '/views',
     modulePath: '/public/modules/acom/app',
     resourcePath: '/public/modules/acom/app',
     googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',

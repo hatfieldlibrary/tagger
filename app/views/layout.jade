@@ -7,7 +7,7 @@ html
     link(rel="stylesheet", href="/stylesheets/style.css")
     link(rel="stylesheet", href="https://fonts.googleapis.com/icon?family=Material+Icons")
     link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css")
-
+    base(href="/admin/")
 
   body(ng-cloak)
     div(layout-fill)&attributes({layout:"column"})
@@ -22,8 +22,7 @@ html
                 md-input-container(class="md-no-float" style="display:inline-block")
                   md-select(ng-model="areas" placeholder="Select Area")
                     md-option(ng-repeat="area in areas" ng-selected="Data.currentAreaIndex == area.id" ng-click="updateArea(area.id)") {{area.title}}
-
-      div(layout="row" style="max-width: 2000px;" ng-controller="LayoutCtrl")
+      div(layout="row" flex class="view-container" ng-controller="LayoutCtrl")
         if user
           md-sidenav(style="height: 850px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
             md-toolbar(class="md-default-theme")
@@ -35,7 +34,6 @@ html
                     md-list-item
                       div.md-subhead #{user}
                         .md-caption(elem-ready="getRole(#{areaId})") {{role}}
-
             md-content
               md-list
                 md-list-item
@@ -46,7 +44,7 @@ html
                       div.list-group-item-text Overview
                         div.md-ripple-container
                 md-list-item.md-active
-                  md-button(class="md-no-style md-button md-default-theme" href="/admin/collections")
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/partials/collections")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons collections
@@ -60,43 +58,44 @@ html
                       div.list-group-item-text Restrictions
                         div.md-ripple-container
                 md-list-item
-                  md-button(class="md-no-style md-button md-default-theme" href="/admin/tag" tabindex="0")
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/partials/tags" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons link
                       div.list-group-item-text Subject Tags
                         div.md-ripple-container
                 md-list-item
-                  md-button(class="md-no-style md-button md-default-theme" href="/admin/content" tabindex="0")
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/partials/contentTypes" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons image
                       div.list-group-item-text Content Types
                         div.md-ripple-container
                 md-list-item
-                  md-button(class="md-no-style md-button md-default-theme" href="/admin/category" tabindex="0")
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/partials/categories" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons library_books
                       div.list-group-item-text Collection Groups
                         div.md-ripple-container
                 md-list-item
-                  md-button(class="md-no-style md-button md-default-theme" href="/admin/area" tabindex="0")
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/partials/areas" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons public
                       div.list-group-item-text Areas
                         div.md-ripple-container
                 md-list-item
-                  md-button(class="md-no-style md-button md-default-theme" href="/admin/users" tabindex="0")
+                  md-button(class="md-no-style md-button md-default-theme" href="/admin/partials/users" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons group
                       div.list-group-item-text Users
                         div.md-ripple-container
-          block content
-        else
-          block content
+
+        div(ng-view flex="80")
+
+
 
 
     script(type="text/javascript", src="../bower_components/angular/angular.min.js")

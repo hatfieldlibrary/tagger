@@ -7,7 +7,7 @@ var async = require('async');
 // new admin interface
 exports.overview = function(req, res){
 
-  res.render('collectionOverview', {
+  res.render('/partials/collectionOverview', {
     title: 'Overview',
     user: req.user.displayName,
     picture: req.user._json.picture,

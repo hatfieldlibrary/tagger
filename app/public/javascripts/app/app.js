@@ -3,6 +3,7 @@
 // load modules
 var taggerApp = angular.module('taggerApp', [
   'ngMaterial',
+    'ngRoute',
     'ngFileUpload',
     'taggerControllers',
     'taggerServices',
@@ -11,6 +12,27 @@ var taggerApp = angular.module('taggerApp', [
 );
 
 
+
+// routes
+taggerApp.config(['$routeProvider','$locationProvider',
+  function($routeProvider, $locationProvider) {
+
+    $routeProvider.
+      when('/partials/:name', {
+        templateUrl: function(params) {
+          return '/admin/partials/' + params.name;
+        }
+      }).when('/', {
+        templateUrl: '/admin/partials/collections',
+        reloadOnSearch: false
+      }).otherwise({
+      redirectTo : 'partials/collections'
+    });
+
+
+    $locationProvider.html5Mode(true).hashPrefix('!');
+
+  }]);
 
 taggerApp.config(function($mdThemingProvider) {
 
