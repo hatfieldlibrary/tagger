@@ -695,9 +695,11 @@ taggerServices.factory('TaggerDialog', [
           // id of the first item in the updated category
           // list.
           if (id === null) {
+            console.log('first category id ' + Data.contentTypes[0].id);
             Data.currentContentIndex = Data.contentTypes[0].id;
 
           }  else {
+            console.log('new category index ' + id);
             Data.currentContentIndex = id;
           }
 

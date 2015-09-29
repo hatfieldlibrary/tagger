@@ -1,0 +1,25 @@
+md-content(layout="row", layout-align="start start", flex, ng-controller="OverviewCtrl")
+  md-content(layout="column" flex)
+    md-card.flex(flex, style="height: 990px;")
+      div(ng-if="category.$resolved")
+      md-toolbar.md_primary
+        .md-toolbar-tools
+          span(flex="20")
+            i.material-icons home
+            span.md-headline &nbsp; {{areaLabel}}
+
+
+      md-card-content
+        div(layout="row", layout-align="start start")
+          md-list
+            md-list-item
+              div
+                span(class="md-title grey-label") Collection Count:
+              div
+                span.md-title &nbsp;{{collections.length}}
+            md-list-item
+              span(class="md-title grey-label") Restricted Collections:
+              span.md-title &nbsp;{{getRestrictedCount()}}
+            md-list-item
+              span(class="md-title grey-label") Public Collections:
+              span.md-title &nbsp;{{getPublicCount()}}

@@ -21,6 +21,10 @@
   max-width: 2000px;
 }
 
+.grey-label {
+  color: #6A78C1;
+}
+
 .chips  .md-chip {
   position: relative;
   padding-right: 55px;

@@ -23,10 +23,10 @@ taggerApp.config(['$routeProvider','$locationProvider',
           return '/admin/partials/' + params.name;
         }
       }).when('/', {
-        templateUrl: '/admin/partials/collections',
+        templateUrl: '/admin/partials/overview',
         reloadOnSearch: false
       }).otherwise({
-      redirectTo : 'partials/collections'
+        templateUrl: '/admin/partials/overview'
     });
 
 
