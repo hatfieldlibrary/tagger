@@ -14,7 +14,9 @@
 
   'use strict';
 
-
+  /**
+   * Controller for collections.
+   */
   taggerControllers.controller('CollectionCtrl', [
 
     '$scope',
@@ -139,39 +141,6 @@
       );
 
       $scope.$watch(function () {
-          return Data.currentAreaIndex
-        },
-        function (newValue, oldValue) {
-          // this is the initial page load
-          if (oldValue === newValue) {
-            vm.Data.currentAreaIndex = newValue;
-            vm.collectionList = Data.collections;
-            init();
-          } else {
-
-            // this is a subsequent area update
-            if (newValue !== null) {
-              vm.Data.currentAreaIndex = newValue;
-              vm.collectionList = CollectionsByArea.query({areaId: newValue});
-              vm.collectionList.$promise.then(function (data) {
-                if (typeof data !== 'undefined') {
-                  Data.collections = data;
-                  Data.currentCollectionIndex = data[0].collection.id;
-                  vm.collection = data[0].collection;
-
-                }
-              });
-              vm.categoryList = CategoryByArea.query({areaId: Data.currentAreaIndex});
-              vm.tagsForArea = TagsForArea.query({areaId: $scope.Data.currentAreaIndex});
-              vm.tagsForArea.$promise.then(function (data) {
-                Data.tagsForArea = data;
-              });
-            }
-          }
-        }
-      );
-
-      $scope.$watch(function () {
           return Data.currentThumbnailImage
         },
         function (newValue) {
@@ -199,44 +168,12 @@
         }
       );
 
-      var init = function () {
-
-        Data.tagsForCollection = [];
-        Data.typesForCollection = [];
-
-        vm.collectionList = CollectionsByArea.query({areaId: Data.currentAreaIndex});
-        vm.collectionList.$promise.then(function (data) {
-          if (typeof data !== 'undefined') {
-            Data.collections = data;
-            Data.currentCollectionIndex = data[0].collection.id;
-            vm.collection = data[0].collection;
-          }
-          vm.categoryList = CategoryByArea.query({areaId: Data.currentAreaIndex});
-          vm.tagsForArea = TagsForArea.query({areaId: Data.currentAreaIndex});
-          vm.tagsForArea.$promise.then(function (data) {
-            Data.tagsForArea = data;
-          });
-
-          Data.tagsForCollection = TagsForCollection
-            .query({collId: data[0].CollectionId});
-
-          Data.typesForCollection = TypesForCollection
-            .query({collId: data[0].CollectionId});
-
-
-        });
-
-      };
-
     }]);
 
 
-  /*
-   *
-   *  TAGS PANEL CONTROLLER
-   *
+  /**
+   * Controller for the tags
    */
-
   taggerControllers.controller('TagFilterCtrl', [
 
     '$scope',

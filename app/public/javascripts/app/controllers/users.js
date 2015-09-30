@@ -26,9 +26,9 @@
       TaggerToast,
       Data ) {
 
-      var areaList = [];
+     // var areaList = [];
 
-      $scope.areas = areaList;
+      $scope.areas = Data.areast;
 
       $scope.newRow = function() {
         $scope.users[$scope.users.length] = {id: null, name:'', email:'', area:''};

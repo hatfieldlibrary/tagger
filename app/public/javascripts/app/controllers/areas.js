@@ -1,13 +1,11 @@
-/*
- *
- *  AREAS CONTROLLER
- *
- */
 
 (function() {
 
   'use strict';
 
+  /**
+   * The controller for collection area management.
+   */
   taggerControllers.controller('AreaCtrl', [
 
     '$rootScope',
@@ -48,7 +46,7 @@
       };
 
       // Initialize view
-      $scope.init();
+      //$scope.init();
 
       // Watch for changes in Data service
       $scope.$watch(function(scope) { return scope.Data.areas },

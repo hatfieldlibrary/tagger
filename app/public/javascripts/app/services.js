@@ -361,10 +361,10 @@ taggerServices.factory('FindAreaById', function() {
  });
 
 // SHARED DATA SERVICE
-// Injected into most Tagger controllers.
 taggerServices.factory('Data', function() {
   return {
     areas: [],
+    areaLabel: '',
     currentAreaIndex: null,
     currentCategoryIndex: null,
     categories: [],
@@ -373,6 +373,7 @@ taggerServices.factory('Data', function() {
     tags: [],
     currentTagIndex: null,
     collections: [],
+    initialCollection: {},
     currentCollectionIndex: null,
     currentThumbnailImage: null,
     tagsForArea: [],

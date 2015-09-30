@@ -16,13 +16,13 @@ html
           span
             h2.md-display-4 Tagger
           span(flex)
-          md-list(ng-controller="LayoutCtrl")
+          md-list(ng-controller="LayoutCtrl as vm")
             md-list-item(ng-style="{'display':'inline'}")
               span.md-subhead Area: &nbsp;
                 md-input-container(class="md-no-float" style="display:inline-block")
-                  md-select(ng-model="areas" placeholder="Select Area")
-                    md-option(ng-repeat="area in areas" ng-selected="Data.currentAreaIndex == area.id" ng-click="updateArea(area.id, $index)") {{area.title}}
-      div(layout="row" flex class="view-container" ng-controller="LayoutCtrl")
+                  md-select(ng-model="vm.areas" placeholder="Select Area")
+                    md-option(ng-repeat="area in vm.areas" ng-selected="vm.currentId == area.id" ng-click="vm.updateArea(area.id, $index)") {{area.title}}
+      div(layout="row" flex class="view-container")
         if user
           md-sidenav(style="height: 850px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
             md-toolbar(class="md-default-theme")
@@ -31,9 +31,9 @@ html
                   md-list
                     md-list-item.contact-item
                       img.md-avatar(src="#{picture}")
-                    md-list-item
+                    md-list-item(ng-controller="AuthorizedCtrl as vm")
                       div.md-subhead #{user}
-                        .md-caption(elem-ready="getRole(#{areaId})") {{role}}
+                        .md-caption(elem-ready="vm.getRole(#{areaId})") {{vm.role}}
             md-content
               md-list
                 md-list-item
@@ -109,6 +109,7 @@ html
 
     script(type="text/javascript", src="/javascripts/app/controllers.js")
     script(type="text/javascript", src="/javascripts/app/controllers/collections.js")
+    script(type="text/javascript", src="/javascripts/app/controllers/authorization.js")
     script(type="text/javascript", src="/javascripts/app/controllers/layout.js")
     script(type="text/javascript", src="/javascripts/app/controllers/overview.js")
     script(type="text/javascript", src="/javascripts/app/controllers/tags.js")
@@ -116,6 +117,7 @@ html
     script(type="text/javascript", src="/javascripts/app/controllers/users.js")
     script(type="text/javascript", src="/javascripts/app/controllers/areas.js")
     script(type="text/javascript", src="/javascripts/app/controllers/categories.js")
+
     script(type="text/javascript", src="/javascripts/app/services.js")
     script(type="text/javascript", src="/javascripts/app/directives.js")
     script(type="text/javascript", src="/javascripts/app/app.js")
