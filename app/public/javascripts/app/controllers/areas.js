@@ -4,107 +4,115 @@
  *
  */
 
-taggerControllers.controller('AreaCtrl', [
+(function() {
 
-  '$rootScope',
-  '$scope',
-  'AreaList',
-  'AreaById',
-  'AreaUpdate',
-  'TaggerToast',
-  'TaggerDialog',
-  '$animate',
-  'Data',
+  'use strict';
 
-  function(
-    $rootScope,
-    $scope,
-    AreaList,
-    AreaById,
-    AreaUpdate,
-    TaggerToast,
-    TaggerDialog,
-    $animate,
-    Data ) {
+  taggerControllers.controller('AreaCtrl', [
 
-    $scope.Data = Data;
-    $scope.areas = Data.areas;
+    '$rootScope',
+    '$scope',
+    'AreaList',
+    'AreaById',
+    'AreaUpdate',
+    'TaggerToast',
+    'TaggerDialog',
+    '$animate',
+    'Data',
 
-    $scope.init = function() {
-      $scope.areas = AreaList.query();
-      $scope.areas
-        .$promise
-        .then(function (data) {
-          $scope.Data.areas = data;
-          if (data.length > 0) {
-            Data.currentAreaIndex =  data[0].id;
-            $scope.resetArea(data[0].id);
-          }
-        });
-    };
+    function(
+      $rootScope,
+      $scope,
+      AreaList,
+      AreaById,
+      AreaUpdate,
+      TaggerToast,
+      TaggerDialog,
+      $animate,
+      Data ) {
 
-    // Initialize view
-    $scope.init();
+      $scope.Data = Data;
+      $scope.areas = Data.areas;
 
-    // Watch for changes in Data service
-    $scope.$watch(function(scope) { return scope.Data.areas },
-      function(newValue, oldValue) {
-        $scope.areas = newValue;
-      }
-    );
+      $scope.init = function() {
+        $scope.areas = AreaList.query();
+        $scope.areas
+          .$promise
+          .then(function (data) {
+            $scope.Data.areas = data;
+            if (data.length > 0) {
+              Data.currentAreaIndex =  data[0].id;
+              $scope.resetArea(data[0].id);
+            }
+          });
+      };
 
-    // Listen for events from dialog
-    $scope.$on('areasUpdate', function() {
+      // Initialize view
+      $scope.init();
 
-      $scope.resetArea(null);
+      // Watch for changes in Data service
+      $scope.$watch(function(scope) { return scope.Data.areas },
+        function(newValue, oldValue) {
+          $scope.areas = newValue;
+        }
+      );
 
-    });
+      // Listen for events from dialog
+      $scope.$on('areasUpdate', function() {
 
-    // New area to edit
-    $scope.resetArea = function(id) {
-
-      if (id !== null) {
-        Data.currentAreaIndex = id;
-      }
-      $scope.area = AreaById.query({id: Data.currentAreaIndex});
-
-    };
-
-    // Update area
-    $scope.updateArea = function() {
-
-      var success = AreaUpdate.save({
-
-        id: $scope.area.id,
-        title: $scope.area.title,
-        description: $scope.area.description,
-        searchUrl: $scope.area.areaId,
-        linkLabel: $scope.area.linkLabel,
-        url: $scope.area.url
+        $scope.resetArea(null);
 
       });
 
-      success.$promise.then(function(data) {
+      // New area to edit
+      $scope.resetArea = function(id) {
 
-        if (data.status === 'success') {
-          $scope.areas = AreaList.query();
-          // Toast upon success
-          TaggerToast("Area Updated");
+        if (id !== null) {
+          Data.currentAreaIndex = id;
         }
-      })
+        $scope.area = AreaById.query({id: Data.currentAreaIndex});
 
-    };
+      };
 
-    // dialogs
-    $scope.showDialog = showDialog;
-    function showDialog($event, message) {
-      TaggerDialog($event, message);
-    }
+      // Update area
+      $scope.updateArea = function() {
 
-    // Area dialog messages
-    $scope.addMessage = 'templates/addAreaMessage.html';
-    $scope.deleteMessage = 'templates/deleteAreaMessage.html';
+        var success = AreaUpdate.save({
 
-  }]);
+          id: $scope.area.id,
+          title: $scope.area.title,
+          description: $scope.area.description,
+          searchUrl: $scope.area.areaId,
+          linkLabel: $scope.area.linkLabel,
+          url: $scope.area.url
+
+        });
+
+        success.$promise.then(function(data) {
+
+          if (data.status === 'success') {
+            $scope.areas = AreaList.query();
+            // Toast upon success
+            TaggerToast("Area Updated");
+          }
+        })
+
+      };
+
+      // dialogs
+      $scope.showDialog = showDialog;
+      function showDialog($event, message) {
+        TaggerDialog($event, message);
+      }
+
+      // Area dialog messages
+      $scope.addMessage = 'templates/addAreaMessage.html';
+      $scope.deleteMessage = 'templates/deleteAreaMessage.html';
+
+    }]);
+
+
+
+})();
 
 

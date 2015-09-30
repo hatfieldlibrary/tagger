@@ -5,104 +5,194 @@
  *
  */
 
-taggerControllers.controller('TagCtrl', [
+(function() {
 
-  '$rootScope',
-  '$scope',
-  '$animate',
-  'TagList',
-  'TagById',
-  'TagUpdate',
-  'TaggerToast',
-  'TaggerDialog',
-  'Data',
+  'use strict';
 
-  function(
-    $rootScope,
-    $scope,
-    $animate,
-    TagList,
-    TagById,
-    TagUpdate,
-    TaggerToast,
-    TaggerDialog,
-    Data  ) {
+  taggerControllers.controller('TagCtrl', [
 
-    $scope.Data = Data;
-    $scope.tags = Data.tags;
+    '$rootScope',
+    '$scope',
+    '$animate',
+    'TagList',
+    'TagById',
+    'TagUpdate',
+    'TaggerToast',
+    'TaggerDialog',
+    'Data',
 
-    $scope.init = function() {
-      $scope.tags = TagList.query();
-      $scope.tags
-        .$promise
-        .then(function (data) {
-          console.log(data);
-          $scope.Data.tags = data;
-          if (data.length > 0) {
-            $scope.resetTag(data[0].id);
-          }
-        });
-    };
+    function(
+      $rootScope,
+      $scope,
+      $animate,
+      TagList,
+      TagById,
+      TagUpdate,
+      TaggerToast,
+      TaggerDialog,
+      Data  ) {
 
-    // init view
-    $scope.init();
+      var vm = self;
+      vm.Data = Data;
+      vm.tags = TagList.query();
+      // Tag dialog messages
+      vm.addMessage = 'templates/addTagMessage.html';
+      vm.deleteMessage = 'templates/deleteTagMessage.html';
+      // Tag dialogs
+      vm.showDialog = function ($event, message) {
+        TaggerDialog($event, message);
+      };
 
-    // Watch for changes in Data service
-    $scope.$watch(function(scope) { return scope.Data.tags },
-      function(newValue, oldValue) {
-        $scope.tags = newValue;
-      }
-    );
 
-    // Listen for event from dialog update
-    $scope.$on('tagsUpdate', function() {
-
-      $scope.Data.tags = Data.tags;
-      $scope.resetTag(null);
-
-    });
-
-    // Reset item to edit
-    $scope.resetTag = function(id) {
-
-      if (id !== null) {
-        Data.currentTagIndex = id;
-      }
-      $scope.tag = TagById.query({id:  Data.currentTagIndex});
-
-    };
-
-    // Update tag
-    $scope.updateTag = function() {
-
-      var success = TagUpdate.save({
-
-        id: $scope.tag.id,
-        name: $scope.tag.name
+      // Listen for event from dialog update
+      $scope.$on('tagsUpdate', function() {
+        vm.Data.tags = Data.tags;
+        vm.resetTag(null);
 
       });
 
-      success.$promise.then(function(data) {
-
-        if (data.status === 'success') {
-          $scope.tags =TagList.query();
-          // Toast upon success
-          TaggerToast("Tag Updated");
+      // Reset item to edit
+      vm.resetTag = function(id) {
+        if (id !== null) {
+          Data.currentTagIndex = id;
         }
-      })
+        vm.tag = TagById.query({id:  Data.currentTagIndex});
 
-    };
+      };
 
-    // Tag dialogs
-    $scope.showDialog = showDialog;
-    function showDialog($event, message) {
-      TaggerDialog($event, message);
-    }
+      // Update tag
+      vm.updateTag = function() {
+        var success = TagUpdate.save({
+          id: vm.tag.id,
+          name: vm.tag.name
 
-    // Tag dialog messages
-    $scope.addMessage = 'templates/addTagMessage.html';
-    $scope.deleteMessage = 'templates/deleteTagMessage.html';
+        });
+        success.$promise.then(function(data) {
+          if (data.status === 'success') {
+            vm.tags =TagList.query();
 
-  }]);
+            // Toast upon success
+            TaggerToast("Tag Updated");
+          }
+        })
 
+      };
+
+      // Watch for changes in Data service
+      $scope.$watch(function() { return Data.tags },
+        function(newValue, oldValue) {
+
+          vm.tags = newValue;
+        }
+      );
+
+      var init = function() {
+        var tags = TagList.query();
+        tags
+          .$promise
+          .then(function (data) {
+            alert('new tags');
+            Data.tags = data;
+            if (data.length > 0) {
+              vm.resetTag(data[0].id);
+            }
+          });
+
+      };
+
+    }]);
+
+  /*
+   *
+   *  TAG AREA CONTROLLER
+   *
+   */
+
+  taggerControllers.controller('TagAreasCtrl', [
+
+    '$scope',
+    'TagTargets',
+    'TagTargetRemove',
+    'TagTargetAdd',
+    'FindAreaById',
+    'TaggerToast',
+    'Data',
+
+    function (
+      $scope,
+      TagTargets,
+      TagTargetRemove,
+      TagTargetAdd,
+      TaggerToast,
+      FindAreaById,
+      Data) {
+
+      var vm = self;
+      vm.areas = Data.areas;
+      vm.areaTargets = [];
+
+      vm.getCurrentAreaTargets = function (id) {
+        vm.areaTargets = TagTargets.query({tagId: id});
+
+      };
+
+      vm.isChosen = function (areaId) {
+        return FindAreaById(areaId, $scope.areaTargets);
+
+      };
+
+      vm.update = function (areaId) {
+        if (vm.areaTargets !== undefined) {
+
+          // If the area id of the selected checkbox is a
+          // aleady a target, then delete the area target.
+          if (FindAreaById(areaId, $scope.areaTargets)) {
+
+            var result = TagTargetRemove.query({tagId: Data.currentTagIndex, areaId: areaId});
+
+            result.$promise.then(function (data) {
+              if (data.status == 'success') {
+                vm.areaTargets = result.areaTargets;
+                TaggerToast('Tag removed from area.')
+              }
+            });
+          }
+          // If the area id of the selected item is
+          // not a target already, add a new area target.
+          else {
+            var result = TagTargetAdd.query({tagId: Data.currentTagIndex, areaId: areaId});
+
+            result.$promise.then(function (data) {
+              if (data.status == 'success') {
+                vm.areaTargets = result.areaTargets;
+                TaggerToast('Tag added to Area.')
+              }
+            });
+          }
+        }
+
+      };
+
+      $scope.$watch(function () {
+          return Data.currentTagIndex
+        },
+        function (newValue, oldValue) {
+          if (newValue !== null) {
+            vm.getCurrentAreaTargets(newValue);
+          }
+        }
+      );
+
+      $scope.$watch(function () {
+          return Data.areas
+        },
+        function (newValue) {
+          vm.areas = newValue;
+        });
+
+
+    }]);
+
+
+})();
 

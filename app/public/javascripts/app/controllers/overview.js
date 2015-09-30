@@ -1,32 +1,42 @@
+/*
+ * OVERVIEW CONTROLLER
+ */
 
+(function() {
 
-taggerControllers.controller('OverviewCtrl', [
-  '$scope',
-  'CollectionsByArea',
-  'Data',
-  function($scope, CollectionsByArea, Data) {
+  'use strict';
 
-    $scope.areaLabel = Data.areaLabel;
-    $scope.collections = CollectionsByArea.query({areaId: Data.currentAreaIndex});
-    var restrictedCount = 0;
-    $scope.collections.$promise.then(function(data) {
-      for (var i = 0; i < data.length; i++) {
+  taggerControllers.controller('OverviewCtrl', [
+    '$scope',
+    'CollectionsByArea',
+    'Data',
+    function($scope, CollectionsByArea, Data) {
 
-        if (data[i].restricted !== true) {
+      $scope.areaLabel = Data.areaLabel;
+      $scope.collections = CollectionsByArea.query({areaId: Data.currentAreaIndex});
+      var restrictedCount = 0;
+      $scope.collections.$promise.then(function(data) {
+        for (var i = 0; i < data.length; i++) {
 
-          restrictedCount++;
+          if (data[i].restricted !== true) {
+
+            restrictedCount++;
+          }
         }
+      });
+
+      $scope.getRestrictedCount = function() {
+        return restrictedCount;
+      };
+
+      $scope.getPublicCount = function() {
+        return $scope.collections.length - restrictedCount;
       }
-    });
 
-    $scope.getRestrictedCount = function() {
-      return restrictedCount;
-    };
 
-    $scope.getPublicCount = function() {
-      return $scope.collections.length - restrictedCount;
     }
+  ]);
+
+})();
 
 
-  }
-]);

@@ -346,7 +346,19 @@ taggerServices.factory('ImageUpload', ['$http', function($http) {
 
 }]);
 
+taggerServices.factory('FindAreaById', function() {
 
+  var findArea = function(areaId, targets) {
+    for (var i = 0; i < targets.length; i++) {
+      if (targets[i].AreaId === areaId) {
+        return true;
+      }
+    }
+    return false;
+  };
+   return findArea;
+
+ });
 
 // SHARED DATA SERVICE
 // Injected into most Tagger controllers.
