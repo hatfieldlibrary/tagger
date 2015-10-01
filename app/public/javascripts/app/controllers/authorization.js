@@ -3,6 +3,9 @@
 
   'use strict';
 
+  /**
+   * Controller for the user profile display.
+   */
   taggerControllers.controller('AuthorizedCtrl', [
     function() {
 
