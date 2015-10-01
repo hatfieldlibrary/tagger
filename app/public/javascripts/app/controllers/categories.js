@@ -1,12 +1,11 @@
-/*
- *
- *  CATEGORIES CONTROLLER
- *
- */
+
 (function() {
 
   'use strict';
 
+  /**
+   * Controller for collection categories management.
+   */
   taggerControllers.controller('CategoryCtrl', [
 
     '$rootScope',
@@ -32,42 +31,59 @@
 
       var vm = this;
 
-      vm.Data = Data;
+      /** @type {Array.<Object>} */
       vm.areas = Data.areas;
+      /** @type {Array.<Object>} */
       vm.categories = Data.categories;
+      /** @type {number} */
+      vm.currentCategory = Data.currentCategoryIndex;
       // Dialog Messages
+      /** @type {string} */
       vm.addMessage = 'templates/addCategoryMessage.html';
+      /** @type {string} */
       vm.deleteMessage = 'templates/deleteCategoryMessage.html';
 
-      // dialog
+      /**
+       * Show the $mdDialog.
+       * @param $event click event object (location of event used as
+       *                    animation starting point)
+       * @param message  html to display in dialog
+       */
       vm.showDialog = function($event, message) {
         TaggerDialog($event, message);
 
       };
 
-      // Set the selected category
+      /**
+       * Resets the current category
+       * @param id
+       */
       vm.resetCategory = function(id) {
         if (id !== null) {
           Data.currentCategoryIndex = id;
+          vm.currentCategory = id;
         }
         vm.category = Category.query({id: Data.currentCategoryIndex});
 
       };
 
-      // Update category values
+      /**
+       * Update category information and update the category
+       * list upon success.
+       */
       vm.updateCategory = function() {
         var success = CategoryUpdate.save({
-          id: $scope.category.id,
-          title: $scope.category.title,
-          description: $scope.category.description,
-          areaId: $scope.category.areaId,
-          linkLabel: $scope.category.linkLabel,
-          url: $scope.category.url
+          id: vm.category.id,
+          title: vm.category.title,
+          description: vm.category.description,
+          areaId: vm.category.areaId,
+          linkLabel: vm.category.linkLabel,
+          url: vm.category.url
 
         });
         success.$promise.then(function(data) {
           if (data.status === 'success') {
-            vm.Data.categories = CategoryList.query();
+            vm.categories = CategoryList.query();
             // Toast upon success
             TaggerToast("Category Updated");
           }
@@ -75,43 +91,27 @@
 
       };
 
-      // Watch for changes in Data singleton
-      // category list
-      $scope.$watch(function(scope) { return scope.Data.categories },
-        function(newValue, oldValue) {
-          $scope.categories = newValue;
+      /**
+       * Watch for changes in the available categories. Can
+       * change with add/deletes in the DialogController.
+       */
+      $scope.$watch(function() { return Data.categories },
+        function(newValue) {
+          vm.categories = newValue;
         }
 
       );
 
-      // area list
+      /**
+       * Watch for changes in the available areas.
+       */
       $scope.$watch(function() { return Data.areas },
-        function(newValue, oldValue) {
-          $scope.areas = newValue;
-          // init view
-          init();
+        function(newValue) {
+          vm.areas = newValue;
 
         }
       );
 
-      // Listen for events from dialog -- should be unused
-      $scope.$on('categoriesUpdate', function() {
-        $scope.resetCategory(null);
-
-      });
-
-      var init = function() {
-        vm.categories = CategoryList.query();
-        vm.categories
-          .$promise
-          .then(function(data) {
-            Data.categories = data;
-            if (data.length > 0) {
-              Data.currentCategoryIndex = data[0].id;
-              resetCategory(data[0].id);
-            }
-          });
-      };
     }
 
   ]);

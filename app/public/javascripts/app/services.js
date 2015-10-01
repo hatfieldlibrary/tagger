@@ -346,20 +346,6 @@ taggerServices.factory('ImageUpload', ['$http', function($http) {
 
 }]);
 
-taggerServices.factory('FindAreaById', function() {
-
-  var findArea = function(areaId, targets) {
-    for (var i = 0; i < targets.length; i++) {
-      if (targets[i].AreaId === areaId) {
-        return true;
-      }
-    }
-    return false;
-  };
-   return findArea;
-
- });
-
 // SHARED DATA SERVICE
 taggerServices.factory('Data', function() {
   return {
@@ -826,7 +812,7 @@ taggerServices.factory('TaggerDialog', [
           console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
         }).success(function (data, status, headers, config) {
           Data.currentThumbnailImage =  config.file.name;
-          $rootScope.$broadcast('imageUpdate', {});
+        //  $rootScope.$broadcast('imageUpdate', {});
           $scope.closeDialog();
           console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
         }).error(function (data, status, headers, config) {

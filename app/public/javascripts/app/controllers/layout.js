@@ -88,8 +88,10 @@
         // Initialize global tags.
         var tags = TagList.query();
         tags.$promise.then(function(data) {
-          Data.tags = data;
-          Data.currentTagIndex = data[0].id
+          if (data.length > 0) {
+            Data.tags = data;
+            Data.currentTagIndex = data[0].id
+          }
         });
 
       }
@@ -115,8 +117,10 @@
         // Set subject tags for area.
         var tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function(data) {
-          Data.tagsForArea = data;
-          Data.currentTagIndex = data[0].id;
+          if (data.lenth > 0) {
+            Data.tagsForArea = data;
+            Data.currentTagIndex = data[0].id;
+          }
         });
 
       }

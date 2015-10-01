@@ -2,7 +2,7 @@
 md-content(layout="row", layout-align="start start", flex, ng-controller="TagCtrl as vm")
   md-content(layout="column" flex="75")
     md-card.flex(flex, style="height: 990px;")
-      div(ng-if="tag.$resolved")
+      div(ng-if="vm.tags.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
           span(flex="20")
@@ -10,7 +10,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="TagCtr
             span.md-subhead &nbsp;TAGS
           h2.md-display-2 {{vm.tag.name}}
           span(flex)
-          md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Tag" ng-click="showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
+          md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Tag" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
       md-card-content
         div(layout="row", layout-align="start start")
           div(flex="20" )
@@ -20,7 +20,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="TagCtr
                 md-list
                   div(ng-repeat="tag in vm.tags")
                     md-list-item
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': tag.id==vm.Data.currentTagIndex}" style="min-height: 47px;"  ng-click="vm.resetTag(tag.id);")
+                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': tag.id==vm.currentTag}" style="min-height: 47px;"  ng-click="vm.resetTag(tag.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{tag.name}}
                           div.md-ripple-container
                     md-divider

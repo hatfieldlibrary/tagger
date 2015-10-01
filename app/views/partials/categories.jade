@@ -1,8 +1,8 @@
 
-md-content(layout="row", layout-align="start start", flex, ng-controller="CategoryCtrl")
+md-content(layout="row", layout-align="start start", flex, ng-controller="CategoryCtrl as vm")
   md-content(layout="column" flex="75")
     md-card.flex(flex, style="height: 990px;")
-      div(ng-if="category.$resolved")
+      div(ng-if="vm.category.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
           span(flex="20")
@@ -10,17 +10,17 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Catego
             span.md-subhead &nbsp;GROUPS
           h2.md-display-2 {{category.title}}
           span(flex)
-          md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Category" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
+          md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Category" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
       md-card-content
         div(layout="row", layout-align="start start")
           div(flex="20" )
-            md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="showDialog($event, addMessage)") Add New Group
+            md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="vm.showDialog($event, vm.addMessage)") Add New Group
             div(layout="column", style="height:770px;")
               md-content(flex)
                 md-list
-                  div(ng-repeat="cat in categories")
+                  div(ng-repeat="cat in vm.categories")
                     md-list-item
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': cat.id==Data.currentCategoryIndex}" style="min-height: 47px;" ng-click="resetCategory(cat.id);")
+                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': cat.id==vm.currentCategory}" style="min-height: 47px;" ng-click="vm.resetCategory(cat.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{cat.title}}
                           div.md-ripple-container
                 md-divider
@@ -30,26 +30,26 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Catego
               |  information about the current collection and related collections.
 
             div(flex)
-              md-button(class="md-raised md-accent" style="float:right;" ng-click="updateCategory()") Update Category
+              md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCategory()") Update Category
               div(flex)
                 p &nbsp;
             md-input-container
               label Collection Name
-              input(type="text", ng-model="category.title")
+              input(type="text", ng-model="vm.category.title")
             md-input-container
               label Description  &nbsp;
-                span(class="md-subhead md-default") maxuimum characters 450 (current {{category.description.length}})
-              textarea(type="textarea", ng-trim="false", ng-model="category.description", maxlength="450")
+                span(class="md-subhead md-default") maxuimum characters 450 (current {{vm.category.description.length}})
+              textarea(type="textarea", ng-trim="false", ng-model="vm.category.description", maxlength="450")
             md-input-container
               label Button Label
-              input(type="text", ng-model="category.linkLabel")
+              input(type="text", ng-model="vm.category.linkLabel")
             md-input-container
               label URL
-              input(type="text", ng-model="category.url")
+              input(type="text", ng-model="vm.category.url")
             md-input-container
               label Area
-              md-select(ng-model="category.areaId" placeholder="Select an Area")
-                md-option(ng-repeat="area in areas" ng-value="area.id" ng-selected="area.id") {{area.title}}
+              md-select(ng-model="vm.category.areaId" placeholder="Select an Area")
+                md-option(ng-repeat="area in vm.areas" ng-value="area.id" ng-selected="area.id") {{area.title}}
 
   md-content(layout="column" flex="25")
 

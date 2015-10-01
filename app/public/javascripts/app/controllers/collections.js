@@ -50,23 +50,37 @@
 
 
       var vm = this;
+
+      /** @type {Object} */
       vm.collection = {};
+      /** @type {Array.<Object>} */
       vm.collectionList = [];
-      vm.Data = Data;
-      // Tag dialog messages
+      /** @type {string} */
+      vm.thumbnailImage = '';
+      // Tag dialog message templates
+      /** @type {string} */
       vm.addMessage = 'templates/addCollectionMessage.html';
       vm.deleteMessage = 'templates/deleteCollectionMessage.html';
       vm.updateImageMessage = 'templates/updateImageMessage.html';
 
-      // Dialog function.
+      /**
+       * Show the $mdDialog.
+       * @param $event click event object (location of event used as
+       *                    animation starting point)
+       * @param message  html to display in dialog
+       */
       vm.showDialog = function ($event, message) {
         TaggerDialog($event, message);
       };
 
-      // Update Collection information
+
+      /**
+       * Updates the collection and reloads the collection
+       * list for the current area upon success.
+       */
       vm.updateCollection = function () {
 
-        var success = CollectionUpdate.save({
+        var update = CollectionUpdate.save({
           id: vm.collection.id,
           title: vm.collection.title,
           url: vm.collection.url,
@@ -80,10 +94,13 @@
           ctype: vm.collection.ctype
 
         });
-        success.$promise.then(function (data) {
-
+        update.$promise.then(function (data) {
           if (data.status === 'success') {
-            vm.collectionList = CollectionsByArea.query({areaId: Data.currentAreaIndex});
+            vm.collectionList = CollectionsByArea.query(
+              {
+                areaId: Data.currentAreaIndex
+              }
+            );
             // Toast upon success
             TaggerToast("Collection Updated");
           }
@@ -91,13 +108,18 @@
 
       };
 
-      vm.getCollectionArea = function (id) {
-        Data.currentCollectionIndex = id;
-        vm.collectionList = CollectionsByArea.query({id: id});
+   //   vm.getCollectionArea = function (id) {
+    //    Data.currentCollectionIndex = id;
+    //    vm.collectionList = CollectionsByArea.query({id: id});
 
-      };
+    //  };
 
 
+      /**
+       * Retrieves collection information as well as tags and
+       * content types associated with the collection.
+       * @param id  the collection id
+       */
       vm.getCollectionById = function (id) {
         Data.currentCollectionIndex = id;
         // collection info
@@ -118,18 +140,35 @@
       };
 
 
-      // Listen for event from image update.
+      /**
+       * Using event for the image update.  See dialog controller.
+       */
       $scope.$on('imageUpdate', function () {
-        vm.collection.image = Data.currentThumbnailImage;
+      //  vm.collection.image = Data.currentThumbnailImage;
       });
 
-      // Listed for removed from current area event.
+      /**
+       * Using event to notify when a collection is removed from a
+       * collection area. The actual removal is done by one of the
+       * controllers below, so perhaps a variable or object in the
+       * parent scope could be used instead. There is no need to
+       * update the shared Data service, although that's another
+       * possibility.
+       *
+       * Updates the collection list on event.
+       */
       $scope.$on('removedFromArea', function () {
-        vm.collectionList = CollectionsByArea.query({areaId: Data.currentAreaIndex});
+        vm.collectionList = CollectionsByArea.query(
+          {
+            areaId: Data.currentAreaIndex
+          }
+        );
       });
 
 
-      // Watch for changes on shared context.
+      /**
+       * Watch for updates to the list of areas.
+       */
       $scope.$watch(function () {
           return Data.areas
         },
@@ -140,16 +179,20 @@
         }
       );
 
+      // not sure this is used
       $scope.$watch(function () {
           return Data.currentThumbnailImage
         },
         function (newValue) {
           if (newValue !== null) {
-            vm.Data.currentThumbnailImage = newValue;
+            vm.currentThumbnailImage = newValue;
           }
         });
 
-
+      /**
+       * Watch for updates to the current context collection
+       * id. Update the selected collection information.
+       */
       $scope.$watch(function () {
           return Data.currentCollectionIndex
         },
@@ -159,7 +202,10 @@
           }
         });
 
-
+      /**
+       * Watch for updates to the current context collection
+       * list. Update the collectionList field in response.
+       */
       $scope.$watch(function () {
           return Data.collections
         },

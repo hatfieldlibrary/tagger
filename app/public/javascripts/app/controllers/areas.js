@@ -29,67 +29,63 @@
       $animate,
       Data ) {
 
-      $scope.Data = Data;
-      $scope.areas = Data.areas;
+      var vm = this;
 
-      $scope.init = function() {
-        $scope.areas = AreaList.query();
-        $scope.areas
-          .$promise
-          .then(function (data) {
-            $scope.Data.areas = data;
-            if (data.length > 0) {
-              Data.currentAreaIndex =  data[0].id;
-              $scope.resetArea(data[0].id);
-            }
-          });
+
+      /** @type {Array.<Object>} */
+      vm.areas = [];
+      /** @type {Object} */
+      vm.area = Data.areas[0];
+      /** @type {string} */
+      vm.addMessage = 'templates/addAreaMessage.html';
+      /** @type {string} */
+      vm.deleteMessage = 'templates/deleteAreaMessage.html';
+      /** @type {number */
+      vm.currentAreaId = Data.currentAreaIndex;
+
+      /**
+       * Show the $mdDialog.
+       * @param $event click event object (location of event used as
+       *                    animation starting point)
+       * @param message  html to display in dialog
+       */
+      vm.showDialog = function($event, message) {
+        TaggerDialog($event, message);
       };
 
-      // Initialize view
-      //$scope.init();
 
-      // Watch for changes in Data service
-      $scope.$watch(function(scope) { return scope.Data.areas },
-        function(newValue, oldValue) {
-          $scope.areas = newValue;
-        }
-      );
-
-      // Listen for events from dialog
-      $scope.$on('areasUpdate', function() {
-
-        $scope.resetArea(null);
-
-      });
-
-      // New area to edit
-      $scope.resetArea = function(id) {
+      /**
+       * Sets the current area in view.
+       * @param id  area id
+       */
+      vm.resetArea = function(id) {
 
         if (id !== null) {
           Data.currentAreaIndex = id;
+          vm.currentAreaId = id;
         }
-        $scope.area = AreaById.query({id: Data.currentAreaIndex});
+        vm.area = AreaById.query({id: Data.currentAreaIndex});
 
       };
 
-      // Update area
-      $scope.updateArea = function() {
+      /**
+       *  Updates the area information.  Updates area list
+       *  upon success.
+       */
+      vm.updateArea = function() {
 
         var success = AreaUpdate.save({
-
-          id: $scope.area.id,
-          title: $scope.area.title,
-          description: $scope.area.description,
-          searchUrl: $scope.area.areaId,
-          linkLabel: $scope.area.linkLabel,
-          url: $scope.area.url
+          id: vm.area.id,
+          title: vm.area.title,
+          description: vm.area.description,
+          searchUrl: vm.area.areaId,
+          linkLabel: vm.area.linkLabel,
+          url: vm.area.url
 
         });
-
         success.$promise.then(function(data) {
-
           if (data.status === 'success') {
-            $scope.areas = AreaList.query();
+            vm.areas = AreaList.query();
             // Toast upon success
             TaggerToast("Area Updated");
           }
@@ -97,18 +93,18 @@
 
       };
 
-      // dialogs
-      $scope.showDialog = showDialog;
-      function showDialog($event, message) {
-        TaggerDialog($event, message);
-      }
 
-      // Area dialog messages
-      $scope.addMessage = 'templates/addAreaMessage.html';
-      $scope.deleteMessage = 'templates/deleteAreaMessage.html';
+      /**
+       * Watch for new areas in context.  Areas are added
+       * and removed in the dialog controller.
+       */
+      $scope.$watch(function() { return Data.areas },
+        function(newValue) {
+          vm.areas = newValue;
+        }
+      );
 
     }]);
-
 
 
 })();

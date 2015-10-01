@@ -28,27 +28,44 @@
 
      // var areaList = [];
 
-      $scope.areas = Data.areast;
+      var vm = this;
 
-      $scope.newRow = function() {
-        $scope.users[$scope.users.length] = {id: null, name:'', email:'', area:''};
+      /** @type {Array.<Object>} */
+      vm.areas = Data.areas;
+      /** @type {Array.<Object>} */
+      vm.users = [];
+
+      /**
+       * Adds empty new row to users.
+       */
+      vm.newRow = function() {
+        vm.users[vm.users.length] = {id: null, name:'', email:'', area:''};
       };
 
+      /**
+       * Sets the current users list.
+       */
       function setUsers() {
         var users = UserList.query();
         users.$promise.then(function(list) {
-          console.log(users);
           var arr = [];
           if (list.length > 0) {
             for (var i = 0; i < list.length; i++) {
               arr[i] = {id: list[i].id, name: list[i].name, email: list[i].email, area: list[i].area};
             }
           }
-          $scope.users = arr;
+          vm.users = arr;
         });
       }
 
-      $scope.updateUser = function(id, name, email, area) {
+      /**
+       * Updates a user.
+       * @param id
+       * @param name
+       * @param email
+       * @param area
+       */
+      vm.updateUser = function(id, name, email, area) {
 
         if (id === null) {
           var result = UserAdd.save({name: name, email: email, area: area});
@@ -70,7 +87,11 @@
 
       };
 
-      $scope.deleteUser = function(id) {
+      /**
+       * Deletes a user.
+       * @param id  the user's id
+       */
+      vm.deleteUser = function(id) {
 
         var result = UserDelete.save({id: id});
         result.$promise.then(function() {
@@ -84,7 +105,9 @@
       setUsers();
 
       // Watch for changes on shared context object.
-      $scope.$watch(function() { return Data.areas },
+      /*
+      vm.$watch(function() { return Data.areas },
+       *
         function(newValue) {
           if (newValue.length > 0) {
             areaList[0] = {id: 0, name: 'Administrator'};
@@ -93,7 +116,7 @@
             }
           }
         }
-      );
+      );   */
 
     }
   ]);

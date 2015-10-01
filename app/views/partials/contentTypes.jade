@@ -1,26 +1,26 @@
 
-md-content(layout="row", layout-align="start start", flex, ng-controller="ContentCtrl")
+md-content(layout="row", layout-align="start start", flex, ng-controller="ContentCtrl as vm")
   md-content(layout="column" flex="75")
     md-card.flex(flex, style="height: 990px;")
-      div(ng-if="contentType.$resolved")
+      div(ng-if="vm.contentType.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
           span(flex="20")
             i.material-icons image
             span.md-subhead &nbsp;TYPES
-          h2.md-display-2 {{contentType.name}}
+          h2.md-display-2 {{vm.contentType.name}}
           span(flex)
-          md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="showDialog($event, deleteMessage)") <i class="material-icons">delete</i>
+          md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
       md-card-content
         div(layout="row", layout-align="start start")
           div(flex="20" )
-            md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="showDialog($event, addMessage)") Add Content Type
+            md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="vm.showDialog($event, vm.addMessage)") Add Content Type
             div(layout="column", style="height:770px;")
               md-content(flex)
                 md-list
-                  div(ng-repeat="type in contentTypes")
+                  div(ng-repeat="type in vm.contentTypes")
                     md-list-item
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': type.id==Data.currentContentIndex}" style="min-height: 47px;" ng-click="resetType(type.id);")
+                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': type.id==vm.currentType}" style="min-height: 47px;" ng-click="resetType(type.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{type.name}}
                           div.md-ripple-container
                   md-divider
@@ -29,17 +29,17 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Conten
               span #[em Content Types] are essentially media or file types and should be thought of in those terms. This in mind, it may sometimes be helpful to create more general types, e.g. Document and Transcribed Document.
             div(flex)
             div(flex)
-              md-button(class="md-raised md-accent" style="float:right;" ng-click="updateContentType()") Update Content Type
+              md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateContentType()") Update Content Type
             div(flex)
               p &nbsp;
               md-input-container
                 label Type Name
-                input(type="text", ng-model="contentType.name")
+                input(type="text", ng-model="vm.contentType.name")
               md-input-container
                 label Type Icon (Fontawesome icon name:  e.g. fa-bus )
-                input(type="text", ng-model="contentType.icon")
+                input(type="text", ng-model="vm.contentType.icon")
               div(ng-if="contentType.icon")
-                i(class="fa {{contentType.icon}}")
+                i(class="fa {{vm.contentType.icon}}")
         div.md-panel Fontawesome Icons:
           a(href="https://fortawesome.github.io/Font-Awesome/icons/", target="_blank")  https://fortawesome.github.io/Font-Awesome/icons/
   md-content(layout="column" flex="25")

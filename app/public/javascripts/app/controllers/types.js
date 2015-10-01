@@ -1,18 +1,14 @@
-/*
- *
- *  CONTENT TYPES CONTROLLER
- *
- */
-
 (function() {
 
   'use strict';
 
+  /**
+   * Controller for content types (e.g. image, document, etc.)
+   */
   taggerControllers.controller('ContentCtrl', [
 
     '$rootScope',
     '$scope',
-    '$animate',
     'TaggerToast',
     'TaggerDialog',
     'ContentTypeList',
@@ -25,7 +21,6 @@
     function(
       $rootScope,
       $scope,
-      $animate,
       TaggerToast,
       TaggerDialog,
       ContentTypeList,
@@ -35,72 +30,55 @@
       ContentTypeAdd,
       Data) {
 
-      $scope.Data = Data;
-      $scope.contentTypes = Data.contentTypes;
+      var vm = this;
 
+      /** @type {Array.<Object>} */
+      vm.contentTypes = Data.contentTypes;
+      /** @type {number} */
+      vm.currentType = Data.currentContentIndex;
+      /** @type {string} */
+      vm.addMessage = 'templates/addContentMessage.html';
+      /** @type {stromg} */
+      vm.deleteMessage = 'templates/deleteContentMessage.html';
 
-      $scope.init = function() {
-
-        $scope.contentTypes = ContentTypeList.query();
-        $scope.contentTypes
-          .$promise
-          .then(function(data) {
-            $scope.Data.contentTypes = data;
-            if (data.length > 0) {
-              console.log('init ' + data);
-              $scope.resetType(data[0].id);
-            }
-          });
-
+      /**
+       * Show the $mdDialog.
+       * @param $event click event object (location of event used as
+       *                    animation starting point)
+       * @param message  html to display in dialog
+       */
+      vm.showDialog = function ($event, message) {
+        TaggerDialog($event, message);
       };
 
-      // Watch for changes in Data service
-      $scope.$watch(function(scope) { return Data.contentTypes },
-        function(newValue, oldValue) {
-          $scope.contentTypes = newValue;
-        }
-      );
-
-      $scope.$watch(function() { return Data.currentCategoryIndex },
-        function() {
-          $scope.init();
-        }
-      );
-
-      // Listen event from dialogs
-      $scope.$on('contentUpdate', function() {
-
-        $scope.resetType(null);
-
-      });
-
-      // Reset content type to edi
-      $scope.resetType = function(id) {
+      /**
+       * Reset the selected content type information.
+       * @param id content type id
+       */
+      vm.resetType = function(id) {
 
         if (id !== null) {
           Data.currentContentIndex = id;
+          vm.currentType = id;
         }
-        console.log( $scope.Data.currentContentIndex);
-        $scope.contentType = ContentType.query({id: Data.currentContentIndex});
+        vm.contentType = ContentType.query({id: Data.currentContentIndex});
 
       };
 
-
-      // Update content type
-      $scope.updateContentType = function() {
-
-        var success = ContentTypeUpdate.save({
-
-          id: $scope.contentType.id,
-          name: $scope.contentType.name,
-          icon: $scope.contentType.icon
+      /**
+       * Update the content type information and reset content type
+       * list on success.
+       */
+      vm.updateContentType = function() {
+        var update = ContentTypeUpdate.save({
+          id: vm.contentType.id,
+          name: vm.contentType.name,
+          icon: vm.contentType.icon
 
         });
-
-        success.$promise.then(function(data) {
-
+        update.$promise.then(function(data) {
           if (data.status === 'success') {
-            $scope.Data.contentTypes = ContentTypeList.query();
+            Data.contentTypes = ContentTypeList.query();
             // Toast upon success
             TaggerToast("Content Type Updated");
           }
@@ -108,20 +86,17 @@
 
       };
 
-      // Dialogs
-      $scope.showDialog = showDialog;
-      function showDialog($event, message) {
-        TaggerDialog($event, message);
-      }
+      /**
+       * Watch for changes in the content type list.
+       */
+      $scope.$watch(function() { return Data.contentTypes },
+        function(newValue) {
+          $scope.contentTypes = newValue;
+        }
+      );
 
-
-      // Dialog Messages
-      $scope.addMessage = 'templates/addContentMessage.html';
-      $scope.deleteMessage = 'templates/deleteContentMessage.html';
 
     }]);
-
-
 
 
 })();
