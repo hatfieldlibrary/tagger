@@ -354,6 +354,7 @@ taggerServices.factory('Data', function() {
     currentAreaIndex: null,
     currentCategoryIndex: null,
     categories: [],
+    categoriesForArea: [],
     currentContentIndex: null,
     contentTypes: [],
     tags: [],
@@ -409,14 +410,12 @@ taggerServices.factory('TaggerToast', [
   }]);
 
 
-// DIALOG SERVICE
-// Using the Angular Material mdDialog directive
-// for add and delete operations. mdDialog has
-// it's own scope.  Defining the controller here
-// to include add/delete methods for the app.
-// Upon success, it updates the shared Data
-// service and broadcasts update event to
-// rootScope.
+/**
+ * Using the Angular Material mdDialog directive
+ * for add and delete operations. mdDialog has
+ * it's own scope.  Defining the controller here
+ * to include add/delete methods for the app.
+ */
 taggerServices.factory('TaggerDialog', [
 
   'Upload',
@@ -452,7 +451,7 @@ taggerServices.factory('TaggerDialog', [
     // The mdDialog service runs in an isolated scope.
     function DialogController(
 
-      $rootScope,
+    //  $rootScope,
       $scope,
       $mdDialog,
       TagAdd,
@@ -523,7 +522,7 @@ taggerServices.factory('TaggerDialog', [
           } else {
             Data.currentTagIndex = id;
           }
-          $rootScope.$broadcast('tagsUpdate', {});
+     //     $rootScope.$broadcast('tagsUpdate', {});
           $scope.closeDialog();
         });
 
@@ -578,7 +577,7 @@ taggerServices.factory('TaggerDialog', [
           } else {
             Data.currentAreaIndex = id;
           }
-          $rootScope.$broadcast('areasUpdate', {});
+        //  $rootScope.$broadcast('areasUpdate', {});
           $scope.closeDialog();
         });
 
@@ -644,7 +643,7 @@ taggerServices.factory('TaggerDialog', [
 
           }
 
-          $rootScope.$broadcast('categoriesUpdate', { });
+         // $rootScope.$broadcast('categoriesUpdate', { });
 
 
         });
@@ -702,7 +701,7 @@ taggerServices.factory('TaggerDialog', [
             Data.currentContentIndex = id;
           }
 
-          $rootScope.$broadcast('contentUpdate', {});
+       //   $rootScope.$broadcast('contentUpdate', {});
 
 
         });
@@ -812,7 +811,6 @@ taggerServices.factory('TaggerDialog', [
           console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
         }).success(function (data, status, headers, config) {
           Data.currentThumbnailImage =  config.file.name;
-        //  $rootScope.$broadcast('imageUpdate', {});
           $scope.closeDialog();
           console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
         }).error(function (data, status, headers, config) {

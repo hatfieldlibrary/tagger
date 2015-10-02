@@ -16,6 +16,7 @@
     'TagsForCollection',
     'TypesForCollection',
     'CategoryList',
+    'CategoryByArea',
     'ContentTypeList',
     'TagList',
     'TagsForArea',
@@ -27,6 +28,7 @@
       TagsForCollection,
       TypesForCollection,
       CategoryList,
+      CategoryByArea,
       ContentTypeList,
       TagList,
       TagsForArea,
@@ -53,6 +55,7 @@
           vm.currentId = data[0].id;
         }
         setContext(Data.currentAreaIndex);
+
       });
 
       /**
@@ -93,6 +96,15 @@
             Data.currentTagIndex = data[0].id
           }
         });
+        // Initialize global content types
+        var types = ContentTypeList.query();
+        types.$promise.then(function(data) {
+          if (data.length > 0) {
+            Data.contentTypes = data;
+            Data.currentContentIndex = data[0].id;
+          }
+
+        });
 
       }
 
@@ -106,7 +118,6 @@
         var collections = CollectionsByArea.query({areaId: id});
         collections.$promise.then(function(data) {
           Data.collections = data;
-          console.log(data);
           Data.currentCollectionIndex = data[0].collection.id;
           Data.tagsForCollection =
             TagsForCollection.query({collId: Data.currentCollectionIndex});
@@ -117,10 +128,15 @@
         // Set subject tags for area.
         var tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function(data) {
-          if (data.lenth > 0) {
+          if (data.length > 0) {
             Data.tagsForArea = data;
-            Data.currentTagIndex = data[0].id;
           }
+        });
+        var categoriesForArea = CategoryByArea.query({areaId: id});
+        categoriesForArea.$promise.then(function(categories) {
+             if (categories.length > 0) {
+               Data.categoriesForArea = categories;
+             }
         });
 
       }

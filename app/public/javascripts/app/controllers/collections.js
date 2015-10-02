@@ -1,21 +1,11 @@
 
-/*
- *  COLLECTIONS CONTROLLERS
- *
- *  Four controllers:
- *  CollectionsCrtl,
- *  TagFilterCtrl,
- *  ContentTypeFilterCtrl,
- *  CollectionAreasCtrl
- *
- */
-
 (function() {
 
   'use strict';
 
+
   /**
-   * Controller for collections.
+   * Controller for managing collections.
    */
   taggerControllers.controller('CollectionCtrl', [
 
@@ -46,21 +36,34 @@
       CategoryByArea,
       TaggerDialog,
       TaggerToast,
-      Data) {
+      Data ) {
 
 
       var vm = this;
 
       /** @type {Object} */
       vm.collection = {};
+
       /** @type {Array.<Object>} */
       vm.collectionList = [];
+
+      /** @type {Array.<Object>} */
+      vm.categoryList = [];
+
+      /** @type {number} */
+      vm.collectionId = 0;
+
       /** @type {string} */
       vm.thumbnailImage = '';
+
       // Tag dialog message templates
       /** @type {string} */
       vm.addMessage = 'templates/addCollectionMessage.html';
+
+      /** @type {string} */
       vm.deleteMessage = 'templates/deleteCollectionMessage.html';
+
+      /** @type {string} */
       vm.updateImageMessage = 'templates/updateImageMessage.html';
 
       /**
@@ -73,13 +76,12 @@
         TaggerDialog($event, message);
       };
 
-
       /**
        * Updates the collection and reloads the collection
        * list for the current area upon success.
        */
       vm.updateCollection = function () {
-
+        alert(vm.collection.category);
         var update = CollectionUpdate.save({
           id: vm.collection.id,
           title: vm.collection.title,
@@ -108,22 +110,23 @@
 
       };
 
-   //   vm.getCollectionArea = function (id) {
-    //    Data.currentCollectionIndex = id;
-    //    vm.collectionList = CollectionsByArea.query({id: id});
-
-    //  };
-
-
       /**
        * Retrieves collection information as well as tags and
        * content types associated with the collection.
-       * @param id  the collection id
+       * @param id  {number} the collection id
        */
       vm.getCollectionById = function (id) {
         Data.currentCollectionIndex = id;
+        vm.collectionId = id;
         // collection info
-        vm.collection = CollectionById.query({id: id});
+        var col = CollectionById.query({id: id});
+        col.$promise.then(function(data) {
+          console.log(data);
+          vm.collection = data;
+          console.log('got collection');
+          console.log(vm.collection);
+          vm.thumbnailImage = data.image;
+        });
         // tag info
         var tags = TagsForCollection
           .query({collId: id});
@@ -139,17 +142,9 @@
 
       };
 
-
-      /**
-       * Using event for the image update.  See dialog controller.
-       */
-      $scope.$on('imageUpdate', function () {
-      //  vm.collection.image = Data.currentThumbnailImage;
-      });
-
       /**
        * Using event to notify when a collection is removed from a
-       * collection area. The actual removal is done by one of the
+       * collection area. The removal is done by one of the
        * controllers below, so perhaps a variable or object in the
        * parent scope could be used instead. There is no need to
        * update the shared Data service, although that's another
@@ -163,8 +158,8 @@
             areaId: Data.currentAreaIndex
           }
         );
-      });
 
+      });
 
       /**
        * Watch for updates to the list of areas.
@@ -177,16 +172,20 @@
             vm.areas = newValue;
           }
         }
+
       );
 
-      // not sure this is used
+      /**
+       * Watch for updates to the thumbnail image.
+       */
       $scope.$watch(function () {
           return Data.currentThumbnailImage
         },
         function (newValue) {
           if (newValue !== null) {
-            vm.currentThumbnailImage = newValue;
+            vm.thumbnailImage = newValue;
           }
+
         });
 
       /**
@@ -200,6 +199,7 @@
           if (newValue !== null) {
             vm.getCollectionById(newValue);
           }
+
         });
 
       /**
@@ -214,11 +214,25 @@
         }
       );
 
+      /**
+       * Watch for updates to the collection category list
+       * that is associated with the collection area.
+       */
+      $scope.$watch(function() {return Data.categoriesForArea},
+        function(newValue) {
+          if (newValue.length > 0) {
+            vm.categoryList = newValue;
+          }
+        });
+
     }]);
 
 
+
+
   /**
-   * Controller for the tags
+   * Controller for managing the association between subject
+   * tags and a collection.
    */
   taggerControllers.controller('TagFilterCtrl', [
 
@@ -237,32 +251,44 @@
       Data) {
 
       var vm = this;
-      vm.searchTextChange = searchTextChange;
-      vm.selectedItemChange = selectedItemChange;
-      vm.queryTags = queryTags;
-      vm.selectedItem = null;
-      vm.searchText = null;
-      vm.isDisabled = false;
-      vm.selectedTags = [];
 
+      /**
+       * Filter for the md-autocomplete component.
+       * @type {queryTags}
+       */
+      vm.queryTags = queryTags;
+
+      /** @type {number} */
+      vm.selectedItem = null;
+      /** @type {string} */
+      vm.searchText = null;
+      /** @type {boolean} */
+      vm.isDisabled = false;
+      /** @type {Array.<Object>} */
+      vm.selectedTags = [];
+      /** @type {Array.<Object>} */
       vm.tagsForArea = [];
+      /** @type {Array.<Object>} */
       vm.tagsForCollection = [];
 
-
+      /**
+       * Function called when appending a chip.  The
+       * function adds an new subject association for
+       * the current collection via db call. Toasts on
+       * success.
+       * @param chip  {Object} $chip
+       * @returns {{id: *, name: *}}
+       */
       vm.addTag = function (chip) {
-
         var chipObj = {id: chip.tag.id, name: chip.tag.name};
-
         var result = CollectionTagTargetAdd.query(
           {
             collId: Data.currentCollectionIndex,
             tagId: chip.tag.id
           }
         );
-
         result.$promise.then(function (data) {
           if (data.status == 'success') {
-
             TaggerToast('Subject Tag Added');
 
           } else {
@@ -276,6 +302,12 @@
 
       };
 
+      /**
+       * Function called when deleting a subject chip.  The function
+       * deletes the subject association with this collection
+       * via db call. Toasts on success.
+       * @param chip  {Object} $chip
+       */
       vm.removeTag = function (chip) {
         console.log('current collection ' + Data.currentCollectionIndex);
         console.log('got chip id ' + chip.id);
@@ -296,7 +328,10 @@
       };
 
 
-      // Watch for changes on shared context object.
+      /**
+       * Watch for changes to the subject tags associated with
+       * the collection area.
+       */
       $scope.$watch(function () {
           return Data.tagsForArea
         },
@@ -305,10 +340,13 @@
         }
       );
 
+      /**
+       * Watch for changes to the subject tags associated with
+       * this collection.
+       */
       $scope.$watch(function () {
           return Data.tagsForCollection
         },
-
         function (newValue) {
           if (newValue.length > 0) {
             var objArray = [];
@@ -322,18 +360,12 @@
         }
       );
 
-
-      function searchTextChange(text) {
-        console.log('Text changed to ' + text);
-      }
-
-      function selectedItemChange(item) {
-        console.log('Item changed to ' + JSON.stringify(item));
-      }
-
-
+      /**
+       * Creates a regex filter for the search term
+       * @param query {string} term to match
+       * @returns {Function}
+       */
       function createFilterFor(query) {
-
         var regex = new RegExp(query, 'i');
         return function filterFn(tagItem) {
           if (tagItem.tag.name.match(regex) !== null) {
@@ -343,10 +375,13 @@
         };
       }
 
+      /**
+       * Returns filter.
+       * @param query
+       * @returns {*}
+       */
       function queryTags(query) {
-
-        var results = query ? vm.tagsForArea.filter(createFilterFor(query)) : [];
-        return results;
+        return query ? vm.tagsForArea.filter(createFilterFor(query)) : [];
 
       }
 
@@ -354,15 +389,12 @@
   ]);
 
 
-
-
-  /*
-   *
-   *  TYPE PANEL CONTROLLER
-   *
+  /**
+   * Controller for managing the association between a
+   * collection and content types.
    */
-
   taggerControllers.controller('ContentTypeFilterCtrl', [
+
     '$scope',
     'ContentTypeList',
     'TypesForCollection',
@@ -371,26 +403,46 @@
     'TaggerToast',
     'Data',
     function (
+
       $scope,
       ContentTypeList,
       TypesForCollection,
       CollectionTypeTargetRemove,
       CollectionTypeTargetAdd,
       TaggerToast,
-      Data) {
+      Data ) {
 
       var vm = this;
-      vm.searchTextChange = searchTextChange;
-      vm.selectedItemChange = selectedItemChange;
+
+      /** @type {queryTypes} */
       vm.queryTypes = queryTypes;
+
+      /** {Object} */
       vm.selectedItem = null;
+
+      /** {string} */
       vm.searchText = null;
+
+      /** {boolean} */
       vm.isDisabled = false;
+
+      /** @type {Array.<Object>} */
       vm.selectedTags = [];
+
+      /** @type {Array.<Object>} */
       vm.globalTypes = ContentTypeList.query();
+
+      /** @type {Array.<Object>} */
       vm.typesForCollection = [];
 
 
+      /**
+       * Function called when adding a content type chip.  The
+       * function associates the content type with this
+       * collection via db call. Toasts on success.
+       * @param chip {Object} $chip
+       * @returns {{id: *, name: *}}
+       */
       vm.addType = function (chip) {
 
         var chipObj = {id: chip.id, name: chip.name};
@@ -415,6 +467,12 @@
 
       };
 
+      /**
+       * Function called when deleting a content type chip.  The
+       * function removes the content type association with this
+       * collection via db call. Toasts on success.
+       * @param chip {Object} $chip
+       */
       vm.removeType = function (chip) {
         console.log('current collection ' + Data.currentCollectionIndex);
         console.log('got chip id ' + chip.id);
@@ -435,6 +493,9 @@
       };
 
 
+      /**
+       * Watch for changes to the list of content t
+       */
       $scope.$watch(function () {
           return Data.typesForCollection
         },
@@ -444,26 +505,19 @@
             for (var i = 0; i < newValue.length; i++) {
               console.log(newValue[i]);
               objArray[i] = {id: newValue[i].itemContent.id, name: newValue[i].itemContent.name};
-
             }
             vm.typesForCollection = objArray;
-
           } else {
             vm.typesForCollection = [];
           }
         }
       );
 
-
-      function searchTextChange(text) {
-        console.log('Text changed to ' + text);
-      }
-
-      function selectedItemChange(item) {
-        console.log('Item changed to ' + JSON.stringify(item));
-      }
-
-
+      /**
+       * Creates filter for content types
+       * @param query  {string} term
+       * @returns {Function}
+       */
       function createFilterFor(query) {
 
         var regex = new RegExp(query, 'i');
@@ -475,23 +529,25 @@
         };
       }
 
+      /**
+       * Returns filter
+       * @param query {string} term
+       * @returns {*}
+       */
       function queryTypes(query) {
-
-        var results = query ? vm.globalTypes.filter(createFilterFor(query)) : [];
-        return results;
+        return query ? vm.globalTypes.filter(createFilterFor(query)) : [];
 
       }
 
     }
+
   ]);
 
 
-  /*
-   *
-   *  COLLECTION AREA CONTROLLER
-   *
+  /**
+   * Controller for managing the association between a collection
+   * and collection areas.
    */
-
   taggerControllers.controller('CollectionAreasCtrl', [
 
     '$rootScope',
@@ -499,7 +555,6 @@
     'AreasForCollection',
     'AreaTargetRemove',
     'AreaTargetAdd',
-    'FindAreaById',
     'TaggerToast',
     'Data',
 
@@ -509,37 +564,69 @@
       AreasForCollection,
       AreaTargetRemove,
       AreaTargetAdd,
-      FindAreaById,
       TaggerToast,
-      Data) {
+      Data ) {
 
       var vm = this;
-      // Areas have been added to shared Data object
-      // by the LayoutCtrl.
+
+
+      /** @type {Array.<Object>} */
       vm.areas = Data.areas;
+
+      /** @type {Array.<Object>} */
       vm.areaTargets = [];
 
+      /**
+       * Searches for area id in the current list of
+       * area associations.
+       * @param areaId  {number} the area ID
+       * @param tar  {Array.<Object>} the areas associated with the collection.
+       * @returns {boolean}
+       */
+      var findArea = function(areaId, tar) {
+        var targets = tar;
+        for (var i = 0; i < targets.length; i++) {
+          if (targets[i].AreaId === areaId) {
+            return true;
+          }
+        }
+        return false;
+      };
 
-
+      /**
+       * Gets the list of areas associated with the current
+       * collection
+       * @param id  {number} the collection id
+       */
       vm.getCurrentAreaTargets = function (id) {
         vm.areaTargets = AreasForCollection.query({collId: id});
 
       };
 
-
+      /**
+       * Tests to see if the collection area is currently
+       * associated with this collection.
+       * @param areaId   {number} area ID
+       * @returns {boolean}
+       */
       vm.isChosen = function (areaId) {
-        return FindAreaById(areaId, vm.areaTargets);
+        return findArea(areaId, vm.areaTargets);
 
       };
 
-
+      /**
+       * Adds or removes the association between a collection and a
+       * collection area.  If the association already exists, it is
+       * removed.  If it is a new association, it is added. Toasts
+       * on success.
+       * @param areaId  {number} the area ID
+       */
       vm.update = function (areaId) {
 
         if (vm.areaTargets !== undefined) {
           // If the area id of the selected checkbox is a
           // already a target, then delete the area target.
-          if (findAreaById(areaId, vm.areaTargets)) {
-
+          if (findArea(areaId, vm.areaTargets)) {
             if (vm.areaTargets.length === 1) {
               TaggerToast('Cannot remove area.  Collections must belong to at least one area.');
 
@@ -554,7 +641,6 @@
               });
             }
           }
-
           // If the area id of the selected item is
           // not a target already, add a new area target.
           else {
@@ -570,29 +656,34 @@
 
       };
 
+      /**
+       * Watches for change in the collection index and retrieves areas
+       * associated with the new collection.
+       */
       $scope.$watch(function () {
           return Data.currentCollectionIndex
         },
-        function (newValue, oldValue) {
+        function (newValue) {
           if (newValue !== null) {
             vm.getCurrentAreaTargets(newValue);
           }
         }
       );
 
+      /**
+       * Watch for change in the list of collection areas. Update
+       * view model.
+       */
       $scope.$watch(function () {
           return Data.areas
         },
         function (newValue) {
-          $scope.areas = newValue;
+          vm.areas = newValue;
         }
       );
 
 
     }]);
-
-
-
 
 })();
 

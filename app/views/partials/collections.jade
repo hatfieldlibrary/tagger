@@ -3,7 +3,6 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
   md-content(layout="column" flex="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.collectionList.$resolved")
-
       md-toolbar.md_primary
         .md-toolbar-tools
           span(flex="25")
@@ -22,7 +21,7 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                 md-list
                 div(ng-repeat="col in vm.collectionList")
                   md-list-item
-                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.collection.id==vm.Data.currentCollectionIndex}" style="min-height: 47px;" ng-click="getCollectionById(col.collection.id);")
+                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.collection.id==vm.collectionId}" style="min-height: 47px;" ng-click="vm.getCollectionById(col.collection.id);")
                       div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
                         div.md-ripple-container
                   md-divider
@@ -30,7 +29,7 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
             div(flex="80" class="md-subhead")
               span With the exception of item count and dates, all fields for this Collection must be complete.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.  The Collection MUST belong to at least one subject area.
             div(flex)
-            md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCollection()") Update This Collection
+            md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCollection()") Update
             div(flex)
               p &nbsp;
             md-input-container
@@ -42,9 +41,8 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
               textarea(type="textarea", ng-trim="false", ng-model="vm.collection.description", maxlength="450")
             md-input-container
               label Collection Group
-              md-select(ng-model="collection.category" placeholder="Select a Collection Group")
-                md-option(ng-repeat="category in vm.categoryList" ng-value="vm.category.id") {{category.title}}
-
+              md-select(ng-model="vm.collection.category" placeholder="Select a Collection Group")
+                md-option(ng-repeat="category in vm.categoryList" ng-value="category.id") {{category.title}}
             md-input-container
               label Coverage Dates
               input(type="text", ng-model="vm.collection.dates")
@@ -93,8 +91,6 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                 div(flex="25")
                   md-radio-button(aria-label="Restricted" value="SEARCH" flex="15" style="display: inline") Search Only
                 span(flex)
-
-
   md-content(layout="column" flex="25")
     md-card.flex(flex)
       md-toolbar.md_primary
@@ -119,23 +115,18 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
           span(flex)
       md-card-content
         div(layout="column")
-          md-input-container(ng-controller="TagFilterCtrl as ctrl")
+          md-input-container(ng-controller="TagFilterCtrl as vm")
             div(layout="column" class="chips")
               md-container
                 label Add Tags
-                md-chips(ng-model="ctrl.tagsForCollection",  md-autocomplete-snap="", md-require-match="true", md-on-append="ctrl.addTag($chip)", md-on-remove="ctrl.removeTag($chip)")
-                  md-autocomplete(md-selected-item="ctrl.selectedItem", md-min-length="1" md-search-text="ctrl.searchText", md-no-cache="true", md-items="item in ctrl.queryTags(ctrl.searchText)", md-item-text="item.tag", )
-                    span(md-highlight-text="ctrl.searchText") {{item.tag.name}}
+                md-chips(ng-model="vm.tagsForCollection",  md-autocomplete-snap="", md-require-match="true", md-on-append="vm.addTag($chip)", md-on-remove="vm.removeTag($chip)")
+                  md-autocomplete(md-selected-item="vm.selectedItem", md-min-length="1" md-search-text="vm.searchText", md-no-cache="true", md-items="item in vm.queryTags(vm.searchText)", md-item-text="item.tag", )
+                    span(md-highlight-text="vm.searchText") {{item.tag.name}}
                   md-chip-template
                     span {{$chip.name}}
                   button(md-chip-remove="", class="md-primary taggerchip")
                     md-icon(md-svg-icon="md-close")
-
           md-container
-            // md-chips(ng-model="collectionTags")
-            //   md-chip-template {{$chip.name}}
-             //  md-button.md-chip-remove Close
-
     md-card.flex(flex)
       md-toolbar.md_primary
         .md-toolbar-tools
@@ -155,7 +146,6 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                     span {{$chip.name}}
                   button(md-chip-remove="", class="md-primary taggerchip")
                     md-icon(md-svg-icon="md-close")
-
     md-card.flex(flex)
       md-toolbar.md_primary
         .md-toolbar-tools

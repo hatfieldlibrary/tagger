@@ -97,7 +97,12 @@
        */
       $scope.$watch(function() { return Data.categories },
         function(newValue) {
-          vm.categories = newValue;
+          if (newValue !== null) {
+            vm.categories = newValue;
+            if (newValue.length > 0) {
+              vm.resetCategory(newValue[0].id);
+            }
+          }
         }
 
       );

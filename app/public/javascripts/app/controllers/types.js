@@ -49,6 +49,7 @@
        */
       vm.showDialog = function ($event, message) {
         TaggerDialog($event, message);
+
       };
 
       /**
@@ -56,7 +57,6 @@
        * @param id content type id
        */
       vm.resetType = function(id) {
-
         if (id !== null) {
           Data.currentContentIndex = id;
           vm.currentType = id;
@@ -74,7 +74,6 @@
           id: vm.contentType.id,
           name: vm.contentType.name,
           icon: vm.contentType.icon
-
         });
         update.$promise.then(function(data) {
           if (data.status === 'success') {
@@ -91,7 +90,12 @@
        */
       $scope.$watch(function() { return Data.contentTypes },
         function(newValue) {
-          $scope.contentTypes = newValue;
+          if (newValue !== null) {
+            vm.contentTypes = newValue;
+            if (newValue.length > 0) {
+              vm.resetType(newValue[0].id);
+            }
+          }
         }
       );
 

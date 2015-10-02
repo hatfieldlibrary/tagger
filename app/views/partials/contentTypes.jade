@@ -20,7 +20,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Conten
                 md-list
                   div(ng-repeat="type in vm.contentTypes")
                     md-list-item
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': type.id==vm.currentType}" style="min-height: 47px;" ng-click="resetType(type.id);")
+                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': type.id==vm.currentType}" style="min-height: 47px;" ng-click="vm.resetType(type.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{type.name}}
                           div.md-ripple-container
                   md-divider
@@ -38,7 +38,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Conten
               md-input-container
                 label Type Icon (Fontawesome icon name:  e.g. fa-bus )
                 input(type="text", ng-model="vm.contentType.icon")
-              div(ng-if="contentType.icon")
+              div(ng-if="vm.contentType.icon" style="font-size: 2rem;")
                 i(class="fa {{vm.contentType.icon}}")
         div.md-panel Fontawesome Icons:
           a(href="https://fortawesome.github.io/Font-Awesome/icons/", target="_blank")  https://fortawesome.github.io/Font-Awesome/icons/

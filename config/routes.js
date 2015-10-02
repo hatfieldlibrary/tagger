@@ -45,7 +45,6 @@ module.exports = function(app,config,passport){
   app.use('/rest/collection/tags/:collId', collection.tagsForCollection); // public
   app.use('/rest/collection/types/:collId', collection.typesForCollection);  // public
   app.use('/rest/collection/areas/:collId', ensureAuthenticated, collection.areas);
-  app.use('/rest/tags/byArea/:areaId', ensureAuthenticated, tag.tagByArea);
   app.post('/rest/collection/add', ensureAuthenticated, collection.add);
   app.post('/rest/collection/delete', ensureAuthenticated, collection.delete);
   app.post('/rest/collection/update', ensureAuthenticated, collection.update);
@@ -88,6 +87,7 @@ module.exports = function(app,config,passport){
   app.get('/admin/tag', ensureAuthenticated, tag.overview);
   app.use('/rest/tag/byId/:id', ensureAuthenticated, tag.byId);
   app.use('/rest/tag/show/list', ensureAuthenticated, tag.list);
+  app.use('/rest/tags/byArea/:areaId', ensureAuthenticated, tag.tagByArea);
   app.post('/rest/tag/add', ensureAuthenticated, tag.add);
   app.post('/rest/tag/delete', ensureAuthenticated, tag.delete);
   app.post('/rest/tag/update', ensureAuthenticated, tag.update);

@@ -1,14 +1,10 @@
 
-/*
- *
- *  USERS CONTROLLER
- *
- */
-
 (function() {
 
   'use strict';
-
+  /**
+   * User management controller.
+   */
   taggerControllers.controller('UserCtrl', [
     '$scope',
     'UserList',
@@ -18,6 +14,7 @@
     'TaggerToast',
     'Data',
     function(
+
       $scope,
       UserList,
       UserAdd,
@@ -26,15 +23,13 @@
       TaggerToast,
       Data ) {
 
-     // var areaList = [];
 
       var vm = this;
 
       /** @type {Array.<Object>} */
-      vm.areas = Data.areas;
+      vm.areaList = [];
       /** @type {Array.<Object>} */
       vm.users = [];
-
       /**
        * Adds empty new row to users.
        */
@@ -58,6 +53,9 @@
         });
       }
 
+      // initialize the user list
+      setUsers();
+
       /**
        * Updates a user.
        * @param id
@@ -66,7 +64,6 @@
        * @param area
        */
       vm.updateUser = function(id, name, email, area) {
-
         if (id === null) {
           var result = UserAdd.save({name: name, email: email, area: area});
           result.$promise.then(function() {
@@ -92,7 +89,6 @@
        * @param id  the user's id
        */
       vm.deleteUser = function(id) {
-
         var result = UserDelete.save({id: id});
         result.$promise.then(function() {
           if (result.status === 'success') {
@@ -100,23 +96,24 @@
             setUsers();
           }
         });
+
       };
 
-      setUsers();
-
-      // Watch for changes on shared context object.
-      /*
-      vm.$watch(function() { return Data.areas },
-       *
+      /**
+       * Watch for updates to area list and construct
+       * an area list padded with the Administrator user
+       * category.
+       */
+      $scope.$watch(function() { return Data.areas },
         function(newValue) {
           if (newValue.length > 0) {
-            areaList[0] = {id: 0, name: 'Administrator'};
+            vm.areaList[0] = {id: 0, name: 'Administrator'};
             for (var i = 0; i < newValue.length; i++) {
-              areaList[i + 1] = {id: newValue[i].id, name: newValue[i].title};
+              vm.areaList[i + 1] = {id: newValue[i].id, name: newValue[i].title};
             }
           }
         }
-      );   */
+      );
 
     }
   ]);

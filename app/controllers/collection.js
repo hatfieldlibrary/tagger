@@ -648,7 +648,10 @@ exports.updateImage = function (req, res, config) {
 
     // read in the temp file from the upload
     fs.readFile(files.file[0].path, function (err, data) {
-
+      if (err !== null) {
+        console.log(err);
+        res.end();
+      }
       imageName = files.file[0].originalFilename;
       console.log(fields);
       id = fields.id;
@@ -668,7 +671,6 @@ exports.updateImage = function (req, res, config) {
         fs.writeFile(fullPath, data, function (err) {
           if (err) {
             console.log(err);
-            // res.redirect('/admin');
             res.end();
           }
           else {

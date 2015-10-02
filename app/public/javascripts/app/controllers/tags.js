@@ -107,9 +107,11 @@
        */
       $scope.$watch(function() { return Data.tags },
         function(newValue) {
-          vm.tags = newValue;
-          if (newValue.length > 0) {
-            vm.resetTag(newValue[0].id);
+          if (newValue !== null) {
+            vm.tags = newValue;
+            if (newValue.length > 0) {
+              vm.resetTag(newValue[0].id);
+            }
           }
         }
       );
