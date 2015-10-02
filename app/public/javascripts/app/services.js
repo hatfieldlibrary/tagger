@@ -2,11 +2,68 @@
 'use strict';
 
 var host = 'http://localhost:3000/rest/';
-var adminhost = 'http://localhost:3000/admin/';
 //var host = 'http://libmedia.willamette.edu/acomrest2/';
-//var adminhost = 'http://localhost:3000/taggerAdmin/';
+
+
 
 var taggerServices = angular.module('taggerServices', ['ngResource']);
+
+
+
+taggerServices.factory('d3Service', [
+  '$document',
+  '$q',
+  '$rootScope',
+  function(
+    $document,
+    $q,
+    $rootScope ) {
+
+    var d = $q.defer();
+    function onScriptLoad() {
+      // Load client in the browser
+      $rootScope.$apply(function() { d.resolve(window.d3); });
+    }
+    // Create a script tag with d3 as the source
+    // and call our onScriptLoad callback when it
+    // has been loaded
+    var scriptTag = $document[0].createElement('script');
+    scriptTag.type = 'text/javascript';
+    scriptTag.async = true;
+    scriptTag.src = 'bower_components/d3/d3.js';
+    scriptTag.onreadystatechange = function () {
+      if (this.readyState === 'complete') { onScriptLoad(); }
+    };
+    scriptTag.onload = onScriptLoad;
+
+    var s = $document[0].getElementsByTagName('body')[0];
+    s.appendChild(scriptTag);
+
+    return {
+      d3: function() { return d.promise; }
+    };
+  }]);
+
+
+taggerServices.provider('UseHost', [
+
+  function() {
+    this.host = 'localhost';
+
+    this.$get= function() {
+      var host = this.host;
+      return {
+        host: function getHost() {
+          return host;
+        }
+      }
+    };
+
+    this.setHost = function(host) {
+      this.host = host;
+    }
+  }
+]);
 
 // USERS
 
@@ -206,11 +263,11 @@ taggerServices.factory('CategoryList', ['$resource',
 ]);
 
 taggerServices.factory('CategoryByArea', ['$resource',
-function($resource) {
-  return $resource(host + 'category/byArea/:areaId', {}, {
-    query: {method: 'Get', isArray: true}
-  })
-}]);
+  function($resource) {
+    return $resource(host + 'category/byArea/:areaId', {}, {
+      query: {method: 'Get', isArray: true}
+    })
+  }]);
 
 taggerServices.factory('CategoryUpdate', ['$resource',
   function($resource) {
@@ -451,7 +508,7 @@ taggerServices.factory('TaggerDialog', [
     // The mdDialog service runs in an isolated scope.
     function DialogController(
 
-    //  $rootScope,
+      //  $rootScope,
       $scope,
       $mdDialog,
       TagAdd,
@@ -522,7 +579,7 @@ taggerServices.factory('TaggerDialog', [
           } else {
             Data.currentTagIndex = id;
           }
-     //     $rootScope.$broadcast('tagsUpdate', {});
+          //     $rootScope.$broadcast('tagsUpdate', {});
           $scope.closeDialog();
         });
 
@@ -577,7 +634,7 @@ taggerServices.factory('TaggerDialog', [
           } else {
             Data.currentAreaIndex = id;
           }
-        //  $rootScope.$broadcast('areasUpdate', {});
+          //  $rootScope.$broadcast('areasUpdate', {});
           $scope.closeDialog();
         });
 
@@ -643,7 +700,7 @@ taggerServices.factory('TaggerDialog', [
 
           }
 
-         // $rootScope.$broadcast('categoriesUpdate', { });
+          // $rootScope.$broadcast('categoriesUpdate', { });
 
 
         });
@@ -701,7 +758,7 @@ taggerServices.factory('TaggerDialog', [
             Data.currentContentIndex = id;
           }
 
-       //   $rootScope.$broadcast('contentUpdate', {});
+          //   $rootScope.$broadcast('contentUpdate', {});
 
 
         });

@@ -1,8 +1,6 @@
-
 (function() {
 
   'use strict';
-
 
   /**
    * Controller for managing collections.
@@ -81,7 +79,7 @@
        * list for the current area upon success.
        */
       vm.updateCollection = function () {
-        alert(vm.collection.category);
+
         var update = CollectionUpdate.save({
           id: vm.collection.id,
           title: vm.collection.title,
@@ -248,7 +246,7 @@
       CollectionTagTargetAdd,
       CollectionTagTargetRemove,
       TaggerToast,
-      Data) {
+      Data ) {
 
       var vm = this;
 
@@ -260,14 +258,19 @@
 
       /** @type {number} */
       vm.selectedItem = null;
+
       /** @type {string} */
       vm.searchText = null;
+
       /** @type {boolean} */
       vm.isDisabled = false;
+
       /** @type {Array.<Object>} */
       vm.selectedTags = [];
+
       /** @type {Array.<Object>} */
       vm.tagsForArea = [];
+
       /** @type {Array.<Object>} */
       vm.tagsForCollection = [];
 
@@ -317,7 +320,6 @@
             tagId: chip.id
           }
         );
-
         result.$promise.then(function (data) {
           if (data.status == 'success') {
             TaggerToast('Subject Tag Removed');
