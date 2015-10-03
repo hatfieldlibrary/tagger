@@ -71,6 +71,7 @@ module.exports = function(app,config,passport){
   app.get('/rest/category/byId/:id', ensureAuthenticated, category.byId);
   app.get('/rest/category/show/list', ensureAuthenticated, category.list);
   app.get('/rest/category/byArea/:areaId', ensureAuthenticated, category.listByArea);
+  app.get('/rest/category/count/:areaId', ensureAuthenticated, category.categoryCountByArea);
   app.post('/rest/category/add', ensureAuthenticated, category.add);
   app.post('/rest/category/update', ensureAuthenticated, category.update);
   app.post('/rest/category/delete', ensureAuthenticated, category.delete);

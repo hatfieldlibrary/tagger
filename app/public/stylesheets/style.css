@@ -67,18 +67,11 @@
 
 /* D3  chart */
 
-
-* {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
 body {
   font-size: 14px;
   font-family: sans-serif;
   font-weight: 100;
-  background-color: #ccc;
-  background-image: linear-gradient(transparent 50%, rgba(255, 255, 255, 0.5) 25%);
+ position: inherit;
   background-size: 4px 4px;
 }
 body ul {
@@ -87,6 +80,21 @@ body ul {
 body ul, body li {
   margin: 0;
   padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+
+* {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .chart {
@@ -102,7 +110,7 @@ body ul, body li {
 .chart--headline {
   position: relative;
   font-weight: 100;
-  font-size: 28px;
+  font-size: 16px;
 }
 .chart--headline:before {
   position: absolute;
@@ -162,7 +170,7 @@ body ul, body li {
 .lineChart--bubble--value {
   fill: #fff;
   stroke: #fff;
-  font-size: 21px;
+  font-size: 12px;
   font-weight: 100;
 }
 
@@ -224,7 +232,7 @@ body ul, body li {
 }
 
 .pieChart--detail--percentage {
-  font-size: 42px;
+  font-size: 18px;
   font-weight: 100;
   fill: #333;
   stroke-width: 1px;

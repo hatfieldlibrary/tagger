@@ -18,7 +18,7 @@ exports.list = function(req, res) {
     attributes: ['id','title'],
     order: [['title', 'ASC']]
   }).success(function(categories) {
-    console.log('found categoes');
+
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -28,6 +28,51 @@ exports.list = function(req, res) {
     console.log(err);
   });
 
+};
+
+exports.categoryCountByArea = function(req, res) {
+
+  var areaId = req.params.areaId;
+
+  db.sequelize.query('select Categories.title, COUNT(*) as count from AreaTargets left join ' +
+    'Collections on AreaTargets.CollectionId = Collections.id left join CategoryTargets on ' +
+    'CategoryTargets.CollectionId = Collections.id left join Categories on CategoryTargets.CategoryId = Categories.id ' +
+    'where AreaTargets.AreaId = ' + areaId + ' group by Categories.id;'
+  ).then(function(categories) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify(categories));
+    });
+  /*
+  db.AreaTarget.findAll({
+     where: {
+       AreaId: areaId
+     },
+    include: [
+      {
+        model: db.Collection,
+        include: [
+          {
+            model: db.CategoryTarget,
+            include: [
+              db.Category
+            ]
+          }
+        ]
+      }
+    ],
+    required: false,
+    attributes: ['Categories.title', [db.sequelize.fn('count', db.sequelize.col('Categories.id')), 'categoryCount']],
+    group: ['Categories.id']
+  }).success(function(categories) {
+    console.log(categories);
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(categories));
+  }).error(function(err) {
+    console.log(err);
+  });   */
 };
 
 exports.listByArea = function (req, res) {
