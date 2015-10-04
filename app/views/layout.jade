@@ -24,7 +24,7 @@ html
                     md-option(ng-repeat="area in vm.areas" ng-selected="vm.currentId == area.id" ng-click="vm.updateArea(area.id, $index)") {{area.title}}
       div(layout="row" flex class="view-container")
         if user
-          md-sidenav(style="height: 850px" class="md-sidenav-left", flex=10, md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
+          md-sidenav(style="height: 850px" class="md-sidenav-left", flex="5", md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
             md-toolbar(class="md-default-theme")
               md-card(class="local-hue-1 margin-override")
                 md-card-content
@@ -93,7 +93,7 @@ html
                       div.list-group-item-text Users
                         div.md-ripple-container
 
-        div(ng-view flex="80")
+        div(ng-view flex="80" flex-md="100")
 
 
 

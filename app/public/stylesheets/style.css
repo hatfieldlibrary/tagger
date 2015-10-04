@@ -1,6 +1,10 @@
 .grey-text {
   color:#999;
 }
+md-sidenav.md-locked-open {
+  min-width: 240px;
+  width: 240px;
+}
 .md-button.md-fab.md-mini {
   line-height: inherit;
 }

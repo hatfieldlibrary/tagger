@@ -21,7 +21,6 @@
        * @param areaId the current area id
        */
       vm.getRole = function (areaId) {
-
         vm.role = getUserRole(areaId);
 
       };

@@ -2,6 +2,21 @@
 
 var taggerDirectives  = angular.module('taggerDirectives', []);
 
+taggerDirectives.directive('elemReady', function( $parse ) {
+  return {
+    restrict: 'A',
+    link: function( $scope, elem, attrs ) {
+      elem.ready(function(){
+        $scope.$apply(function(){
+          var func = $parse(attrs.elemReady);
+          func($scope);
+        })
+      })
+    }
+  }
+
+});
+
 taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', function($window, $timeout, d3Service) {
 
   return {
