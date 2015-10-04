@@ -8,7 +8,8 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="TagCtr
           span(flex="20")
             i.material-icons link
             span.md-subhead &nbsp;TAGS
-          h2.md-display-2 {{vm.tag.name}}
+          span(flex="70")
+            h2.md-display-2 {{vm.tag.name}}
           span(flex)
           md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Tag" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
       md-card-content
@@ -25,7 +26,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="TagCtr
                           div.md-ripple-container
                     md-divider
           md-content(layout-padding flex="80" style="padding-left: 20px;")
-            div(flex="80" class="md-subhead")
+            div(flex="80" class="md-subhead grey-text")
               span Collections can be associated with one or more #[em Subject Tags]. A single Subject Tag can be used across multiple Areas. (A Tag must be assigned to at least one Area.)
             div(flex)
               md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateTag()") Update Tag

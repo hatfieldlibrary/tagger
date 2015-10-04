@@ -42,6 +42,7 @@
       var restrictedCount;
 
       var init = function() {
+
         restrictedCount = 0;
         var categoryCount = CategoryCountByArea.query({areaId: Data.currentAreaIndex});
         categoryCount.$promise.then(function (categories) {
@@ -59,10 +60,8 @@
             data: data
           }
         });
-
         vm.areaLabel = Data.areaLabel;
         vm.collections = CollectionsByArea.query({areaId: Data.currentAreaIndex});
-
         vm.collections.$promise.then(function (data) {
           for (var i = 0; i < data.length; i++) {
             console.log('restrict ');

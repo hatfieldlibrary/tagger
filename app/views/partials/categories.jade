@@ -8,7 +8,8 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Catego
           span(flex="20")
             i.material-icons library_books
             span.md-subhead &nbsp;GROUPS
-          h2.md-display-2 {{vm.category.title}}
+          span(flex="70")
+            h2.md-display-2 {{vm.category.title}}
           span(flex)
           md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Category" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
       md-card-content
@@ -25,7 +26,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Catego
                           div.md-ripple-container
                 md-divider
           md-content(layout-padding flex="80" style="padding-left: 20px;")
-            div(flex="80" class="md-subhead")
+            div(flex="80" class="md-subhead grey-text")
               span Collections can belong to a single #[em Collection Group]. A Collection Group provides specific
               |  information about the current collection and related collections.
 

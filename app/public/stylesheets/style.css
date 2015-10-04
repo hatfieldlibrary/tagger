@@ -1,4 +1,6 @@
-
+.grey-text {
+  color:#999;
+}
 .md-button.md-fab.md-mini {
   line-height: inherit;
 }
@@ -251,8 +253,8 @@
 }
 
 .pieChart__blue {
-   fill: #6bb7c7;
- }
+  fill: #6bb7c7;
+}
 
 .pieChart__red {
   fill: #d79d91;

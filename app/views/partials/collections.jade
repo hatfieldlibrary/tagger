@@ -8,7 +8,7 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
           span(flex="25")
             i.material-icons() collections
             span.md-subhead &nbsp;COLLECTIONS
-          span(flex="50")
+          span(flex="70")
             h3.md-display-1 {{vm.collection.title}}
           span(flex)
           md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
@@ -26,7 +26,7 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                         div.md-ripple-container
                   md-divider
           md-content(layout-padding flex="80" style="padding-left: 20px;")
-            div(flex="80" class="md-subhead")
+            div(flex="80" class="md-subhead grey-text")
               span With the exception of item count and dates, all fields for this Collection must be complete.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.  The Collection MUST belong to at least one subject area.
             div(flex)
             md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCollection()") Update
@@ -58,13 +58,13 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                 div(flex="25")
                   md-radio-button(aria-label="Unrestricted" value="dig" style="display: inline") Collection
                 div(flex="25")
-                  md-radio-button(aria-label="Restricted" value="itm" style="display: inline") Item
+                  md-radio-button(aria-label="Restricted" value="itm" style="display: inline") Single Item
                 div(flex="25")
                   md-radio-button(aria-label="Restricted" value="aid" style="display: inline") Finding Aid
                 span(flex)
             md-divider
             div(style="margin-top: 10px; margin-bottom: 15px;")
-              div.md-caption Access Restriction
+              div.md-caption Collection Access
               md-radio-group(layout="row" ng-model="vm.collection.restricted")
                 div(flex="25")
                   md-radio-button(aria-label="Unrestricted" ng-value="true" flex="15" style="display: inline") Unrestricted
@@ -73,7 +73,7 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                   span(flex)
             md-divider
             div(style="margin-top: 10px; margin-bottom: 15px;")
-              div.md-caption Link Type
+              div.md-caption Browse Collection Type
               md-radio-group(layout="row" ng-model="vm.collection.browseType")
                 div(flex="25")
                   md-radio-button(aria-label="Link" value="link" flex="15" style="display: inline") Link
@@ -82,7 +82,7 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                 span(flex)
             md-divider
             div(style="margin-top: 10px; margin-bottom: 35px;")
-              div.md-caption Search Type
+              div.md-caption Search Options
               md-radio-group(layout="row" ng-model="vm.collection.repoType")
                 div(flex="25")
                   md-radio-button(aria-label="Unrestricted" value="DEFAULT" flex="15" style="display: inline") Search & Browse

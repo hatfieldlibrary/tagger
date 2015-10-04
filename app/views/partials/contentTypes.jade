@@ -8,9 +8,10 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Conten
           span(flex="20")
             i.material-icons image
             span.md-subhead &nbsp;TYPES
-          h2.md-display-2 {{vm.contentType.name}}
+          span(flex="70")
+            h2.md-display-2 {{vm.contentType.name}}
           span(flex)
-          md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
+            md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Area" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
       md-card-content
         div(layout="row", layout-align="start start")
           div(flex="20" )
@@ -25,7 +26,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Conten
                           div.md-ripple-container
                   md-divider
           md-content(layout-padding flex="80" style="padding-left: 20px;")
-            div(flex="80" class="md-subhead")
+            div(flex="80" class="md-subhead grey-text")
               span #[em Content Types] are essentially media or file types and should be thought of in those terms. This in mind, it may sometimes be helpful to create more general types, e.g. Document and Transcribed Document.
             div(flex)
             div(flex)
