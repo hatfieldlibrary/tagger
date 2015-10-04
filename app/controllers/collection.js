@@ -437,6 +437,7 @@ exports.byId = function(req, res) {
         response.browseType = result.getCollection.browseType;
         response.repoType = result.getCollection.repoType;
         response.image = result.getCollection.image;
+        response.restricted = result.getCollection.restricted;
       }
       if (result.getCategory !== null) {
         response.category = result.getCategory.CategoryId;

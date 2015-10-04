@@ -67,9 +67,9 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
               div.md-caption Access Restriction
               md-radio-group(layout="row" ng-model="vm.collection.restricted")
                 div(flex="25")
-                  md-radio-button(aria-label="Unrestricted" value=true flex="15" style="display: inline") Unrestricted
+                  md-radio-button(aria-label="Unrestricted" ng-value="true" flex="15" style="display: inline") Unrestricted
                 div(flex="25")
-                  md-radio-button(aria-label="Restricted" value=false flex="15" style="display: inline") Restricted
+                  md-radio-button(aria-label="Restricted" ng-value="false" flex="15" style="display: inline") Restricted
                   span(flex)
             md-divider
             div(style="margin-top: 10px; margin-bottom: 15px;")

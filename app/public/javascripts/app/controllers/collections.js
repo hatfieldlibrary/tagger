@@ -79,7 +79,7 @@
        * list for the current area upon success.
        */
       vm.updateCollection = function () {
-
+                                    alert(vm.collection.restricted);
         var update = CollectionUpdate.save({
           id: vm.collection.id,
           title: vm.collection.title,
@@ -108,30 +108,29 @@
 
       };
 
+
+
       /**
-       * Retrieves collection information as well as tags and
+       * Retrieves collection information, tags and
        * content types associated with the collection.
        * @param id  {number} the collection id
        */
       vm.getCollectionById = function (id) {
         Data.currentCollectionIndex = id;
         vm.collectionId = id;
-        // collection info
+
         var col = CollectionById.query({id: id});
         col.$promise.then(function(data) {
-          console.log(data);
           vm.collection = data;
-          console.log('got collection');
-          console.log(vm.collection);
           vm.thumbnailImage = data.image;
         });
-        // tag info
+
         var tags = TagsForCollection
           .query({collId: id});
         tags.$promise.then(function (data) {
           Data.tagsForCollection = data;
         });
-        // type info
+
         var types = TypesForCollection
           .query({collId: id});
         types.$promise.then(function (data) {

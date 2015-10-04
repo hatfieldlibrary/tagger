@@ -36,52 +36,67 @@
         total: 0,
         data: []
       };
-      var categoryCount = CategoryCountByArea.query({areaId: Data.currentAreaIndex});
-      categoryCount.$promise.then(function(categories) {
-        console.log(categories);
-        var catCount = 0;
-        for (var i = 0; i < categories.length; i++) {
-            catCount = catCount + categories[i].count;
+      vm.restricted = 0;
+      vm.public = 0;
 
-        }
-        vm.categoryCounts = {
-          total: catCount,
-          data: categories
-        }
-      });
+      var restrictedCount;
+
+      var init = function() {
+        restrictedCount = 0;
+        var categoryCount = CategoryCountByArea.query({areaId: Data.currentAreaIndex});
+        categoryCount.$promise.then(function (categories) {
+          var catCount = 0;
+          var data = [];
+          for (var i = 0; i < categories.length; i++) {
+            catCount = catCount + categories[i].count;
+          }
+          for (var i = 0; i < categories.length; i++) {
+            data[i] = {title: categories[i].title, value: categories[i].count};
+            console.log(data[i]);
+          }
+          vm.categoryCounts = {
+            total: catCount,
+            data: data
+          }
+        });
 
         vm.areaLabel = Data.areaLabel;
-      vm.collections = CollectionsByArea.query({areaId: Data.currentAreaIndex});
-      var restrictedCount = 0;
-      vm.collections.$promise.then(function(data) {
-        for (var i = 0; i < data.length; i++) {
-          if (data[i].restricted !== true) {
-            restrictedCount++;
+        vm.collections = CollectionsByArea.query({areaId: Data.currentAreaIndex});
+
+        vm.collections.$promise.then(function (data) {
+          for (var i = 0; i < data.length; i++) {
+            console.log('restrict ');
+            console.log(data[i].collection.restricted);
+            if (data[i].collection.restricted !== false) {
+              restrictedCount++;
+            }
           }
-        }
+          vm.restricted = restrictedCount;
+          vm.public =  vm.collections.length - restrictedCount;
+        });
+      } ;
 
-      });
+      init();
 
-      $scope.$watch( function() {return Data.categoriesForArea},
-        function(data) {
-              if (data !== null) {
-                if (data.length > 0) {
-                    vm.categoryChart.total = data.length;
-                  var categories = [];
-                  for (var i = 0; i < data.length; i++) {
-                      categories[i] = {title: data.title, count: data.count}
-                  }
-                }
+      $scope.$watch(function() {return Data.currentAreaIndex},
+        function(newValue, oldValue){
+              if (newValue !== oldValue) {
+                init();
               }
         });
 
-      vm.getRestrictedCount = function() {
-        return restrictedCount;
-      };
-
-      vm.getPublicCount = function() {
-        return vm.collections.length - restrictedCount;
-      }
+      $scope.$watch( function() {return Data.categoriesForArea},
+        function(data) {
+          if (data !== null) {
+            if (data.length > 0) {
+              vm.categoryChart.total = data.length;
+              var categories = [];
+              for (var i = 0; i < data.length; i++) {
+                categories[i] = {title: data.title, count: data.count}
+              }
+            }
+          }
+        });
 
 
     }

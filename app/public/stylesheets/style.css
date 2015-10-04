@@ -67,34 +67,25 @@
 
 /* D3  chart */
 
-body {
-  font-size: 14px;
-  font-family: sans-serif;
-  font-weight: 100;
- position: inherit;
-  background-size: 4px 4px;
-}
-body ul {
-  list-style: none;
-}
-body ul, body li {
-  margin: 0;
-  padding: 0;
-}
-
-ul {
-  list-style: none;
-}
-
-ul, li {
-  margin: 0;
-  padding: 0;
-}
-
-
 * {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+
+.svg-container body {
+  font-size: 14px;
+  font-family: sans-serif;
+  font-weight: 100;
+  background-size: 4px 4px;
+  position: inherit;
+
+}
+.svg-container body ul {
+  list-style: none;
+}
+.svg-container body ul, body li {
+  margin: 0;
+  padding: 0;
 }
 
 .chart {
@@ -110,7 +101,7 @@ ul, li {
 .chart--headline {
   position: relative;
   font-weight: 100;
-  font-size: 16px;
+  font-size: 28px;
 }
 .chart--headline:before {
   position: absolute;
@@ -170,7 +161,7 @@ ul, li {
 .lineChart--bubble--value {
   fill: #fff;
   stroke: #fff;
-  font-size: 12px;
+  font-size: 21px;
   font-weight: 100;
 }
 
@@ -226,13 +217,14 @@ ul, li {
   fill: rgba(255, 255, 255, 0.75);
 }
 
+
 .pieChart--detail--divider {
   stroke: gray;
   stroke-width: 1;
 }
 
 .pieChart--detail--percentage {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 100;
   fill: #333;
   stroke-width: 1px;
@@ -240,7 +232,7 @@ ul, li {
 
 .pieChart--detail--textContainer {
   background-color: transparent;
-  padding: 10px 0 0 0;
+  padding: 1px 0 0 0;
   margin: 0;
   color: #666;
   font-style: italic;
