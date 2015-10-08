@@ -9,14 +9,6 @@ var host = 'http://localhost:3000/rest/';
 var taggerServices = angular.module('taggerServices', ['ngResource']);
 
 
-taggerServices.service('TestData', function() {
-  return {
-    total: 10,
-    data: [6,4,3]
-  }
-});
-
-
 taggerServices.provider('UseHost', [
 
   function() {
@@ -638,7 +630,6 @@ taggerServices.factory('TaggerDialog', [
       };
 
       $scope.getAreaList = function(id) {
-
         // Update the shared Data service
         Data.areas  = AreaList.query();
 
@@ -659,7 +650,7 @@ taggerServices.factory('TaggerDialog', [
 
       $scope.deleteCategory = function() {
 
-        var result = CategoryDelete.save({id: Data.currentContentIndex});
+        var result = CategoryDelete.save({id: Data.currentCategoryIndex});
         result.$promise.then(function(data) {
           if (data.status === 'success') {
 
@@ -716,7 +707,6 @@ taggerServices.factory('TaggerDialog', [
             Data.currentCategoryIndex = id;
 
           }
-
           // $rootScope.$broadcast('categoriesUpdate', { });
 
 
@@ -733,10 +723,10 @@ taggerServices.factory('TaggerDialog', [
           if (data.status === 'success') {
 
             TaggerToast("Content Type Deleted");
-            // After retrieving new category list, we need
-            // to update the category currently in view.
+            // After retrieving new content type list, we need
+            // to update the content types currently in view.
             // This method is designed to take an id
-            // parameter.  But if this is null, it
+            // parameter.  If this param is null, it
             // uses the id of the first category in the
             // updated list. That's what we want in the
             // case of deletions.

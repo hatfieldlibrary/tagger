@@ -12,14 +12,12 @@
     '$scope',
     'CollectionsByArea',
     'CategoryByArea',
-    'TestData',
     'CategoryCountByArea',
     'Data',
     function(
       $scope,
       CollectionsByArea,
       CategoryByArea,
-      TestData,
       CategoryCountByArea,
       Data) {
 
@@ -27,15 +25,11 @@
 
       vm.catgoryCounts = {};
 
-      vm.TestData = {
-        total: 13,
-        data: [{title: 'cat one', value: 6} , {title: 'cat two', value: 4 }, {title: 'cat three', value: 3}]
-      };
-
       vm.categoryChart = {
         total: 0,
         data: []
       };
+
       vm.restricted = 0;
       vm.public = 0;
 

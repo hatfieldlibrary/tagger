@@ -24,15 +24,15 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Catego
                       md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': cat.id==vm.collection.category}" style="min-height: 47px;" ng-click="vm.resetCategory(cat.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{cat.title}}
                           div.md-ripple-container
-                md-divider
+                    md-divider
           md-content(layout-padding flex="80" style="padding-left: 20px;")
-            div(flex="80" class="md-subhead grey-text")
+            div(layout-padding flex="80" class="md-subhead grey-text")
               span Collections can belong to a single #[em Collection Group]. A Collection Group provides specific
               |  information about the current collection and related collections.
-
+            div(flex)
             div(flex)
               md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCategory()") Update Category
-              div(flex)
+            div(flex)
                 p &nbsp;
             md-input-container
               label Collection Name

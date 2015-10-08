@@ -34,12 +34,16 @@
 
       /** @type {Array.<Object>} */
       vm.areas = [];
+
       /** @type {Object} */
       vm.area = Data.areas[0];
+
       /** @type {string} */
       vm.addMessage = 'templates/addAreaMessage.html';
+
       /** @type {string} */
       vm.deleteMessage = 'templates/deleteAreaMessage.html';
+
       /** @type {number */
       vm.currentAreaId = Data.currentAreaIndex;
 
@@ -59,13 +63,14 @@
        * @param id  area id
        */
       vm.resetArea = function(id) {
-
         if (id !== null) {
           Data.currentAreaIndex = id;
           vm.currentAreaId = id;
         }
-        vm.area = AreaById.query({id: Data.currentAreaIndex});
-
+        var ar = AreaById.query({id: Data.currentAreaIndex});
+         ar.$promise.then(function(data) {
+           vm.area = data;
+         });
       };
 
       /**
@@ -103,6 +108,11 @@
           vm.areas = newValue;
         }
       );
+
+      $scope.$watch(function() { return Data.currentAreaIndex},
+        function(newValue) {
+           vm.resetArea(newValue);
+      });
 
     }]);
 

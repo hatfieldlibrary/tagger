@@ -38,6 +38,7 @@
 
       /** @type {Array.<Object>} */
       vm.areas = [];
+
       /** @type {number} */
       vm.currentId = 0;
 
@@ -54,6 +55,7 @@
           Data.currentAreaIndex = data[0].id;
           vm.currentId = data[0].id;
         }
+
         setContext(Data.currentAreaIndex);
 
       });
@@ -66,11 +68,15 @@
        */
       vm.updateArea = function(id, index) {
         Data.currentAreaIndex = id;
-        Data.currentAreaIndex = id;
         Data.areaLabel = Data.areas[index].title;
         updateAreaContext(id);
 
       };
+
+      $scope.$watch(function() { return Data.areas; },
+        function(newValue) {
+          vm.areas = newValue;
+      });
 
 
       /**
@@ -113,18 +119,21 @@
        * @param id   the area id
        */
       function updateAreaContext(id) {
-
         // Set collections for area collections.
         var collections = CollectionsByArea.query({areaId: id});
         collections.$promise.then(function(data) {
-          Data.collections = data;
-          Data.currentCollectionIndex = data[0].collection.id;
-          Data.tagsForCollection =
-            TagsForCollection.query({collId: Data.currentCollectionIndex});
-          Data.typesForCollection =
-            TypesForCollection.query({collId: Data.currentCollectionIndex});
-        });
+          if (data !== undefined) {
+            if (data.length > 0) {
+              Data.collections = data;
+              Data.currentCollectionIndex = data[0].collection.id;
+              Data.tagsForCollection =
+                TagsForCollection.query({collId: Data.currentCollectionIndex});
+              Data.typesForCollection =
+                TypesForCollection.query({collId: Data.currentCollectionIndex});
+            }
+          }
 
+        });
         // Set subject tags for area.
         var tagsForArea = TagsForArea.query({areaId: id});
         tagsForArea.$promise.then(function(data) {

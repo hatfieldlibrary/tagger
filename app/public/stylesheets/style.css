@@ -1,6 +1,10 @@
 .grey-text {
   color:#999;
 }
+.primary-content {
+  min-height: 900px;
+  max-height: 1200px;
+}
 md-sidenav.md-locked-open {
   min-width: 240px;
   width: 240px;
@@ -73,7 +77,7 @@ md-sidenav.md-locked-open {
 
 /* D3  chart */
 
-* {
+.svg-container * {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
@@ -146,71 +150,6 @@ md-sidenav.md-locked-open {
   padding: 1em;
 }
 
-.lineChart--area {
-  fill: url(#lineChart--gradientBackgroundArea);
-}
-
-.lineChart--areaLine {
-  fill: none;
-  stroke: #6bb7c7;
-  stroke-width: 3;
-}
-
-.lineChart--bubble--label {
-  fill: none;
-  stroke: #6bb7c7;
-  font-size: 12.6px;
-  font-style: italic;
-  font-weight: 100;
-}
-
-.lineChart--bubble--value {
-  fill: #fff;
-  stroke: #fff;
-  font-size: 21px;
-  font-weight: 100;
-}
-
-.lineChart--circle {
-  fill: #6bb7c7;
-  stroke: #fff;
-  stroke-width: 3;
-}
-
-.lineChart--circle__highlighted {
-  fill: #fff;
-  stroke: #3f94a7;
-}
-
-.lineChart--gradientBackgroundArea--top {
-  stop-color: #6bb7c7;
-  stop-opacity: 0.1;
-}
-
-.lineChart--gradientBackgroundArea--bottom {
-  stop-color: #6bb7c7;
-  stop-opacity: 0.6;
-}
-
-.lineChart--svg {
-  border: 1px solid #eee;
-}
-
-.lineChart--xAxisTicks .domain, .lineChart--xAxis .domain, .lineChart--yAxisTicks .domain {
-  display: none;
-}
-
-.lineChart--xAxis .tick line {
-  display: none;
-}
-
-.lineChart--xAxisTicks .tick line, .lineChart--yAxisTicks .tick line {
-  fill: none;
-  stroke: #b3b3b3;
-  stroke-width: 1;
-  stroke-dasharray: 2,2;
-}
-
 .pieChart--center--innerCircle {
   fill: #fff;
 }
@@ -230,7 +169,7 @@ md-sidenav.md-locked-open {
 }
 
 .pieChart--detail--percentage {
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 100;
   fill: #333;
   stroke-width: 1px;
@@ -240,7 +179,8 @@ md-sidenav.md-locked-open {
   background-color: transparent;
   padding: 1px 0 0 0;
   margin: 0;
-  color: #666;
+  color: #333;
+  font-size: 12px;
   font-style: italic;
 }
 

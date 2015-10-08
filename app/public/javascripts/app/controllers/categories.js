@@ -107,6 +107,17 @@
 
       );
 
+      $scope.$watch(function() { return Data.currentCategoryIndex },
+        function(newValue) {
+          if (newValue !== null) {
+
+              vm.resetCategory(Data.currentCategoryIndex);
+            }
+
+        }
+
+      );
+
       /**
        * Watch for changes in the available areas.
        */

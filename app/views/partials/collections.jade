@@ -1,7 +1,7 @@
 
 md-content(layout="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
   md-content(layout="column" flex="75")
-    md-card.flex(flex, style="height: 990px;")
+    md-card.flex(flex, class="primary-content")
       div(ng-if="vm.collectionList.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
@@ -105,56 +105,12 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
           md-card(flex="40" style="margin:0;max-width: 120px")
             img(style="max-width: 120px;" src="/resources/img/thumb/{{vm.thumbnailImage}}")
           md-card-content
-            span.md-caption Recommended image size is 600px wide by 500px high (Thumbnails are created from the original)
+            span.md-caption Image size 600px wide by 500px high (thumbnails created from original)
 
-    md-card.flex(flex)
-      md-toolbar.md_primary
-        .md-toolbar-tools
-          i.material-icons link
-          h3.md-display-1 &nbsp;Tags
-          span(flex)
-      md-card-content
-        div(layout="column")
-          md-input-container(ng-controller="TagFilterCtrl as vm")
-            div(layout="column" class="chips")
-              md-container
-                label Add Tags
-                md-chips(ng-model="vm.tagsForCollection",  md-autocomplete-snap="", md-require-match="true", md-on-append="vm.addTag($chip)", md-on-remove="vm.removeTag($chip)")
-                  md-autocomplete(md-selected-item="vm.selectedItem", md-min-length="1" md-search-text="vm.searchText", md-no-cache="true", md-items="item in vm.queryTags(vm.searchText)", md-item-text="item.tag", )
-                    span(md-highlight-text="vm.searchText") {{item.tag.name}}
-                  md-chip-template
-                    span {{$chip.name}}
-                  button(md-chip-remove="", class="md-primary taggerchip")
-                    md-icon(md-svg-icon="md-close")
-          md-container
-    md-card.flex(flex)
-      md-toolbar.md_primary
-        .md-toolbar-tools
-          i(class="material-icons") image
-          h3.md-display-1 &nbsp;Content Type
-          span(flex)
-      md-card-content
-        div(layout="column")
-          md-input-container(ng-controller="ContentTypeFilterCtrl as vm")
-            div(layout="column" class="chips")
-              md-container
-                label Add Types
-                md-chips(ng-model="vm.typesForCollection",  md-autocomplete-snap="", md-require-match="true", md-on-append="vm.addType($chip)", md-on-remove="vm.removeType($chip)")
-                  md-autocomplete(md-selected-item="vm.selectedItem", md-search-text="vm.searchText", md-no-cache="true", md-items="item in vm.queryTypes(vm.searchText)", md-item-text="item.tag", )
-                    span(md-highlight-text="vm.searchText") {{item.name}}
-                  md-chip-template
-                    span {{$chip.name}}
-                  button(md-chip-remove="", class="md-primary taggerchip")
-                    md-icon(md-svg-icon="md-close")
-    md-card.flex(flex)
-      md-toolbar.md_primary
-        .md-toolbar-tools
-          i(class="material-icons") public
-          h3.md-display-1 &nbsp;Areas
-          span(flex)
-      md-card-content(ng-controller="CollectionAreasCtrl as vm")
-        div(layout="column", class="md-subhead") Select the Areas in which this Collection will appear.
-          md-container
-            md-checkbox(ng-repeat="area in vm.areas", aria-label="Areas" value="area.id" ng-checked="vm.isChosen(area.id)" ng-click="vm.update(area.id)") {{area.title}}
+    subject-selector.flex
+
+    content-type-selector.flex
+
+    area-selector.flex
 
 

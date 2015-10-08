@@ -24,7 +24,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Conten
                       md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': type.id==vm.currentType}" style="min-height: 47px;" ng-click="vm.resetType(type.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{type.name}}
                           div.md-ripple-container
-                  md-divider
+                    md-divider
           md-content(layout-padding flex="80" style="padding-left: 20px;")
             div(flex="80" class="md-subhead grey-text")
               span #[em Content Types] are essentially media or file types and should be thought of in those terms. This in mind, it may sometimes be helpful to create more general types, e.g. Document and Transcribed Document.
