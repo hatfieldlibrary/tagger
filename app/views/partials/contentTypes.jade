@@ -1,6 +1,6 @@
 
-md-content(layout="row", layout-align="start start", flex, ng-controller="ContentCtrl as vm")
-  md-content(layout="column" flex="75")
+md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="ContentCtrl as vm")
+  md-content(class="transparent" layout="column" flex="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.contentType.$resolved")
       md-toolbar.md_primary
@@ -43,4 +43,4 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="Conten
                 i(class="fa {{vm.contentType.icon}}")
         div.md-panel Fontawesome Icons:
           a(href="https://fortawesome.github.io/Font-Awesome/icons/", target="_blank")  https://fortawesome.github.io/Font-Awesome/icons/
-  md-content(layout="column" flex="25")
+  md-content(class="transparent" layout="column" flex="25")

@@ -53,6 +53,13 @@ exports.list = function(req, res) {
 
 };
 
+exports.countByArea = function(req, res) {
+
+  var areaId = req.params.areaId;
+
+
+};
+
 exports.add = function( req, res) {
 
   var name = req.body.title;
@@ -154,11 +161,6 @@ exports.delete = function (req, res) {
 };
 
 
-
-
-
-
-
 exports.create = function(req, res) {
 
   var cName = req.body.name;
@@ -220,7 +222,6 @@ exports.create = function(req, res) {
 
   );
 };
-
 
 
 

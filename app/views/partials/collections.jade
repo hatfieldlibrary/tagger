@@ -1,6 +1,6 @@
 
-md-content(layout="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
-  md-content(layout="column" flex="75")
+md-content(class="transparent" layout="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
+  md-content(class="transparent" layout="column" flex="75" class="transparent")
     md-card.flex(flex, class="primary-content")
       div(ng-if="vm.collectionList.$resolved")
       md-toolbar.md_primary
@@ -25,7 +25,7 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                       div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
                         div.md-ripple-container
                   md-divider
-          md-content(layout-padding flex="80" style="padding-left: 20px;")
+          md-content(layout-padding flex="80" style="padding-left: 20px;" class="transparent")
             div(flex="80" class="md-subhead grey-text")
               span With the exception of item count and dates, all fields for this Collection must be complete.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.  The Collection MUST belong to at least one subject area.
             div(flex)
@@ -40,10 +40,6 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
                 span(class="md-subhead md-default") maximum characters 450 (current {{vm.collection.description.length}})
               textarea(type="textarea", ng-trim="false", ng-model="vm.collection.description", maxlength="450")
             md-input-container
-              label Collection Group
-              md-select(ng-model="vm.collection.category" placeholder="Select a Collection Group")
-                md-option(ng-repeat="category in vm.categoryList" ng-value="category.id") {{category.title}}
-            md-input-container
               label Coverage Dates
               input(type="text", ng-model="vm.collection.dates")
             md-input-container
@@ -52,6 +48,10 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
             md-input-container
               label URL
               input(type="text", ng-model="vm.collection.url")
+            md-input-container
+              label Collection Group
+              md-select(ng-model="vm.collection.category" placeholder="Select a Collection Group")
+                md-option(ng-repeat="category in vm.categoryList" ng-value="category.id") {{category.title}}
             div(style="margin-bottom: 5px;")
               div.md-caption Item Type
               md-radio-group(layout="row" ng-model="vm.collection.ctype")
@@ -67,9 +67,9 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
               div.md-caption Collection Access
               md-radio-group(layout="row" ng-model="vm.collection.restricted")
                 div(flex="25")
-                  md-radio-button(aria-label="Unrestricted" ng-value="true" flex="15" style="display: inline") Unrestricted
+                  md-radio-button(aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline") Unrestricted
                 div(flex="25")
-                  md-radio-button(aria-label="Restricted" ng-value="false" flex="15" style="display: inline") Restricted
+                  md-radio-button(aria-label="Restricted" ng-value="true" flex="15" style="display: inline") Restricted
                   span(flex)
             md-divider
             div(style="margin-top: 10px; margin-bottom: 15px;")
@@ -85,13 +85,13 @@ md-content(layout="row", layout-align="start start",  ng-controller="CollectionC
               div.md-caption Search Options
               md-radio-group(layout="row" ng-model="vm.collection.repoType")
                 div(flex="25")
-                  md-radio-button(aria-label="Unrestricted" value="DEFAULT" flex="15" style="display: inline") Search & Browse
+                  md-radio-button(aria-label="Search & Browse" value="DEFAULT" flex="15" style="display: inline") Search & Browse
                 div(flex="25")
-                  md-radio-button(aria-label="Restricted" value="BROWSE" flex="15" style="display: inline") Browse Only
+                  md-radio-button(aria-label="Browse Only" value="BROWSE" flex="15" style="display: inline") Browse Only
                 div(flex="25")
-                  md-radio-button(aria-label="Restricted" value="SEARCH" flex="15" style="display: inline") Search Only
+                  md-radio-button(aria-label="Search Only" value="SEARCH" flex="15" style="display: inline") Search Only
                 span(flex)
-  md-content(layout="column" flex="25")
+  md-content(class="transparent" layout="column" flex="25" class="transparent")
     md-card.flex(flex)
       md-toolbar.md_primary
         .md-toolbar-tools

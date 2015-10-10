@@ -53,11 +53,15 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
       var colors = ['red', 'green', 'blue', 'yellow', 'indigo'];
       var colorIndex = 0;
 
+      /**
+       * Calculates percentage from integer counts
+       * @param values   count by type
+       * @param total     count of all types
+       * @returns {Array}
+       */
       function ratios(values, total) {
-        console.log(values);
         var data = [];
         for (var i = 0; i < values.length; i++) {
-          console.log(values[i]);
           data[i] = {title: values[i].title, value:  values[i].value / total, count: values[i].value}
         }
         return data;
@@ -232,19 +236,21 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
 
             var trans;
             /* apply hack */
-            if ((bBox.height + bBox.y + 60) === 60)  {
+            if ((bBox.height + bBox.y + 50) === 50)  {
               if (hackyTest === false)  {
                 hackyTest = true;
-                trans =  bBox.height + bBox.y + 60;
+                trans =  bBox.height + bBox.y + 50;
               }
               else  if (hackyTest === true)
               {
-                trans = bBox.height + bBox.y + 60;
+                trans = bBox.height + bBox.y + 50;
               }
             } else {
-              trans = bBox.height + bBox.y + 60;
+              trans = bBox.height + bBox.y + 50;
             }
+            var side;
             if ((bBox.x + bBox.width / 2) > 0) {
+              side = -29;
               infoContainer = detailedInfo.append('g')
                 .attr('width', infoWidth)
                 .attr(
@@ -255,7 +261,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               anchor = 'end';
               position = 'right';
             } else {
-
+              side = 29;
               infoContainer = detailedInfo.append('g')
                 .attr('width', infoWidth)
                 .attr(
@@ -271,7 +277,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               .text('0 %')
               .attr('class', 'pieChart--detail--percentage')
               .attr('x', (position === 'left' ? 0 : infoWidth))
-              .attr('y', -5)
+              .attr('y', 13)
               .attr('text-anchor', anchor)
               .transition()
               .duration(DURATION)
@@ -299,6 +305,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               .append('foreignObject')
               .attr('width', infoWidth)
               .attr('height', 100)
+              .attr('x', side)
               .append('xhtml:body')
               .attr(
               'class',
@@ -311,6 +318,156 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
       });
     }
   };
+
+}]);
+
+
+/**
+ * Searches for area id in the current list of
+ * area associations.
+ * @param areaId  {number} the area ID
+ * @param tar  {Array.<Object>} the areas associated with the collection.
+ * @returns {boolean}
+ */
+var findArea = function(areaId, tar) {
+  var targets = tar;
+  for (var i = 0; i < targets.length; i++) {
+    if (targets[i].AreaId === areaId) {
+      return true;
+    }
+  }
+  return false;
+};
+
+taggerDirectives.directive('tagAreaSelector', [function() {
+  return {
+    restrict: 'E',
+    scope: {},
+    template:
+    '<md-card>' +
+    '  <md-toolbar class="md-primary">' +
+    '   <div class="md-toolbar-tools">' +
+    '     <i class="material-icons"> public </i>' +
+    '     <h3 class="md-display-1"> &nbsp;Areas</h3>' +
+    '    </div>' +
+    '   </md-toolbar>' +
+    '   <md-card-content>' +
+    '      <div layout="column" class="md-subhead">Select the Areas in which this Tag will appear.' +
+    '        <md-container>' +
+    '           <md-checkbox ng-repeat="area in areas" aria-label="Areas" value="area.id" ng-checked=isChosen(area.id) ng-click="update(area.id)">{{area.title}}</md-checkbox>' +
+    '        </md=container>' +
+    '      </div>' +
+    '   </md-content>' +
+    '</md-card>',
+    controller:     function (
+      $scope,
+      TagTargets,
+      TagTargetRemove,
+      TagTargetAdd,
+      TaggerToast,
+      Data) {
+
+
+      /** @type {Array.<Object>} */
+      $scope.areas = Data.areas;
+
+      /** @type {Array.<Object>} */
+      $scope.areaTargets = [];
+
+      /**
+       * Retrieve the areas for the current tag.
+       * @param id the id of the tag
+       */
+      $scope.getCurrentAreaTargets = function (id) {
+        $scope.areaTargets = TagTargets.query({tagId: id});
+
+      };
+
+      /**
+       * Test whether an area is in the list of areas selected
+       * for this tag.  Uses the areaTargets array for the
+       * test.
+       * @param areaId the area id
+       */
+      $scope.isChosen = function (areaId) {
+        return findArea(areaId, $scope.areaTargets);
+
+      };
+
+      /**
+       * Update by associating adding or removing the association of
+       * a tag with the provided content area.
+       * @param areaId id of the area to be added or removed
+       */
+      $scope.update = function (areaId) {
+
+        if ($scope.areaTargets !== undefined) {
+
+          // If the area id is a already associated with tag,
+          // remove that association
+          if (findArea(areaId, $scope.areaTargets)) {
+
+            var result = TagTargetRemove.query(
+              {
+                tagId: Data.currentTagIndex,
+                areaId: areaId
+              }
+            );
+            result.$promise.then(function (data) {
+              if (data.status == 'success') {
+                $scope.areaTargets = result.areaTargets;
+                TaggerToast('Tag removed from area.')
+              }
+            });
+          }
+          // If the area id is a not associated with tag,
+          // remove that association
+          else {
+
+            var result = TagTargetAdd.query(
+              {
+                tagId: Data.currentTagIndex,
+                areaId: areaId
+              }
+            );
+            result.$promise.then(function (data) {
+              if (data.status == 'success') {
+                $scope.areaTargets = result.areaTargets;
+                TaggerToast('Tag added to Area.')
+              }
+            });
+          }
+        }
+
+      };
+
+      /**
+       * Watch updates the current list of area targets
+       * when the current tag id changes.
+       */
+      $scope.$watch(function () {
+          return Data.currentTagIndex
+        },
+        function (newValue) {
+          if (newValue !== null) {
+            $scope.getCurrentAreaTargets(newValue);
+          }
+        }
+      );
+
+      /**
+       * Watches the global list of areas and updates local
+       * area list on change.
+       */
+      $scope.$watch(function () {
+          return Data.areas
+        },
+        function (newValue) {
+          $scope.areas = newValue;
+        });
+
+    }
+  }
 
 }]);
 
@@ -350,22 +507,7 @@ taggerDirectives.directive('areaSelector', [function() {
       /** @type {Array.<Object>} */
       $scope.areaTargets = [];
 
-      /**
-       * Searches for area id in the current list of
-       * area associations.
-       * @param areaId  {number} the area ID
-       * @param tar  {Array.<Object>} the areas associated with the collection.
-       * @returns {boolean}
-       */
-      var findArea = function(areaId, tar) {
-        var targets = tar;
-        for (var i = 0; i < targets.length; i++) {
-          if (targets[i].AreaId === areaId) {
-            return true;
-          }
-        }
-        return false;
-      };
+
 
       /**
        * Gets the list of areas associated with the current
@@ -462,6 +604,7 @@ taggerDirectives.directive('areaSelector', [function() {
   }
 
 }]);
+
 
 
 taggerDirectives.directive('contentTypeSelector', [ function() {
@@ -849,6 +992,240 @@ taggerDirectives.directive('subjectSelector', [ function() {
 }
 
 ]);
+
+taggerDirectives.directive('subjectTagSummary', function(){
+
+  return {
+    restrict: 'E',
+    scope: {},
+    template:
+      '<div style="margin-top: 40px;padding: 5px;font-size: 0.85em;"><p class=" grey-label">{{subjects}}</p></div>',
+    controller: function(
+      $scope,
+      TagCountForArea,
+      Data ) {
+
+      $scope.subjects = '';
+
+      function init() {
+        var subList = '';
+
+        var subs = TagCountForArea.query({areaId: Data.currentAreaIndex});
+        subs.$promise.then(function(data) {  ;
+          console.log('tags');
+          console.log(data);
+          for (var i = 0; i < data.length; i++) {
+            subList = subList + data[i].name + ' (' + data[i].count + ')';
+            if (i < data.length - 1) {
+              subList = subList + ', ';
+            }
+          }
+          $scope.subjects = subList;
+        });
+      }
+      init();
+
+      $scope.$watch(function() {return Data.currentAreaIndex},
+        function(newValue, oldValue){
+          if (newValue !== oldValue) {
+            init();
+          }
+        });
+    }
+  }
+
+});
+
+taggerDirectives.directive('searchOptionSummary', function() {
+
+  return {
+    restrict: 'E',
+    scope: {},
+    template:
+    '<md-list style="width:100%;margin-top: 40px;">' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Search & Browse</p>' +
+    '       <p class="list-alignment"> {{default}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Browse Only</p>' +
+    '       <p class="list-alignment"> {{browse}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Search Only</p>' +
+    '     <p class="list-alignment"> {{search}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '</md-list>',
+
+    controller: function (
+      $scope,
+      SearchOptionType,
+      Data ) {
+
+      $scope.default = 0;
+      $scope.search = 0;
+      $scope.browse = 0;
+
+      function init()
+      {
+        var types =
+          SearchOptionType.query({areaId: Data.currentAreaIndex});
+        types.$promise.then(function (data) {
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].repoType === 'DEFAULT') {
+              $scope.default = data[i].count;
+            } else if (data[i].repoType === 'SEARCH') {
+              $scope.search = data[i].count;
+            } else if (data[i].repoType === 'BROWSE') {
+              $scope.browse = data[i].count;
+            }
+          }
+
+
+        });
+      }
+      init();
+
+      $scope.$watch(function() {return Data.currentAreaIndex},
+        function(newValue, oldValue){
+          if (newValue !== oldValue) {
+            init();
+          }
+        });
+    }
+  }
+});
+
+taggerDirectives.directive('contentTypeSummary', function() {
+
+  return {
+    restrict: 'E',
+    scope: {},
+    template:
+    '<md-list style="width:100%;margin-top: 40px;">' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Collection</p>' +
+    '       <p class="list-alignment"> {{digCount}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Single Item</p>' +
+    '       <p class="list-alignment"> {{itmCount}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Finding Aid</p>' +
+    '     <p class="list-alignment"> {{eadCount}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '</md-list>',
+
+    controller: function (
+      $scope,
+      CollectionTypeCount,
+      Data ) {
+
+      $scope.digCount = 0;
+      $scope.itmCount = 0;
+      $scope.eadCount = 0;
+
+      function init()
+      {
+
+        var types =
+          CollectionTypeCount.query({areaId: Data.currentAreaIndex});
+        types.$promise.then(function (data) {
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].ctype === 'dig') {
+              $scope.digCount = data[i].count;
+            } else if (data[i].ctype === 'itm') {
+              $scope.itmCount = data[i].count;
+            } else if (data[i].ctype === 'aid') {
+              $scope.eadCount = data[i].count;
+            }
+          }
+
+
+        });
+      }
+      init();
+
+      $scope.$watch(function() {return Data.currentAreaIndex},
+        function(newValue, oldValue){
+          if (newValue !== oldValue) {
+            init();
+          }
+        });
+    }
+  }
+});
+
+taggerDirectives.directive('collectionSummary', [function() {
+  return {
+    restrict: 'E',
+    scope: {},
+    template:
+    '<md-list style="width:100%;margin-top: 40px;">' +
+    '   <md-list-item>' +
+    '     <p class="grey-label"> Restricted</p>' +
+    '       <p class="list-alignment"> {{restricted}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label"> Public</p>' +
+    '     <p class="list-alignment"> {{public}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label">Total</p>' +
+    '       <p class="list-alignment"> {{collections.length}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '</md-list>',
+
+    controller: function (
+      $scope,
+      CollectionsByArea,
+      Data ) {
+
+      $scope.restricted = 0;
+      $scope.public = 0;
+      $scope.collections = [];
+
+
+      function init()
+      {
+        var restrictedCount = 0;
+        $scope.collections =
+          CollectionsByArea.query({areaId: Data.currentAreaIndex});
+        $scope.collections.$promise.then(function (data) {
+          console.log('collections');
+          console.log(data.length);
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].collection.restricted !== false) {
+              restrictedCount++;
+            }
+          }
+          $scope.restricted = restrictedCount;
+          $scope.public = data.length - restrictedCount;
+
+        });
+      }
+      init();
+
+      $scope.$watch(function() {return Data.currentAreaIndex},
+        function(newValue, oldValue){
+          if (newValue !== oldValue) {
+            init();
+          }
+        });
+    }
+  }
+
+}]);
 
 
 

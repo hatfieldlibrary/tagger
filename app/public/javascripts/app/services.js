@@ -8,12 +8,36 @@ var host = 'http://localhost:3000/rest/';
 
 var taggerServices = angular.module('taggerServices', ['ngResource']);
 
+// SHARED DATA SERVICE
+taggerServices.factory('Data', function() {
+  return {
+    areas: [],
+    areaLabel: '',
+    currentAreaIndex: null,
+    currentCategoryIndex: null,
+    categories: [],
+    categoriesForArea: [],
+    currentContentIndex: null,
+    contentTypes: [],
+    contentTypesForArea: [],
+    tags: [],
+    currentTagIndex: null,
+    collections: [],
+    initialCollection: {},
+    currentCollectionIndex: null,
+    currentThumbnailImage: null,
+    tagsForArea: [],
+    tagsForCollection: [],
+    typesForCollection: [],
+    userAreaId: null
+  };
+});
+
+
 
 taggerServices.provider('UseHost', [
-
   function() {
     this.host = 'localhost';
-
     this.$get= function() {
       var host = this.host;
       return {
@@ -22,7 +46,6 @@ taggerServices.provider('UseHost', [
         }
       }
     };
-
     this.setHost = function(host) {
       this.host = host;
     }
@@ -55,13 +78,13 @@ taggerServices.factory('d3Service', [
       if (this.readyState === 'complete') { onScriptLoad(); }
     };
     scriptTag.onload = onScriptLoad;
-
     var s = $document[0].getElementsByTagName('body')[0];
     s.appendChild(scriptTag);
 
     return {
       d3: function() { return d.promise; }
     };
+
   }]);
 
 
@@ -95,6 +118,24 @@ taggerServices.factory('UserUpdate', ['$resource',
 
 
 // COLLECTION
+
+
+
+taggerServices.factory('SearchOptionType', ['$resource',
+  function($resource){
+    return $resource(host + 'collection/repoTypeByArea/:areaId', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
+
+taggerServices.factory('CollectionTypeCount', ['$resource',
+  function($resource){
+    return $resource(host + 'collection/count/types/byArea/:areaId', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
 
 taggerServices.factory('CollectionsByArea', ['$resource',
   function($resource){
@@ -170,12 +211,6 @@ taggerServices.factory('AreaTargetRemove', ['$resource',
       query: {method: 'GET', isArray: false}
     });
   }]);
-
-taggerServices.factory('TagsForArea', ['$resource', function Resource($resource) {
-  return $resource(host + 'tags/byArea/:areaId', {} ,{
-    query: {method: 'GET', isArray: true}
-  });
-}]);
 
 taggerServices.factory('CollectionTagTargetAdd', ['$resource',
   function Resource($resource) {
@@ -298,6 +333,14 @@ taggerServices.factory('CategoryDelete', ['$resource',
 
 // CONTENT TYPE
 
+taggerServices.factory('ContentTypeCount', ['$resource',
+  function($resource){
+    return $resource(host + 'content/byArea/count/:areaId', {}, {
+      query: {method:'GET', isArray:true}
+    });
+  }
+]);
+
 taggerServices.factory('ContentType', ['$resource',
   function($resource) {
     return $resource(host + 'content/byId/:id', {}, {
@@ -333,6 +376,18 @@ taggerServices.factory('ContentTypeUpdate', ['$resource',
 ]);
 
 // TAG
+
+taggerServices.factory('TagCountForArea', ['$resource', function Resource($resource) {
+  return $resource(host + 'tags/count/byArea/:areaId', {} ,{
+    query: {method: 'GET', isArray: true}
+  });
+}]);
+
+taggerServices.factory('TagsForArea', ['$resource', function Resource($resource) {
+  return $resource(host + 'tags/byArea/:areaId', {} ,{
+    query: {method: 'GET', isArray: true}
+  });
+}]);
 
 taggerServices.factory('TagById', ['$resource',
   function($resource) {
@@ -412,29 +467,7 @@ taggerServices.factory('ImageUpload', ['$http', function($http) {
 
 }]);
 
-// SHARED DATA SERVICE
-taggerServices.factory('Data', function() {
-  return {
-    areas: [],
-    areaLabel: '',
-    currentAreaIndex: null,
-    currentCategoryIndex: null,
-    categories: [],
-    categoriesForArea: [],
-    currentContentIndex: null,
-    contentTypes: [],
-    tags: [],
-    currentTagIndex: null,
-    collections: [],
-    initialCollection: {},
-    currentCollectionIndex: null,
-    currentThumbnailImage: null,
-    tagsForArea: [],
-    tagsForCollection: [],
-    typesForCollection: [],
-    userAreaId: null
-  };
-});
+
 
 // TOAST SERVICE
 // Using the Angular Material mdToast
@@ -451,8 +484,8 @@ taggerServices.factory('TaggerToast', [
       var toastPosition = {
         bottom: false,
         top: true,
-        left: false,
-        right: true
+        left: true,
+        right: false
       };
 
       var getToastPosition = function () {

@@ -1,6 +1,6 @@
 
-md-content(layout="row", layout-align="start start", flex, ng-controller="AreaCtrl as vm")
-  md-content(layout="column" flex="75")
+md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="AreaCtrl as vm")
+  md-content(class="transparent" layout="column" flex="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.area.$resolved")
       md-toolbar.md_primary
@@ -25,7 +25,7 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="AreaCt
                         div(class="list-group-item-text md-subhead layout-fill") {{area.title}}
                           div.md-ripple-container
                     md-divider
-          md-content(layout-padding flex="80" class="md-subhead grey-text" style="padding-left: 20px;")
+          md-content(class="transparent" layout-padding flex="80" class="md-subhead grey-text" style="padding-left: 20px;")
             span #[em Areas] are at the top of the organizational model and are the most general way to group collections. A collection can be assigned to multiple Areas.
               div(flex)
             div(flex)
@@ -49,4 +49,4 @@ md-content(layout="row", layout-align="start start", flex, ng-controller="AreaCt
               label Search URL
               input(type="text", ng-model="vm.area.searchUrl")
 
-  md-content(layout="column" flex="25")
+  md-content(class="transparent" layout="column" flex="25")

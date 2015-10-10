@@ -1,5 +1,5 @@
-md-content( layout-align="start start", flex, ng-controller="OverviewCtrl as vm")
-  md-content(layout="column" flex)
+md-content(class="transparent" layout-align="start start", flex, ng-controller="OverviewCtrl as vm")
+  md-content(layout="column" flex class="transparent")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.category.$resolved")
       md-toolbar.md_primary
@@ -9,30 +9,40 @@ md-content( layout-align="start start", flex, ng-controller="OverviewCtrl as vm"
             span.md-headline &nbsp; {{vm.areaLabel}}
 
 
-      md-card-content.flex
-        div(layout="row", layout-align="start start" style="height: 100%")
-          md-list(flex="40")
-            md-list-item
-              div
-                span(class="md-title grey-label") Collection Count:
-              div
-                span.md-title &nbsp;{{vm.collections.length}}
-            md-list-item
-              span(class="md-title grey-label") Restricted Collections:
-              span.md-title &nbsp;{{vm.restricted}}
-            md-list-item
-              span(class="md-title grey-label") Public Collections:
-              span.md-title &nbsp;{{vm.public}}
-            md-list-item
-              span(class="md-title grey-label") Public Collections:
-            md-list-item
-              span(class="md-title grey-label") Public Collections:
-            md-list-item
-              span(class="md-title grey-label") Public Collections:
-            md-list-item
-              span(class="md-title grey-label") Public Collections:
-          div(flex="60" style="height: 900px;")
-            div(layout="column", layout-align="start start" style="height: 100%")
-              div(flex="100")
-                span.md-title Collection Groups
-                div(id="categoryChart" class="svg-container" flex style="height:740px; width:740px;padding-top: 10px;" d3-pie data="vm.categoryCounts")
+      md-card-content(flex, class="grid-list-overview")
+          md-grid-list(md-cols-sm="1", md-cols-md="2", md-cols-lg="2", md-cols="4", md-row-height="235px", md-gutter="12px", md-gutter-gt-sm="8px")
+
+            md-grid-tile(class="blue" )
+              md-grid-tile-header
+                h3 Entries
+              div(flex layout="row", layout-align="start start", style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee;")
+                collection-summary.flex
+
+            md-grid-tile(class="blue" )
+              md-grid-tile-header
+                h3 Entry Types
+              div(flex layout="row", layout-align="start start", style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee;")
+                content-type-summary.flex
+
+
+            md-grid-tile(class="blue" )
+              md-grid-tile-header
+                h3 Search Option Types
+              div(flex layout="row", layout-align="start start", style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee;")
+                search-option-summary.flex
+
+            md-grid-tile(class="blue" )
+              md-grid-tile-header
+                h3 Subjects
+              div(flex layout="row", layout-align="start start", style="height:100%;width:100%; background: #f9f9f9;border-bottom: 1px solid #eee;")
+                subject-tag-summary.flex
+
+            md-grid-tile(class="blue", md-rowspan="3", md-colspan="2", md-colspan-sm="1")
+              md-grid-tile-header
+                h3 Collection Categories
+              div(id="categoryChart" class="svg-container" flex style="height:100%; width:80%;padding-top: 50px;position: inherit;margin-left: -47%;" d3-pie data="vm.categoryCounts")
+
+            md-grid-tile(class="blue", md-rowspan="3", md-colspan="2", md-colspan-sm="1")
+              md-grid-tile-header
+                h3 Content Types
+              div(id="typeChart" class="svg-container" flex style="height:100%; width:80%;padding-top: 50px;position: inherit;margin-left: -47%;" d3-pie data="vm.categoryCounts")

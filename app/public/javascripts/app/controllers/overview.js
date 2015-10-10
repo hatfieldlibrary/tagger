@@ -1,7 +1,3 @@
-/*
- * OVERVIEW CONTROLLER
- */
-
 (function() {
 
   'use strict';
@@ -13,12 +9,14 @@
     'CollectionsByArea',
     'CategoryByArea',
     'CategoryCountByArea',
+    'ContentTypeCount',
     'Data',
     function(
       $scope,
       CollectionsByArea,
       CategoryByArea,
       CategoryCountByArea,
+      ContentTypeCount,
       Data) {
 
       var vm = this;
@@ -30,14 +28,9 @@
         data: []
       };
 
-      vm.restricted = 0;
-      vm.public = 0;
-
-      var restrictedCount;
 
       var init = function() {
 
-        restrictedCount = 0;
         var categoryCount = CategoryCountByArea.query({areaId: Data.currentAreaIndex});
         categoryCount.$promise.then(function (categories) {
           var catCount = 0;
@@ -54,28 +47,29 @@
             data: data
           }
         });
-        vm.areaLabel = Data.areaLabel;
-        vm.collections = CollectionsByArea.query({areaId: Data.currentAreaIndex});
-        vm.collections.$promise.then(function (data) {
-          for (var i = 0; i < data.length; i++) {
-            console.log('restrict ');
-            console.log(data[i].collection.restricted);
-            if (data[i].collection.restricted !== false) {
-              restrictedCount++;
-            }
-          }
-          vm.restricted = restrictedCount;
-          vm.public =  vm.collections.length - restrictedCount;
+
+        var contentTypeCount = ContentTypeCount.query({areaId: Data.currentAreaIndex});
+        contentTypeCount.$promise.then(function(types) {
+          console.log('types');
+          console.log(types);
+          var typeCount = 0;
+          var data = [];
+         // for (var i = 0; i < types.count; i++ ) {
+
+        //  }
+
         });
+        vm.areaLabel = Data.areaLabel;
+
       } ;
 
       init();
 
       $scope.$watch(function() {return Data.currentAreaIndex},
         function(newValue, oldValue){
-              if (newValue !== oldValue) {
-                init();
-              }
+          if (newValue !== oldValue) {
+            init();
+          }
         });
 
       $scope.$watch( function() {return Data.categoriesForArea},
@@ -91,6 +85,7 @@
           }
         });
 
+      $scope.$watch(function() {return Data.contentTypes})
 
     }
   ]);

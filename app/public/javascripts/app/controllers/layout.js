@@ -36,6 +36,8 @@
 
       var vm = this;
 
+      vm.currentIndex = 0;
+
       /** @type {Array.<Object>} */
       vm.areas = [];
 
@@ -73,6 +75,11 @@
 
       };
 
+      vm.setCurrentIndex = function(index) {
+        vm.currentIndex = index;
+
+      };
+
       $scope.$watch(function() { return Data.areas; },
         function(newValue) {
           vm.areas = newValue;
@@ -84,6 +91,8 @@
        * @param id   the area id
        */
       function setContext(id) {
+
+        vm.currentId = id;
 
         updateAreaContext(id);
 
@@ -102,6 +111,7 @@
             Data.currentTagIndex = data[0].id
           }
         });
+
         // Initialize global content types
         var types = ContentTypeList.query();
         types.$promise.then(function(data) {

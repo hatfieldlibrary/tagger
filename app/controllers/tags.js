@@ -20,7 +20,6 @@ exports.overview = function(req, res) {
 exports.list = function (req, res) {
 
   db.Tag.findAll({
-
     order: [['name', 'ASC']]
 
   }).success(function (tags) {
@@ -80,6 +79,22 @@ exports.tagByArea = function (req, res) {
   });
 };
 
+exports.tagByAreaCount = function (req, res) {
+  console.log('TAGS');
+  var areaId = req.params.areaId;
+
+  db.sequelize.query('SELECT name, COUNT(*) as count from TagTargets left join Tags on ' +
+    'TagTargets.TagId = Tags.id left join TagAreaTargets on TagAreaTargets.TagId = Tags.id  ' +
+    'WHERE TagAreaTargets.AreaId = ' + areaId + ' group by TagTargets.TagId order by name'
+  ).then(function (tags) {
+      console.log('TAGS');
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(tags));
+    }).error(function(err) {
+      console.log(err);
+    });
+};
 
 exports.add = function( req, res) {
 

@@ -16,6 +16,30 @@ exports.overview = function(req, res){
 
 };
 
+exports.countCTypesByArea = function(req, res) {
+  var areaId = req.params.areaId;
+  db.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ' + areaId + ' GROUP BY ctype;'
+  ).then(function (types) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(types));
+    }).error(function(err) {
+      console.log(err);
+    });
+};
+
+exports.repoTypeByArea = function(req, res) {
+  var areaId = req.params.areaId;
+  db.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ' + areaId + ' GROUP BY repoType;'
+  ).then(function (types) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(types));
+    }).error(function(err) {
+      console.log(err);
+    });
+};
+
 exports.list = function (req, res) {
 
   var areaId = req.params.areaId;

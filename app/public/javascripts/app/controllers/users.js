@@ -1,7 +1,7 @@
-
 (function() {
 
   'use strict';
+
   /**
    * User management controller.
    */
