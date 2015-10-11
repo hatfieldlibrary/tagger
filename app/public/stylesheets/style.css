@@ -206,13 +206,27 @@ md-list-item.md-no-proxy  {
   stroke-width: 1px;
 }
 
-.pieChart--detail--textContainer {
+.svg-container .pieChart--detail--textContainer {
   background-color: transparent;
   padding: 1px 0 0 0;
   margin: 0;
   color: #333;
-  font-size: 12px;
   font-style: italic;
+}
+@media only screen and (min-width: 900px) {
+  .svg-container .pieChart--detail--textContainer {
+    font-size: 9px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .svg-container .pieChart--detail--textContainer {
+    font-size: 11px;
+  }
+}
+@media only screen and (min-width: 1460px) {
+  .svg-container .pieChart--detail--textContainer {
+    font-size: 14px;
+  }
 }
 
 .pieChart--detail__left {
@@ -228,11 +242,11 @@ md-list-item.md-no-proxy  {
 }
 
 .pieChart__blue {
-  fill: #6bb7c7;
+  fill: #568cc7;
 }
 
 .pieChart__red {
-  fill: #d79d91;
+  fill: #b76ad7;
 }
 
 .pieChart__green {
@@ -240,7 +254,11 @@ md-list-item.md-no-proxy  {
 }
 
 .pieChart__yellow {
-  fill: #d5d789;
+  fill: #d7d46b;
+}
+
+.pieChart__orange {
+  fill: #d7833b;
 }
 
 /**

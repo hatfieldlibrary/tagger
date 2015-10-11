@@ -22,7 +22,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
   return {
     // attribute only
     restrict: 'A',
-    template: '<svg id="pieChartSVG" style="overflow: visible;"> ' +
+    template: '<svg id="{{label}}" style="overflow: visible;"> ' +
     '           <defs> ' +
     '             <filter id=\'pieChartInsetShadow\'> ' +
     '              <feOffset dx=\'0\' dy=\'0\'/> ' +
@@ -50,7 +50,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
 
       var DURATION = 1500;
       var DELAY    = 500;
-      var colors = ['red', 'green', 'blue', 'yellow', 'indigo'];
+      var colors = ['red', 'green', 'blue', 'yellow', 'indigo', 'orange'];
       var colorIndex = 0;
 
       /**
@@ -69,7 +69,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
 
       function colorWheel() {
         var color = colors[colorIndex];
-        if (colorIndex == 4) {
+        if (colorIndex == 6) {
           colorIndex = 0;
         } else {
           colorIndex++;
@@ -79,6 +79,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
 
       // waiting for the d3 object promise
       d3Service.d3().then(function (d3) {
+
 
         var total = 0;
         var data = [];
@@ -90,8 +91,13 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               colorIndex = 0;
               total = scope.data.total;
               if (scope.data.data.length > 0) {
+                // calculate percentages
                 data = ratios(scope.data.data, total);
-                drawPieChart();
+                // Make sure element is ready
+                ele.ready(function() {
+                  drawPieChart();
+                });
+
               } else {
                 clearChart();
               }
@@ -111,13 +117,16 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
             svg = container.select('svg');
           svg.selectAll('g').remove();
           svg.select('circle').remove();
-
         }
 
         /**
          * Draws the pie chart
          */
         function drawPieChart() {
+           console.log('element');
+          console.log(document.getElementById(attrs.id));
+          console.log(document.getElementById(attrs.id).clientWidth);
+
 
           var containerEl = document.getElementById(attrs.id),
             width = containerEl.clientWidth,
@@ -127,7 +136,6 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
             svg = container.select('svg')
               .attr('width', width)
               .attr('height', height);
-
           svg.selectAll('g').remove();
 
           var pie = svg.append('g')
@@ -192,7 +200,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               .transition()
               .duration(DURATION)
               .delay(DELAY)
-              .attr('r', radius - 50);
+              .attr('r', radius - 60);
 
             centerContainer.append('circle')
               .attr('id', 'pieChart-clippy')
@@ -201,7 +209,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               .transition()
               .delay(DELAY)
               .duration(DURATION)
-              .attr('r', radius - 55)
+              .attr('r', radius - 65)
               .attr('fill', '#fff');
           }
 
@@ -213,7 +221,7 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
            * hacks.
            * @type {boolean}
            */
-          var hackyTest = false;
+          var hackyTest = 0;
 
           /**
            * Adds the detail information sections to the chart.
@@ -229,28 +237,15 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               infoContainer,
               position;
 
-
+            console.log(bBox);
             if (infoContainer !== undefined) {
               infoContainer.empty();
             }
 
-            var trans;
-            /* apply hack */
-            if ((bBox.height + bBox.y + 50) === 50)  {
-              if (hackyTest === false)  {
-                hackyTest = true;
-                trans =  bBox.height + bBox.y + 50;
-              }
-              else  if (hackyTest === true)
-              {
-                trans = bBox.height + bBox.y + 50;
-              }
-            } else {
-              trans = bBox.height + bBox.y + 50;
-            }
+
             var side;
             if ((bBox.x + bBox.width / 2) > 0) {
-              side = -29;
+              side = 0;
               infoContainer = detailedInfo.append('g')
                 .attr('width', infoWidth)
                 .attr(
@@ -261,7 +256,16 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               anchor = 'end';
               position = 'right';
             } else {
-              side = 29;
+              side = 0;
+              var trans;
+              /* apply hack */
+              if ((bBox.height + bBox.y + 50) === 50)  {
+                trans =  bBox.height + bBox.y + 50 + (hackyTest * 20);
+                console.log('increment hacky ' + data.title);
+                hackyTest++;
+              } else {
+                trans = bBox.height + bBox.y + 50;
+              }
               infoContainer = detailedInfo.append('g')
                 .attr('width', infoWidth)
                 .attr(
@@ -271,25 +275,52 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               anchor = 'start';
               position = 'left';
             }
+            /*
+             infoContainer.data([data.value * 100])
+             .append('text')
+             .text('0 %')
+             .attr('class', 'pieChart--detail--percentage')
+             .attr('x', (position === 'left' ? 0 : infoWidth))
+             .attr('y', 0)
+             .attr('text-anchor', anchor)
+             .transition()
+             .duration(DURATION)
+             .tween('text', function (d) {
+             var i = d3.interpolateRound(+this.textContent.replace(/\s%/ig, ''),
+             d
+             );
 
-            infoContainer.data([data.value * 100])
-              .append('text')
-              .text('0 %')
-              .attr('class', 'pieChart--detail--percentage')
-              .attr('x', (position === 'left' ? 0 : infoWidth))
-              .attr('y', 13)
-              .attr('text-anchor', anchor)
-              .transition()
-              .duration(DURATION)
-              .tween('text', function (d) {
-                var i = d3.interpolateRound(+this.textContent.replace(/\s%/ig, ''),
-                  d
-                );
+             return function (t) {
+             this.textContent = i(t) + ' %';
+             };
+             });   */
 
-                return function (t) {
-                  this.textContent = i(t) + ' %';
-                };
-              });
+            var title = '';
+            if (data.title !== null) {
+              console.log(data.title);
+              if (data.title.length > 18) {
+
+                title = data.title.substring(0,18) + '...';
+                console.log(title);
+              } else {
+                title = data.title;
+              }   }
+            else {
+              title = data.title;
+            }
+
+            infoContainer.data([title])
+              .append('foreignObject')
+              .attr('width', infoWidth)
+              .attr('height', 100)
+              .attr('x', side)
+              .append('xhtml:body')
+              .attr(
+              'class',
+              'pieChart--detail--textContainer ' + 'pieChart--detail__' + position
+            )
+              .html(title + ' (' + data.count + ')');
+
 
             infoContainer.append('line')
               .attr('class', 'pieChart--detail--divider')
@@ -300,18 +331,6 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
               .transition()
               .duration(DURATION)
               .attr('x2', infoWidth);
-
-            infoContainer.data([data.title])
-              .append('foreignObject')
-              .attr('width', infoWidth)
-              .attr('height', 100)
-              .attr('x', side)
-              .append('xhtml:body')
-              .attr(
-              'class',
-              'pieChart--detail--textContainer ' + 'pieChart--detail__' + position
-            )
-              .html(data.title + ' (' + data.count + ')');
 
           }
         }

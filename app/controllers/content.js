@@ -57,6 +57,16 @@ exports.countByArea = function(req, res) {
 
   var areaId = req.params.areaId;
 
+  db.sequelize.query('Select name, COUNT(*) as count from AreaTargets left ' +
+    'join Collections on AreaTargets.CollectionId = Collections.id left join ItemContentTargets ' +
+    'on ItemContentTargets.CollectionId = Collections.id left join ItemContents on ' +
+    'ItemContentTargets.ItemContentId = ItemContents.id ' +
+    'where AreaTargets.AreaId = ' + areaId + ' group by ItemContents.id order by ' +
+    'ItemContents.name').then(function(types) {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(types));
+  });
 
 };
 

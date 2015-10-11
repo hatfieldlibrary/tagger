@@ -23,10 +23,10 @@
 
       vm.catgoryCounts = {};
 
-      vm.categoryChart = {
-        total: 0,
-        data: []
-      };
+     // vm.categoryChart = {
+     //   total: 0,
+     //   data: []
+     // };
 
 
       var init = function() {
@@ -52,12 +52,19 @@
         contentTypeCount.$promise.then(function(types) {
           console.log('types');
           console.log(types);
-          var typeCount = 0;
+          var count = 0;
           var data = [];
-         // for (var i = 0; i < types.count; i++ ) {
-
-        //  }
-
+          for (var i = 0; i < types.length; i++) {
+            count = count + types[i].count;
+          }
+          for (var i = 0; i < types.length; i++) {
+            data[i] = {title: types[i].name, value: types[i].count};
+            console.log(data[i]);
+          }
+          vm.typeCounts = {
+            total: count,
+            data: data
+          }
         });
         vm.areaLabel = Data.areaLabel;
 

@@ -4,13 +4,13 @@ md-content(class="transparent" layout-align="start start", flex, ng-controller="
       div(ng-if="vm.category.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
-          span(flex="20")
+          span(flex="30")
             i.material-icons home
             span.md-headline &nbsp; {{vm.areaLabel}}
 
 
       md-card-content(flex, class="grid-list-overview")
-          md-grid-list(md-cols-sm="1", md-cols-md="2", md-cols-lg="2", md-cols="4", md-row-height="235px", md-gutter="12px", md-gutter-gt-sm="8px")
+          md-grid-list(md-cols-sm="1", md-cols-md="1", md-cols-lg="2", md-cols-gt-lg="4", md-row-height="196px", md-gutter="12px", md-gutter-gt-sm="8px")
 
             md-grid-tile(class="blue" )
               md-grid-tile-header
@@ -37,12 +37,12 @@ md-content(class="transparent" layout-align="start start", flex, ng-controller="
               div(flex layout="row", layout-align="start start", style="height:100%;width:100%; background: #f9f9f9;border-bottom: 1px solid #eee;")
                 subject-tag-summary.flex
 
-            md-grid-tile(class="blue", md-rowspan="3", md-colspan="2", md-colspan-sm="1")
+            md-grid-tile(class="blue", md-rowspan="3", md-colspan-gt-lg="2", md-colspan-lg="2", md-colspan-md="1", md-colspan-sm="1")
               md-grid-tile-header
                 h3 Collection Categories
-              div(id="categoryChart" class="svg-container" flex style="height:100%; width:80%;padding-top: 50px;position: inherit;margin-left: -47%;" d3-pie data="vm.categoryCounts")
+              div(id="categoryChart", class="svg-container", flex style="min-height: 196px; width:96%;padding-top: 50px;position: inherit;margin-left: -50%;", d3-pie, label="categorySVG", data="vm.categoryCounts")
 
-            md-grid-tile(class="blue", md-rowspan="3", md-colspan="2", md-colspan-sm="1")
+            md-grid-tile(class="blue", md-rowspan="3", md-colspan-gt-lg="2", md-colspan-lg="2" md-colspan-md="1", md-colspan-sm="1")
               md-grid-tile-header
                 h3 Content Types
-              div(id="typeChart" class="svg-container" flex style="height:100%; width:80%;padding-top: 50px;position: inherit;margin-left: -47%;" d3-pie data="vm.categoryCounts")
+              div(id="typeChart", class="svg-container", flex style="min-height: 196px; width:96%;padding-top: 50px;position: inherit;margin-left: -47%;", d3-pie, label="typesSVG", data="vm.typeCounts")
