@@ -64,6 +64,8 @@
       /** @type {string} */
       vm.updateImageMessage = 'templates/updateImageMessage.html';
 
+      vm.userAreaId = Data.userAreaId;
+
       /**
        * Show the $mdDialog.
        * @param $event click event object (location of event used as

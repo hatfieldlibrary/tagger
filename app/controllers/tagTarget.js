@@ -54,15 +54,16 @@ exports.addTarget = function(req, res) {
       }
     },
     function (err, result) {
-
+      console.log('check ' + result.check);
       // if new
       if (result.check === null) {
-
+         console.log('adding target');
          addArea(tagId, areaId, res);
 
       }
       // if not new, just return the current list.
       else {
+        console.log('returning list');
         db.TagAreaTarget.findAll(
           {
             where: {
@@ -76,7 +77,10 @@ exports.addTarget = function(req, res) {
           // JSON response
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Access-Control-Allow-Origin', '*');
-          res.end(JSON.stringify({status: 'exists', areaTargets: areas}));
+          res.end(JSON.stringify({status: 'exists', areaTargets: areas})
+          ).error(function(err) {
+              console.log(err);
+            });
         }
       }
 
@@ -84,6 +88,8 @@ exports.addTarget = function(req, res) {
 };
 
 function addArea(tagId, areaId, res) {
+
+      console.log('tag ' + tagId  +', area ' + areaId +  ' ,res ' + res);
 
   async.series(
     {
@@ -117,6 +123,7 @@ function addArea(tagId, areaId, res) {
     },
 
     function (err, result) {
+      console.log(result);
       if (err) { console.log(err); }
       // JSON response
       res.setHeader('Content-Type', 'application/json');

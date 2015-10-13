@@ -6,8 +6,10 @@
   /**
    * Controller for the user profile display.
    */
-  taggerControllers.controller('AuthorizedCtrl', [
-    function() {
+  taggerControllers.controller('AuthorizedCtrl', ['Data',
+    function(
+      Data
+    ) {
 
       var vm = this;
 
@@ -21,8 +23,14 @@
        * @param areaId the current area id
        */
       vm.getRole = function (areaId) {
+        // update the app state
+        Data.userAreaId = areaId;
+        // set the string
         vm.role = getUserRole(areaId);
-
+        // set area default for non-admin user
+        if (areaId > 0) {
+          Data.currentAreaIndex = areaId;
+        }
       };
 
       /**

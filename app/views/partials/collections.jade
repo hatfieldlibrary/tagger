@@ -1,7 +1,7 @@
 
 md-content(class="transparent" layout="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
   md-content(class="transparent" layout="column" flex="75" class="transparent")
-    md-card.flex(flex, class="primary-content")
+    md-card.flex(flex, class="primary-content" style="background: #DFE3EE;")
       div(ng-if="vm.collectionList.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
@@ -16,16 +16,16 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
         div(layout="row", layout-align="start start")
           div(flex="20" )
             md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="vm.showDialog($event, vm.addMessage)") Add Collection
-            div(layout="column", style="height:770px;")
-              md-content(flex)
+            div(layout="column", style="height:770px; background: transparent;")
+              md-content(flex style="background: transparent;")
                 md-list
                 div(ng-repeat="col in vm.collectionList")
                   md-list-item
-                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.collection.id==vm.collectionId}" style="min-height: 47px;" ng-click="vm.getCollectionById(col.collection.id);")
+                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.collection.id==vm.collectionId}" style="padding-left: 5px;min-height: 47px;" ng-click="vm.getCollectionById(col.collection.id);")
                       div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
                         div.md-ripple-container
                   md-divider
-          md-content(layout-padding flex="80" style="padding-left: 20px;" class="transparent")
+          md-content(layout-padding flex="80" style="padding-left: 20px;border: 1px solid #ccc;background: #fff;" class="transparent")
             div(flex="80" class="md-subhead grey-text")
               span With the exception of item count and dates, all fields for this Collection must be complete.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.  The Collection MUST belong to at least one subject area.
             div(flex)
@@ -111,6 +111,6 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
 
     content-type-selector.flex
 
-    area-selector.flex
+    area-selector(flex ng-show="vm.areaUserId == 0")
 
 

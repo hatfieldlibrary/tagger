@@ -5,6 +5,7 @@ var taggerDirectives  = angular.module('taggerDirectives', []);
 taggerDirectives.directive('elemReady', function( $parse ) {
   return {
     restrict: 'A',
+    scope: false,
     link: function( $scope, elem, attrs ) {
       elem.ready(function(){
         $scope.$apply(function(){
@@ -16,6 +17,134 @@ taggerDirectives.directive('elemReady', function( $parse ) {
   }
 
 });
+
+taggerDirectives.directive('tagButton', [ 'TaggerToast','TagTargets', 'TagTargetRemove', 'TagTargetAdd', 'Data',
+
+  function(
+    TaggerToast,
+    TagTargets,
+    TagTargetRemove,
+    TagTargetAdd,
+    Data ) {
+
+    return {
+      restrict: 'E',
+      scope: {
+        tagId: '@',
+        tagName: '@'
+      },
+      template:
+
+        '<div style="width: 10%;float:left;">' +
+        '   <md-button class="{{buttonClass}} md-raised md-fab md-mini"  ng-click="update();">' +
+        '     <i class="material-icons">{{buttonIcon}}</i>' +
+        '     <div class="md-ripple-container"></div>' +
+        '   </md-button>' +
+        '</div>' +
+        '<div style="width: 90%;float:left;line-height: 3.3rem;" class="{{textClass}} md-subhead">' +
+        '   {{tagName}}' +
+        '</div>' ,
+      link: function(scope, elem, attrs) {
+
+        var targetList = [];
+        scope.buttonClass = '';
+
+        scope.init = function() {
+          var targets = TagTargets.query({tagId: scope.tagId});
+          targets.$promise.then(function(data) {
+            targetList = data;
+            scope.checkArea();
+          });
+        };
+
+        scope.init();
+
+        scope.update = function() {
+
+          if (targetList !== undefined) {
+
+            // If the area id is a already associated with tag,
+            // remove that association
+            if (findArea(Data.currentAreaIndex, targetList)) {
+
+              var result = TagTargetRemove.query(
+                {
+                  tagId: Data.currentTagIndex,
+                  areaId: Data.currentAreaIndex
+                }
+              );
+              result.$promise.then(function (data) {
+                alert('delete');
+                if (data.status == 'success') {
+                  targetList = result.areaTargets;
+                  TaggerToast('Tag removed from area.')
+                }
+              });
+            }
+            // If the area id is a not associated with tag,
+            // remove that association
+            else {
+
+              var result = TagTargetAdd.query(
+                {
+                  tagId: Data.currentTagIndex,
+                  areaId: Data.currentAreaIndex
+                }
+              );
+              result.$promise.then(function (data) {
+                alert('add');
+                console.log(data);
+                if (data.status == 'success') {
+                  targetList = result.areaTargets;
+                  TaggerToast('Tag added to Area.')
+                }
+              });
+            }
+          }
+
+        };
+
+        scope.checkArea = function () {
+
+          if(findArea(Data.currentAreaIndex, targetList)) {
+            scope.buttonClass = 'md-warn';
+            scope.buttonIcon = 'clear';
+            scope.textClass = 'grey-label';
+          } else {
+            scope.textClass = 'grey-item';
+            scope.buttonClass = 'md-accent';
+            scope.buttonIcon = 'add';
+          }
+        }
+      }
+    }
+
+  }
+
+]);
+
+
+
+taggerDirectives.directive('adminTags', [
+
+  function(
+
+  ) {
+      return {
+        restrict: 'E',
+        template:
+        '<div class="list-group-item-text md-subhead" flex="60"> {{tag.name}}</div>' +
+        '<div flex="40">' +
+        '  <md-button class="md-warn md-raised md-fab md-mini" ng-click="resetTag(tag.id);"/>' +
+        '</div>' +
+        '<div md-ripple-container>' +
+        '</div>',
+        scope: {
+          tag: '='
+        },
+        controller: 'TagsCtrl'
+      }
+}]);
 
 taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', function($window, $timeout, d3Service) {
 
@@ -48,8 +177,8 @@ taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', functio
     // Angular link function
     link: function (scope, ele, attrs) {
 
-      var DURATION = 1500;
-      var DELAY    = 500;
+      var DURATION = 800;
+      var DELAY    = 200;
       var colors = ['red', 'green', 'blue', 'yellow', 'indigo', 'orange'];
       var colorIndex = 0;
 

@@ -96,6 +96,10 @@ module.exports = function(app,config,passport){
   app.post('/rest/tag/delete', ensureAuthenticated, tag.delete);
   app.post('/rest/tag/update', ensureAuthenticated, tag.update);
   app.use('/rest/tags/count/byArea/:areaId', ensureAuthenticated, tag.tagByAreaCount);
+  app.get('/rest/tag/targets/byId/:tagId', ensureAuthenticated, tagTarget.getAreaTargets);
+  app.get('/rest/tag/:tagId/add/area/:areaId', ensureAuthenticated, tagTarget.addTarget);
+  app.get('/rest/tag/:tagId/remove/area/:areaId', ensureAuthenticated, tagTarget.removeTarget);
+
 
   // USERS
   app.get('/admin/users', ensureAuthenticated, users.overview);
@@ -104,9 +108,7 @@ module.exports = function(app,config,passport){
   app.post('/rest/users/delete', ensureAuthenticated, users.delete);
   app.post('/rest/users/update', ensureAuthenticated, users.update);
 
-  app.get('/rest/tag/targets/byId/:tagId', ensureAuthenticated, tagTarget.getAreaTargets);
-  app.get('/rest/tag/:tagId/add/area/:areaId', ensureAuthenticated, tagTarget.addTarget);
-  app.get('/rest/tag/:tagId/remove/area/:areaId', ensureAuthenticated, tagTarget.removeTarget);
+
 
   //unused category route
   app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);

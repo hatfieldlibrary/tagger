@@ -45,6 +45,10 @@
       vm.currentId = 0;
 
       var areas = AreaList.query();
+
+      vm.userAreaId = Data.userAreaId;
+
+
       /**
        * Upon resolution, set the area data and call
        * the context initialization method setContext()
@@ -74,6 +78,8 @@
         updateAreaContext(id);
 
       };
+
+
 
       vm.setCurrentIndex = function(index) {
         vm.currentIndex = index;
@@ -160,7 +166,36 @@
 
       }
 
+      /**
+       * Sets the view model's user value.
+       */
+      $scope.$watch(function() { return Data.userAreaId },
+        function(id) {
+          vm.userAreaId = id;
+          getAreaLabel(id);
+          setContext(id);
+        });
+
+
+      /**
+       * Look up area label.
+       * @param id  the area id
+       */
+      function getAreaLabel(id) {
+
+        for (var i = 0; i < Data.areas.length; i++) {
+
+          if (Data.areas[i].id === id) {
+            Data.areaLabel = Data.areas[i].title;
+            vm.areaLabel = Data.areas[i].title;
+            return;
+          }
+        }
+      }
+
     }]);
+
+
 
 
 })();

@@ -15,6 +15,7 @@
     'TagList',
     'TagById',
     'TagUpdate',
+    'TagsForArea',
     'TaggerToast',
     'TaggerDialog',
     'Data',
@@ -26,6 +27,7 @@
       TagList,
       TagById,
       TagUpdate,
+      TagsForArea,
       TaggerToast,
       TaggerDialog,
       Data  ) {
@@ -65,8 +67,13 @@
           vm.currentTag = id;
         }
         vm.tag = TagById.query({id:  Data.currentTagIndex});
-
+        console.log('tag data');
+        console.log(vm.tag);
       };
+
+
+
+
 
       /**
        * Updates tag information and retrieves new
@@ -100,6 +107,7 @@
             vm.tags = newValue;
             if (newValue.length > 0) {
               vm.resetTag(newValue[0].id);
+              vm.userAreaId = Data.userAreaId;
             }
           }
         }
