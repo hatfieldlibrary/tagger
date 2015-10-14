@@ -72,16 +72,15 @@ exports.addTarget = function(req, res) {
               }
             }
           },
-          {attributes: ['AreaId']}
-        ).success = function (areas) {
+          {attributes: ['AreaId','TagId']}
+        ).success(function (areas) {
           // JSON response
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Access-Control-Allow-Origin', '*');
-          res.end(JSON.stringify({status: 'exists', areaTargets: areas})
-          ).error(function(err) {
-              console.log(err);
-            });
-        }
+          res.end(JSON.stringify({status: 'exists', areaTargets: areas}))
+          }).error(function(err) {
+            console.log(err);
+          });
       }
 
     });

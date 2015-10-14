@@ -27,7 +27,8 @@ md-content(class="transparent" layout="row", style="overflow: auto;" layout-alig
           md-content(layout-padding flex="80" style="padding-left: 20px;")
             div(flex="80" class="md-subhead grey-text")
               span(ng-show="vm.userAreaId==0") Collections can be associated with one or more #[em Subject Tags]. A single Subject Tag can be used across multiple Areas. (A Tag must be assigned to at least one Area.)
-              span( ng-show="vm.userAreaId > 0") Add or remove #[em Subject Tags} from your collection area. Note that when you add a tag it may immediately appear in the public display. If you add a tag, be sure to use it.
+              div(style="width: 70%;" ng-show="vm.userAreaId > 0") Add or remove #[em Subject Tags} from your collection area. Note that when you add a tag it may immediately appear in the public display. If you add a tag, be sure to use it.
+                                                |  Before you delete a tag, be sure to remove it from ALL Collections first.  That's just good housekeeping.
             div(flex)
               md-button(ng-show="vm.userAreaId==0" class="md-raised md-accent" style="float:right;" ng-click="vm.updateTag()") Update Tag
             div(flex)
@@ -37,7 +38,7 @@ md-content(class="transparent" layout="row", style="overflow: auto;" layout-alig
               label Tag Name
               input(type="text", ng-model="vm.tag.name")
 
-            div(layout="column" style="height: 700px;overflow: auto;border-top: 1px solid #ccc;" flex ng-show="vm.userAreaId > 0")
+            div(layout="column" style="height: 600px;margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;" flex ng-show="vm.userAreaId > 0")
               md-content(flex )
                 md-list
                   md-list-item(ng-repeat="tag in vm.tags")

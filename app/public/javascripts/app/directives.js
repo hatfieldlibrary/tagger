@@ -69,12 +69,12 @@ taggerDirectives.directive('tagButton', [ 'TaggerToast','TagTargets', 'TagTarget
 
               var result = TagTargetRemove.query(
                 {
-                  tagId: Data.currentTagIndex,
+                  tagId: scope.tagId,
                   areaId: Data.currentAreaIndex
                 }
               );
               result.$promise.then(function (data) {
-                alert('delete');
+                scope.init();
                 if (data.status == 'success') {
                   targetList = result.areaTargets;
                   TaggerToast('Tag removed from area.')
@@ -87,13 +87,12 @@ taggerDirectives.directive('tagButton', [ 'TaggerToast','TagTargets', 'TagTarget
 
               var result = TagTargetAdd.query(
                 {
-                  tagId: Data.currentTagIndex,
+                  tagId: scope.tagId,
                   areaId: Data.currentAreaIndex
                 }
               );
               result.$promise.then(function (data) {
-                alert('add');
-                console.log(data);
+                scope.init();
                 if (data.status == 'success') {
                   targetList = result.areaTargets;
                   TaggerToast('Tag added to Area.')
