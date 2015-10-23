@@ -3,15 +3,11 @@ html
   head
     title= title
     link(rel="stylesheet", href="/stylesheets/jquery-ui-1.11.2-min.css")
-    link(rel="stylesheet", href="../../bower_components/angular-material/angular-material.min.css")
+    link(rel="stylesheet", href="/bower_components/angular-material/angular-material.min.css")
     link(rel="stylesheet", href="/stylesheets/style.css")
     link(rel="stylesheet", href="https://fonts.googleapis.com/icon?family=Material+Icons")
     link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css")
-    body(ng-cloak)
-      div(layout-fill)&attributes({layout: "column"})
-        md-toolbar()
-          div.md-toolbar-tools
-            span
-              h2.md-display-4 Tagger
-            span(flex)
-      block content
+    base(href="/admin/")
+
+
+

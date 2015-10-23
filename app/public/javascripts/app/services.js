@@ -6,7 +6,13 @@ var host = 'http://localhost:3000/rest/';
 
 var taggerServices = angular.module('taggerServices', ['ngResource']);
 
-// SHARED DATA SERVICE
+/**
+ * Returns singleton data object used to share state
+ * among controllers. Controllers update object fields
+ * whenever a change needs to propagate, and $watch for updates
+ * to fields, changing the view model as required
+ * in response to updates.
+ */
 taggerServices.factory('Data', function () {
   return {
     areas: [],
@@ -32,6 +38,7 @@ taggerServices.factory('Data', function () {
 });
 
 
+// Unused?
 taggerServices.provider('UseHost', [
   function () {
     this.host = 'localhost';
@@ -50,6 +57,14 @@ taggerServices.provider('UseHost', [
 ]);
 
 
+/**
+ * D3 service lazyloads the d3 script and
+ * calls onScriptLoad function when ready.
+ * Note that the path to the javascript
+ * library is hardcoded.  It should be injected
+ * into this service or perhaps configured via
+ * the provider in app.js.
+ */
 taggerServices.factory('d3Service', [
   '$document',
   '$q',
@@ -92,6 +107,10 @@ taggerServices.factory('d3Service', [
   }]);
 
 
+/**
+ * ngResource services
+ */
+
 // USERS
 
 taggerServices.factory('UserList', ['$resource',
@@ -120,7 +139,6 @@ taggerServices.factory('UserUpdate', ['$resource',
 
 
 // COLLECTION
-
 
 taggerServices.factory('SearchOptionType', ['$resource',
   function ($resource) {
@@ -270,6 +288,12 @@ taggerServices.factory('AreaAdd', ['$resource',
 taggerServices.factory('AreaDelete', ['$resource',
   function ($resource) {
     return $resource(host + 'area/delete');
+  }
+]);
+
+taggerServices.factory('ReorderAreas', ['$resource',
+  function($resource) {
+    return $resource(host + 'area/reorder');
   }
 ]);
 
@@ -448,32 +472,14 @@ taggerServices.factory('TagTargets', ['$resource',
     });
   }]);
 
-taggerServices.factory('ImageUpload', ['$http', function ($http) {
-
-  this.uploadFileToUrl = function (file) {
-    var uploadUrl = '/admin/collection/image';
-    var fd = new FormData();
-    fd.append('file', file);
-    $http.post(uploadUrl, fd, {
-      transformRequest: angular.identity,
-      headers: {'Content-Type': undefined}
-    })
-      .success(function () {
-        return '{status: "success"}';
-      })
-      .error(function (err) {
-        console.log(err)
-      });
-  }
-
-}]);
 
 
-// TOAST SERVICE
-// Using the Angular Material mdToast
-// directive throughout the application.
-// This toast service takes a single
-// message parameter.
+/**
+ * Using the Angular Material mdToast
+ * directive throughout the application.
+ * This toast service takes a single
+ * message parameter.
+ */
 taggerServices.factory('TaggerToast', [
 
   '$mdToast',
@@ -605,17 +611,18 @@ taggerServices.factory('TaggerDialog', [
       $scope.getTagList = function (id) {
 
         // Update the shared Data service
-        Data.tags = TagList.query();
+        var tags = TagList.query();
 
         // Broadcast event from rootScope so that
         // AreaCtrl will update list with the
         // new category.
-        Data.tags.$promise.then(function () {
+        tags.$promise.then(function () {
           if (id === null) {
             Data.currentTagIndex = Data.tags[0].id;
           } else {
             Data.currentTagIndex = id;
           }
+          Data.tags = tags;
           //     $rootScope.$broadcast('tagsUpdate', {});
           $scope.closeDialog();
         });
@@ -909,30 +916,6 @@ taggerServices.factory('TaggerDialog', [
           console.log('error status: ' + status);
         })
       };
-      /*
-       $scope.f = file;
-       if (file && !file.$error) {
-       file.upload = Upload.upload({
-       url: '/admin/collection/image',
-       file: file
-       });
-
-       file.upload.then(function (response) {
-       $timeout(function () {
-       file.result = response.data;
-       });
-       }, function (response) {
-       if (response.status > 0)
-       $scope.errorMsg = response.status + ': ' + response.data;
-       });
-
-       file.upload.progress(function (evt) {
-       file.progress = Math.min(100, parseInt(100.0 *
-       evt.loaded / evt.total));
-       });
-       } */
-      //};
-
 
       $scope.closeDialog = function () {
         $mdDialog.hide();

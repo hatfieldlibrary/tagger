@@ -35,7 +35,7 @@ exports.byId = function(req, res) {
 exports.list = function(req, res) {
 
   db.Area.findAll( {
-    order: [['title', 'ASC']]
+    order: [['position', 'ASC']]
   }).success( function(tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
@@ -49,14 +49,28 @@ exports.add =function (req, res) {
 
   var title = req.body.title;
 
-  db.Area.create({
-    title: title
-  }).success(function(result) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify({ status: 'success', id: result.id }));
-  });
+  db.Area.findAll()
+    .success(function(result) {
+      console.log('result count ' + result.length);
+      addArea(result.length + 1)
+    })
+    .error(function (err) {
+      console.log(err);
+    });
+
+  function addArea(position) {
+    console.log('Adding area with position ' + position);
+    db.Area.create({
+      title: title,
+      position: position
+    }).success(function(result) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({ status: 'success' }));
+    }).error(function(err) {
+      console.log(err);
+    });
+  }
 
 };
 
@@ -87,6 +101,45 @@ exports.update = function (req, res) {
     });
 };
 
+/**
+ * Updates position attributes to new values based on the
+ * order of the array passed in via POST.  This is useful
+ * when the array order has been changed in the client-side
+ * model. The new position value can be used to order query
+ * results for clients (order by position).
+ * @param req
+ * @param res
+ */
+exports.reorder = function (req, res) {
+
+  var areas = req.body.areas;
+
+  var chainer = new db.Sequelize.Utils.QueryChainer();
+  for (var i = 0; i < areas.length; i++) {
+    chainer.add(
+      db.Area.update(
+        {
+          // position attribute based on current array index
+          position: i + 1
+        },
+        {
+          id: areas[i].id
+        })
+    );
+  }
+
+  chainer.run()
+    .success(function() {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({ status: 'success'}))
+    }).error(function(err) {
+      console.log(err);
+    })
+
+};
+
 exports.delete = function (req , res) {
 
   var id = req.body.id;
@@ -102,151 +155,4 @@ exports.delete = function (req , res) {
     res.end(JSON.stringify({ status: 'success'}));
   });
 };
-
-
-
-
-
-
-
-
-
-exports.create = function(req, res) {
-
-  var title = req.body.title;
-  var url = req.body.url;
-  var searchUrl = req.body.searchUrl;
-  var description = req.body.description;
-  // First create the new category. Then retrieve the
-  // updated category list and pass it to the view.
-  async.series (
-    {
-      create: function (callback) {
-        db.Area.create({
-          title: title,
-          url: url,
-          searchUrl: searchUrl,
-          description: description,
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function (callback) {
-        db.Area.findAll(
-          {
-            attributes: ['id','title', 'url','linkLabel','searchUrl', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      }
-    },
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.render('areaIndex', {
-        title: 'Areas',
-        areas: result.home
-      });
-    }
-  );
-};
-
-
-
-
-
-
-exports.oldupdate = function(req, res) {
-
-  var title = req.body.title;
-  var url = req.body.url;
-  var searchUrl = req.body.searchUrl;
-  var description = req.body.description;
-  var linkLabel = req.body.linkLabel;
-  var id = req.body.id;
-
-  // First update the collection. Then retrieve the updated
-  // collection list and pass it to the view.
-  async.series (
-    {
-      update:  function (callback) {
-        db.Area.update({
-            title: title,
-            url: url,
-            linkLabel: linkLabel,
-            searchUrl: searchUrl,
-            description: description
-          },
-          {
-            id: {
-              eq: id
-            }
-          }).complete(callback);
-      },
-      home: function (callback) {
-        db.Area.findAll(
-          {
-            attributes: ['id','title', 'linkLabel', 'url', 'searchUrl', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback);
-      }
-    },
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.render('areaIndex', {
-        title: 'Areas',
-        areas: result.home
-      });
-    }
-  );
-};
-
-
-
-
-exports.olddelete = function(req, res) {
-
-  var areaId = req.params.id;
-  // First delete the collection. Then retrieve the updated
-  // collection list and pass it to the view.
-  async.series (
-    {
-      delete: function(callback) {
-        db.Area.destroy({
-          id: {
-            eq: areaId
-          }
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function(callback) {
-        db.Area.findAll(
-          {
-            attributes: ['id','title', 'linkLabel', 'url', 'searchUrl', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      }
-    }, function(err, result) {
-      if (err) { console.log(err); }
-      res.render('areaIndex', {
-        title: 'Areas',
-        areas: result.home
-      });
-    }
-  );
-};
-
-
-
-
 

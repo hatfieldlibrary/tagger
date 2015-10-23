@@ -36,7 +36,6 @@
       TaggerToast,
       Data ) {
 
-
       var vm = this;
 
       /** @type {Object} */
@@ -64,6 +63,7 @@
       /** @type {string} */
       vm.updateImageMessage = 'templates/updateImageMessage.html';
 
+      /** @type {number} */
       vm.userAreaId = Data.userAreaId;
 
       /**
@@ -158,15 +158,28 @@
 
       });
 
+      /**
+       * Watch for changes in the shared area id and update the
+       * view model collection list and category list.
+       */
       $scope.$watch(function() {
          return Data.currentAreaIndex;
       }, function(newValue, oldValue) {
+
         if (newValue !== oldValue) {
           var cats = CategoryByArea.query({areaId: newValue});
           cats.$promise.then(function() {
              vm.categoryList = cats;
+          });
+          var collectionList = CollectionsByArea.query(
+            {
+              areaId: Data.currentAreaIndex
+            }
+          );
+          collectionList.$promise.then(function(data) {
+              vm.collectionList = data;
+          });
 
-          })
         }
       });
 
@@ -230,7 +243,8 @@
       $scope.$watch(function() {return Data.categories},
         function(newValue) {
           if (newValue.length > 0) {
-            vm.categoryList = CategoryByArea.query({areaId: Data.currentAreaIndex});
+            vm.categoryList =
+              CategoryByArea.query({areaId: Data.currentAreaIndex});
           }
         });
 

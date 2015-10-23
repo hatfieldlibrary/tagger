@@ -36,13 +36,24 @@
 
       /** @type {Array.<Object>} */
       vm.tags = Data.tags;
+
       /** @type {Object} */
       vm.tag = Data.tags[0];
+
       /** @type {number} */
-      vm.currentTag = vm.tag.id;
+      if (vm.tag) {
+        vm.currentTag = vm.tag.id;
+      } else {
+        vm.currentTag = 10000;
+      }
+
+      /** @type {number} */
+      vm.userAreaId = Data.userAreaId;
+
       /* Tag dialog messages */
       /** @type {string} */
       vm.addMessage = 'templates/addTagMessage.html';
+
       /** @type {string} */
       vm.deleteMessage = 'templates/deleteTagMessage.html';
 
@@ -70,10 +81,6 @@
         console.log('tag data');
         console.log(vm.tag);
       };
-
-
-
-
 
       /**
        * Updates tag information and retrieves new
@@ -106,12 +113,17 @@
           if (newValue !== null) {
             vm.tags = newValue;
             if (newValue.length > 0) {
-              vm.resetTag(newValue[0].id);
+
               vm.userAreaId = Data.userAreaId;
+
+                vm.resetTag(Data.currentTagIndex);
+
             }
           }
         }
       );
+
+
 
     }]);
 

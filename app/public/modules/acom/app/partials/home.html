@@ -14,7 +14,7 @@
         <li class="collection-item lowercase hide-for-small-down" style="border-bottom: none;">
           <ul class="inline-list sub">
             <li ng-repeat="sub in subjects">
-              <a ng-click="setSelectedSubject($index);getCollectionsBySubject(sub.id, currentAreaId, sub.name)"
+              <a ng-click="setSelectedSubject($index);getCollectionsBySubject(sub.TagId, sub.name)"
                  ng-class="{active: $index === selectedSubjectIndex}">{{sub.name}}</a>
             </li>
           </ul>

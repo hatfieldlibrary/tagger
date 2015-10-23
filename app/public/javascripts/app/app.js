@@ -6,6 +6,7 @@ angular.module('taggerApp', [
     'ngMaterial',
     'ngRoute',
     'ngFileUpload',
+    'dndLists',
     'taggerControllers',
     'taggerServices',
     'taggerDirectives'

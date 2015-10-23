@@ -1,6 +1,9 @@
 .grey-text {
   color:#999;
 }
+html {
+  background: #ECEFF5;
+}
 body {
   background: #ECEFF5;
 }
@@ -232,6 +235,14 @@ md-list-item.md-no-proxy  {
   }
 }
 
+.chart-data {
+  margin-top: 20px;
+  margin-left: 160px;
+  width: 500px;
+  border: 1px solid #ccc;
+  padding: 20px;
+
+}
 .pieChart--detail__left {
   text-align: left;
 }
@@ -241,27 +252,53 @@ md-list-item.md-no-proxy  {
 }
 
 .pieChart__indigo {
+  color: #4d52c7;
   fill: #4d52c7;
 }
 
 .pieChart__blue {
+  color: #568cc7;
   fill: #568cc7;
 }
 
 .pieChart__red {
-  fill: #b76ad7;
+  color: #9052AA;
+  fill: #9052AA;
 }
 
 .pieChart__green {
-  fill: #6ec798;
+  color:  #39C57B;
+  fill: #39C57B;
 }
 
 .pieChart__yellow {
+  color:  #d7d46b;
   fill: #d7d46b;
 }
 
 .pieChart__orange {
+  color:  #d7833b;
   fill: #d7833b;
+}
+
+.pieChart__skyblue {
+  color: #8cc4c7;
+  fill: #8cc4c7;
+}
+
+.pieChart__seagreen {
+  color: #2d846b;
+  fill: #2d846b;
+}
+
+.pieChart__maroon {
+  color: #841848;
+  fill: #841848;
+}
+
+.pieChart__coffee {
+  color: #594833;
+  fill: #594833;
 }
 
 /**
@@ -269,4 +306,68 @@ md-list-item.md-no-proxy  {
  */
 .hidden {
   display: none;
+}
+
+
+.sortable-list md-list[dnd-list],
+.sortable-list md-list[dnd-list] > md-list-item{
+  position: relative;
+}
+
+/**
+ * The dnd-list should always have a min-height,
+ * otherwise you can't drop to it once it's empty
+ */
+.sortable-list md-list[dnd-list] {
+  min-height: 42px;
+  padding-left: 0px;
+}
+
+/**
+ * The dndDraggingSource class will be applied to
+ * the source element of a drag operation. It makes
+ * sense to hide it to give the user the feeling
+ * that he's actually moving it.
+ */
+.sortable-list md-list[dnd-list] .dndDraggingSource {
+  display: none;
+}
+
+/**
+ * An element with .dndPlaceholder class will be
+ * added to the dnd-list while the user is dragging
+ * over it.
+ */
+.sortable-list md-list[dnd-list] .dndPlaceholder {
+  display: block;
+  background-color: #ddd;
+  min-height: 42px;
+}
+
+/**
+ * The dnd-lists's child elements currently MUST have
+ * position: relative. Otherwise we can not determine
+ * whether the mouse pointer is in the upper or lower
+ * half of the element we are dragging over. In other
+ * browsers we can use event.offsetY for this.
+ */
+.sortable-list md-list[dnd-list] >  md-list-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding-left: 10px;
+  display: block;
+  padding: 0;
+  margin-bottom: -1px;
+}
+
+.sortable-list md-list-item > button {
+  padding-left: 10px;
+}
+
+/**
+ * Show selected elements in green
+ */
+.md-list md-list[dnd-list] md-list-item.selected {
+  background-color: #dff0d8;
+  color: #3c763d;
 }

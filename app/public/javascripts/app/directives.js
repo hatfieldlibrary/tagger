@@ -2,6 +2,9 @@
 
 var taggerDirectives  = angular.module('taggerDirectives', []);
 
+/**
+ * Directive used to detect when a DOM element is ready.
+ */
 taggerDirectives.directive('elemReady', function( $parse ) {
   return {
     restrict: 'A',
@@ -18,7 +21,18 @@ taggerDirectives.directive('elemReady', function( $parse ) {
 
 });
 
-taggerDirectives.directive('tagButton', [ 'TaggerToast','TagTargets', 'TagTargetRemove', 'TagTargetAdd', 'Data',
+/**
+ * Directive used by the Collection Manager function of
+ * adding or removing subject tags from the area that
+ * the manager maintains.
+ */
+taggerDirectives.directive('toggleTagAreaButton', [
+
+  'TaggerToast',
+  'TagTargets',
+  'TagTargetRemove',
+  'TagTargetAdd',
+  'Data',
 
   function(
     TaggerToast,
@@ -34,16 +48,15 @@ taggerDirectives.directive('tagButton', [ 'TaggerToast','TagTargets', 'TagTarget
         tagName: '@'
       },
       template:
-
-        '<div style="width: 10%;float:left;">' +
-        '   <md-button class="{{buttonClass}} md-raised md-fab md-mini"  ng-click="update();">' +
-        '     <i class="material-icons">{{buttonIcon}}</i>' +
-        '     <div class="md-ripple-container"></div>' +
-        '   </md-button>' +
-        '</div>' +
-        '<div style="width: 90%;float:left;line-height: 3.3rem;" class="{{textClass}} md-subhead">' +
-        '   {{tagName}}' +
-        '</div>' ,
+      '<div style="width: 10%;float:left;">' +
+      '   <md-button class="{{buttonClass}} md-raised md-fab md-mini"  ng-click="update();">' +
+      '     <i class="material-icons">{{buttonIcon}}</i>' +
+      '     <div class="md-ripple-container"></div>' +
+      '   </md-button>' +
+      '</div>' +
+      '<div style="width: 90%;float:left;line-height: 3.3rem;" class="{{textClass}} md-subhead">' +
+      '   {{tagName}}' +
+      '</div>' ,
       link: function(scope, elem, attrs) {
 
         var targetList = [];
@@ -122,355 +135,261 @@ taggerDirectives.directive('tagButton', [ 'TaggerToast','TagTargets', 'TagTarget
 
 ]);
 
+/**
+ * Pie chart directive.
+ */
+taggerDirectives.directive('d3Pie', [
+  '$window',
+  '$timeout',
+  'd3Service',
+  function($window, $timeout, d3Service) {
 
+    return {
+      // attribute only
+      restrict: 'A',
+      template: '<svg id="{{label}}" style="overflow: visible;"> ' +
+      '           <defs> ' +
+      '             <filter id=\'pieChartInsetShadow\'> ' +
+      '              <feOffset dx=\'0\' dy=\'0\'/> ' +
+      '                 <feGaussianBlur stdDeviation=\'3\' result=\'offset-blur\' /> ' +
+      '                 <feComposite operator=\'out\' in=\'SourceGraphic\' in2=\'offset-blur\' result=\'inverse\' /> ' +
+      '                 <feFlood flood-color=\'black\' flood-opacity=\'1\' result=\'color\' />  ' +
+      '                 <feComposite operator=\'in\' in=\'color\' in2=\'inverse\' result=\'shadow\' /> ' +
+      '                 <feComposite operator=\'over\' in=\'shadow\' in2=\'SourceGraphic\' />  ' +
+      '             </filter> ' +
+      '             <filter id="pieChartDropShadow"> ' +
+      '               <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" /> ' +
+      '                 <feOffset in="blur" dx="0" dy="3" result="offsetBlur" /> ' +
+      '                 <feMerge> <feMergeNode /> ' +
+      '                 <feMergeNode in="SourceGraphic" /> </feMerge> ' +
+      '             </filter> ' +
+      '           </defs> ' +
+      '         </svg>' +
+      '         <div class="chart-data"></div>',
+      // creating scope object isolates
+      scope: {
+        data: '=',      // bi-directional binding of data
+        label: '@'
+      },
+      // Angular link function
+      link: function (scope, ele, attrs) {
 
-taggerDirectives.directive('adminTags', [
+        var DURATION = 800;
+        var DELAY    = 200;
+        /**
+         * Array of colors used by class attributes.
+         * @type {Array<string> }*/
+        var colors = ['blue', 'green', 'yellow', 'red', 'indigo', 'orange', 'skyblue', 'seagreen', 'maroon', 'coffee'];
+        /**
+         * The parent element
+         * @type {Element}
+         */
+        var containerEl = document.getElementById(attrs.id),
+          /**
+           * The top level d3 node.
+           * @type {Object}
+           */
+          container = d3.select(containerEl);
 
-  function(
-
-  ) {
-      return {
-        restrict: 'E',
-        template:
-        '<div class="list-group-item-text md-subhead" flex="60"> {{tag.name}}</div>' +
-        '<div flex="40">' +
-        '  <md-button class="md-warn md-raised md-fab md-mini" ng-click="resetTag(tag.id);"/>' +
-        '</div>' +
-        '<div md-ripple-container>' +
-        '</div>',
-        scope: {
-          tag: '='
-        },
-        controller: 'TagsCtrl'
-      }
-}]);
-
-taggerDirectives.directive('d3Pie', ['$window', '$timeout', 'd3Service', function($window, $timeout, d3Service) {
-
-  return {
-    // attribute only
-    restrict: 'A',
-    template: '<svg id="{{label}}" style="overflow: visible;"> ' +
-    '           <defs> ' +
-    '             <filter id=\'pieChartInsetShadow\'> ' +
-    '              <feOffset dx=\'0\' dy=\'0\'/> ' +
-    '                 <feGaussianBlur stdDeviation=\'3\' result=\'offset-blur\' /> ' +
-    '                 <feComposite operator=\'out\' in=\'SourceGraphic\' in2=\'offset-blur\' result=\'inverse\' /> ' +
-    '                 <feFlood flood-color=\'black\' flood-opacity=\'1\' result=\'color\' />  ' +
-    '                 <feComposite operator=\'in\' in=\'color\' in2=\'inverse\' result=\'shadow\' /> ' +
-    '                 <feComposite operator=\'over\' in=\'shadow\' in2=\'SourceGraphic\' />  ' +
-    '             </filter> ' +
-    '             <filter id="pieChartDropShadow"> ' +
-    '               <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" /> ' +
-    '                 <feOffset in="blur" dx="0" dy="3" result="offsetBlur" /> ' +
-    '                 <feMerge> <feMergeNode /> ' +
-    '                 <feMergeNode in="SourceGraphic" /> </feMerge> ' +
-    '             </filter> ' +
-    '           </defs> ' +
-    '         </svg>',
-    // creating scope object isolates
-    scope: {
-      data: '=',      // bi-directional binding of data
-      label: '@'
-    },
-    // Angular link function
-    link: function (scope, ele, attrs) {
-
-      var DURATION = 800;
-      var DELAY    = 200;
-      var colors = ['red', 'green', 'blue', 'yellow', 'indigo', 'orange'];
-      var colorIndex = 0;
-
-      /**
-       * Calculates percentage from integer counts
-       * @param values   count by type
-       * @param total     count of all types
-       * @returns {Array}
-       */
-      function ratios(values, total) {
-        var data = [];
-        for (var i = 0; i < values.length; i++) {
-          data[i] = {title: values[i].title, value:  values[i].value / total, count: values[i].value}
+        /**
+         * Calculates percentage from integer counts
+         * @param values   count by type
+         * @param total     count of all types
+         * @returns {Array}
+         */
+        function ratios(values, total) {
+          var data = [];
+          for (var i = 0; i < values.length; i++) {
+            data[i] = {
+              title: values[i].title,
+              value:  values[i].value / total,
+              count: values[i].value}
+          }
+          return data;
         }
-        return data;
-      }
 
-      function colorWheel() {
-        var color = colors[colorIndex];
-        if (colorIndex == 6) {
-          colorIndex = 0;
-        } else {
-          colorIndex++;
+        /**
+         * Return the color name from the colors array.
+         * @param i  the index of the array element
+         * @returns {string}
+         */
+        function colorWheel(i) {
+          return colors[i];
         }
-        return color;
-      }
 
-      // waiting for the d3 object promise
-      d3Service.d3().then(function (d3) {
+        // waiting for the d3 object promise
+        d3Service.d3().then(function (d3) {
 
+          var total = 0;
+          var data = [];
 
-        var total = 0;
-        var data = [];
+          // initialize on data change
+          scope.$watch(function(scope) { return scope.data },
+            function() {
+              if (scope.data !== undefined) {
+                total = scope.data.total;
+                if (scope.data.data.length > 0) {
+                  // calculate percentages
+                  data = ratios(scope.data.data, total);
+                  // Make sure element is ready
+                  ele.ready(function() {
+                    drawPieChart();
+                  });
 
-        // initialize on data change
-        scope.$watch(function(scope) { return scope.data },
-          function() {
-            if (scope.data !== undefined) {
-              colorIndex = 0;
-              total = scope.data.total;
-              if (scope.data.data.length > 0) {
-                // calculate percentages
-                data = ratios(scope.data.data, total);
-                // Make sure element is ready
-                ele.ready(function() {
-                  drawPieChart();
-                });
-
-              } else {
-                clearChart();
+                } else {
+                  clearChart();
+                }
               }
-            }
-          });
-
-
-        // d3 code begins here.
-
-        /**
-         * Clear the chart.  This will be called when an empty
-         * data array is passed to the directive.
-         */
-        function clearChart() {
-          var containerEl = document.getElementById(attrs.id),
-            container = d3.select(containerEl),
-            svg = container.select('svg');
-          svg.selectAll('g').remove();
-          svg.select('circle').remove();
-        }
-
-        /**
-         * Draws the pie chart
-         */
-        function drawPieChart() {
-           console.log('element');
-          console.log(document.getElementById(attrs.id));
-          console.log(document.getElementById(attrs.id).clientWidth);
-
-
-          var containerEl = document.getElementById(attrs.id),
-            width = containerEl.clientWidth,
-            height = width * 0.4,
-            radius = Math.min(width, height) / 2,
-            container = d3.select(containerEl),
-            svg = container.select('svg')
-              .attr('width', width)
-              .attr('height', height);
-          svg.selectAll('g').remove();
-
-          var pie = svg.append('g')
-            .attr(
-            'transform',
-            'translate(' + width / 2 + ',' + height / 2 + ')'
-          );
-
-          var detailedInfo = svg.append('g')
-            .attr('class', 'pieChart--detailedInformation');
-
-          var twoPi = 2 * Math.PI;
-          var pieData = d3.layout.pie()
-            .value(function (d) {
-              return d.value;
             });
 
-          var arc = d3.svg.arc()
-            .outerRadius(radius - 20)
-            .innerRadius(0);
 
-          var pieChartPieces = pie.datum(data)
-            .selectAll('path')
-            .data(pieData)
-            .enter()
-            .append('path')
-            .attr('class', function (d) {
-              return 'pieChart__' + colorWheel();
-            })
-            .attr('filter', 'url(#pieChartInsetShadow)')
-            .attr('d', arc)
-            .each(function () {
-              this._current = {
-                startAngle: 0,
-                endAngle: 0
-              };
-            })
-            .transition()
-            .duration(DURATION)
-            .attrTween('d', function (d) {
-              var interpolate = d3.interpolate(this._current, d);
-              this._current = interpolate(0);
+          // d3 code begins here.
 
-              return function (t) {
-                return arc(interpolate(t));
-              };
-            })
-            .each('end', function handleAnimationEnd(d) {
-              drawDetailedInformation(d.data, this);
-            });
+          /**
+           * Clear the chart.  This will be called when an empty
+           * data array is passed to the directive.
+           */
+          function clearChart() {
 
-          drawChartCenter();
+            var  svg = container.select('svg');
+            svg.selectAll('g').remove();
+            svg.select('circle').remove();
 
-          function drawChartCenter() {
-            var centerContainer = pie.append('g')
-              .attr('class', 'pieChart--center');
-
-            centerContainer.append('circle')
-              .attr('class', 'pieChart--center--outerCircle')
-              .attr('r', 0)
-              .attr('filter', 'url(#pieChartDropShadow)')
-              .transition()
-              .duration(DURATION)
-              .delay(DELAY)
-              .attr('r', radius - 60);
-
-            centerContainer.append('circle')
-              .attr('id', 'pieChart-clippy')
-              .attr('class', 'pieChart--center--innerCircle')
-              .attr('r', 0)
-              .transition()
-              .delay(DELAY)
-              .duration(DURATION)
-              .attr('r', radius - 65)
-              .attr('fill', '#fff');
           }
 
           /**
-           * Using this hack to test for equivalent svg.bBox heights.
-           * This handles an edge case in which two detail entries
-           * with the same percentage overlap in the left column of the
-           * view.  There may be other edge cases, so stay tuned for more
-           * hacks.
-           * @type {boolean}
+           * Draws the pie chart
            */
-          var hackyTest = 0;
-
-          /**
-           * Adds the detail information sections to the chart.
-           * @param data  {Array} of objects containing details
-           * @param element
-           */
-          function drawDetailedInformation(data, element) {
+          function drawPieChart() {
+            console.log('element');
+            console.log(document.getElementById(attrs.id));
+            console.log(document.getElementById(attrs.id).clientWidth);
 
 
-            var bBox = element.getBBox(),
-              infoWidth = width * 0.3,
-              anchor,
-              infoContainer,
-              position;
+            var width = containerEl.clientWidth,
+              height = width * 0.4,
+              radius = Math.min(width, height) / 2,
+              container = d3.select(containerEl),
+              labelsEl = container.select('.chart-data'),
+              svg = container.select('svg')
+                .attr('width', width)
+                .attr('height', height);
+            svg.selectAll('g').remove();
+            labelsEl.selectAll('.item-info').remove();
 
-            console.log(bBox);
-            if (infoContainer !== undefined) {
-              infoContainer.empty();
-            }
-
-
-            var side;
-            if ((bBox.x + bBox.width / 2) > 0) {
-              side = 0;
-              infoContainer = detailedInfo.append('g')
-                .attr('width', infoWidth)
-                .attr(
-                'transform',
-                'translate(' + (width - infoWidth) + ',' + (bBox.height + bBox.y + 60) + ')'
-
-              );
-              anchor = 'end';
-              position = 'right';
-            } else {
-              side = 0;
-              var trans;
-              /* apply hack */
-              if ((bBox.height + bBox.y + 50) === 50)  {
-                trans =  bBox.height + bBox.y + 50 + (hackyTest * 20);
-                console.log('increment hacky ' + data.title);
-                hackyTest++;
-              } else {
-                trans = bBox.height + bBox.y + 50;
-              }
-              infoContainer = detailedInfo.append('g')
-                .attr('width', infoWidth)
-                .attr(
-                'transform',
-                'translate(' + 0 + ',' + trans + ')'
-              );
-              anchor = 'start';
-              position = 'left';
-            }
-            /*
-             infoContainer.data([data.value * 100])
-             .append('text')
-             .text('0 %')
-             .attr('class', 'pieChart--detail--percentage')
-             .attr('x', (position === 'left' ? 0 : infoWidth))
-             .attr('y', 0)
-             .attr('text-anchor', anchor)
-             .transition()
-             .duration(DURATION)
-             .tween('text', function (d) {
-             var i = d3.interpolateRound(+this.textContent.replace(/\s%/ig, ''),
-             d
-             );
-
-             return function (t) {
-             this.textContent = i(t) + ' %';
-             };
-             });   */
-
-            var title = '';
-            if (data.title !== null) {
-              console.log(data.title);
-              if (data.title.length > 18) {
-
-                title = data.title.substring(0,18) + '...';
-                console.log(title);
-              } else {
-                title = data.title;
-              }   }
-            else {
-              title = data.title;
-            }
-
-            infoContainer.data([title])
-              .append('foreignObject')
-              .attr('width', infoWidth)
-              .attr('height', 100)
-              .attr('x', side)
-              .append('xhtml:body')
+            var pie = svg.append('g')
               .attr(
-              'class',
-              'pieChart--detail--textContainer ' + 'pieChart--detail__' + position
-            )
-              .html(title + ' (' + data.count + ')');
+              'transform',
+              'translate(' + width / 2 + ',' + height / 2 + ')'
+            );
+
+            var detailedInfo = svg.append('g')
+              .attr('class', 'pieChart--detailedInformation');
+
+            var twoPi = 2 * Math.PI;
+            var pieData = d3.layout.pie()
+              .value(function (d) {
+                return d.value;
+              });
+
+            var arc = d3.svg.arc()
+              .outerRadius(radius - 10)
+              .innerRadius(0);
 
 
-            infoContainer.append('line')
-              .attr('class', 'pieChart--detail--divider')
-              .attr('x1', 0)
-              .attr('x2', 0)
-              .attr('y1', 0)
-              .attr('y2', 0)
+            var pieChartPieces = pie.datum(data)
+              .selectAll('path')
+              .data(pieData)
+              .enter()
+              .append('path')
+              .attr('class', function (d, i) {
+                return 'pieChart__' + colorWheel(i);
+              })
+              .attr('filter', 'url(#pieChartInsetShadow)')
+              .attr('d', arc)
+              .each(function () {
+                this._current = {
+                  startAngle: 0,
+                  endAngle: 0
+                };
+              })
               .transition()
               .duration(DURATION)
-              .attr('x2', infoWidth);
+              .attrTween('d', function (d) {
+                var interpolate = d3.interpolate(this._current, d);
+                this._current = interpolate(0);
 
+                return function (t) {
+                  return arc(interpolate(t));
+                };
+              })
+              .each('end', function handleAnimationEnd(d) {
+                drawDetailedInformation(d.data, labelsEl);
+              });
+
+            drawChartCenter();
+
+            function drawChartCenter() {
+              var centerContainer = pie.append('g')
+                .attr('class', 'pieChart--center');
+
+              centerContainer.append('circle')
+                .attr('class', 'pieChart--center--outerCircle')
+                .attr('r', 0)
+                .attr('filter', 'url(#pieChartDropShadow)')
+                .transition()
+                .duration(DURATION)
+                .delay(DELAY)
+                .attr('r', radius - 52);
+
+              centerContainer.append('circle')
+                .attr('id', 'pieChart-clippy')
+                .attr('class', 'pieChart--center--innerCircle')
+                .attr('r', 0)
+                .transition()
+                .delay(DELAY)
+                .duration(DURATION)
+                .attr('r', radius - 65)
+                .attr('fill', '#fff');
+            }
+
+            /**
+             * This counter variable provides the index
+             * used to request colors.
+             * @type {number}
+             */
+            var currentColor = 0;
+
+            /**
+             * Adds color key, title, and count information for a single item to the DOM.
+             * @param @type {Object} the item information
+             * @param element the parent element
+             */
+            function drawDetailedInformation(data, element) {
+
+              var listItem = element.append('div').attr('class','item-info');
+              listItem.data([data])
+                  .html(
+                '       <div style="float:left;" class="pieChart__' + colorWheel(currentColor) + '">' +
+                '          <i class="material-icons">brightness_1</i>' +
+                '       </div>' +
+                '       <div style="float:left; margin-left: 40px;">' +
+                           data.title + ' (' + data.count + ')' +
+                '       </div>' +
+                '       <div style="clear:left;"></div>');
+              currentColor++;
+
+            }
           }
-        }
-      });
-    }
-  };
+        });
+      }
+    };
 
-}]);
+  }]);
 
 
 /**
- * Searches for area id in the current list of
+ * Private method. Searches for area id in the current list of
  * area associations.
  * @param areaId  {number} the area ID
  * @param tar  {Array.<Object>} the areas associated with the collection.
@@ -486,6 +405,9 @@ var findArea = function(areaId, tar) {
   return false;
 };
 
+/**
+ * Directive for selecting the areas with which a TAG will be associated.
+ */
 taggerDirectives.directive('tagAreaSelector', [function() {
   return {
     restrict: 'E',
@@ -506,7 +428,8 @@ taggerDirectives.directive('tagAreaSelector', [function() {
     '      </div>' +
     '   </md-content>' +
     '</md-card>',
-    controller:     function (
+    controller: function (
+
       $scope,
       TagTargets,
       TagTargetRemove,
@@ -618,6 +541,9 @@ taggerDirectives.directive('tagAreaSelector', [function() {
 
 }]);
 
+/**
+ * Directive for selecting the areas with which a COLLECTION will be associated.
+ */
 taggerDirectives.directive('areaSelector', [function() {
   return {
     restrict: 'E',
@@ -639,6 +565,7 @@ taggerDirectives.directive('areaSelector', [function() {
     '   </md-content>' +
     '</md-card>',
     controller: function(
+
       $rootScope,
       $scope,
       AreasForCollection,
@@ -753,7 +680,9 @@ taggerDirectives.directive('areaSelector', [function() {
 }]);
 
 
-
+/**
+ * Directive used to associate a CONTENT TYPE with a COLLECTION.
+ */
 taggerDirectives.directive('contentTypeSelector', [ function() {
 
   return {
@@ -792,14 +721,14 @@ taggerDirectives.directive('contentTypeSelector', [ function() {
     '</md-card>',
 
     controller: function(
+
       $scope,
       ContentTypeList,
       TypesForCollection,
       CollectionTypeTargetRemove,
       CollectionTypeTargetAdd,
       TaggerToast,
-      Data
-    ) {
+      Data ) {
 
 
       /** @type {queryTypes} */
@@ -934,6 +863,9 @@ taggerDirectives.directive('contentTypeSelector', [ function() {
 
 }]);
 
+/**
+ * Directive used to associate a TAG with a COLLECTION.
+ */
 taggerDirectives.directive('subjectSelector', [ function() {
 
   return {
@@ -1140,6 +1072,9 @@ taggerDirectives.directive('subjectSelector', [ function() {
 
 ]);
 
+/**
+ * Directive for adding TAG information to the OVERVIEW.
+ */
 taggerDirectives.directive('subjectTagSummary', function(){
 
   return {
@@ -1183,6 +1118,9 @@ taggerDirectives.directive('subjectTagSummary', function(){
 
 });
 
+/**
+ * Directive for adding a SEARCH OPTION SUMMARY to the OVERVIEW.
+ */
 taggerDirectives.directive('searchOptionSummary', function() {
 
   return {
@@ -1246,6 +1184,9 @@ taggerDirectives.directive('searchOptionSummary', function() {
   }
 });
 
+/**
+ * Directive for adding a CONTENT TYPE SUMMARY information to the OVERVIEW.
+ */
 taggerDirectives.directive('contentTypeSummary', function() {
 
   return {
@@ -1310,6 +1251,10 @@ taggerDirectives.directive('contentTypeSummary', function() {
   }
 });
 
+
+/**
+* Directive for adding a COLLECTOINS SUMMARY information to the OVERVIEW.
+*/
 taggerDirectives.directive('collectionSummary', [function() {
   return {
     restrict: 'E',

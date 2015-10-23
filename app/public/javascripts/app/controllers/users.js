@@ -23,18 +23,23 @@
       TaggerToast,
       Data ) {
 
-
       var vm = this;
 
       /** @type {Array.<Object>} */
       vm.areaList = [];
+
       /** @type {Array.<Object>} */
       vm.users = [];
+
       /**
        * Adds empty new row to users.
        */
       vm.newRow = function() {
-        vm.users[vm.users.length] = {id: null, name:'', email:'', area:''};
+        vm.users[vm.users.length] = {
+          id: null, name:'',
+          email:'',
+          area:''
+        };
       };
 
       /**
@@ -46,7 +51,12 @@
           var arr = [];
           if (list.length > 0) {
             for (var i = 0; i < list.length; i++) {
-              arr[i] = {id: list[i].id, name: list[i].name, email: list[i].email, area: list[i].area};
+              arr[i] = {
+                id: list[i].id,
+                name: list[i].name,
+                email: list[i].email,
+                area: list[i].area
+              };
             }
           }
           vm.users = arr;
@@ -65,7 +75,12 @@
        */
       vm.updateUser = function(id, name, email, area) {
         if (id === null) {
-          var result = UserAdd.save({name: name, email: email, area: area});
+          var result = UserAdd.save(
+            {
+              name: name,
+              email: email,
+              area: area
+            });
           result.$promise.then(function() {
             if (result.status === 'success') {
               TaggerToast('User Added');
@@ -73,7 +88,12 @@
             }
           });
         } else {
-          var result = UserUpdate.save({id: id, name: name, email: email, area: area});
+          var result = UserUpdate.save(
+            {id: id,
+              name: name,
+              email: email,
+              area: area
+            });
           result.$promise.then(function() {
             if (result.status === 'success') {
               TaggerToast('User Updated');
@@ -81,7 +101,6 @@
             }
           });
         }
-
       };
 
       /**
@@ -109,7 +128,10 @@
           if (newValue.length > 0) {
             vm.areaList[0] = {id: 0, name: 'Administrator'};
             for (var i = 0; i < newValue.length; i++) {
-              vm.areaList[i + 1] = {id: newValue[i].id, name: newValue[i].title};
+              vm.areaList[i + 1] = {
+                id: newValue[i].id,
+                name: newValue[i].title
+              };
             }
           }
         }

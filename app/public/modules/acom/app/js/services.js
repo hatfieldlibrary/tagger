@@ -4,14 +4,14 @@
 
 'use strict';
 
-//var host = 'http://localhost:3000/rest/';
-var host = 'http://libmedia.willamette.edu/acomrest2/';
+var host = 'http://localhost:3000/rest/';
+//var host = 'http://libmedia.willamette.edu/acomrest2/';
 
 var collectionServices = angular.module('collectionServices', ['ngResource']);
 
 collectionServices.factory('CollectionById', ['$resource',
   function($resource){
-    return $resource(host + 'collection/byId/:id', {}, {
+    return $resource(host + 'collection/info/byId/:id', {}, {
       query: {method:'GET', isArray:false}
     });
   }
@@ -37,6 +37,14 @@ collectionServices.factory('SubjectsByArea', ['$resource',
   function($resource){
     return $resource(host + 'subjects/byArea/:id', {}, {
       query: {method:'GET', isArray:true}
+    });
+  }
+]);
+
+collectionServices.factory('AreaList', ['$resource',
+  function ($resource) {
+    return $resource(host + 'areas', {}, {
+      query: {method: 'GET', isArray: true}
     });
   }
 ]);

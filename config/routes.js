@@ -15,6 +15,11 @@ module.exports = function(app,config,passport){
 
   /*jshint unused:false*/
 
+  // TAGGER ROUTES
+
+  // AUTHENTICATION
+  app.get('/login', crud.login);
+
   // Use passport.authenticate() as middleware. The first step in Google authentication
   // redirects the user to google.com.  After authorization, Google
   // will redirect the user back to the callback URL /auth/google/callback
@@ -32,14 +37,8 @@ module.exports = function(app,config,passport){
     passport.authenticate('google', { successRedirect: '/admin/',
       failureRedirect: '/login' }));
 
-  // TAGGER ROUTES
- // app.get('/admin/', ensureAuthenticated, crud.overview);
-  app.get('/login', crud.login);
-  app.get('/admin/tag/view', ensureAuthenticated, crud.tagIndex);
-  app.get('/admin/content/view', ensureAuthenticated, crud.contentIndex);
-
   // COLLECTIONS
-//  app.get('/admin/collections', ensureAuthenticated, collection.overview);
+  app.get('/admin/collections', ensureAuthenticated, collection.overview);
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
   app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
   app.use('/rest/collection/tags/:collId', collection.tagsForCollection); // public
@@ -67,6 +66,7 @@ module.exports = function(app,config,passport){
   app.post('/rest/area/add', ensureAuthenticated, area.add);
   app.post('/rest/area/delete', ensureAuthenticated, area.delete);
   app.post('/rest/area/update', ensureAuthenticated, area.update);
+  app.post('/rest/area/reorder', ensureAuthenticated, area.reorder);
 
   // CATEGORIES
   app.get('/admin/category', ensureAuthenticated, category.overview);
@@ -100,7 +100,6 @@ module.exports = function(app,config,passport){
   app.get('/rest/tag/:tagId/add/area/:areaId', ensureAuthenticated, tagTarget.addTarget);
   app.get('/rest/tag/:tagId/remove/area/:areaId', ensureAuthenticated, tagTarget.removeTarget);
 
-
   // USERS
   app.get('/admin/users', ensureAuthenticated, users.overview);
   app.use('/rest/users/list', ensureAuthenticated, users.list);
@@ -108,76 +107,18 @@ module.exports = function(app,config,passport){
   app.post('/rest/users/delete', ensureAuthenticated, users.delete);
   app.post('/rest/users/update', ensureAuthenticated, users.update);
 
-
-
-  //unused category route
-  app.get('/admin/category/view', ensureAuthenticated, crud.categoryIndex);
-  app.get('/admin/area/view', ensureAuthenticated, crud.areaIndex);
-  app.get('/admin/form/collection', ensureAuthenticated, crud.index);
-  app.get('/admin/form/collection/create', ensureAuthenticated, crud.collCreate);
-  app.get('/admin/form/collection/update/:id', ensureAuthenticated, crud.collUpdate);
-  app.get('/admin/form/tag/create', ensureAuthenticated,  crud.tagCreate);
-  app.get('/admin/form/tag/update/:id', ensureAuthenticated, crud.tagUpdate);
-  app.get('/admin/form/area/update/:id', ensureAuthenticated, crud.areaUpdate);
-  app.get('/admin/form/category/update/:id', ensureAuthenticated, crud.categoryUpdate);
-  app.get('/admin/form/content/update/:id', ensureAuthenticated,  crud.contentUpdate);
-  app.get('/admin/collection/remove/tag/:collid/:tagid', ensureAuthenticated, collection.removeTag);
-  app.get('/admin/collection/remove/type/:collid/:type', ensureAuthenticated, collection.removeType);
-  app.get('/admin/collection/delete/:id', ensureAuthenticated, collection.delete);
-  app.post('/admin/collection/tag', ensureAuthenticated, collection.addTag);
-  app.post('/admin/collection/type', ensureAuthenticated, collection.addType);
-//  app.post('/admin/collection/create', ensureAuthenticated, collection.create);
-//  app.post('/admin/collection/update', ensureAuthenticated, collection.update);
-  // need to pass application configuration to imageUpdate controller.
-
-  app.get('/admin/tag/delete/:id', ensureAuthenticated, tag.delete);
-  app.post('/admin/tag/create', ensureAuthenticated, tag.create);
-  app.post('/admin/tag/update', ensureAuthenticated, tag.tagUpdate);
-//  app.post('/admin/area/create', ensureAuthenticated, area.create);
- // app.post('/admin/area/update', ensureAuthenticated, area.update);
-  app.get('/admin/area/delete/:id', ensureAuthenticated, area.delete);
-  app.get('/admin/target/create', ensureAuthenticated, target.create);
-  app.post('/admin/content/create', ensureAuthenticated, content.create);
-  //app.post('/admin/content/update', ensureAuthenticated, content.contentUpdate);
-  app.get('/admin/content/delete/:id', ensureAuthenticated, content.delete);
-  app.post('/admin/category/create', ensureAuthenticated, category.create);
-  app.post('/admin/category/update', ensureAuthenticated, category.update);
-  app.get('/admin/category/delete/:id', ensureAuthenticated, category.delete);
-  app.post('/admin/category/link', ensureAuthenticated, category.addCategoryTarget);
-
-
-  // used by admin
-  app.get('/rest/taglist',               tag.tagList);
-  app.get('/rest/contentlist',           content.getTypeList);
-
-  // Public API routes. These return JSON.
-  //app.get('/rest/taglist',               tag.tagList);
-  //app.use('/rest/tag/getInfo/:id',       tag.getTagInfo);
-  //app.use('/rest/subjects',              tag.getSubjects);
-  //app.get('/rest/contentlist',           content.getTypeList);
-  //app.use('/rest/types',                 content.getTypeList);
-  //app.use('/rest/type/getInfo/:id',      content.getTypeInfo);
-  //app.get('/rest/collection/bytype/:id', collection.collectionByTypeId);
-  //app.get('/rest/collection/bytag/:id',  collection.collectionByTagId);
-  //app.get('/rest/getEad/:id/:fld',       collection.getEadBySubject);
-  //app.get('/rest/getDspaceCollections',  collection.getDspaceCollections);
-  //app.use('/rest/getBrowseList/:collection', collection.browseList);
-
-  //existing
-  app.use('/rest/collection/byId/:id',      collection.collectionById);
+  // Public API routes
+  app.use('/rest/collection/info/byId/:id',      collection.collectionById);
   app.use('/rest/getBrowseList/:collection', collection.browseList);
-  // new
   app.use('/rest/collections/all',          collection.allCollections);
   app.use('/rest/collection/byArea/:id',    collection.collectionsByArea);
   app.use('/rest/collection/bySubject/:id/area/:areaId', collection.collectionsBySubject);
   app.use('/rest/subjects/byArea/:id',      tag.subjectsByArea);
-
   app.use('/rest/collection/tags/:id',   collection.tagsForCollection);
   app.use('/rest/collection/types/:id',   collection.typesForCollection);
- // app.use('/rest/categories/byArea/:areaId', category.categoriesByArea);
 
 
-
+  // PARTIALS
   app.get('/admin/partials/:name', ensureAuthenticated, function(req, res) {
 
     var name = req.params.name;
@@ -206,8 +147,6 @@ module.exports = function(app,config,passport){
       }
     );
   });
-
-
 
 
 

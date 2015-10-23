@@ -36,6 +36,7 @@
 
       var vm = this;
 
+      /** @type {number} */
       vm.currentIndex = 0;
 
       /** @type {Array.<Object>} */
@@ -44,11 +45,10 @@
       /** @type {number} */
       vm.currentId = 0;
 
-      var areas = AreaList.query();
-
+      /** @type {number} */
       vm.userAreaId = Data.userAreaId;
 
-
+      var areas = AreaList.query();
       /**
        * Upon resolution, set the area data and call
        * the context initialization method setContext()
@@ -57,9 +57,10 @@
         vm.areas = data;
         Data.areas = data;
         Data.areaLabel = data[0].title;
+        vm.currentId = data[0].id;
         if (Data.currentAreaIndex === null) {
           Data.currentAreaIndex = data[0].id;
-          vm.currentId = data[0].id;
+
         }
 
         setContext(Data.currentAreaIndex);
@@ -79,26 +80,16 @@
 
       };
 
-
-
       vm.setCurrentIndex = function(index) {
         vm.currentIndex = index;
 
       };
-
-      $scope.$watch(function() { return Data.areas; },
-        function(newValue) {
-          vm.areas = newValue;
-      });
-
 
       /**
        * Initializes the shared Data context.
        * @param id   the area id
        */
       function setContext(id) {
-
-        vm.currentId = id;
 
         updateAreaContext(id);
 
@@ -159,21 +150,48 @@
         });
         var categoriesForArea = CategoryByArea.query({areaId: id});
         categoriesForArea.$promise.then(function(categories) {
-             if (categories.length > 0) {
-               Data.categoriesForArea = categories;
-             }
+          if (categories.length > 0) {
+            Data.categoriesForArea = categories;
+          }
         });
 
       }
 
       /**
-       * Sets the view model's user value.
+       * Sets the view model's user id and
+       * initializes the application state for
+       * the corresponding area. If the user id
+       * is 0 (administrator) initialize using
+       * the id of the first area in the current
+       * area list.
        */
       $scope.$watch(function() { return Data.userAreaId },
-        function(id) {
-          vm.userAreaId = id;
+        function(newValue, oldValue) {
+          vm.userAreaId = newValue;
+          var id = '';
+          if (newValue === 0) {
+            if (Data.areas.length > 0) {
+              id = Data.areas[0].id;
+            }
+          }
+          else {
+            id = newValue;
+          }
           getAreaLabel(id);
           setContext(id);
+
+        });
+
+
+      /**
+       * Updates the area list and selected area id
+       * values when areas change.
+       */
+      $scope.$watch(function() { return Data.areas; },
+        function(newValue) {
+          vm.currentId = Data.currentAreaIndex;
+          vm.areas = newValue;
+
         });
 
 
@@ -182,7 +200,6 @@
        * @param id  the area id
        */
       function getAreaLabel(id) {
-
         for (var i = 0; i < Data.areas.length; i++) {
 
           if (Data.areas[i].id === id) {
@@ -194,9 +211,6 @@
       }
 
     }]);
-
-
-
 
 })();
 

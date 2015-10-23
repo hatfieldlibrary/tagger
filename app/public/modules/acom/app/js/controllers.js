@@ -7,21 +7,6 @@ var scrollToTop = function() {
   $('body').animate({scrollTop: elem.offset().top}, 0);
 };
 
-// These objects are set manually.  The
-// collection areas will display in this order.
-// You must set the corresponding ID to the
-// current value in the database.  We should
-// bootstrap these inside their own controller,
-// but for now...
-var mainAreaMenu = [
-  {title: 'Student Research', id: 3},
-  {title: 'Faculty Research', id: 4},
-  {title: 'University Archives', id: 1},
-  {title: 'Museum of Art', id: 2},
-  {title: 'Library', id: 5},
-  {title: 'Other Departments', id: 6} ];
-
-
 var isBrowse = function(link) {
   return link === 'list';
 };
@@ -47,14 +32,26 @@ collectionControllers.controller('CollectionsHomeCtrl',
     'CollectionBySubject',
     'SubjectsByArea',
     'AreaById',
-    function($scope, $location, $anchorScroll, $timeout, Data, CollectionsByArea, CollectionsBySubject, SubjectsByArea, AreaById ) {
+    'AreaList',
+    function($scope,
+             $location,
+             $anchorScroll,
+             $timeout,
+             Data,
+             CollectionsByArea,
+             CollectionsBySubject,
+             SubjectsByArea,
+             AreaById,
+             AreaList) {
 
 
       // this is the shared data store
       $scope.Data = Data;
 
       $scope.viewType = $scope.Data.currentView;
-      $scope.mainAreaMenu = mainAreaMenu;
+
+
+
       // catch repeat finished event when emitted
       // by the last-repeat directive.
       $scope.$on('ngRepeatFinished', function() {
@@ -70,19 +67,26 @@ collectionControllers.controller('CollectionsHomeCtrl',
         $scope.subjectId = '';
         $scope.subjectName = '';
         $scope.activeState = false;
-        $scope.currentAreaId = $scope.mainAreaMenu[$scope.Data.currentAreaIndex].id;
+        $scope.mainAreaMenu = AreaList.query();
+        $scope.mainAreaMenu.$promise.then(function() {
+          $scope.currentAreaId = $scope.mainAreaMenu[$scope.Data.currentAreaIndex].id;
 
-        if ($scope.Data.currentSubjectIndex === null) {
-          // query only for area when the stored subject
-          // id is null.
-          $scope.area = AreaById.query({id: $scope.currentAreaId});
-          $scope.collections = CollectionsByArea.query({id: $scope.currentAreaId});
+          if ($scope.Data.currentSubjectIndex === null) {
+            // query only for area when the stored subject
+            // id is null.
+            $scope.area = AreaById.query({id: $scope.currentAreaId});
+            $scope.collections = CollectionsByArea.query({id: $scope.currentAreaId});
+          } else {
+            // query by subject is stored subject id is non-null.
+            subjectQuery($scope.currentAreaId, $scope.Data);
+          }
+          var subjects = SubjectsByArea.query({id: $scope.currentAreaId});
+          subjects.$promise.then(function(data) {
+            console.log(data);
+            $scope.subjects = data;
+          });
 
-        } else {
-          // query by subject is stored subject id is non-null.
-          subjectQuery($scope.currentAreaId, $scope.Data);
-        }
-        $scope.subjects = SubjectsByArea.query({id: $scope.currentAreaId});
+        });
 
       };
 
@@ -105,7 +109,6 @@ collectionControllers.controller('CollectionsHomeCtrl',
           $('body').animate({scrollTop: top.offset().top}, 0);
         }
       };
-
 
       $scope.setCurrentItem = function(id) {
         $scope.Data.currentId = id;
@@ -197,14 +200,14 @@ collectionControllers.controller('CollectionsHomeCtrl',
       };
 
 
-      $scope.getCollectionsBySubject = function(subjectId, areaId, subName) {
+      $scope.getCollectionsBySubject = function(subjectId, subName) {
 
         $scope.subjectId = subjectId;
         $scope.subjectName = subName;
         $scope.Data.currentSubjectId = subjectId;
         $scope.Data.currentSubjectName = $scope.subjectName;
         $scope.subjectLength = subjectId.toString().length;
-        $scope.collections = CollectionsBySubject.query({id: subjectId, areaId: areaId });
+        $scope.collections = CollectionsBySubject.query({id: subjectId, areaId: $scope.currentAreaId });
 
       };
 
@@ -239,68 +242,79 @@ collectionControllers.controller('CardCtrl', ['$scope', 'Data',
   }
 ]);
 
-collectionControllers.controller('SingleCollectionCtrl',
-  ['$scope',
-    '$location',
-    '$anchorScroll',
-    'Data',
-    'CollectionById',
-    function($scope,$location,$anchorScroll,Data,CollectionById) {
+collectionControllers.controller('SingleCollectionCtrl', [
+  '$scope',
+  '$location',
+  '$anchorScroll',
+  'Data',
+  'CollectionById',
+  function(
 
-      // this is the shared data store
-      $scope.Data = Data;
+    $scope,
+    $location,
+    $anchorScroll,
+    Data,
+    CollectionById ) {
 
-      var path = $location.path();
-      var components = path.split('/');
-      $scope.id = components[3];
-      $scope.collection = {};
-      $scope.mainAreaMenu = mainAreaMenu;
+    // this is the shared data store
+    $scope.Data = Data;
 
-
-      $scope.init = function () {
-        $scope.toTop();
-        $scope.Data.currentId = $scope.id;
-        $scope.collection = CollectionById.query({id: $scope.id});
-      };
+    var path = $location.path();
+    var components = path.split('/');
+    $scope.id = components[3];
+    $scope.collection = {};
 
 
-      $scope.toTop = function() {
-        var elem = $('#top');
-        $('body').animate({scrollTop: elem.offset().top}, 0);
-      };
+    $scope.init = function () {
+      $scope.toTop();
+      $scope.Data.currentId = $scope.id;
+
+      var collection = CollectionById.query({id: $scope.id});
+      collection.$promise.then(function(data) {
+        console.log('responsse');
+        console.log(data);
+        $scope.collection = data;
+      })
+    };
 
 
-      $scope.isStaticLink = function(link) {
-        return link === 'link';
-      };
+    $scope.toTop = function() {
+      var elem = $('#top');
+      $('body').animate({scrollTop: elem.offset().top}, 0);
+    };
 
 
-      $scope.isBrowseList = function(link) {
-        return isBrowse(link);
-      };
+    $scope.isStaticLink = function(link) {
+      return link === 'link';
+    };
 
 
-      $scope.setSelectedArea = function(index) {
-        $scope.Data.currentAreaIndex = index;
-
-      };
-
-
-      $scope.setSelectedSubject = function(index) {
-        $scope.selectedSubjectIndex = index;
-        $scope.Data.currentSubjectIndex = $scope.selectedSubjectIndex;
-      };
+    $scope.isBrowseList = function(link) {
+      return isBrowse(link);
+    };
 
 
-      // test for digital collection type
-      $scope.isCollection = function(type) {
-        return isCollection(type);
-      };
+    $scope.setSelectedArea = function(index) {
+      $scope.Data.currentAreaIndex = index;
 
-      $scope.init();
+    };
 
 
-    }]);
+    $scope.setSelectedSubject = function(index) {
+      $scope.selectedSubjectIndex = index;
+      $scope.Data.currentSubjectIndex = $scope.selectedSubjectIndex;
+    };
+
+
+    // test for digital collection type
+    $scope.isCollection = function(type) {
+      return isCollection(type);
+    };
+
+    $scope.init();
+
+
+  }]);
 
 
 collectionControllers.controller('FilterCollectionsCtrl',

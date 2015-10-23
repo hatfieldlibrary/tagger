@@ -33,15 +33,20 @@
 
       /** @type {Array.<Object>} */
       vm.areas = Data.areas;
+
       /** @type {Array.<Object>} */
       vm.categories = Data.categories;
+
       /** @type {number} */
       vm.currentCategory = Data.currentCategoryIndex;
+
       // Dialog Messages
       /** @type {string} */
       vm.addMessage = 'templates/addCategoryMessage.html';
+
       /** @type {string} */
       vm.deleteMessage = 'templates/deleteCategoryMessage.html';
+
 
       /**
        * Show the $mdDialog.
@@ -92,8 +97,9 @@
       };
 
       /**
-       * Watch for changes in the available categories. Can
-       * change with add/deletes in the DialogController.
+       * Watch for changes in the shared categories array
+       * and update the view model. The array changes
+       * with add/delete calls to DialogController.
        */
       $scope.$watch(function() { return Data.categories },
         function(newValue) {
@@ -104,22 +110,24 @@
             }
           }
         }
-
       );
 
+      /**
+       * Watch for changes in the value of the shared category id
+       * and reset the view model category.
+       */
       $scope.$watch(function() { return Data.currentCategoryIndex },
         function(newValue) {
           if (newValue !== null) {
-
               vm.resetCategory(Data.currentCategoryIndex);
             }
-
         }
 
       );
 
       /**
-       * Watch for changes in the available areas.
+       * Watch for changes in the shared areas array and update
+       * the view model.
        */
       $scope.$watch(function() { return Data.areas },
         function(newValue) {

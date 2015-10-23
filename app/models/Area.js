@@ -30,6 +30,10 @@ module.exports = function(sequelize, DataTypes) {
       description: {
         type: DataTypes.STRING(4096),
         allowNull: true
+      },
+      position: {
+        type: DataTypes.INTEGER(3),
+        allowNull: false
       }
     },  {
       getterMethods: {

@@ -86,9 +86,14 @@ exports.addTarget = function(req, res) {
     });
 };
 
+/**
+ * Local function for adding association between tag and area.
+ * @param tagId   the id of the tag
+ * @param areaId   the id of the area
+ * @param res      response object
+ */
 function addArea(tagId, areaId, res) {
 
-      console.log('tag ' + tagId  +', area ' + areaId +  ' ,res ' + res);
 
   async.series(
     {
@@ -140,7 +145,13 @@ exports.removeTarget = function(req, res) {
 
   async.series (
     {
-      create: function(callback) {
+      // Remove current associations between the tag and collections in the area.
+      removeSubjects: function(callback) {
+        db.sequelize.query('delete tt from TagTargets tt Inner Join Tags t on t.id = tt.TagId inner join TagAreaTargets tat on t.id = tat.TagId inner join Areas a on tat.AreaId = a.id inner join AreaTargets at on a.id=at.AreaId inner join Collections c on at.CollectionId = c.id where tat.AreaId = ' + areaId + ' and tt.TagId = ' + tagId + ';')
+          .then(callback)
+      },
+      // Remove the tag from the area.
+      delete: function(callback) {
         db.TagAreaTarget.destroy(
           {
             TagId: {
@@ -155,6 +166,7 @@ exports.removeTarget = function(req, res) {
             console.log(err);
           });
       },
+      // Get the updated tag list for the area
       areaList: function(callback) {
         db.TagAreaTarget.findAll(
           {
@@ -176,7 +188,7 @@ exports.removeTarget = function(req, res) {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList, removedTags: result.removeSubjects}));
     }
 
   );

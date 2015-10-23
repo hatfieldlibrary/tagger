@@ -34,10 +34,13 @@
 
       /** @type {Array.<Object>} */
       vm.contentTypes = Data.contentTypes;
+
       /** @type {number} */
       vm.currentType = Data.currentContentIndex;
+
       /** @type {string} */
       vm.addMessage = 'templates/addContentMessage.html';
+
       /** @type {stromg} */
       vm.deleteMessage = 'templates/deleteContentMessage.html';
 
