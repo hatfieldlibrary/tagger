@@ -26,9 +26,9 @@ require('./config/routes')(app, config, passport);
 // not handled by express or routes configuration will
 // invoke this middleware.
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  console.log("404");
+  var err = new Error('Not Found: ' + req.originalUrl);
   err.status = 404;
+  err.request = req.originalUrl;
   next(err);
 });
 

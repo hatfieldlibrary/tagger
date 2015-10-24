@@ -80,14 +80,12 @@ exports.tagByArea = function (req, res) {
 };
 
 exports.tagByAreaCount = function (req, res) {
-  console.log('TAGS');
   var areaId = req.params.areaId;
 
   db.sequelize.query('SELECT name, COUNT(*) as count from TagTargets left join Tags on ' +
     'TagTargets.TagId = Tags.id left join TagAreaTargets on TagAreaTargets.TagId = Tags.id  ' +
     'WHERE TagAreaTargets.AreaId = ' + areaId + ' group by TagTargets.TagId order by name'
   ).then(function (tags) {
-      console.log('TAGS');
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(tags));
@@ -104,7 +102,6 @@ exports.add = function( req, res) {
     {
       // Check to see if content type already exists.
       check: function (callback) {
-        console.log('checking existence of content type');
         db.Tag.find(
           {
             where: {
@@ -162,7 +159,6 @@ exports.update = function (req, res) {
         eq: id
       }
     }).success(function() {
-      console.log('success');
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');

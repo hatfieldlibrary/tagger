@@ -54,16 +54,13 @@ exports.addTarget = function(req, res) {
       }
     },
     function (err, result) {
-      console.log('check ' + result.check);
       // if new
       if (result.check === null) {
-         console.log('adding target');
          addArea(tagId, areaId, res);
 
       }
       // if not new, just return the current list.
       else {
-        console.log('returning list');
         db.TagAreaTarget.findAll(
           {
             where: {

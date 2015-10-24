@@ -24,7 +24,6 @@ exports.list = function(req, res) {
     res.setHeader('Access-Control-Allow-Origin','*');
     res.end(JSON.stringify(categories));
   }).error(function(err) {
-    console.log('lost categoes');
     console.log(err);
   });
 
@@ -116,7 +115,6 @@ exports.update = function(req, res) {
   var linkLabel = req.body.linkLabel;
   var id = req.body.id;
   var areaId = req.body.areaId;
-  console.log("Got id " + id);
   db.Category.update({
       title: title,
       url: url,

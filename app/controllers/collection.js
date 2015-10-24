@@ -492,7 +492,6 @@ exports.update = function(req, res) {
   var repoType = req.body.repoType;
   var restricted = req.body.restricted;
   var category = req.body.category;
-  console.log('category value ' + category);
 
   async.series({
       updateCollection: function(callback) {
@@ -536,7 +535,6 @@ exports.update = function(req, res) {
       if (result.checkCategory === null) {
         db.CategoryTarget.create({CollectionId: id, CategoryId: category})
           .success(function() {
-            console.log('added new category target')
             // JSON response
             res.setHeader('Content-Type', 'application/json');
             res.setHeader('Access-Control-Allow-Origin','*');
@@ -555,7 +553,6 @@ exports.update = function(req, res) {
               eq: id
             }
           }).success(function() {
-            console.log('updated category target');
             // JSON response
             res.setHeader('Content-Type', 'application/json');
             res.setHeader('Access-Control-Allow-Origin','*');
@@ -666,56 +663,54 @@ exports.updateImage = function (req, res, config) {
   var imageName;
   var id;
   form.parse(req, function (err, fields, files) {
-    //file = req.files.file;
-    // console.log(files.image);
 
-    // read in the temp file from the upload
-    fs.readFile(files.file[0].path, function (err, data) {
-      if (err !== null) {
-        console.log(err);
-        res.end();
-      }
-      imageName = files.file[0].originalFilename;
-      console.log(fields);
-      id = fields.id;
-      console.log(imageName);
-      if (!imageName) {
-        console.log('Image name not defined');
-        res.redirect('/');
-        res.end();
+    if (files.file !== undefined) {
+      // read in the temp file from the upload
+      fs.readFile(files.file[0].path, function (err, data) {
+        if (err !== null) {
+          console.log(err);
+          res.end();
+        }
+        imageName = files.file[0].originalFilename;
+        console.log(fields);
+        id = fields.id;
+        if (!imageName) {
+          res.redirect('/');
+          res.end();
 
-      } else {
-        // use imagemagick to transform the full image to thumbnail.
-        // write to thumb directory
-        var fullPath = imagePath + '/full/' + imageName;
-        var thumbPath = imagePath + '/thumb/' + imageName;
-        console.log(fullPath);
+        } else {
+          // use imagemagick to transform the full image to thumbnail.
+          // write to thumb directory
+          var fullPath = imagePath + '/full/' + imageName;
+          var thumbPath = imagePath + '/thumb/' + imageName;
 
-        fs.writeFile(fullPath, data, function (err) {
-          if (err) {
-            console.log(err);
-            res.end();
-          }
-          else {
-            console.log('ImageMagick at work');
-            magick.resize({
-                srcPath: fullPath,
-                dstPath: thumbPath,
-                width: 200
+          fs.writeFile(fullPath, data, function (err) {
+            if (err) {
+              console.log(err);
+              res.end();
+            }
+            else {
+              magick.resize({
+                  srcPath: fullPath,
+                  dstPath: thumbPath,
+                  width: 200
 
-              },
-              /*jshint unused:false */
-              function (err, stdout, stderr) {
-                if (err) {
-                  console.log(err);
-                }
-                // update database even if the conversion fails
-                updateDb(id);
-              });
-          }
-        });
-      }
-    });
+                },
+                /*jshint unused:false */
+                function (err, stdout, stderr) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  // update database even if the conversion fails
+                  updateDb(id);
+                });
+            }
+          });
+        }
+      });
+    } else {
+      res.end();
+    }
   });
 
 
@@ -943,7 +938,7 @@ exports.browseList = function(req, res) {
   };
   var request = http.request(options, callback);
   request.on('error', function (e) {
-    console.log('Problem with request: ' + e);
+    console.log(e);
   });
   request.end();
 };

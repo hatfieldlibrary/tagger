@@ -122,7 +122,6 @@ module.exports = function(app,config,passport){
   app.get('/admin/partials/:name', ensureAuthenticated, function(req, res) {
 
     var name = req.params.name;
-    console.log('Handling request for collection partial!');
     res.render(
       config.root +
       config.adminPath +
@@ -134,7 +133,6 @@ module.exports = function(app,config,passport){
   // This catch-all is required by html5mode.
   app.get('/admin/*', ensureAuthenticated, function(req, res) {
 
-    console.log('Handling request for layout');
     res.render(
       config.root +
       config.adminPath +

@@ -11,7 +11,7 @@ collectionFilters.filter('collectionFilter', function() {
   return function( items, types) {
 
     var filtered = [];
-    console.log(types);
+
     angular.forEach(items, function(item) {
 
       // types is the ng-model used by the filter toggle buttons. Initialized

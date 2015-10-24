@@ -25,7 +25,6 @@ module.exports = function(app, config, passport) {
   // Use redis as the production session store for oauth2.
   // http://redis.io/
   } else if (app.get('env') === 'production') {
-    console.log('production');
     var client = redis.createClient(
       config.redisPort, '127.0.0.1',
       {}

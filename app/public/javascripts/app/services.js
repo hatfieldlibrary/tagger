@@ -33,12 +33,12 @@ taggerServices.factory('Data', function () {
     tagsForArea: [],
     tagsForCollection: [],
     typesForCollection: [],
-    userAreaId: null
+    userAreaId: 0
   };
 });
 
 
-// Unused?
+// Needed?
 taggerServices.provider('UseHost', [
   function () {
     this.host = 'localhost';
@@ -792,11 +792,9 @@ taggerServices.factory('TaggerDialog', [
           // id of the first item in the updated category
           // list.
           if (id === null) {
-            console.log('first category id ' + Data.contentTypes[0].id);
             Data.currentContentIndex = Data.contentTypes[0].id;
 
           } else {
-            console.log('new category index ' + id);
             Data.currentContentIndex = id;
           }
 
@@ -851,7 +849,6 @@ taggerServices.factory('TaggerDialog', [
       };
 
       $scope.deleteCollection = function () {
-        console.log('id ' + Data.currentCollectionIndex);
         var result = CollectionDelete.save({id: Data.currentCollectionIndex});
 
         result.$promise.then(function (data) {
@@ -901,25 +898,28 @@ taggerServices.factory('TaggerDialog', [
 
       $scope.uploadImage = function (file) {
 
-        Upload.upload({
-          url: '/admin/collection/image',
-          file: file,
-          fields: {id: Data.currentCollectionIndex}
-        }).progress(function (evt) {
-          var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-          console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-        }).success(function (data, status, headers, config) {
-          Data.currentThumbnailImage = config.file.name;
-          $scope.closeDialog();
-          console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
-        }).error(function (data, status, headers, config) {
-          console.log('error status: ' + status);
-        })
-      };
+        if (file !== undefined) {
+          Upload.upload({
+            url: '/admin/collection/image',
+            file: file,
+            fields: {id: Data.currentCollectionIndex}
+          }).progress(function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+          }).success(function (data, status, headers, config) {
+            Data.currentThumbnailImage = config.file.name;
+            $scope.closeDialog();
+            console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+          }).error(function (data, status, headers, config) {
+            console.log('error status: ' + status);
+          })
+        }
+        ;
 
-      $scope.closeDialog = function () {
-        $mdDialog.hide();
-      };
+        $scope.closeDialog = function () {
+          $mdDialog.hide();
+        };
+      }
 
     }
 

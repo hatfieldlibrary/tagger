@@ -16,14 +16,14 @@ html
           span
             h2.md-display-4 Tagger
           span(flex)
-          md-list(ng-show="vm.userAreaId == 0")
+          md-list(ng-if="vm.userAreaId === 0")
             md-list-item(ng-style="{'display':'inline'}")
               span.md-subhead Area: &nbsp;
                 md-input-container(class="md-no-float" style="display:inline-block")
                   md-select(ng-model="vm.areas" placeholder="Select Area")
                     md-option(ng-repeat="area in vm.areas" ng-selected="vm.currentId == area.id" ng-click="vm.updateArea(area.id, $index)") {{area.title}}
-          md-container(ng-show="vm.userAreaId > 0")
-            span.md-subhead Area: &nbsp;  {{vm.areas}}
+          md-container(ng-if="vm.userAreaId > 0")
+            span.md-subhead Area: &nbsp;  {{vm.areaLabel}}
       div(layout="row" flex class="view-container")
         if user
           md-sidenav(style="height: 850px" class="md-sidenav-left transparent", flex="5", md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
@@ -63,7 +63,7 @@ html
                   md-button(ng-click="vm.setCurrentIndex(3)", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/contentTypes" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
-                        i.material-icons image
+                        i.material-icons local_movies
                       div.list-group-item-text Content Types
                         div.md-ripple-container
                 md-list-item( ng-class="{selected: vm.currentIndex===4}")

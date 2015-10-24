@@ -82,7 +82,6 @@ collectionControllers.controller('CollectionsHomeCtrl',
           }
           var subjects = SubjectsByArea.query({id: $scope.currentAreaId});
           subjects.$promise.then(function(data) {
-            console.log(data);
             $scope.subjects = data;
           });
 
@@ -271,8 +270,6 @@ collectionControllers.controller('SingleCollectionCtrl', [
 
       var collection = CollectionById.query({id: $scope.id});
       collection.$promise.then(function(data) {
-        console.log('responsse');
-        console.log(data);
         $scope.collection = data;
       })
     };

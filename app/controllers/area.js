@@ -51,7 +51,6 @@ exports.add =function (req, res) {
 
   db.Area.findAll()
     .success(function(result) {
-      console.log('result count ' + result.length);
       addArea(result.length + 1)
     })
     .error(function (err) {
@@ -59,7 +58,6 @@ exports.add =function (req, res) {
     });
 
   function addArea(position) {
-    console.log('Adding area with position ' + position);
     db.Area.create({
       title: title,
       position: position

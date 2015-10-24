@@ -77,7 +77,6 @@ exports.add = function( req, res) {
     {
       // Check to see if content type already exists.
       check: function (callback) {
-        console.log('checking existence of content type');
         db.ItemContent.find(
           {
             where: {
@@ -137,7 +136,6 @@ exports.update = function (req, res) {
         eq: id
       }
     }).success(function() {
-      console.log('success');
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');

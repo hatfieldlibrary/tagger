@@ -179,7 +179,7 @@ taggerDirectives.directive('d3Pie', [
         /**
          * Array of colors used by class attributes.
          * @type {Array<string> }*/
-        var colors = ['blue', 'green', 'yellow', 'red', 'indigo', 'orange', 'skyblue', 'seagreen', 'maroon', 'coffee'];
+        var colors = ['seagreen', 'blue', 'skyblue', 'red', 'indigo', 'yellow', 'orange', 'green', 'maroon', 'coffee'];
         /**
          * The parent element
          * @type {Element}
@@ -261,10 +261,6 @@ taggerDirectives.directive('d3Pie', [
            * Draws the pie chart
            */
           function drawPieChart() {
-            console.log('element');
-            console.log(document.getElementById(attrs.id));
-            console.log(document.getElementById(attrs.id).clientWidth);
-
 
             var width = containerEl.clientWidth,
               height = width * 0.4,
@@ -693,7 +689,7 @@ taggerDirectives.directive('contentTypeSelector', [ function() {
     '<md-card flex>' +
     ' <md-toolbar class="md_primary">' +
     '   <div class="md-toolbar-tools">' +
-    '     <i class="material-icons">link</i>' +
+    '     <i class="material-icons">local_movies</i>' +
     '     <h3 class="md-display-1">&nbsp;Content Types</h3>' +
     '     <span flex></span>' +
     '   </div>' +
@@ -791,8 +787,6 @@ taggerDirectives.directive('contentTypeSelector', [ function() {
        * @param chip {Object} $chip
        */
       $scope.removeType = function (chip) {
-        console.log('current collection ' + Data.currentCollectionIndex);
-        console.log('got chip id ' + chip.id);
         var result = CollectionTypeTargetRemove.query(
           {
             collId: Data.currentCollectionIndex,
@@ -820,7 +814,6 @@ taggerDirectives.directive('contentTypeSelector', [ function() {
           if (newValue.length > 0) {
             var objArray = [];
             for (var i = 0; i < newValue.length; i++) {
-              console.log(newValue[i]);
               objArray[i] = {id: newValue[i].itemContent.id, name: newValue[i].itemContent.name};
             }
             $scope.typesForCollection = objArray;
@@ -975,8 +968,6 @@ taggerDirectives.directive('subjectSelector', [ function() {
        * @param chip  {Object} $chip
        */
       $scope.removeTag = function (chip) {
-        console.log('current collection ' + Data.currentCollectionIndex);
-        console.log('got chip id ' + chip.id);
         var result = CollectionTagTargetRemove.query(
           {
             collId: Data.currentCollectionIndex,
@@ -1043,7 +1034,6 @@ taggerDirectives.directive('subjectSelector', [ function() {
        * @returns {Function}
        */
       function createFilterFor(query) {
-        console.log(query);
         var regex = new RegExp(query, 'i');
         return function filterFn(tagItem) {
           if (tagItem.tag.name.match(regex) !== null) {
@@ -1059,8 +1049,6 @@ taggerDirectives.directive('subjectSelector', [ function() {
        * @returns {*}
        */
       function queryTags(query) {
-
-        console.log(query);
         return query ? $scope.tagsForArea.filter(createFilterFor(query)) : [];
 
       }
@@ -1090,20 +1078,21 @@ taggerDirectives.directive('subjectTagSummary', function(){
       $scope.subjects = '';
 
       function init() {
-        var subList = '';
 
-        var subs = TagCountForArea.query({areaId: Data.currentAreaIndex});
-        subs.$promise.then(function(data) {  ;
-          console.log('tags');
-          console.log(data);
-          for (var i = 0; i < data.length; i++) {
-            subList = subList + data[i].name + ' (' + data[i].count + ')';
-            if (i < data.length - 1) {
-              subList = subList + ', ';
+        if (Data.currentAreaIndex !== null) {
+          var subList = '';
+          var subs = TagCountForArea.query({areaId: Data.currentAreaIndex});
+          subs.$promise.then(function (data) {
+            ;
+            for (var i = 0; i < data.length; i++) {
+              subList = subList + data[i].name + ' (' + data[i].count + ')';
+              if (i < data.length - 1) {
+                subList = subList + ', ';
+              }
             }
-          }
-          $scope.subjects = subList;
-        });
+            $scope.subjects = subList;
+          });
+        }
       }
       init();
 
@@ -1156,21 +1145,21 @@ taggerDirectives.directive('searchOptionSummary', function() {
 
       function init()
       {
-        var types =
-          SearchOptionType.query({areaId: Data.currentAreaIndex});
-        types.$promise.then(function (data) {
-          for (var i = 0; i < data.length; i++) {
-            if (data[i].repoType === 'DEFAULT') {
-              $scope.default = data[i].count;
-            } else if (data[i].repoType === 'SEARCH') {
-              $scope.search = data[i].count;
-            } else if (data[i].repoType === 'BROWSE') {
-              $scope.browse = data[i].count;
+        if (Data.currentAreaIndex != null) {
+          var types =
+            SearchOptionType.query({areaId: Data.currentAreaIndex});
+          types.$promise.then(function (data) {
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].repoType === 'DEFAULT') {
+                $scope.default = data[i].count;
+              } else if (data[i].repoType === 'SEARCH') {
+                $scope.search = data[i].count;
+              } else if (data[i].repoType === 'BROWSE') {
+                $scope.browse = data[i].count;
+              }
             }
-          }
-
-
-        });
+          });
+        }
       }
       init();
 
@@ -1223,22 +1212,23 @@ taggerDirectives.directive('contentTypeSummary', function() {
       function init()
       {
 
-        var types =
-          CollectionTypeCount.query({areaId: Data.currentAreaIndex});
-        types.$promise.then(function (data) {
-          for (var i = 0; i < data.length; i++) {
-            if (data[i].ctype === 'dig') {
-              $scope.digCount = data[i].count;
-            } else if (data[i].ctype === 'itm') {
-              $scope.itmCount = data[i].count;
-            } else if (data[i].ctype === 'aid') {
-              $scope.eadCount = data[i].count;
+        if (Data.currentAreaIndex !== null) {
+          var types =
+            CollectionTypeCount.query({areaId: Data.currentAreaIndex});
+          types.$promise.then(function (data) {
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].ctype === 'dig') {
+                $scope.digCount = data[i].count;
+              } else if (data[i].ctype === 'itm') {
+                $scope.itmCount = data[i].count;
+              } else if (data[i].ctype === 'aid') {
+                $scope.eadCount = data[i].count;
+              }
             }
-          }
-
-
-        });
+          });
+        }
       }
+
       init();
 
       $scope.$watch(function() {return Data.currentAreaIndex},
@@ -1291,21 +1281,22 @@ taggerDirectives.directive('collectionSummary', [function() {
       function init()
       {
         var restrictedCount = 0;
-        $scope.collections =
-          CollectionsByArea.query({areaId: Data.currentAreaIndex});
-        $scope.collections.$promise.then(function (data) {
-          console.log('collections');
-          console.log(data.length);
-          for (var i = 0; i < data.length; i++) {
-            if (data[i].collection.restricted !== false) {
-              restrictedCount++;
+        if (Data.currentAreaIndex !== null) {
+          $scope.collections =
+            CollectionsByArea.query({areaId: Data.currentAreaIndex});
+          $scope.collections.$promise.then(function (data) {
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].collection.restricted !== false) {
+                restrictedCount++;
+              }
             }
-          }
-          $scope.restricted = restrictedCount;
-          $scope.public = data.length - restrictedCount;
+            $scope.restricted = restrictedCount;
+            $scope.public = data.length - restrictedCount;
 
-        });
+          });
+        }
       }
+
       init();
 
       $scope.$watch(function() {return Data.currentAreaIndex},
@@ -1318,6 +1309,32 @@ taggerDirectives.directive('collectionSummary', [function() {
   }
 
 }]);
+
+/**
+ * Directive for the thumbnail image on collection page.
+ */
+taggerDirectives.directive('thumbImage', function() {
+   return {
+     restrict: 'E',
+     scope: {
+       imgname: "@"
+     },
+     template: '<img style="max-width: 120px;" ng-src="{{thumbnailsrc}}">',
+     link:
+       function($scope) {
+
+         $scope.$watch(function() {return $scope.imgname} ,
+           function(newValue) {
+             if (newValue.length > 0) {
+               $scope.thumbnailsrc = '/resources/img/thumb/' + newValue;
+             } else {
+               $scope.thumbnailsrc = '';
+             }
+           });
+       }
+
+  }
+});
 
 
 

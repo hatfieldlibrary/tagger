@@ -78,8 +78,6 @@
           vm.currentTag = id;
         }
         vm.tag = TagById.query({id:  Data.currentTagIndex});
-        console.log('tag data');
-        console.log(vm.tag);
       };
 
       /**
