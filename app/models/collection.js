@@ -53,6 +53,10 @@ module.exports = function(sequelize, DataTypes) {
       restricted: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
+      },
+      published: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {
