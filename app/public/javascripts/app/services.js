@@ -28,6 +28,10 @@ taggerServices.factory('Data', function () {
     currentTagIndex: null,
     collections: [],
     initialCollection: {},
+    collectionsTotal: 0,
+    collectionTypeTotal: 0,
+    searchOptionsTotal: 0,
+    collectionLinksTotal: 0,
     currentCollectionIndex: null,
     currentThumbnailImage: null,
     tagsForArea: [],
@@ -151,6 +155,14 @@ taggerServices.factory('SearchOptionType', ['$resource',
 taggerServices.factory('CollectionTypeCount', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/count/types/byArea/:areaId', {}, {
+      query: {method: 'GET', isArray: true}
+    });
+  }
+]);
+
+taggerServices.factory('CollectionLinkCount', ['$resource',
+  function ($resource) {
+    return $resource(host + 'collection/count/linkTypes/byArea/:areaId', {}, {
       query: {method: 'GET', isArray: true}
     });
   }
@@ -574,6 +586,10 @@ taggerServices.factory('TaggerDialog', [
       Upload,
       Data) {
 
+      $scope.closeDialog = function () {
+        $mdDialog.hide();
+      };
+
       $scope.deleteTag = function () {
 
         var result = TagDelete.save({id: Data.currentTagIndex});
@@ -916,9 +932,7 @@ taggerServices.factory('TaggerDialog', [
         }
         ;
 
-        $scope.closeDialog = function () {
-          $mdDialog.hide();
-        };
+
       }
 
     }

@@ -87,6 +87,8 @@
        *          current area array
        */
       vm.updateArea = function(id, index) {
+        // update area id after user input
+        console.log('new area index ' + id);
         Data.currentAreaIndex = id;
         Data.areaLabel = Data.areas[index].title;
         updateAreaContext(id);

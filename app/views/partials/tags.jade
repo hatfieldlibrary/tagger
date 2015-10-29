@@ -35,7 +35,7 @@ md-content(class="transparent" layout="row", style="overflow: auto;" layout-alig
           md-input-container(ng-show="vm.userAreaId==0")
             label Tag Name
             input(type="text", ng-model="vm.tag.name")
-          div( style="height: 600px;margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;" flex ng-show="vm.userAreaId > 0")
+          div( style="height: 600px;max-width: 75%;margin-bottom: 40px;overflow: auto;border-top: 1px solid #ccc;border-bottom: 1px solid #ccc;" flex="80" ng-show="vm.userAreaId > 0")
             md-content(flex )
               md-list
                 md-list-item(ng-repeat="tag in vm.tags")

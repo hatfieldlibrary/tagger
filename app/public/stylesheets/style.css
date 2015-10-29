@@ -72,6 +72,18 @@ md-list-item.md-no-proxy  {
 .grid-list-overview .blue md-grid-tile-header {
   background: #414669;
 }
+figcaption  {
+  width: 90% !important;
+}
+figcaption h3 {
+  line-height: 20px;
+}
+figcaption .alert-color {
+  color: rgb(255,215,64) !important;
+}
+figcaption .alert-color .material-icons {
+  font-size: 20px;
+}
 .chips  .md-chip {
   position: relative;
   padding-right: 55px;
@@ -236,13 +248,13 @@ md-list-item.md-no-proxy  {
 }
 
 .chart-data {
-  margin-top: 20px;
-  margin-left: 160px;
-  width: 500px;
+  width: 48%;
   border: 1px solid #ccc;
-  padding: 20px;
-
+  padding: 15px;
+  float:right;
+  margin-top: 10px;
 }
+
 .pieChart--detail__left {
   text-align: left;
 }
@@ -370,4 +382,30 @@ md-list-item.md-no-proxy  {
 .md-list md-list[dnd-list] md-list-item.selected {
   background-color: #dff0d8;
   color: #3c763d;
+}
+
+/**
+ * bar chart
+*/
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
 }

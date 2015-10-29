@@ -1,6 +1,6 @@
 md-content(class="transparent" layout-align="start start", flex, ng-controller="OverviewCtrl as vm")
   md-content(layout="column" flex class="transparent")
-    md-card.flex(flex, style="height: 990px;")
+    md-card.flex(flex, style="min-height: 990px;")
       div(ng-if="vm.category.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
@@ -15,32 +15,42 @@ md-content(class="transparent" layout-align="start start", flex, ng-controller="
                 h3 Entries
               div(flex layout="row", layout-align="start start", style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee;")
                 collection-summary.flex
-
             md-grid-tile(class="blue" )
-              md-grid-tile-header
+              md-grid-tile-header.flex
                 h3 Entry Types
+                  span(style="float:right;" class="alert-color" ng-if="!vm.collectionTypeMatch")
+                    i(class="material-icons") warning
               div(flex layout="row", layout-align="start start", style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee;")
-                content-type-summary.flex
+                collection-type-summary.flex
 
 
             md-grid-tile(class="blue" )
-              md-grid-tile-header
+              md-grid-tile-header.flex
                 h3 Search Option Types
+                  span(style="float:right;" class="alert-color" ng-if="!vm.collectionSearchMatch")
+                    i(class="material-icons") warning
               div(flex layout="row", layout-align="start start", style="height:100%;width:100%;background: #f9f9f9;border-bottom: 1px solid #eee;")
                 search-option-summary.flex
 
             md-grid-tile(class="blue" )
-              md-grid-tile-header
-                h3 Subjects
+              md-grid-tile-header.flex
+                h3 Link Types
+                  span(style="float:right;" class="alert-color" ng-if="!vm.collectionLinksMatch")
+                    i(class="material-icons") warning
               div(flex layout="row", layout-align="start start", style="height:100%;width:100%; background: #f9f9f9;border-bottom: 1px solid #eee;")
-                subject-tag-summary.flex
+                link-summary.flex
 
-            md-grid-tile(class="blue", md-rowspan="3", md-colspan-gt-lg="2", md-colspan-lg="2", md-colspan-md="1", md-colspan-sm="1")
+            md-grid-tile(class="blue", md-rowspan="2", md-colspan-gt-lg="2", md-colspan-lg="2", md-colspan-md="1", md-colspan-sm="1")
               md-grid-tile-header
                 h3 Collection Categories
-              div(id="categoryChart", class="svg-container", flex style="min-height: 196px; width:96%;padding-top: 50px;position: inherit;margin-left: -60%;", d3-pie, label="categorySVG", data="vm.categoryCounts")
+              div(id="categoryChart", class="svg-container", flex style="min-height: 196px; width:96%;padding-top: 50px;position: inherit;margin-left: -50%;margin-top: 20px;", d3-pie, label="categorySVG", data="vm.categoryCounts")
 
-            md-grid-tile(class="blue", md-rowspan="3", md-colspan-gt-lg="2", md-colspan-lg="2" md-colspan-md="1", md-colspan-sm="1")
+            md-grid-tile(class="blue", md-rowspan="2", md-colspan-gt-lg="2", md-colspan-lg="2" md-colspan-md="1", md-colspan-sm="1")
               md-grid-tile-header
                 h3 Content Types
-              div(id="typeChart", class="svg-container", flex style="min-height: 196px; width:96%;padding-top: 50px;position: inherit;margin-left: -60%;", d3-pie, label="typesSVG", data="vm.typeCounts")
+              div(id="typeChart", class="svg-container", flex style="min-height: 196px; width:96%;padding-top: 50px;position: inherit;margin-left: -50%;margin-top: 20px;", d3-pie, label="typesSVG", data="vm.typeCounts")
+
+            md-grid-tile(class="blue", md-rowspan="2", md-colspan-gt-lg="4", md-colspan-lg="4" md-colspan-md="1", md-colspan-sm="1")
+              md-grid-tile-header
+                h3 Collection Totals by Subject
+              div(id="subjectBar", class="svg-container", flex style="min-height: 320px; width:96%;padding-top: 50px;position: inherit;margin-left: -50%;", d3-bar, label="typesSVG", data="vm.subjects")

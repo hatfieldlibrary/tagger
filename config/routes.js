@@ -58,6 +58,7 @@ module.exports = function(app,config,passport){
   app.get('/rest/collection/:collId/remove/type/:typeId', ensureAuthenticated, collection.removeTypeTarget);
   app.get('/rest/collection/repoTypeByArea/:areaId', ensureAuthenticated, collection.repoTypeByArea);
   app.get('/rest/collection/count/types/byArea/:areaId', ensureAuthenticated, collection.countCTypesByArea);
+  app.get('/rest/collection/count/linkTypes/byArea/:areaId', ensureAuthenticated, collection.browseTypesByArea);
 
   // AREAS
   app.get('/admin/area', ensureAuthenticated, area.overview);

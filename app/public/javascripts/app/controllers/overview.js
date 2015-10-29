@@ -9,21 +9,32 @@
     'CategoryByArea',
     'CategoryCountByArea',
     'ContentTypeCount',
+    'TagCountForArea',
     'Data',
     function(
       $scope,
       CategoryByArea,
       CategoryCountByArea,
       ContentTypeCount,
-      Data) {
+      TagCountForArea,
+      Data ) {
 
       var vm = this;
+      var collectionTotal = Data.collectionsTotal;
+      var collectionTypeTotal = Data.collectionTypeTotal;
+      var searchOptionsTotal = Data.searchOptionsTotal;
+      var collectionLinksTotal = Data.collectionLinksTotal;
+
+      vm.categoryCounts ={data: null};
+      vm.typeCounts = {data: null};
 
       /**
        * Init function called on load and after change to
        * the selected area.
        */
       var init = function() {
+
+
 
         if (Data.currentAreaIndex !== null) {
 
@@ -43,10 +54,12 @@
               for (var i = 0; i < categories.length; i++) {
                 data[i] = {title: categories[i].title, value: categories[i].count};
               }
+
               vm.categoryCounts = {
                 total: catCount,
                 data: data
-              }
+              };
+              console.log('setting new categories ' + vm.categoryCounts.total);
             });
 
           var contentTypeCount =
@@ -65,11 +78,20 @@
               for (var i = 0; i < types.length; i++) {
                 data[i] = {title: types[i].name, value: types[i].count};
               }
+
               vm.typeCounts = {
                 total: count,
                 data: data
-              }
+              };
+              console.log('setting new types ' + vm.typeCounts.total);
             });
+
+          var subs = TagCountForArea.query({areaId: Data.currentAreaIndex});
+          subs.$promise.then(function (data) {
+            console.log('setting new areas in controller');
+            vm.subjects = data;
+          });
+
 
         }
       };
@@ -90,8 +112,87 @@
       $scope.$watch(function() {return Data.currentAreaIndex},
         function(newValue, oldValue){
           if (newValue !== oldValue) {
-
             init();
+          }
+        });
+
+      /**
+       * Watch for changes in the search option type total.  Update
+       * local variable and view model's collectionTypeMatch variable..
+       */
+      $scope.$watch(function() {return Data.searchOptionsTotal},
+
+        function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            if (newValue !== 0) {
+              searchOptionsTotal = newValue;
+              if ( newValue ) {
+                vm.collectionSearchMatch = (collectionTotal === searchOptionsTotal);
+                console.log('search options ' + searchOptionsTotal);
+                console.log('search match ' + vm.collectionSearchMatch);
+              }
+
+            }
+          }
+        });
+
+      /**
+       * Watch for changes in the collection type total.  Update
+       * local variable and view model's collectionTypeMatch variable..
+       */
+      $scope.$watch(function() {return Data.collectionTypeTotal},
+
+        function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            if (newValue !== 0) {
+              collectionTypeTotal = newValue;
+              if ( newValue ) {
+                vm.collectionTypeMatch = (collectionTotal === collectionTypeTotal);
+
+              }
+
+            }
+          }
+        });
+
+      /**
+       * Watch for changes in the collection links total.  Update
+       * local variable and view model's collectionLinkMatch variable.
+       */
+      $scope.$watch(function() {return Data.collectionLinksTotal},
+
+        function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            if (newValue !== 0) {
+              collectionLinksTotal = newValue;
+              if ( newValue ) {
+                vm.collectionLinksMatch = (collectionTotal === collectionLinksTotal);
+
+              }
+
+            }
+          }
+        });
+
+      /**
+       * Watch for changes in the collections total.  Update
+       * local variable and view model's collectionTypeMatch variable..
+       */
+      $scope.$watch(function() {return Data.collectionsTotal},
+
+        function(newValue, oldValue) {
+          if (newValue !== oldValue) {
+            init();
+            if (newValue !== 0) {
+              collectionTotal = newValue;
+              if ( newValue ) {
+                vm.collectionTypeMatch = (collectionTotal === collectionTypeTotal);
+                vm.collectionSearchMatch = (collectionTotal === searchOptionsTotal);
+                vm.collectionLinksMatch =  (collectionTotal === collectionLinksTotal);
+              }
+
+
+            }
           }
         });
 

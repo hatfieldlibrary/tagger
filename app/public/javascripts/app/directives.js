@@ -3,6 +3,72 @@
 var taggerDirectives  = angular.module('taggerDirectives', []);
 
 /**
+ * This comparison function looks for inequality in
+ * the inputs and returns true if found.  The input
+ * values can be arrays or objects.  If the inputs are
+ * two arrays of equal length, the objects within the two
+ * arrays are compared.
+ * @param newValue first array or object.
+ * @param oldValue  second array or object.
+ * @returns {boolean}  true if the two inputs are NOT equal.
+ */
+function checkForNewValues(newValue, oldValue) {
+
+  var oldValueIsArray = (oldValue instanceof Array);
+  var newValueIsArray = (newValue instanceof Array);
+
+  // If the newValue is null, return false and do no further
+  // comparison.
+  if (newValue === null) {
+    return false;
+  }
+
+  // New value is an array.
+  if ( newValueIsArray) {
+
+    // But the old value is not an array.
+    if (!oldValueIsArray) {
+
+      // The oldValue is null, so return inequality.
+      if (oldValue === null) {
+        return true;
+      }
+      // This should be unreachable, but if it is reached, log it.
+      console.log("Something is amiss in the comparison for d3 pie charts");
+    }
+
+    // The oldValue is an array, but the two array lengths are not equal.
+    if (newValue.length !== oldValue.length) {
+
+      // The array lengths do not match, so return inequality.
+      return true;
+
+    } else {
+      // Two arrays of equal length. Evaluate the array of objects.
+      // Return return inequality if anything does not match.
+      for (var i = 0; i < newValue.length; i++) {
+        if (newValue[i].title !== oldValue[i].title
+          || newValue[i].value !== oldValue[i].value) {
+          return true;
+        }
+      }
+    }
+
+  // The newValue is an object, not an array.
+  } else {
+    // But the oldValue is an array, so return inequality.
+    if (oldValueIsArray) { return true;}
+    // Otherwise, compare the contents of two objects and return inequality
+    // if they do not match.
+    return (newValue.title !== oldValue.title
+                  && newValue.value !== oldValue.value);
+
+  }
+
+}
+
+
+/**
  * Directive used to detect when a DOM element is ready.
  */
 taggerDirectives.directive('elemReady', function( $parse ) {
@@ -135,6 +201,157 @@ taggerDirectives.directive('toggleTagAreaButton', [
 
 ]);
 
+taggerDirectives.directive('d3Bar', [
+
+  '$window',
+  '$timeout',
+  'd3Service',
+
+  function($window, $timeout, d3Service) {
+    return {
+      restrict: 'A',
+      template: '',
+      // creating scope object isolates
+      scope: {
+        data: '='      // bi-directional binding of data
+
+      },
+      // Angular link function
+      link: function (scope, ele, attrs) {
+
+        var margin,
+          width,
+          height,
+          container,
+          svg,
+          xAxis,
+          yAxis,
+          x,
+          y;
+
+
+        // initialize on data change
+        scope.$watch(function(scope) { return scope.data },
+          function(newValue) {
+
+            if (newValue !== undefined) {
+              if (newValue.length > 0) {
+                scope.data;
+                ele.ready(function () {
+                  prepareContainer();
+                  setDimens();
+                });
+              } else {
+                prepareContainer();
+              }
+            }
+          });
+
+        var containerEl = document.getElementById(attrs.id);
+
+        /**
+         * Clear the chart.  This will be called when an empty
+         * data array is passed to the directive.
+         */
+        function  prepareContainer(){
+          if (svg !== undefined) {
+            svg = container.select('svg');
+            svg.selectAll('g').remove();
+            svg.select('circle').remove();
+            containerEl.innerHTML = '';
+          }
+        }
+
+        console.log(scope);
+
+
+        var setDimens = function()  {
+
+
+          margin = {top: 20, right: 20, bottom: 30, left: 40},
+            width = containerEl.offsetWidth - margin.left - margin.right,
+            height = containerEl.offsetHeight - margin.top - margin.bottom;
+
+
+          console.log(height);
+          x = d3.scale.ordinal()
+            .rangeRoundBands([0, width], .1);
+
+          y = d3.scale.linear()
+            .range([height, 0]);
+
+          xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom");
+
+          /**
+           * The top level d3 node.
+           * @type {Object}
+           */
+          container = d3.select(containerEl);
+
+
+          svg = container.append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          drawBarChart(scope.data);
+        };
+
+
+
+        // d3.tsv("data.tsv", type, function(error, data) {
+        //   if (error) throw error;
+        var drawBarChart = function(data) {
+
+          yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .ticks(10)
+            .tickFormat(d3.format("d"))
+            .tickSubdivide(0);
+
+          x.domain(data.map(function(d) { return d.name; }));
+          y.domain([0, d3.max(data, function(d) { return d.count; })]);
+
+          svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+          svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("Frequency");
+
+          svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.name); })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d) { return y(d.count); })
+            .attr("height", function(d) { return height - y(d.count); });
+        };
+
+        // });
+
+        function type(d) {
+          d.frequency = +d.frequency;
+          return d;
+        }
+      }
+    }
+  }
+]);
+
 /**
  * Pie chart directive.
  */
@@ -174,8 +391,10 @@ taggerDirectives.directive('d3Pie', [
       // Angular link function
       link: function (scope, ele, attrs) {
 
+        var data = [];
         var DURATION = 800;
         var DELAY    = 200;
+
         /**
          * Array of colors used by class attributes.
          * @type {Array<string> }*/
@@ -189,7 +408,8 @@ taggerDirectives.directive('d3Pie', [
            * The top level d3 node.
            * @type {Object}
            */
-          container = d3.select(containerEl);
+          container = d3.select(containerEl),
+          labelsEl = container.select('.chart-data');
 
         /**
          * Calculates percentage from integer counts
@@ -198,6 +418,7 @@ taggerDirectives.directive('d3Pie', [
          * @returns {Array}
          */
         function ratios(values, total) {
+
           var data = [];
           for (var i = 0; i < values.length; i++) {
             data[i] = {
@@ -205,6 +426,7 @@ taggerDirectives.directive('d3Pie', [
               value:  values[i].value / total,
               count: values[i].value}
           }
+
           return data;
         }
 
@@ -217,27 +439,36 @@ taggerDirectives.directive('d3Pie', [
           return colors[i];
         }
 
+
+
         // waiting for the d3 object promise
         d3Service.d3().then(function (d3) {
 
           var total = 0;
-          var data = [];
 
           // initialize on data change
           scope.$watch(function(scope) { return scope.data },
-            function() {
-              if (scope.data !== undefined) {
-                total = scope.data.total;
-                if (scope.data.data.length > 0) {
-                  // calculate percentages
-                  data = ratios(scope.data.data, total);
-                  // Make sure element is ready
-                  ele.ready(function() {
-                    drawPieChart();
-                  });
-
-                } else {
-                  clearChart();
+            function(newValue, oldValue) {
+              if (newValue !== oldValue) {
+                if (newValue !== undefined && oldValue !== undefined) {
+                  console.log(newValue.data);
+                  console.log(scope);
+                  if (newValue.data !== undefined) {
+                    if (checkForNewValues(newValue.data, oldValue.data)) {
+                      if (newValue.data.length > 0) {
+                        total = newValue.total;
+                        // calculate percentages
+                        data = ratios(newValue.data, total);
+                        // Make sure element is ready
+                        ele.ready(function () {
+                          clearChart();
+                          drawPieChart();
+                        });
+                      } else {
+                        clearChart();
+                      }
+                    }
+                  }
                 }
               }
             });
@@ -254,24 +485,22 @@ taggerDirectives.directive('d3Pie', [
             var  svg = container.select('svg');
             svg.selectAll('g').remove();
             svg.select('circle').remove();
-
+            labelsEl.selectAll('.item-info').remove();
           }
+
+
 
           /**
            * Draws the pie chart
            */
           function drawPieChart() {
 
-            var width = containerEl.clientWidth,
-              height = width * 0.4,
+            var width = containerEl.clientWidth / 2,
+              height = width * 0.7,
               radius = Math.min(width, height) / 2,
-              container = d3.select(containerEl),
-              labelsEl = container.select('.chart-data'),
               svg = container.select('svg')
                 .attr('width', width)
                 .attr('height', height);
-            svg.selectAll('g').remove();
-            labelsEl.selectAll('.item-info').remove();
 
             var pie = svg.append('g')
               .attr(
@@ -364,13 +593,16 @@ taggerDirectives.directive('d3Pie', [
             function drawDetailedInformation(data, element) {
 
               var listItem = element.append('div').attr('class','item-info');
+              if (data.title === null) {
+                data.title = '<span style="color: red;">No value selected</span>';
+              }
               listItem.data([data])
-                  .html(
-                '       <div style="float:left;" class="pieChart__' + colorWheel(currentColor) + '">' +
+                .html(
+                '       <div style="float:left;width: 10%;" class="pieChart__' + colorWheel(currentColor) + '">' +
                 '          <i class="material-icons">brightness_1</i>' +
                 '       </div>' +
-                '       <div style="float:left; margin-left: 40px;">' +
-                           data.title + ' (' + data.count + ')' +
+                '       <div style="float:left; width:75%;padding-left: 20px;color: #999;">' +
+                data.title + ' (' + data.count + ')' +
                 '       </div>' +
                 '       <div style="clear:left;"></div>');
               currentColor++;
@@ -1083,7 +1315,6 @@ taggerDirectives.directive('subjectTagSummary', function(){
           var subList = '';
           var subs = TagCountForArea.query({areaId: Data.currentAreaIndex});
           subs.$promise.then(function (data) {
-            ;
             for (var i = 0; i < data.length; i++) {
               subList = subList + data[i].name + ' (' + data[i].count + ')';
               if (i < data.length - 1) {
@@ -1149,6 +1380,7 @@ taggerDirectives.directive('searchOptionSummary', function() {
           var types =
             SearchOptionType.query({areaId: Data.currentAreaIndex});
           types.$promise.then(function (data) {
+
             for (var i = 0; i < data.length; i++) {
               if (data[i].repoType === 'DEFAULT') {
                 $scope.default = data[i].count;
@@ -1158,6 +1390,7 @@ taggerDirectives.directive('searchOptionSummary', function() {
                 $scope.browse = data[i].count;
               }
             }
+            Data.searchOptionsTotal = $scope.default + $scope.search + $scope.browse;
           });
         }
       }
@@ -1165,8 +1398,10 @@ taggerDirectives.directive('searchOptionSummary', function() {
 
       $scope.$watch(function() {return Data.currentAreaIndex},
         function(newValue, oldValue){
-          if (newValue !== oldValue) {
-            init();
+          if (newValue !== undefined) {
+            if (newValue !== oldValue) {
+              init();
+            }
           }
         });
     }
@@ -1176,7 +1411,7 @@ taggerDirectives.directive('searchOptionSummary', function() {
 /**
  * Directive for adding a CONTENT TYPE SUMMARY information to the OVERVIEW.
  */
-taggerDirectives.directive('contentTypeSummary', function() {
+taggerDirectives.directive('collectionTypeSummary', function() {
 
   return {
     restrict: 'E',
@@ -1225,6 +1460,7 @@ taggerDirectives.directive('contentTypeSummary', function() {
                 $scope.eadCount = data[i].count;
               }
             }
+            Data.collectionTypeTotal = $scope.digCount + $scope.itmCount + $scope.eadCount;
           });
         }
       }
@@ -1233,8 +1469,10 @@ taggerDirectives.directive('contentTypeSummary', function() {
 
       $scope.$watch(function() {return Data.currentAreaIndex},
         function(newValue, oldValue){
-          if (newValue !== oldValue) {
-            init();
+          if (newValue !== undefined) {
+            if (newValue !== oldValue) {
+              init();
+            }
           }
         });
     }
@@ -1243,8 +1481,8 @@ taggerDirectives.directive('contentTypeSummary', function() {
 
 
 /**
-* Directive for adding a COLLECTOINS SUMMARY information to the OVERVIEW.
-*/
+ * Directive for adding a COLLECTOINS SUMMARY information to the OVERVIEW.
+ */
 taggerDirectives.directive('collectionSummary', [function() {
   return {
     restrict: 'E',
@@ -1277,7 +1515,6 @@ taggerDirectives.directive('collectionSummary', [function() {
       $scope.public = 0;
       $scope.collections = [];
 
-
       function init()
       {
         var restrictedCount = 0;
@@ -1285,6 +1522,7 @@ taggerDirectives.directive('collectionSummary', [function() {
           $scope.collections =
             CollectionsByArea.query({areaId: Data.currentAreaIndex});
           $scope.collections.$promise.then(function (data) {
+            Data.collectionsTotal = data.length;
             for (var i = 0; i < data.length; i++) {
               if (data[i].collection.restricted !== false) {
                 restrictedCount++;
@@ -1292,6 +1530,7 @@ taggerDirectives.directive('collectionSummary', [function() {
             }
             $scope.restricted = restrictedCount;
             $scope.public = data.length - restrictedCount;
+
 
           });
         }
@@ -1311,27 +1550,89 @@ taggerDirectives.directive('collectionSummary', [function() {
 }]);
 
 /**
+ * Directive for adding COLLECTION LINKS SUMMARY information to the OVERVIEW.
+ */
+taggerDirectives.directive('linkSummary', [function() {
+  return {
+    restrict: 'E',
+    scope: {},
+    template:
+    '<md-list style="width:100%;margin-top: 40px;">' +
+    '   <md-list-item>' +
+    '     <p class="grey-label"> Link</p>' +
+    '       <p class="list-alignment"> {{linkCount}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '   <md-list-item>' +
+    '     <p class="grey-label"> Selection Menu</p>' +
+    '     <p class="list-alignment"> {{selectCount}}</p>' +
+    '   </md-list-item>' +
+    '   <md-divider/>' +
+    '</md-list>',
+
+    controller: function (
+      $scope,
+      CollectionLinkCount,
+      Data ) {
+
+      $scope.linkCount = 0;
+      $scope.selectCount = 0;
+
+
+      function init()
+      {
+        if (Data.currentAreaIndex !== null) {
+          var types =
+            CollectionLinkCount.query({areaId: Data.currentAreaIndex});
+          types.$promise.then(function (data) {
+            for (var i = 0; i < data.length; i++) {
+              if (data[i].browseType === 'link') {
+                $scope.linkCount = data[i].count;
+              } else if (data[i].browseType === 'opts') {
+                $scope.selectCount = data[i].count;
+              }
+            }
+            Data.collectionLinksTotal = $scope.linkCount + $scope.selectCount;
+          });
+        }
+      }
+
+      init();
+
+      $scope.$watch(function() {return Data.currentAreaIndex},
+        function(newValue, oldValue){
+          if (newValue !== oldValue) {
+            init();
+          }
+        });
+    }
+  }
+
+}]);
+
+
+/**
  * Directive for the thumbnail image on collection page.
  */
 taggerDirectives.directive('thumbImage', function() {
-   return {
-     restrict: 'E',
-     scope: {
-       imgname: "@"
-     },
-     template: '<img style="max-width: 120px;" ng-src="{{thumbnailsrc}}">',
-     link:
-       function($scope) {
+  return {
+    restrict: 'E',
+    scope: {
+      imgname: "@"
+    },
+    template: '<img style="max-width: 120px;" ng-src="{{thumbnailsrc}}">',
+    link:
+      function($scope) {
 
-         $scope.$watch(function() {return $scope.imgname} ,
-           function(newValue) {
-             if (newValue.length > 0) {
-               $scope.thumbnailsrc = '/resources/img/thumb/' + newValue;
-             } else {
-               $scope.thumbnailsrc = '';
-             }
-           });
-       }
+        $scope.$watch(function() {return $scope.imgname} ,
+          function(newValue) {
+            if (newValue.length > 0) {
+              $scope.thumbnailsrc = '/resources/img/thumb/' + newValue;
+            } else {
+              $scope.thumbnailsrc = '';
+            }
+          });
+      }
 
   }
 });

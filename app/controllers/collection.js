@@ -970,7 +970,6 @@ exports.collectionsByArea = function (req, res) {
 exports.collectionsBySubject = function (req, res) {
 
   var subjectId = req.params.id;
-  var areaId = req.params.areaId;
 
   db.TagTarget.findAll({
     where:
@@ -987,6 +986,26 @@ exports.collectionsBySubject = function (req, res) {
       }]
 
   }).success( function(collections) {
+
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(collections));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+exports.browseTypesByArea = function(req, res) {
+
+  var areaId = req.params.areaId;
+
+  db.sequelize.query('select Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
+    'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = '
+    + areaId +
+    ' group by Collections.browseType')
+  .then( function(collections) {
 
     // JSON response
     res.setHeader('Content-Type', 'application/json');
