@@ -34,8 +34,6 @@
        */
       var init = function() {
 
-
-
         if (Data.currentAreaIndex !== null) {
 
           var categoryCount =
@@ -54,7 +52,6 @@
               for (var i = 0; i < categories.length; i++) {
                 data[i] = {title: categories[i].title, value: categories[i].count};
               }
-
               vm.categoryCounts = {
                 total: catCount,
                 data: data
@@ -78,7 +75,6 @@
               for (var i = 0; i < types.length; i++) {
                 data[i] = {title: types[i].name, value: types[i].count};
               }
-
               vm.typeCounts = {
                 total: count,
                 data: data
@@ -128,8 +124,6 @@
               searchOptionsTotal = newValue;
               if ( newValue ) {
                 vm.collectionSearchMatch = (collectionTotal === searchOptionsTotal);
-                console.log('search options ' + searchOptionsTotal);
-                console.log('search match ' + vm.collectionSearchMatch);
               }
 
             }
@@ -167,9 +161,7 @@
               collectionLinksTotal = newValue;
               if ( newValue ) {
                 vm.collectionLinksMatch = (collectionTotal === collectionLinksTotal);
-
               }
-
             }
           }
         });
@@ -190,8 +182,6 @@
                 vm.collectionSearchMatch = (collectionTotal === searchOptionsTotal);
                 vm.collectionLinksMatch =  (collectionTotal === collectionLinksTotal);
               }
-
-
             }
           }
         });

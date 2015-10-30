@@ -66,6 +66,14 @@
       /** @type {number} */
       vm.userAreaId = Data.userAreaId;
 
+      /** @type {Array.string} */
+      vm.urlLabels = ['Show entire collection URL', 'Show a selection URL'];
+
+      /** @type {string} */
+      vm.browseType = vm.urlLabels[0];
+
+
+
       /**
        * Show the $mdDialog.
        * @param $event click event object (location of event used as
@@ -136,6 +144,16 @@
         types.$promise.then(function (data) {
           Data.typesForCollection = data;
         });
+
+      };
+
+      /**
+       * Sets vm.browseType string for choosing the URL label.
+       * @param type array index
+       */
+      vm.setBrowseType = function(index) {
+          vm.browseType = vm.urlLabels[index];
+        console.log(vm.browseType);
 
       };
 

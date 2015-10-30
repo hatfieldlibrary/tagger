@@ -49,9 +49,6 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
             md-input-container
               label Item Count
               input(type="text", ng-model="vm.collection.items")
-            md-input-container
-              label URL
-              input(type="text", ng-model="vm.collection.url")
             div(style="margin-bottom: 5px;")
               div.md-caption Item Type
               md-radio-group(layout="row" ng-model="vm.collection.ctype")
@@ -73,14 +70,21 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
                   span(flex)
             md-divider
             div(style="margin-top: 10px; margin-bottom: 15px;")
-              div.md-caption Browse Collection Type
+              div.md-caption Browse Type
               md-radio-group(layout="row" ng-model="vm.collection.browseType")
-                div(flex="25")
-                  md-radio-button(aria-label="Link" value="link" flex="15" style="display: inline") Link
-                div(flex="25")
-                  md-radio-button(aria-label="Selection" value="opts" flex="15" style="display: inline") Selection
+                div(flex="35")
+                  md-radio-button(aria-label="Show entire collection" value="link" flex="25" style="display: inline" ng-click="vm.setBrowseType(0)") Show entire collection
+                div(flex="35")
+                  md-radio-button(aria-label="Show a selection" value="opts" flex="25" style="display: inline" ng-click="vm.setBrowseType(1)") Show a selection
                 span(flex)
             md-divider
+            md-content(class="transparent" layout="row" flex class="transparent")
+              div(flex="5")
+                i(class="material-icons" style="margin-top: 20px;color: rgb(63,81,181);") arrow_forward
+              div(flex="95")
+                md-input-container
+                  label {{vm.browseType}}
+                  input(type="text", ng-model="vm.collection.url")
             div(style="margin-top: 10px; margin-bottom: 35px;")
               div.md-caption Search Options
               md-radio-group(layout="row" ng-model="vm.collection.repoType")

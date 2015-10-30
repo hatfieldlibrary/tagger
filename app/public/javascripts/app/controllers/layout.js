@@ -88,7 +88,6 @@
        */
       vm.updateArea = function(id, index) {
         // update area id after user input
-        console.log('new area index ' + id);
         Data.currentAreaIndex = id;
         Data.areaLabel = Data.areas[index].title;
         updateAreaContext(id);
@@ -209,13 +208,14 @@
        * attribute of the area is changed.
        */
       $scope.$watch(function() { return Data.areas; },
-        function(newValue, oldValue) {
-          if (newValue !== oldValue) {
-            if (newValue > 0) {
-              vm.currentId = Data.currentAreaIndex;
+        function(newValue) {
+            if (newValue.length > 0) {
+              vm.currentId = Data.areas[0].id;
               vm.areas = newValue;
+              Data.areaLabel = Data.areas[0].title;
+              updateAreaContext(vm.currentId);
+              $scope.$apply();
             }
-          }
 
         });
 

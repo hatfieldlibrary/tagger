@@ -11,6 +11,11 @@ body {
   min-height: 900px;
   max-height: 1200px;
 }
+md-radio-button:focus {
+  outline: none !important;
+  border: 0;
+}
+
 md-content.transparent{
   background: transparent;
 }

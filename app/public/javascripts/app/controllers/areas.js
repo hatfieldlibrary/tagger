@@ -132,6 +132,7 @@
             var areas =  AreaList.query();
             areas.$promise.then(function(data) {
               Data.areas = data;
+              Data.currentAreaIndex = data[0].id;
             });
             TaggerToast("Area order updated.");
           }
