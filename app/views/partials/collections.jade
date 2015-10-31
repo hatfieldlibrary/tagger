@@ -49,7 +49,7 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
             md-input-container
               label Item Count
               input(type="text", ng-model="vm.collection.items")
-            div(style="margin-bottom: 5px;")
+            div(style="margin-bottom: 35px;")
               div.md-caption Item Type
               md-radio-group(layout="row" ng-model="vm.collection.ctype")
                 div(flex="25")
@@ -60,31 +60,6 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
                   md-radio-button(aria-label="Restricted" value="aid" style="display: inline") Finding Aid
                 span(flex)
             md-divider
-            div(style="margin-top: 10px; margin-bottom: 15px;")
-              div.md-caption Collection Access
-              md-radio-group(layout="row" ng-model="vm.collection.restricted")
-                div(flex="25")
-                  md-radio-button(aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline") Unrestricted
-                div(flex="25")
-                  md-radio-button(aria-label="Restricted" ng-value="true" flex="15" style="display: inline") Restricted
-                  span(flex)
-            md-divider
-            div(style="margin-top: 10px; margin-bottom: 15px;")
-              div.md-caption Browse Type
-              md-radio-group(layout="row" ng-model="vm.collection.browseType")
-                div(flex="35")
-                  md-radio-button(aria-label="Show entire collection" value="link" flex="25" style="display: inline" ng-click="vm.setBrowseType(0)") Show entire collection
-                div(flex="35")
-                  md-radio-button(aria-label="Show a selection" value="opts" flex="25" style="display: inline" ng-click="vm.setBrowseType(1)") Show a selection
-                span(flex)
-            md-divider
-            md-content(class="transparent" layout="row" flex class="transparent")
-              div(flex="5")
-                i(class="material-icons" style="margin-top: 20px;color: rgb(63,81,181);") arrow_forward
-              div(flex="95")
-                md-input-container
-                  label {{vm.browseType}}
-                  input(type="text", ng-model="vm.collection.url")
             div(style="margin-top: 10px; margin-bottom: 35px;")
               div.md-caption Search Options
               md-radio-group(layout="row" ng-model="vm.collection.repoType")
@@ -95,6 +70,33 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
                 div(flex="25")
                   md-radio-button(aria-label="Search Only" value="SEARCH" flex="15" style="display: inline") Search Only
                 span(flex)
+            md-divider
+            div(style="margin-top: 10px; margin-bottom: 35px;")
+              div.md-caption Collection Access
+              md-radio-group(layout="row" ng-model="vm.collection.restricted")
+                div(flex="35")
+                  md-radio-button(aria-label="Unrestricted" ng-value="false" flex="15" style="display: inline") Unrestricted
+                div(flex="35")
+                  md-radio-button(aria-label="Restricted" ng-value="true" flex="15" style="display: inline") Restricted
+                  span(flex)
+            md-divider
+            div(style="margin-top: 10px;")
+              div.md-caption Browse Type
+              md-radio-group(layout="row" ng-model="vm.collection.browseType")
+                div(flex="35")
+                  md-radio-button(aria-label="Show entire collection" value="link" flex="25" style="display: inline" ng-click="vm.setBrowseType(0)") Show entire collection
+                div(flex="35")
+                  md-radio-button(aria-label="Show a selection" value="opts" flex="25" style="display: inline" ng-click="vm.setBrowseType(1)") Show a selection
+                span(flex)
+
+            md-content(class="transparent" layout="row" flex class="transparent")
+              div(flex="5")
+                i(class="material-icons" style="margin-top: 20px;color: rgb(63,81,181);") arrow_forward
+              div(flex="95")
+                md-input-container
+                  label {{vm.browseType}}
+                  input(type="text", ng-model="vm.collection.url")
+
   md-content(class="transparent" layout="column" flex="25" class="transparent")
     md-card.flex(flex)
       md-toolbar.md_primary

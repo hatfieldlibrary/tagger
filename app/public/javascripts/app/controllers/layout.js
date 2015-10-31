@@ -10,6 +10,7 @@
    * the application and updates global state.
    */
   taggerControllers.controller('LayoutCtrl', [
+
     '$scope',
     'AreaList',
     'CollectionsByArea',
@@ -22,6 +23,7 @@
     'TagsForArea',
     'Data',
     function(
+
       $scope,
       AreaList,
       CollectionsByArea,
@@ -77,8 +79,6 @@
 
         });
       };
-
-
 
       /**
        * Update the current area.

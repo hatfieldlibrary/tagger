@@ -20,6 +20,7 @@
     'Data',
 
     function(
+
       $rootScope,
       $scope,
       AreaList,

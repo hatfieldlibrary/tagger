@@ -5,6 +5,7 @@
    * Controller for the area overview page.
    */
   taggerControllers.controller('OverviewCtrl', [
+
     '$scope',
     'CategoryByArea',
     'CategoryCountByArea',
@@ -12,6 +13,7 @@
     'TagCountForArea',
     'Data',
     function(
+
       $scope,
       CategoryByArea,
       CategoryCountByArea,
