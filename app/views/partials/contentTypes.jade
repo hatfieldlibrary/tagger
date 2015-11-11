@@ -1,6 +1,6 @@
 
-md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="ContentCtrl as vm")
-  md-content(class="transparent" layout="column" flex="75")
+md-content( layout="row", layout-align="start start", flex, ng-controller="ContentCtrl as vm")
+  md-content( layout="column" flex="100" flex-gt-lg="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.contentType.$resolved")
       md-toolbar.md_primary
@@ -26,7 +26,7 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
                           div.md-ripple-container
                     md-divider
           md-content(layout-padding flex="80" style="padding-left: 20px;")
-            div(flex="80" class="md-subhead grey-text")
+            div(flex="100" class="md-subhead grey-text")
               span #[em Content Types] are essentially media or file types and should be thought of in those terms. This in mind, it may sometimes be helpful to create more general types, e.g. Document and Transcribed Document.
             div(flex)
             div(flex)
@@ -43,4 +43,4 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
                 i(class="fa {{vm.contentType.icon}}")
         div.md-panel Fontawesome Icons:
           a(href="https://fortawesome.github.io/Font-Awesome/icons/", target="_blank")  https://fortawesome.github.io/Font-Awesome/icons/
-  md-content(class="transparent" layout="column" flex="25")
+  md-content(class="transparent" layout="column" flex-gt-md="25")

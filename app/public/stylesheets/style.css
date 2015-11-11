@@ -2,10 +2,10 @@
   color:#999;
 }
 html {
-  background: #ECEFF5;
+  background: #EBECEC;
 }
 body {
-  background: #ECEFF5;
+  background: #EBECEC;
 }
 .primary-content {
   min-height: 900px;
@@ -17,7 +17,7 @@ md-radio-button:focus {
 }
 
 md-content.transparent{
-  background: transparent;
+  background: #EBECEC;
 }
 md-sidenav.transparent {
   background: transparent !important;
@@ -32,18 +32,18 @@ md-list-item.md-no-proxy  {
 }
 .selected {
   /*background: #7685C0;*/
-  background: #CFD4E2;
-  color: #6971D2;;
+  background: #DDDDD9;
+  color: #317869;;
 }
 .selected md-icon {
-  color: #6971D2;
+  color: #358377;
   font-weight: 800;
 }
 .md-button.md-fab.md-mini {
   line-height: inherit;
 }
 .local-hue-1 {
-  background-color: #5C6BC0 !important;
+  background-color: #44A299 !important;
   color: #eee !important;
 }
 .local-hue-2-background {
@@ -54,7 +54,12 @@ md-list-item.md-no-proxy  {
 }
 
 .md-button.md-primary {
-  background: #f0f3fa;
+  background: #959591;
+}
+
+.md-button.md-default-theme.md-primary:not([disabled]),
+.md-button.md-primary:not([disabled]) md-icon  {
+  color: rgb(238, 238, 236);
 }
 
 .view-container {
@@ -72,7 +77,7 @@ md-list-item.md-no-proxy  {
   background: #eee;
 }
 .grey-label {
-  color: #6A78C1;
+  color: #4C8A7D;
 }
 .grid-list-overview .blue md-grid-tile-header {
   background: #414669;

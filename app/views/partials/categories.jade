@@ -1,6 +1,6 @@
 
-md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="CategoryCtrl as vm")
-  md-content(class="transparent" layout="column" flex="75")
+md-content( layout="row", layout-align="start start", flex, ng-controller="CategoryCtrl as vm")
+  md-content( layout="column" flex="100" flex-gt-lg="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.category.$resolved")
       md-toolbar.md_primary
@@ -25,8 +25,8 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
                         div(class="list-group-item-text md-subhead layout-fill") {{cat.title}}
                           div.md-ripple-container
                     md-divider
-          md-content(class="transparent" layout-padding flex="80" style="padding-left: 20px;")
-            div(layout-padding flex="80" class="md-subhead grey-text")
+          md-content(layout-padding flex="80" style="padding-left: 20px;")
+            div(layout-padding flex="100" class="md-subhead grey-text")
               span Collections can belong to a single #[em Collection Group]. A Collection Group provides specific
               |  information about the current collection and related collections.
             div(flex)
@@ -52,5 +52,5 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
               md-select(ng-model="vm.category.areaId" placeholder="Select an Area")
                 md-option(ng-repeat="area in vm.areas" ng-value="area.id" ng-selected="area.id") {{area.title}}
 
-  md-content(class="transparent" layout="column" flex="25")
+  md-content( layout="column" flex="25")
 

@@ -18,12 +18,10 @@ exports.byId = function(req, res) {
 
   db.Area.find( {
     where: {
-      id: {
-        eq: areaId
-      }
+      id: areaId
     },
     order: [['title', 'ASC']]
-  }).success( function(tags) {
+  }).then( function(tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -36,7 +34,7 @@ exports.list = function(req, res) {
 
   db.Area.findAll( {
     order: [['position', 'ASC']]
-  }).success( function(tags) {
+  }).then( function(tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -50,7 +48,7 @@ exports.add =function (req, res) {
   var title = req.body.title;
 
   db.Area.findAll()
-    .success(function(result) {
+    .then(function(result) {
       addArea(result.length + 1)
     })
     .error(function (err) {
@@ -61,7 +59,7 @@ exports.add =function (req, res) {
     db.Area.create({
       title: title,
       position: position
-    }).success(function(result) {
+    }).then(function(result) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
       res.end(JSON.stringify({ status: 'success' }));
@@ -91,11 +89,11 @@ exports.update = function (req, res) {
       id: {
         eq: id
       }
-    }).success(function(result) {
+    }).then(function(result) {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({ status: 'success', id: result.id }));
+      res.end(JSON.stringify({ status: 'then', id: result.id }));
     });
 };
 
@@ -127,7 +125,7 @@ exports.reorder = function (req, res) {
   }
 
   chainer.run()
-    .success(function() {
+    .then(function() {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
@@ -146,7 +144,7 @@ exports.delete = function (req , res) {
     id: {
       eq: id
     }
-  }).success(function(result) {
+  }).then(function(result) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');

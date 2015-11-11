@@ -8,7 +8,6 @@ var express = require('express'),
   multiparty = require('multiparty');
 
 
-
 global.db = require('./app/models');
 var config = require('./config/environment');
 var app = express();
@@ -25,7 +24,7 @@ require('./config/routes')(app, config, passport);
 // Catch 404 and forward to error handler. Any request
 // not handled by express or routes configuration will
 // invoke this middleware.
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found: ' + req.originalUrl);
   err.status = 404;
   err.request = req.originalUrl;
@@ -36,7 +35,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(err.status || 500);
     res.render('error', {
@@ -48,7 +47,7 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(err.status || 500).end();
   res.render('error', {
@@ -66,14 +65,14 @@ if (config.nodeEnv !== 'test') {
   db
     .sequelize
     .sync(config.sync)
-    .complete(function(err) {
+    .error(function (err) {
       if (err) {
         throw err[0]
-      } else {
-        // after database sync, start Express server
-        startServer();
       }
-    });
+    }).then(function () {
+    startServer();
+
+  });
 }
 else {
   // Doing integration tests. No need to sync.
@@ -88,7 +87,7 @@ function startServer() {
   }
 
   // start server
-  server = http.createServer(app).listen(config.port, function() {
+  server = http.createServer(app).listen(config.port, function () {
 
     if (config.nodeEnv !== 'development') {
       try {
@@ -101,7 +100,7 @@ function startServer() {
         console.log('Refusing to keep the process alive as root.');
         process.exit(1);
       }
-    }  else {
+    } else {
       console.log('Running with User Id: ' + process.getuid());
       console.log('Express server listening on port ' + config.port)
     }

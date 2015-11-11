@@ -131,6 +131,7 @@
         col.$promise.then(function(data) {
           vm.collection = data;
           vm.thumbnailImage = data.image;
+
         });
 
         var tags = TagsForCollection

@@ -114,13 +114,13 @@ taggerDirectives.directive('toggleTagAreaButton', [
         tagName: '@'
       },
       template:
-      '<div style="width: 10%;float:left;">' +
+      '<div style="width: 20%;float:left;">' +
       '   <md-button class="{{buttonClass}} md-raised md-fab md-mini"  ng-click="update();">' +
       '     <i class="material-icons">{{buttonIcon}}</i>' +
       '     <div class="md-ripple-container"></div>' +
       '   </md-button>' +
       '</div>' +
-      '<div style="width: 90%;float:left;line-height: 3.3rem;" class="{{textClass}} md-subhead">' +
+      '<div style="width: 80%;float:left;line-height: 3.3rem;" class="{{textClass}} md-subhead">' +
       '   {{tagName}}' +
       '</div>' ,
       link: function(scope, elem, attrs) {
@@ -496,17 +496,21 @@ taggerDirectives.directive('d3Pie', [
           function drawPieChart() {
 
             var width = containerEl.clientWidth / 2,
-              height = width * 0.7,
+              height = width * 0.8,
               radius = Math.min(width, height) / 2,
               svg = container.select('svg')
                 .attr('width', width)
                 .attr('height', height);
-
+              console.log("height " + height);
+            console.log("width " + width);
+            console.log("radius " + radius);
             var pie = svg.append('g')
               .attr(
               'transform',
               'translate(' + width / 2 + ',' + height / 2 + ')'
             );
+            console.log('height ' + height);
+            console.log('width ' + width);
 
             var detailedInfo = svg.append('g')
               .attr('class', 'pieChart--detailedInformation');

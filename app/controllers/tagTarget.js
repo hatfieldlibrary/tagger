@@ -9,13 +9,11 @@ exports.getAreaTargets = function(req, res ) {
   db.TagAreaTarget.findAll(
     {
       where: {
-        TagId: {
-          eq: TagId
-        }
+        TagId: TagId
       }
     },
     {attributes: ['AreaId']}
-  ).success(function(areas) {
+  ).then(function(areas) {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
@@ -40,12 +38,8 @@ exports.addTarget = function(req, res) {
         db.TagAreaTarget.find(
           {
             where: {
-              TagId: {
-                eq: tagId
-              },
-              AreaId: {
-                eq: areaId
-              }
+              TagId: tagId ,
+              AreaId: areaId
             }
           }).complete(callback)
           .error(function (err) {
@@ -64,13 +58,11 @@ exports.addTarget = function(req, res) {
         db.TagAreaTarget.findAll(
           {
             where: {
-              TagId: {
-                eq: tagId
-              }
+              TagId: tagId
             }
           },
           {attributes: ['AreaId','TagId']}
-        ).success(function (areas) {
+        ).then(function (areas) {
           // JSON response
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Access-Control-Allow-Origin', '*');
@@ -110,9 +102,7 @@ function addArea(tagId, areaId, res) {
         db.TagAreaTarget.findAll(
           {
             where: {
-              TagId: {
-                eq: tagId
-              }
+              TagId: tagId
             }
           },
           {attributes: ['AreaId']}
@@ -151,12 +141,8 @@ exports.removeTarget = function(req, res) {
       delete: function(callback) {
         db.TagAreaTarget.destroy(
           {
-            TagId: {
-              eq: tagId
-            },
-            AreaId: {
-              eq: areaId
-            }
+            TagId: tagId,
+            AreaId: areaId
           }
         ).complete(callback)
           .error(function(err) {
@@ -168,9 +154,7 @@ exports.removeTarget = function(req, res) {
         db.TagAreaTarget.findAll(
           {
             where: {
-              TagId: {
-                eq: tagId
-              }
+              TagId: tagId
             }
           },
           { attributes: ['AreaId'] }

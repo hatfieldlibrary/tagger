@@ -20,6 +20,7 @@ var config = {
       port: 3306,
       dialect: 'mysql'
     },
+    sync: { force: false },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
@@ -48,6 +49,7 @@ var config = {
       port: 3306,
       dialect: 'mysql'
     },
+    sync: { force: false },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
@@ -75,6 +77,7 @@ var config = {
       port: 3306,
       dialect: 'mysql'
     },
+    sync: { force: true },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/var/taggerImages',
@@ -91,6 +94,7 @@ var config = {
     app: {
       name: 'acomtags'
     },
+    sync: { force: false },
     uid: 'node',
     gid: 'node',
     port: 3001,

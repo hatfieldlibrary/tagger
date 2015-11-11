@@ -1,22 +1,22 @@
 
-md-content(class="transparent" layout="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
-  md-content(class="transparent" layout="column" flex="75" class="transparent")
-    md-card.flex(flex, class="primary-content" style="background: #DFE3EE;")
+md-content(class="transparent" layout="column", layout-gt-md="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
+  md-content(class="transparent" layout="column" flex="100" flex-gt-md="75" class="transparent")
+    md-card.flex(flex, class="primary-content" style="background: #EAEAE6;")
       div(ng-if="vm.collectionList.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
           span(flex="25")
             i.material-icons() collections
             span.md-subhead &nbsp;COLLECTIONS
-          span(flex="70")
+          span(flex="65")
             h3.md-display-1 {{vm.collection.title}}
           span(flex)
           md-button(class="md-warn md-raised md-fab md-mini" aria-label="Delete Collection" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
       md-card-content
-        div(layout="row", layout-align="start start")
+        div(layout="row" layout-align="start start")
           div(flex="20" )
             md-button(class="md-raised md-accent" style="margin-top: 15px;" ng-click="vm.showDialog($event, vm.addMessage)") Add Collection
-            div(layout="column", style="height:770px; background: transparent;")
+            div(layout="column", layout-gt-md="column", style="height:770px; background: transparent;")
               md-content(flex style="background: transparent;")
                 md-list
                 div(ng-repeat="col in vm.collectionList")
@@ -89,7 +89,7 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
                   md-radio-button(aria-label="Show a selection" value="opts" flex="25" style="display: inline" ng-click="vm.setBrowseType(1)") Show a selection
                 span(flex)
 
-            md-content(class="transparent" layout="row" flex class="transparent")
+            md-content( layout="row" flex)
               div(flex="5")
                 i(class="material-icons" style="margin-top: 20px;color: rgb(63,81,181);") arrow_forward
               div(flex="95")
@@ -97,7 +97,7 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
                   label {{vm.browseType}}
                   input(type="text", ng-model="vm.collection.url")
 
-  md-content(class="transparent" layout="column" flex="25" class="transparent")
+  md-content(class="transparent" layout="column" flex="100" flex-gt-md="25" class="transparent")
     md-card.flex(flex)
       md-toolbar.md_primary
         .md-toolbar-tools
@@ -113,7 +113,7 @@ md-content(class="transparent" layout="row", layout-align="start start",  ng-con
           md-card-content
             span.md-caption Image size 600px wide by 500px high (thumbnails created from original)
 
-    subject-selector.flex
+    subject-selector.flext
 
     content-type-selector.flex
 

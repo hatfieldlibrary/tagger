@@ -22,7 +22,7 @@ exports.list = function (req, res) {
   db.Tag.findAll({
     order: [['name', 'ASC']]
 
-  }).success(function (tags) {
+  }).then(function (tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,12 +40,10 @@ exports.byId = function(req, res) {
 
   db.Tag.find( {
     where: {
-      id: {
-        eq: id
-      }
+      id:  id
     },
     order: [['name', 'ASC']]
-  }).success( function(tag) {
+  }).then( function(tag) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -58,18 +56,19 @@ exports.byId = function(req, res) {
 
 // Provides list of tags associated with an area.
 exports.tagByArea = function (req, res) {
+
+
   var areaId = req.params.areaId;
+
   db.TagAreaTarget.findAll( {
     where: {
-      AreaId: {
-        eq: areaId
-      }
+      AreaId: areaId
     },
 
-   // attributes: ['name', 'TagId'],
-    order: [['name', 'ASC']],
+    attributes: [[db.Tag, 'name'], ['TagId']],
+    order: [db.Tag, ['name', 'ASC']],
     include: [db.Tag]
-  }).success( function(tags) {
+  }).then( function(tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -84,7 +83,7 @@ exports.tagByAreaCount = function (req, res) {
 
   db.sequelize.query('SELECT name, COUNT(*) as count from TagTargets left join Tags on ' +
     'TagTargets.TagId = Tags.id left join TagAreaTargets on TagAreaTargets.TagId = Tags.id  ' +
-    'WHERE TagAreaTargets.AreaId = ' + areaId + ' group by TagTargets.TagId order by name'
+    'WHERE TagAreaTargets.AreaId = ' + areaId + ' group by TagTargets.TagId order by Tags.name'
   ).then(function (tags) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -105,9 +104,7 @@ exports.add = function( req, res) {
         db.Tag.find(
           {
             where: {
-              name: {
-                eq: name
-              }
+              name: name
             }
           }
         ).complete(callback)
@@ -123,7 +120,7 @@ exports.add = function( req, res) {
       if (result.check === null) {
         // Add new content type
         db.Tag.create({name: name
-        }).success(function (result) {
+        }).then(function (result) {
           // JSON response
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Access-Control-Allow-Origin','*');
@@ -158,7 +155,7 @@ exports.update = function (req, res) {
       id: {
         eq: id
       }
-    }).success(function() {
+    }).then(function() {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
@@ -173,10 +170,8 @@ exports.delete = function (req , res) {
   var id = req.body.id;
 
   db.Tag.destroy({
-    id: {
-      eq: id
-    }
-  }).success(function() {
+    id: id
+  }).then(function() {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -188,19 +183,17 @@ exports.delete = function (req , res) {
 
 exports.subjectsByArea = function(req, res) {
 
+  console.log('subjectsByArea');
   var id = req.params.id;
-
   db.TagAreaTarget.findAll( {
     where: {
-      AreaId: {
-        eq: id
-      }
+      AreaId: id
     },
+    include: [db.Tag],
+    attributes: ['"Tags.name"', 'TagId'],
+    order: [[db.Tag, 'name', 'ASC']]
 
-    attributes: ['Tag.name', 'TagId'],
-    order: [['Tag.name', 'ASC']],
-    include: [db.Tag]
-  }).success( function(tags) {
+  }).then( function(tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');

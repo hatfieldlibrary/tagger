@@ -13,8 +13,10 @@ html
     div(layout-fill)&attributes({layout:"column"})
       md-toolbar()
         div.md-toolbar-tools
+          md-button(class="md-icon-button", style="padding-top: 8px;", aria-label="Settings" ng-click="vm.toggleLeft()",  hide-gt-md="true")
+            i(class="material-icons") menu
           span
-            h2.md-display-4 Tagger
+            h2.md-display-1 Tagger
           span(flex)
           md-list(ng-if="vm.userAreaId === 0")
             md-list-item(ng-style="{'display':'inline'}")
@@ -38,57 +40,62 @@ html
                         .md-caption(elem-ready="vm.getRole(#{areaId})") {{vm.role}}
             md-content.transparent
               md-list
+                md-list-item(hide-gt-md="true")
+                  md-button(ng-click="vm.toggleLeft();", class=" md-button md-default-theme")
+                    div.md-list-item-inner
+                      div.list-group-item-text HIDE MENU
+                        div.md-ripple-container
                 md-list-item(ng-class="{selected: vm.currentIndex===0}")
-                  md-button(ng-click="vm.setCurrentIndex(0)", class="md-no-style md-button md-default-theme",  href="/admin/partials/overview")
+                  md-button(ng-click="vm.setCurrentIndex(0);vm.toggleLeft();", class="md-no-style md-button md-default-theme",  href="/admin/partials/overview")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons home
                       div.list-group-item-text Overview
                         div.md-ripple-container
                 md-list-item( ng-class="{selected: vm.currentIndex===1}")
-                  md-button(ng-click="vm.setCurrentIndex(1)", class="md-no-style md-button md-default-theme",  ng-href="/admin/partials/collections")
+                  md-button(ng-click="vm.setCurrentIndex(1); vm.toggleLeft();", class="md-no-style md-button md-default-theme",  ng-href="/admin/partials/collections",)
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons collections
                       div.list-group-item-text Collections
                         div.md-ripple-container
                 md-list-item( ng-class="{selected: vm.currentIndex===2}")
-                  md-button(ng-click="vm.setCurrentIndex(2)", class="md-no-style md-button md-default-theme" href="/admin/partials/tags" tabindex="0")
+                  md-button(ng-click="vm.setCurrentIndex(2); vm.toggleLeft();", class="md-no-style md-button md-default-theme" href="/admin/partials/tags" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons link
                       div.list-group-item-text Subject Tags
                         div.md-ripple-container
                 md-list-item( ng-class="{selected: vm.currentIndex===3}")
-                  md-button(ng-click="vm.setCurrentIndex(3)", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/contentTypes" tabindex="0")
+                  md-button(ng-click="vm.setCurrentIndex(3); vm.toggleLeft();", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/contentTypes" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons local_movies
                       div.list-group-item-text Content Types
                         div.md-ripple-container
-                md-list-item( ng-class="{selected: vm.currentIndex===4}")
-                  md-button(ng-click="vm.setCurrentIndex(4)", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/categories" tabindex="0")
+                md-list-item( ng-class="{selected: vm.currentIndex===4}" )
+                  md-button(ng-click="vm.setCurrentIndex(4); vm.toggleLeft();", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/categories" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons library_books
                       div.list-group-item-text Collection Groups
                         div.md-ripple-container
-                md-list-item(ng-class="{selected: vm.currentIndex===5}")
-                  md-button(ng-click="vm.setCurrentIndex(5)", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/areas" tabindex="0")
+                md-list-item(ng-class="{selected: vm.currentIndex===5}" )
+                  md-button(ng-click="vm.setCurrentIndex(5); vm.toggleLeft();", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/areas" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons public
                       div.list-group-item-text Areas
                         div.md-ripple-container
-                md-list-item(ng-class="{selected: vm.currentIndex===6}")
-                  md-button(ng-click="vm.setCurrentIndex(6)", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/users" tabindex="0")
+                md-list-item(ng-class="{selected: vm.currentIndex===6}" )
+                  md-button(ng-click="vm.setCurrentIndex(6); vm.toggleLeft();", ng-disabled="vm.userAreaId > 0", class="md-no-style md-button md-default-theme" href="/admin/partials/users" tabindex="0")
                     div.md-list-item-inner
                       md-icon( aria-hidden="true" style="margin: 10px;")
                         i.material-icons group
                       div.list-group-item-text Users
                         div.md-ripple-container
 
-        div(ng-view flex)
+        div(ng-view, style="overflow:auto", layout="row" layout-gt-md="column" flex)
 
 
 

@@ -17,7 +17,7 @@ exports.list = function(req, res) {
   db.Category.findAll({
     attributes: ['id','title'],
     order: [['title', 'ASC']]
-  }).success(function(categories) {
+  }).then(function(categories) {
 
     // JSON response
     res.setHeader('Content-Type', 'application/json');
@@ -51,12 +51,10 @@ exports.listByArea = function (req, res) {
 
   db.Category.findAll( {
     where: {
-      areaId: {
-        eq: areaId
-      }
+      areaId: areaId
     },
     order: [['title', 'ASC']]
-  }).success( function(categories) {
+  }).then( function(categories) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -73,12 +71,10 @@ exports.byId = function( req, res) {
 
   db.Category.find({
     where: {
-      id: {
-        eq: categoryId
-      }
+      id:  categoryId
     }
 
-  }).success( function(category) {
+  }).then( function(category) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -95,7 +91,7 @@ exports.add = function(req, res ) {
 
   db.Category.create({
     title: title
-  }).success(function(result) {
+  }).then(function(result) {
     console.log(result);
     // JSON response
     res.setHeader('Content-Type', 'application/json');
