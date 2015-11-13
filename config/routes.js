@@ -2,15 +2,18 @@ module.exports = function(app,config,passport){
 
   'use strict';
 
-  var crud = require('../app/controllers/crud');
+  var login = require('../app/controllers/login');
   var tag = require('../app/controllers/tags');
   var tagTarget = require('../app/controllers/tagTarget.js');
   var area = require('../app/controllers/area');
   var content = require('../app/controllers/content');
   var collection = require('../app/controllers/collection');
-  var target = require('../app/controllers/target');
   var category = require('../app/controllers/category');
   var users = require('../app/controllers/users');
+  /**
+   * Indicates whether the request has an authenticated session.
+   * @type {boolean}
+   */
   var ensureAuthenticated = app.ensureAuthenticated;
 
   /*jshint unused:false*/
@@ -18,7 +21,7 @@ module.exports = function(app,config,passport){
   // TAGGER ROUTES
 
   // AUTHENTICATION
-  app.get('/login', crud.login);
+  app.get('/login', login.login);
 
   // Use passport.authenticate() as middleware. The first step in Google authentication
   // redirects the user to google.com.  After authorization, Google

@@ -19,7 +19,7 @@ md-content(class="transparent" layout="row", style="overflow: auto;" layout-alig
               md-list
                 div(ng-repeat="tag in vm.tags")
                   md-list-item
-                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': tag.id==vm.currentTag}" style="min-height: 47px;"  ng-click="vm.resetTag(tag.id);")
+                    md-button(class="md-no-style md-button nav-item-dimens md-default-theme", ng-class="{'md-primary': tag.id==vm.currentTag}"  ng-click="vm.resetTag(tag.id);")
                       div(class="list-group-item-text md-subhead layout-fill") {{tag.name}}
                         div.md-ripple-container
                   md-divider

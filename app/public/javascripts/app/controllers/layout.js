@@ -163,7 +163,7 @@
           var tags = TagList.query();
           tags.$promise.then(function (data) {
             if (data.length > 0) {
-              console.log(data);
+
               Data.tags = data;
               Data.currentTagIndex = data[0].id
             }

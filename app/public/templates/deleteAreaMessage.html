@@ -1,4 +1,4 @@
-<md-dialog aria-label="Add dialog" style="width: 450px;">
+<md-dialog aria-label="Add dialog" class="dialogs">
     <md-dialog-content>
         <h3 class="md-display-1">Delete Area</h3>
           <md-input-container>
@@ -8,10 +8,10 @@
           </md-input-container>
       </md-dialog-content>
     <div class="md-actions">
-        <md-button ng-click="closeDialog()" class="md-primary">
+        <md-button ng-click="closeDialog()">
             Cancel
           </md-button>
-        <md-button ng-click="deleteArea(Data.currentAreaIndex)" class="md-primary">
+        <md-button ng-click="deleteArea(Data.currentAreaIndex)">
             Delete Area
           </md-button>
       </div>

@@ -3,6 +3,11 @@
 var async = require('async');
 
 
+/**
+ * The overview page.  Renders overview.jade.
+ * @param req
+ * @param res
+ */
 exports.overview = function (req, res) {
 
   res.render('/partials/collectionOverview', {
@@ -14,11 +19,19 @@ exports.overview = function (req, res) {
 
 };
 
+/**
+ * Returns ctype (item type) counts for the overview
+ * dashboard.
+ * @param req
+ * @param res
+ */
 exports.countCTypesByArea = function (req, res) {
 
   var areaId = req.params.areaId;
 
-  db.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ? GROUP BY ctype',
+  db.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets ' +
+    'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
+    'WHERE AreaTargets.AreaId = ? GROUP BY ctype',
     {
       replacements: [areaId],
       type: db.Sequelize.QueryTypes.SELECT
@@ -32,11 +45,46 @@ exports.countCTypesByArea = function (req, res) {
   });
 };
 
+/**
+ * Gets browse type (search option types) by area for overview dashboard.
+ * @param req
+ * @param res
+ */
+exports.browseTypesByArea = function (req, res) {
+
+  var areaId = req.params.areaId;
+
+  db.sequelize.query('select Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
+    'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = ? group by Collections.browseType',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }).then(
+    function (collections) {
+
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(collections));
+
+    }).error(function (err) {
+    console.log(err);
+  });
+};
+
+/**
+ * Returns repoType (search option) counts for the overview
+ * dashboard.
+ * @param req
+ * @param res
+ */
 exports.repoTypeByArea = function (req, res) {
 
   var areaId = req.params.areaId;
 
-  db.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ? GROUP BY repoType',
+  db.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets ' +
+    'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
+    'WHERE AreaTargets.AreaId = ? GROUP BY repoType',
     {
       replacements: [areaId],
       type: db.Sequelize.QueryTypes.SELECT
@@ -50,6 +98,12 @@ exports.repoTypeByArea = function (req, res) {
   });
 };
 
+/**
+ * Retrieves the collections by area id for the administrative
+ * collection panel.
+ * @param req
+ * @param res
+ */
 exports.list = function (req, res) {
 
   var areaId = req.params.areaId;
@@ -72,6 +126,12 @@ exports.list = function (req, res) {
   });
 };
 
+/**
+ * Retrieves areas by collection id for the administrative
+ * collections panel.
+ * @param req
+ * @param res
+ */
 exports.areas = function (req, res) {
 
   var collId = req.params.collId;
@@ -91,6 +151,12 @@ exports.areas = function (req, res) {
 
 };
 
+/**
+ * Adds a content type to the collection metadata after first
+ * checking whether the association already exists.
+ * @param req
+ * @param res
+ */
 exports.addTypeTarget = function (req, res) {
 
   var collId = req.params.collId;
@@ -143,6 +209,11 @@ exports.addTypeTarget = function (req, res) {
   );
 };
 
+/**
+ * Removes a content type association from the collection.
+ * @param req
+ * @param res
+ */
 exports.removeTypeTarget = function (req, res) {
 
   var collId = req.params.collId;
@@ -150,8 +221,10 @@ exports.removeTypeTarget = function (req, res) {
 
   db.ItemContentTarget.destroy(
     {
-      ItemContentId: typeId,
-      CollectionId: collId
+      where: {
+        ItemContentId: typeId,
+        CollectionId: collId
+      }
     }
   ).then(function () {
     // JSON response
@@ -164,6 +237,12 @@ exports.removeTypeTarget = function (req, res) {
 
 };
 
+/**
+ * Add a subject tag to teh collection after first checking
+ * whether the association already exists.
+ * @param req
+ * @param res
+ */
 exports.addTagTarget = function (req, res) {
 
   var collId = req.params.collId;
@@ -171,8 +250,6 @@ exports.addTagTarget = function (req, res) {
 
   async.series(
     {
-      // Check to see if tag is already associated
-      // with area.
       check: function (callback) {
 
         db.TagTarget.find(
@@ -221,6 +298,11 @@ exports.addTagTarget = function (req, res) {
 
 };
 
+/**
+ * Removes a subject tag from the collection.
+ * @param req
+ * @param res
+ */
 exports.removeTagTarget = function (req, res) {
 
   var collId = req.params.collId;
@@ -228,8 +310,10 @@ exports.removeTagTarget = function (req, res) {
 
   db.TagTarget.destroy(
     {
-      TagId: tagId,
-      CollectionId: collId
+      where: {
+        TagId: tagId,
+        CollectionId: collId
+      }
     }
   ).then(function () {
     // JSON response
@@ -242,6 +326,14 @@ exports.removeTagTarget = function (req, res) {
 
 };
 
+
+/**
+ * Adds collection to a collection area after first
+ * checking for a existing associatoin then returns
+ * new area list.
+ * @param req
+ * @param res
+ */
 exports.addAreaTarget = function (req, res) {
 
   var collId = req.params.collId;
@@ -296,6 +388,12 @@ exports.addAreaTarget = function (req, res) {
 
 };
 
+/**
+ * Adds a collection to a collection area.
+ * @param collId    the collection id
+ * @param areaId    the area id
+ * @param res
+ */
 function addArea(collId, areaId, res) {
 
   async.series(
@@ -306,7 +404,9 @@ function addArea(collId, areaId, res) {
             CollectionId: collId,
             AreaId: areaId
           }
-        ).complete(callback)
+        ).then(function(result) {
+            callback(null, result);
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -320,7 +420,9 @@ function addArea(collId, areaId, res) {
             }
           },
           {attributes: ['AreaId']}
-        ).complete(callback)
+        ).then(function(result) {
+          callback(null, result);
+        })
           .error(function (err) {
             console.log(err);
           });
@@ -340,6 +442,12 @@ function addArea(collId, areaId, res) {
   );
 }
 
+/**
+ * Removes the association between a collection and a collection
+ * area.  Returns new area list after completion.
+ * @param req
+ * @param res
+ */
 exports.removeAreaTarget = function (req, res) {
 
   var collId = req.params.collId;
@@ -349,18 +457,17 @@ exports.removeAreaTarget = function (req, res) {
     {
       create: function (callback) {
         db.AreaTarget.destroy({
-            AreaId: {
-              eq: areaId
-            },
-            CollectionId: {
-              eq: collId
-            }
+          where: {
+            AreaId: areaId,
+            CollectionId: collId
           }
-        ).complete(callback)
+
+        }).then(function (result) {
+            callback(null, result);
+          })
           .error(function (err) {
             console.log(err);
           });
-
       },
       areaList: function (callback) {
         db.AreaTarget.findAll(
@@ -370,7 +477,9 @@ exports.removeAreaTarget = function (req, res) {
             }
           },
           {attributes: ['AreaId']}
-        ).complete(callback)
+        ).then(function (result) {
+            callback(null, result);
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -389,6 +498,11 @@ exports.removeAreaTarget = function (req, res) {
     });
 };
 
+/**
+ * Retrieves data for a single collection by collection id.
+ * @param req
+ * @param res
+ */
 exports.byId = function (req, res) {
 
   var collId = req.params.id;
@@ -416,16 +530,18 @@ exports.byId = function (req, res) {
       },
       getAreas: function (callback) {
         db.AreaTarget.findAll({
-            where: {
-              CollectionId: collId
-            }
-          }).then(function (result) {
+          where: {
+            CollectionId: collId
+          }
+        }).then(function (result) {
           callback(null, result);
         });
       }
     },
     function (err, result) {
-      if (err !== null) {console.log(err);}
+      if (err !== null) {
+        console.log(err);
+      }
 
       var response = {};
       var areas = [];
@@ -447,7 +563,6 @@ exports.byId = function (req, res) {
         response.category = result.getCategory.CategoryId;
       }
       if (result.getAreas !== null) {
-
         for (var i = 0; i < result.getAreas.length; i++) {
           areas[0] = result.getAreas[i].AreaId;
         }
@@ -462,6 +577,11 @@ exports.byId = function (req, res) {
 };
 
 
+/**
+ * Updates metadata and associations for a single collection.
+ * @param req
+ * @param res
+ */
 exports.update = function (req, res) {
 
   var id = req.body.id;
@@ -494,20 +614,29 @@ exports.update = function (req, res) {
             id: {
               eq: id
             }
-          }).complete(callback)
+          }).then(function (result) {
+          callback(null, result);
+        })
       },
       checkCategory: function (callback) {
         db.CategoryTarget.find({
           where: {
             CollectionId: id
           }
-        }).complete(callback)
+        }).then(function (result) {
+            callback(null, result);
+          })
           .error(function (err) {
             console.log(err);
           });
       }
     },
     function (err, result) {
+      if (err !== null) {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'failed'}));
+      }
       // If no category exists for this collection,
       // add new entry.
       if (result.checkCategory === null) {
@@ -544,13 +673,18 @@ exports.update = function (req, res) {
 
 };
 
+/**
+ * Deletes a collection.
+ * @param req
+ * @param res
+ */
 exports.delete = function (req, res) {
 
   var id = req.body.id;
 
   db.Collection.destroy({
-    id: {
-      eq: id
+    where: {
+      id: id
     }
   }).then(function () {
     // JSON response
@@ -563,6 +697,13 @@ exports.delete = function (req, res) {
 };
 
 
+/**
+ * Adds a new collection with title field metadata
+ * and creates the collection association with the
+ * collection area.
+ * @param req
+ * @param res
+ */
 exports.add = function (req, res) {
 
 
@@ -606,6 +747,9 @@ exports.add = function (req, res) {
         });
       }
     }, function (err, results) {
+      if (err !== null) {
+        console.log(err);
+      }
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -616,6 +760,14 @@ exports.add = function (req, res) {
 };
 
 
+/**
+ * Image upload. Reads multipart form data and creates
+ * thumbnail image. Writes thumbnail and full size image to
+ * directories in the configuration's image path directory.
+ * @param req
+ * @param res
+ * @param config
+ */
 exports.updateImage = function (req, res, config) {
 
   //https://github.com/danialfarid/ng-file-upload
@@ -690,8 +842,13 @@ exports.updateImage = function (req, res, config) {
   });
 
 
+  /**
+   * Updates the data base with new image information.
+   * @param id
+     */
   function updateDb(id) {
-    db.Collection.update({
+    db.Collection.update(
+      {
         image: imageName
       },
       {
@@ -713,6 +870,12 @@ exports.updateImage = function (req, res, config) {
 };
 
 
+/**
+ * Retrieves the tags associated with a single collection. Used by
+ * both admin interface and public REST API.
+ * @param req
+ * @param res
+ */
 exports.tagsForCollection = function (req, res) {
 
   var collId = req.params.collId;
@@ -732,10 +895,19 @@ exports.tagsForCollection = function (req, res) {
 
   }).error(function (err) {
     console.log(err);
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'failed'}));
   });
 
 };
 
+/**
+ * Retrieves the types associated with a single collection.  Used by
+ * both admin interface and public REST API.
+ * @param req
+ * @param res
+ */
 exports.typesForCollection = function (req, res) {
 
   var collId = req.params.collId;
@@ -755,12 +927,18 @@ exports.typesForCollection = function (req, res) {
     })
     .error(function (err) {
       console.log(err);
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'failed'}));
     })
 
 };
 
-// end new admin interface
-
+/**
+ * Retreives a list of all collections for the public API.
+ * @param req
+ * @param res
+ */
 exports.allCollections = function (req, res) {
   db.Collection.findAll({
     attributes: ['id', 'title'],
@@ -769,13 +947,22 @@ exports.allCollections = function (req, res) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(collections));
+    res.end(JSON.stringify({status: 'failed'}));
 
   }).error(function (err) {
     console.log(err);
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(collections));
+
   });
 };
 
+/**
+ * Retrieves single collection information for the public API.
+ * @param req
+ * @param res
+ */
 exports.collectionById = function (req, res) {
 
   // var chainer = new db.Sequelize.Utils.QueryChainer();
@@ -827,13 +1014,15 @@ exports.collectionById = function (req, res) {
         }).error(function (err) {
           console.log(err);
         });
-        ;
       }
 
     },
     function (err, result) {
       if (err != null) {
         console.log(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'failed'}));
       } else {
         // JSON response
         res.setHeader('Content-Type', 'application/json');
@@ -843,91 +1032,10 @@ exports.collectionById = function (req, res) {
     });
 
 };
-/*
- (
- db.Collection.find(
- {
- where: {
- eq: collId
- }
- }
- ).then(function (collection) {
- result.collection.title = collection.title;
- result.collection.url = collection.url;
- result.collection.description = collection.description;
- result.collection.image = collection.image;
- result.collection.dates = collection.dates;
- result.collection.items = collection.items;
- result.collection.browseType = collection.browseType;
- result.collection.collType = collection.ctype;
- result.collection.restricted = collection.restricted;
- result.collection.searchType = collection.repoType;
- })
- .error(function (err) {
- console.log(err);
- })
- );
- chainer.add(
- db.CategoryTarget.find(
- {
- where: {
- CollectionId: collId
- },
- include: [db.Category]
- }
- ).then(function (category) {
- if (category === null) {
- result.category.title = '';
- result.category.description = '';
- } else if (category.category === null) {
- result.category.title = '';
- result.category.description = '';
- } else {
- result.category.title = category.category.title;
- result.category.description = category.category.description;
- result.category.url = category.category.url;
- result.category.linkLabel = category.category.linkLabel;
- }
 
- })
- .error(function (err) {
- console.log(err);
- }
- )
- );
- chainer.add(
- db.ItemContentTarget.findAll(
- {
- where: {
- CollectionId: collId
- },
- include: [db.ItemContent]
- }
- ).then(function (types) {
- result.contentTypes = types;
- })
- .error(function (err) {
- console.log(err);
- })
- );
- chainer.run()
- .then(function () {
-
- // JSON response
- res.setHeader('Content-Type', 'application/json');
- res.setHeader('Access-Control-Allow-Origin', '*');
- res.end(JSON.stringify(result));
-
- })
- .error(function (err) {
- console.log(err);
- });
- }
- ;
- */
 /**
- * Used for pull down menu in academic commons view.
- * Needs to be generalized.
+ * Returns a JSON list of queries retrieved from the eXist
+ * database host.  The list contains
  * @param req
  * @param res
  */
@@ -947,6 +1055,7 @@ exports.browseList = function (req, res) {
     path: '/exist/apps/METSALTO/api/BrowseList.xquery',
     method: 'GET'
   };
+
   var callback = function (response) {
 
     var str = '';
@@ -959,6 +1068,7 @@ exports.browseList = function (req, res) {
       res.end(str);
     });
   };
+
   var request = http.request(options, callback);
   request.on('error', function (e) {
     console.log(e);
@@ -966,8 +1076,12 @@ exports.browseList = function (req, res) {
   request.end();
 };
 
+/**
+ * Retrieves list of collection by area ID for the public API.
+ * @param req
+ * @param res
+ */
 exports.collectionsByArea = function (req, res) {
-
 
   var areaId = req.params.id;
 
@@ -987,6 +1101,11 @@ exports.collectionsByArea = function (req, res) {
   });
 };
 
+/**
+ * Retrieves a list of collections by subject and area for the public API.
+ * @param req
+ * @param res
+ */
 exports.collectionsBySubject = function (req, res) {
 
   var subjectId = req.params.id;
@@ -1010,26 +1129,6 @@ exports.collectionsBySubject = function (req, res) {
   });
 };
 
-exports.browseTypesByArea = function (req, res) {
 
-  var areaId = req.params.areaId;
-
-  db.sequelize.query('select Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
-    'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = ? group by Collections.browseType',
-    {
-      replacements: [areaId],
-      type: db.Sequelize.QueryTypes.SELECT
-    }).then(
-    function (collections) {
-
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(collections));
-
-    }).error(function (err) {
-    console.log(err);
-  });
-};
 
 

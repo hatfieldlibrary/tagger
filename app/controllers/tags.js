@@ -7,6 +7,11 @@
 var async = require('async');
 
 
+/**
+ * Render tag overview page.
+ * @param req
+ * @param res
+ */
 exports.overview = function(req, res) {
 
   res.render('tagOverview', {
@@ -17,6 +22,11 @@ exports.overview = function(req, res) {
   });
 };
 
+/**
+ * Retrieves a list of all tags.
+ * @param req
+ * @param res
+ */
 exports.list = function (req, res) {
 
   db.Tag.findAll({
@@ -34,6 +44,11 @@ exports.list = function (req, res) {
 
 };
 
+/**
+ * Retrieves tag information by tag id.
+ * @param req
+ * @param res
+ */
 exports.byId = function(req, res) {
 
   var id = req.params.id;
@@ -54,7 +69,12 @@ exports.byId = function(req, res) {
   });
 };
 
-// Provides list of tags associated with an area.
+/**
+ * Retrieves list of tags assoicated with an area. Query
+ * by area id.
+ * @param req
+ * @param res
+ */
 exports.tagByArea = function (req, res) {
 
 
@@ -78,6 +98,12 @@ exports.tagByArea = function (req, res) {
   });
 };
 
+
+/**
+ * Retrieves tag name and use count by area id.
+ * @param req
+ * @param res
+ */
 exports.tagByAreaCount = function (req, res) {
 
   var areaId = req.params.areaId;
@@ -98,6 +124,13 @@ exports.tagByAreaCount = function (req, res) {
     });
 };
 
+
+/**
+ * Adds a new tag.  First checks to see if tag with this name already
+ * exists.
+ * @param req
+ * @param res
+ */
 exports.add = function( req, res) {
 
   var name = req.body.name;
@@ -147,6 +180,11 @@ exports.add = function( req, res) {
   );
 };
 
+/**
+ * Update the tag name.
+ * @param req
+ * @param res
+ */
 exports.update = function (req, res) {
 
   var id = req.body.id;
@@ -170,6 +208,11 @@ exports.update = function (req, res) {
     });
 };
 
+/**
+ * Delete the tag.
+ * @param req
+ * @param res
+ */
 exports.delete = function (req , res) {
 
   var id = req.body.id;
@@ -184,8 +227,12 @@ exports.delete = function (req , res) {
   });
 };
 
-// end admin
 
+/**
+ * Retrieves a list of subjects by area for the public API.
+ * @param req
+ * @param res
+ */
 exports.subjectsByArea = function(req, res) {
 
   console.log('subjectsByArea');

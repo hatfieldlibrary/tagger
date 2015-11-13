@@ -11,6 +11,14 @@ body {
   min-height: 900px;
   max-height: 1200px;
 }
+.dialogs {
+  width: 450px;
+  padding: 10px;
+}
+.nav-item-dimens {
+  padding-left: 5px !important;
+  min-height: 47px !important;
+}
 md-radio-button:focus {
   outline: none !important;
   border: 0;

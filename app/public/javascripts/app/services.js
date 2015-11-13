@@ -6,41 +6,6 @@ var host = 'http://localhost:3000/rest/';
 
 var taggerServices = angular.module('taggerServices', ['ngResource']);
 
-/**
- * Returns singleton data object used to share state
- * among controllers. Controllers update object fields
- * whenever a change needs to propagate, and $watch for updates
- * to fields, changing the view model as required
- * in response to updates.
- */
-taggerServices.factory('Data', function () {
-  return {
-    areas: [],
-    areaLabel: '',
-    currentAreaIndex: null,
-    currentCategoryIndex: null,
-    categories: [],
-    categoriesForArea: [],
-    currentContentIndex: null,
-    contentTypes: [],
-    contentTypesForArea: [],
-    tags: [],
-    currentTagIndex: null,
-    collections: [],
-    initialCollection: {},
-    collectionsTotal: 0,
-    collectionTypeTotal: 0,
-    searchOptionsTotal: 0,
-    collectionLinksTotal: 0,
-    currentCollectionIndex: null,
-    currentThumbnailImage: null,
-    tagsForArea: [],
-    tagsForCollection: [],
-    typesForCollection: [],
-    userAreaId: 0
-  };
-});
-
 
 // Needed?
 taggerServices.provider('UseHost', [

@@ -1176,7 +1176,7 @@ taggerDirectives.directive('subjectSelector', [ function() {
        * @returns {{id: *, name: *}}
        */
       $scope.addTag = function (chip) {
-        var chipObj = {id: chip.tag.id, name: chip.tag.name};
+        var chipObj = {id: chip.Tag.id, name: chip.Tag.name};
         var result = CollectionTagTargetAdd.query(
           {
             collId: Data.currentCollectionIndex,

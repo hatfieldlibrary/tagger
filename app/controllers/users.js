@@ -1,6 +1,11 @@
 'use strict;'
 
-exports.overview = function(req, res) {
+/**
+ * Renders the user administration page.
+ * @param req
+ * @param res
+ */
+overview = function(req, res) {
 
   res.render('usersOverview', {
     title: 'Users',
@@ -10,6 +15,11 @@ exports.overview = function(req, res) {
   });
 };
 
+/**
+ * Retrieves list of current users.
+ * @param req
+ * @param res
+ */
 exports.list = function (req, res ) {
 
   db.Users.findAll({
@@ -27,6 +37,11 @@ exports.list = function (req, res ) {
 
 };
 
+/**
+ * Adds a new user.
+ * @param req
+ * @param res
+ */
 exports.add = function(req, res) {
 
   var name = req.body.name;
@@ -48,6 +63,11 @@ exports.add = function(req, res) {
     });
 };
 
+/**
+ * Deletes user.
+ * @param req
+ * @param res
+ */
 exports.delete = function(req, res) {
   var id = req.body.id;
 
@@ -66,6 +86,11 @@ exports.delete = function(req, res) {
 
 };
 
+/**
+ * Updates user information.
+ * @param req
+ * @param res
+ */
 exports.update = function(req, res) {
   var name = req.body.name;
   var email = req.body.email;

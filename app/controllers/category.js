@@ -2,6 +2,11 @@
 
 var async = require('async');
 
+/**
+ * Renders the collection group (category) overview page.
+ * @param req
+ * @param res
+ */
 exports.overview = function(req, res) {
   console.log(req.user);
   res.render('categoryOverview', {
@@ -12,6 +17,11 @@ exports.overview = function(req, res) {
   });
 };
 
+/**
+ * Retrieves the list of all collection groups.
+ * @param req
+ * @param res
+ */
 exports.list = function(req, res) {
 
   db.Category.findAll({
@@ -29,6 +39,11 @@ exports.list = function(req, res) {
 
 };
 
+/**
+ * Returns collection group title and usage count for dashboard.
+ * @param req
+ * @param res
+ */
 exports.categoryCountByArea = function(req, res) {
 
   var areaId = req.params.areaId;
@@ -49,6 +64,11 @@ exports.categoryCountByArea = function(req, res) {
 
 };
 
+/**
+ * Retrieves list of collection groups by area.
+ * @param req
+ * @param res
+ */
 exports.listByArea = function (req, res) {
 
   var areaId = req.params.areaId;
@@ -69,6 +89,11 @@ exports.listByArea = function (req, res) {
   });
 };
 
+/**
+ * Retrieves single collection group information by category id.
+ * @param req
+ * @param res
+ */
 exports.byId = function( req, res) {
 
   var categoryId = req.params.id;
@@ -89,6 +114,11 @@ exports.byId = function( req, res) {
 
 };
 
+/**
+ * Adds a new collection group with title.
+ * @param req
+ * @param res
+ */
 exports.add = function(req, res ) {
 
   var title = req.body.title;
@@ -107,6 +137,11 @@ exports.add = function(req, res ) {
 
 };
 
+/**
+ * Updates collection group.
+ * @param req
+ * @param res
+ */
 exports.update = function(req, res) {
 
   var title = req.body.title;
@@ -137,6 +172,11 @@ exports.update = function(req, res) {
 
 };
 
+/**
+ * Deletes collection group.
+ * @param req
+ * @param res
+ */
 exports.delete = function(req, res) {
 
   var catId = req.body.id;

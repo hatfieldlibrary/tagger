@@ -1,6 +1,6 @@
 
-md-content( layout="row", layout-align="start start", flex, ng-controller="AreaCtrl as vm")
-  md-content(layout="column" flex="100" flex-gt-lg="75")
+md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="AreaCtrl as vm")
+  md-content(class="transparent" layout="column" flex="100" flex-gt-lg="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.area.$resolved")
       md-toolbar.md_primary
@@ -21,7 +21,7 @@ md-content( layout="row", layout-align="start start", flex, ng-controller="AreaC
                 div(class="md-caption" style="margin-top: 10px;") Drag item to reorder
                 md-list(dnd-list="vm.areas")
                     md-list-item(ng-repeat="area in vm.areas", dnd-draggable="area", dnd-moved="vm.orderAreaList($index, area.id)",  dnd-effect-allowed="move" )
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': area.id==vm.currentAreaId}" style="min-height: 47px;" ng-click="vm.resetArea(area.id);")
+                      md-button(class="md-no-style md-button nav-item-dimens md-default-theme", ng-class="{'md-primary': area.id==vm.currentAreaId}" ng-click="vm.resetArea(area.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{area.title}}
                       div.md-ripple-container
           md-content( layout-padding flex="80" class="md-subhead grey-text" style="padding-left: 20px;")

@@ -20,7 +20,9 @@ exports.byId = function (req, res) {
   var id = req.params.id;
 
   db.ItemContent.find({
-    where: id
+    where:{
+       id: id
+    }
   }).then(function (type) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
@@ -81,9 +83,7 @@ exports.add = function (req, res) {
         db.ItemContent.find(
           {
             where: {
-              name: {
-                eq: name
-              }
+              name:  name
             }
           }
         ).complete(callback)
@@ -133,10 +133,9 @@ exports.update = function (req, res) {
       icon: icon
     },
     {
-      id: {
-        eq: id
-      }
-    }).then(function () {
+      id:  id
+    }
+  ).then(function () {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');

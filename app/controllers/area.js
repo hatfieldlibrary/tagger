@@ -12,6 +12,11 @@ exports.overview = function (req, res) {
   });
 };
 
+/**
+ * Retrieves area information by area id.
+ * @param req
+ * @param res
+ */
 exports.byId = function (req, res) {
 
   var areaId = req.params.id;
@@ -30,6 +35,11 @@ exports.byId = function (req, res) {
   });
 };
 
+/**
+ * Retrieves a list of all areas.
+ * @param req
+ * @param res
+ */
 exports.list = function (req, res) {
 
   db.Area.findAll({
@@ -43,6 +53,12 @@ exports.list = function (req, res) {
   });
 };
 
+/**
+ * Adds new area, setting the area position to the
+ * end of the current area list.
+ * @param req
+ * @param res
+ */
 exports.add = function (req, res) {
 
   var title = req.body.title;
@@ -70,6 +86,11 @@ exports.add = function (req, res) {
 
 };
 
+/**
+ * Updates an existing area.
+ * @param req
+ * @param res
+ */
 exports.update = function (req, res) {
   var title = req.body.title;
   var url = req.body.url;
@@ -98,11 +119,9 @@ exports.update = function (req, res) {
 };
 
 /**
- * Updates position attributes to new values based on the
- * order of the array passed in via POST.  This is useful
- * when the array order has been changed in the client-side
- * model. The new position value can be used to order query
- * results for clients (order by position).
+ * Updates area position to new value based on the
+ * order of the new array passed in via POST. The new position
+ * can be used to order query results for clients (order by position).
  * @param req
  * @param res
  */
@@ -152,34 +171,14 @@ exports.reorder = function (req, res) {
       console.log(err);
     });
 
-  /*
 
-   var chainer = new db.Sequelize.Utils.QueryChainer();
-   for (var i = 0; i < areas.length; i++) {
-   chainer.add(
-   db.Area.update(
-   {
-   // position attribute based on current array index
-   position: i + 1
-   },
-   {
-   id: areas[i].id
-   })
-   );
-   }
-
-   chainer.run()
-   .then(function() {
-   // JSON response
-   res.setHeader('Content-Type', 'application/json');
-   res.setHeader('Access-Control-Allow-Origin','*');
-   res.end(JSON.stringify({ status: 'success'}))
-   }).error(function(err) {
-   console.log(err);
-   })
-   */
 };
 
+/**
+ * Delete an area.
+ * @param req
+ * @param res
+ */
 exports.delete = function (req, res) {
 
   var id = req.body.id;

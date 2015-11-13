@@ -1,6 +1,6 @@
 
-md-content( layout="row", layout-align="start start", flex, ng-controller="ContentCtrl as vm")
-  md-content( layout="column" flex="100" flex-gt-lg="75")
+md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="ContentCtrl as vm")
+  md-content(class="transparent" layout="column" flex="100" flex-gt-lg="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.contentType.$resolved")
       md-toolbar.md_primary
@@ -21,7 +21,7 @@ md-content( layout="row", layout-align="start start", flex, ng-controller="Conte
                 md-list
                   div(ng-repeat="type in vm.contentTypes")
                     md-list-item
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': type.id==vm.currentType}" style="min-height: 47px;" ng-click="vm.resetType(type.id);")
+                      md-button(class="md-no-style md-button nav-item-dimens md-default-theme", ng-class="{'md-primary': type.id==vm.currentType}" ng-click="vm.resetType(type.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{type.name}}
                           div.md-ripple-container
                     md-divider

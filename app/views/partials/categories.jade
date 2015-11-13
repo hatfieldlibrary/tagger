@@ -1,6 +1,6 @@
 
-md-content( layout="row", layout-align="start start", flex, ng-controller="CategoryCtrl as vm")
-  md-content( layout="column" flex="100" flex-gt-lg="75")
+md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="CategoryCtrl as vm")
+  md-content(class="transparent" layout="column" flex="100" flex-gt-lg="75")
     md-card.flex(flex, style="height: 990px;")
       div(ng-if="vm.category.$resolved")
       md-toolbar.md_primary
@@ -21,7 +21,7 @@ md-content( layout="row", layout-align="start start", flex, ng-controller="Categ
                 md-list
                   div(ng-repeat="cat in vm.categories")
                     md-list-item
-                      md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': cat.id==vm.collection.category}" style="min-height: 47px;" ng-click="vm.resetCategory(cat.id);")
+                      md-button(class="md-no-style md-button nav-item-dimens md-default-theme", ng-class="{'md-primary': cat.id==vm.currentCategory}" ng-click="vm.resetCategory(cat.id);")
                         div(class="list-group-item-text md-subhead layout-fill") {{cat.title}}
                           div.md-ripple-container
                     md-divider

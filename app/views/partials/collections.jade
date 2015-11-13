@@ -1,6 +1,6 @@
 
 md-content(class="transparent" layout="column", layout-gt-md="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
-  md-content(class="transparent" layout="column" flex="100" flex-gt-md="75" class="transparent")
+  md-content( layout="column" flex="100" flex-gt-md="75" class="transparent")
     md-card.flex(flex, class="primary-content" style="background: #EAEAE6;")
       div(ng-if="vm.collectionList.$resolved")
       md-toolbar.md_primary
@@ -21,7 +21,7 @@ md-content(class="transparent" layout="column", layout-gt-md="row", layout-align
                 md-list
                 div(ng-repeat="col in vm.collectionList")
                   md-list-item
-                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.Collection.id==vm.collectionId}" style="padding-left: 5px;min-height: 47px;" ng-click="vm.getCollectionById(col.Collection.id);")
+                    md-button(class="md-no-style md-button  md-default-theme nav-item-dimens", ng-class="{'md-primary': col.Collection.id==vm.collectionId}" ng-click="vm.getCollectionById(col.Collection.id);")
                       div(class="list-group-item-text md-subhead layout-fill") {{col.Collection.title}}
                         div.md-ripple-container
                   md-divider
