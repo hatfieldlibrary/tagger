@@ -21,8 +21,8 @@ md-content(class="transparent" layout="column", layout-gt-md="row", layout-align
                 md-list
                 div(ng-repeat="col in vm.collectionList")
                   md-list-item
-                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.collection.id==vm.collectionId}" style="padding-left: 5px;min-height: 47px;" ng-click="vm.getCollectionById(col.collection.id);")
-                      div(class="list-group-item-text md-subhead layout-fill") {{col.collection.title}}
+                    md-button(class="md-no-style md-button  md-default-theme", ng-class="{'md-primary': col.Collection.id==vm.collectionId}" style="padding-left: 5px;min-height: 47px;" ng-click="vm.getCollectionById(col.Collection.id);")
+                      div(class="list-group-item-text md-subhead layout-fill") {{col.Collection.title}}
                         div.md-ripple-container
                   md-divider
           md-content(layout-padding flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff;" class="transparent")

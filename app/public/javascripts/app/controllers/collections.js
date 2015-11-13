@@ -129,11 +129,11 @@
 
         var col = CollectionById.query({id: id});
         col.$promise.then(function(data) {
+          console.log(data);
           vm.collection = data;
           vm.thumbnailImage = data.image;
 
         });
-
         var tags = TagsForCollection
           .query({collId: id});
         tags.$promise.then(function (data) {
@@ -154,7 +154,6 @@
        */
       vm.setBrowseType = function(index) {
           vm.browseType = vm.urlLabels[index];
-        console.log(vm.browseType);
 
       };
 

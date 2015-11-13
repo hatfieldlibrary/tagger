@@ -688,6 +688,8 @@ taggerServices.factory('TaggerDialog', [
         // AreaCtrl will update list with the
         // new category.
         Data.areas.$promise.then(function () {
+          console.log('service: areas');
+          console.log(data);
           if (id === null) {
             Data.currentAreaIndex = Data.areas[0].id;
           } else {

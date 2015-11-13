@@ -16,7 +16,7 @@ exports.list = function (req, res ) {
       attributes:['id','name','email', 'area'],
       order: [['name', 'ASC']],
     }
-  ).success(function(users) {
+  ).then(function(users) {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
@@ -38,7 +38,7 @@ exports.add = function(req, res) {
       email: email,
       area: area
     }
-  ).success(function() {
+  ).then(function() {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
@@ -55,7 +55,7 @@ exports.delete = function(req, res) {
     id: {
       eq: id
     }
-  }).success(function() {
+  }).then(function() {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
@@ -80,7 +80,7 @@ exports.update = function(req, res) {
       id: {
         eq: id
       }
-    }).success(function() {
+    }).then(function() {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');

@@ -2,7 +2,8 @@
 
 module.exports = function(sequelize, DataTypes) {
 
-  var TagAreaTarget = sequelize.define('TagAreaTarget',
+  var TagAreaTarget =
+    sequelize.define('TagAreaTarget',
     {
       id: {
         type: DataTypes.INTEGER(5),

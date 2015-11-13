@@ -15,8 +15,14 @@ exports.overview = function (req, res) {
 };
 
 exports.countCTypesByArea = function (req, res) {
+
   var areaId = req.params.areaId;
-  db.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ' + areaId + ' GROUP BY ctype;'
+
+  db.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ? GROUP BY ctype',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
   ).then(function (types) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,8 +33,14 @@ exports.countCTypesByArea = function (req, res) {
 };
 
 exports.repoTypeByArea = function (req, res) {
+
   var areaId = req.params.areaId;
-  db.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ' + areaId + ' GROUP BY repoType;'
+
+  db.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id WHERE AreaTargets.AreaId = ? GROUP BY repoType',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
   ).then(function (types) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -44,11 +56,9 @@ exports.list = function (req, res) {
 
   db.AreaTarget.findAll({
     where: {
-      AreaId: {
-        eq: areaId
-      }
+      AreaId: areaId
     },
-    order: [['title', 'ASC']],
+    order: [[db.Collection, 'title', 'ASC']],
     include: [db.Collection]
 
   }).then(function (collections) {
@@ -68,9 +78,7 @@ exports.areas = function (req, res) {
 
   db.AreaTarget.findAll({
     where: {
-      CollectionId: {
-        eq: collId
-      }
+      CollectionId: collId
     }
   }).then(function (areas) {
     // JSON response
@@ -93,12 +101,8 @@ exports.addTypeTarget = function (req, res) {
         db.ItemContentTarget.find(
           {
             where: {
-              CollectionId: {
-                eq: collId
-              },
-              ItemContentId: {
-                eq: typeId
-              }
+              CollectionId: collId,
+              ItemContentId: typeId
             }
           }).then(callback)
           .error(function (err) {
@@ -146,12 +150,8 @@ exports.removeTypeTarget = function (req, res) {
 
   db.ItemContentTarget.destroy(
     {
-      ItemContentId: {
-        eq: typeId
-      },
-      CollectionId: {
-        eq: collId
-      }
+      ItemContentId: typeId,
+      CollectionId: collId
     }
   ).then(function () {
     // JSON response
@@ -228,12 +228,8 @@ exports.removeTagTarget = function (req, res) {
 
   db.TagTarget.destroy(
     {
-      TagId: {
-        eq: tagId
-      },
-      CollectionId: {
-        eq: collId
-      }
+      TagId: tagId,
+      CollectionId: collId
     }
   ).then(function () {
     // JSON response
@@ -260,8 +256,8 @@ exports.addAreaTarget = function (req, res) {
         db.AreaTarget.find(
           {
             where: {
-              CollectionId:collId,
-              AreaId:  areaId
+              CollectionId: collId,
+              AreaId: areaId
             }
           }).complete(callback)
           .error(function (err) {
@@ -397,17 +393,16 @@ exports.byId = function (req, res) {
 
   var collId = req.params.id;
 
-  async.series({
+  async.parallel({
       getCollection: function (callback) {
         db.Collection.find(
           {
             where: {
               id: collId
             }
-          }).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
+          }).then(function (result) {
+          callback(null, result);
+        });
       },
       getCategory: function (callback) {
         db.CategoryTarget.find(
@@ -415,24 +410,23 @@ exports.byId = function (req, res) {
             where: {
               CollectionId: collId
             }
-          }).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
+          }).then(function (result) {
+          callback(null, result);
+        });
       },
       getAreas: function (callback) {
         db.AreaTarget.findAll({
             where: {
               CollectionId: collId
             }
-          }
-        ).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
+          }).then(function (result) {
+          callback(null, result);
+        });
       }
     },
     function (err, result) {
+      if (err !== null) {console.log(err);}
+
       var response = {};
       var areas = [];
       if (result.getCollection !== null) {
@@ -448,6 +442,7 @@ exports.byId = function (req, res) {
         response.image = result.getCollection.image;
         response.restricted = result.getCollection.restricted;
       }
+
       if (result.getCategory !== null) {
         response.category = result.getCategory.CategoryId;
       }
@@ -458,6 +453,7 @@ exports.byId = function (req, res) {
         }
         response.areas = areas;
       }
+
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -499,16 +495,11 @@ exports.update = function (req, res) {
               eq: id
             }
           }).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
       },
       checkCategory: function (callback) {
         db.CategoryTarget.find({
           where: {
-            CollectionId: {
-              eq: id
-            }
+            CollectionId: id
           }
         }).complete(callback)
           .error(function (err) {
@@ -607,7 +598,7 @@ exports.add = function (req, res) {
             AreaId: areaId
           },
           include: [db.Collection],
-          order: [['title', 'ASC']]
+          order: [[db.Collection, 'title', 'ASC']]
         }).then(function (colls) {
           callback(null, colls);
         }).error(function (err) {
@@ -704,9 +695,7 @@ exports.updateImage = function (req, res, config) {
         image: imageName
       },
       {
-        id: {
-          eq: id
-        }
+        id: id
       }
       /*jshint unused:false*/
     ).then(function (err, result) {
@@ -734,7 +723,7 @@ exports.tagsForCollection = function (req, res) {
         CollectionId: collId
       },
       include: [db.Tag],
-      attributes: [[db.Tag, 'name'], [db.Tag, 'id']]
+      attributes: ['"Tags.name"', 'id']
     }).then(function (tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
@@ -789,7 +778,7 @@ exports.allCollections = function (req, res) {
 
 exports.collectionById = function (req, res) {
 
-  var chainer = new db.Sequelize.Utils.QueryChainer();
+  // var chainer = new db.Sequelize.Utils.QueryChainer();
   var collId = req.params.id;
   var result = {
     collection: {},
@@ -797,86 +786,145 @@ exports.collectionById = function (req, res) {
     contentTypes: []
   };
 
-  chainer.add(
-    db.Collection.find(
-      {
-        where: {
-            eq: collId
-        }
-      }
-    ).then(function (collection) {
-        result.collection.title = collection.title;
-        result.collection.url = collection.url;
-        result.collection.description = collection.description;
-        result.collection.image = collection.image;
-        result.collection.dates = collection.dates;
-        result.collection.items = collection.items;
-        result.collection.browseType = collection.browseType;
-        result.collection.collType = collection.ctype;
-        result.collection.restricted = collection.restricted;
-        result.collection.searchType = collection.repoType;
-      })
-      .error(function (err) {
-        console.log(err);
-      })
-  );
-  chainer.add(
-    db.CategoryTarget.find(
-      {
-        where: {
-          CollectionId: collId
-        },
-        include: [db.Category]
-      }
-    ).then(function (category) {
-        if (category === null) {
-          result.category.title = '';
-          result.category.description = '';
-        } else if (category.category === null) {
-          result.category.title = '';
-          result.category.description = '';
-        } else {
-          result.category.title = category.category.title;
-          result.category.description = category.category.description;
-          result.category.url = category.category.url;
-          result.category.linkLabel = category.category.linkLabel;
-        }
-
-      })
-      .error(function (err) {
+  async.series({
+      collection: function (callback) {
+        db.Collection.find(
+          {
+            where: {
+              id: collId
+            }
+          }).then(function (data) {
+          callback(null, data)
+        }).error(function (err) {
           console.log(err);
-        }
-      )
-  );
-  chainer.add(
-    db.ItemContentTarget.findAll(
-      {
-        where: {
-          CollectionId: collId
-        },
-        include: [db.ItemContent]
+        });
+        ;
+      },
+      categories: function (callback) {
+        db.CategoryTarget.find(
+          {
+            where: {
+              CollectionId: collId
+            },
+            include: [db.Category]
+          }).then(function (data) {
+          callback(null, data)
+        }).error(function (err) {
+          console.log(err);
+        });
+        ;
+      },
+      itemTypes: function (callback) {
+        db.ItemContentTarget.findAll(
+          {
+            where: {
+              CollectionId: collId
+            },
+            include: [db.ItemContent]
+          }
+        ).then(function (data) {
+          callback(null, data)
+        }).error(function (err) {
+          console.log(err);
+        });
+        ;
       }
-    ).then(function (types) {
-        result.contentTypes = types;
-      })
-      .error(function (err) {
+
+    },
+    function (err, result) {
+      if (err != null) {
         console.log(err);
-      })
-  );
-  chainer.run()
-    .then(function () {
-
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify(result));
-
-    })
-    .error(function (err) {
-      console.log(err);
+      } else {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify(result));
+      }
     });
-};
 
+};
+/*
+ (
+ db.Collection.find(
+ {
+ where: {
+ eq: collId
+ }
+ }
+ ).then(function (collection) {
+ result.collection.title = collection.title;
+ result.collection.url = collection.url;
+ result.collection.description = collection.description;
+ result.collection.image = collection.image;
+ result.collection.dates = collection.dates;
+ result.collection.items = collection.items;
+ result.collection.browseType = collection.browseType;
+ result.collection.collType = collection.ctype;
+ result.collection.restricted = collection.restricted;
+ result.collection.searchType = collection.repoType;
+ })
+ .error(function (err) {
+ console.log(err);
+ })
+ );
+ chainer.add(
+ db.CategoryTarget.find(
+ {
+ where: {
+ CollectionId: collId
+ },
+ include: [db.Category]
+ }
+ ).then(function (category) {
+ if (category === null) {
+ result.category.title = '';
+ result.category.description = '';
+ } else if (category.category === null) {
+ result.category.title = '';
+ result.category.description = '';
+ } else {
+ result.category.title = category.category.title;
+ result.category.description = category.category.description;
+ result.category.url = category.category.url;
+ result.category.linkLabel = category.category.linkLabel;
+ }
+
+ })
+ .error(function (err) {
+ console.log(err);
+ }
+ )
+ );
+ chainer.add(
+ db.ItemContentTarget.findAll(
+ {
+ where: {
+ CollectionId: collId
+ },
+ include: [db.ItemContent]
+ }
+ ).then(function (types) {
+ result.contentTypes = types;
+ })
+ .error(function (err) {
+ console.log(err);
+ })
+ );
+ chainer.run()
+ .then(function () {
+
+ // JSON response
+ res.setHeader('Content-Type', 'application/json');
+ res.setHeader('Access-Control-Allow-Origin', '*');
+ res.end(JSON.stringify(result));
+
+ })
+ .error(function (err) {
+ console.log(err);
+ });
+ }
+ ;
+ */
 /**
  * Used for pull down menu in academic commons view.
  * Needs to be generalized.
@@ -922,21 +970,19 @@ exports.collectionsByArea = function (req, res) {
 
 
   var areaId = req.params.id;
-  db.AreaTarget.findAll({
-    where: {
-      AreaId: areaId
-    },
-    order: ['title'],
-    include: [db.Collection]
 
-  }).then(function (collections) {
+  db.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? order by c.title',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }).then(
+    function (collections) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(collections));
 
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(collections));
-
-  }).error(function (err) {
+    }).error(function (err) {
     console.log(err);
   });
 };
@@ -946,8 +992,9 @@ exports.collectionsBySubject = function (req, res) {
   var subjectId = req.params.id;
   var areaId = req.params.areaId;
 
-  db.sequelize.query("Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c " +
-    "on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ?",
+  db.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
+    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ?' +
+    'order by c.title',
     {
       replacements: [subjectId, areaId],
       type: db.Sequelize.QueryTypes.SELECT
@@ -968,10 +1015,12 @@ exports.browseTypesByArea = function (req, res) {
   var areaId = req.params.areaId;
 
   db.sequelize.query('select Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
-      'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = '
-      + areaId +
-      ' group by Collections.browseType')
-    .then(function (collections) {
+    'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = ? group by Collections.browseType',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }).then(
+    function (collections) {
 
       // JSON response
       res.setHeader('Content-Type', 'application/json');

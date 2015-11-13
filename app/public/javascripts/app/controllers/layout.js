@@ -98,13 +98,15 @@
          * the context initialization method setContext()
          */
         areas.$promise.then(function (data) {
-
+                       console.log('area query');
+          console.log(data);
           vm.areas = data;
           Data.areas = data;
           Data.areaLabel = data[0].title;
           vm.currentId = data[0].id;
           // Initialize current area to first item
           // in the data array.
+
           if (Data.currentAreaIndex === null) {
             Data.currentAreaIndex = data[0].id;
 
@@ -151,6 +153,8 @@
           // Initialize global categories.
           var categories = CategoryList.query();
           categories.$promise.then(function (data) {
+            console.log('set context');
+            console.log(data);
             Data.categories = data;
             Data.currentCategoryIndex = data[0].id;
           });
@@ -159,6 +163,7 @@
           var tags = TagList.query();
           tags.$promise.then(function (data) {
             if (data.length > 0) {
+              console.log(data);
               Data.tags = data;
               Data.currentTagIndex = data[0].id
             }
@@ -167,6 +172,7 @@
           // Initialize global content types
           var types = ContentTypeList.query();
           types.$promise.then(function (data) {
+            console.log(data);
             if (data.length > 0) {
               Data.contentTypes = data;
               Data.currentContentIndex = data[0].id;
@@ -187,10 +193,12 @@
           // Set collections for area collections.
           var collections = CollectionsByArea.query({areaId: id});
           collections.$promise.then(function (data) {
+
             if (data !== undefined) {
+
               if (data.length > 0) {
                 Data.collections = data;
-                Data.currentCollectionIndex = data[0].collection.id;
+                Data.currentCollectionIndex = data[0].Collection.id;
                 Data.tagsForCollection =
                   TagsForCollection.query({collId: Data.currentCollectionIndex});
                 Data.typesForCollection =
@@ -202,12 +210,14 @@
           // Set subject tags for area.
           var tagsForArea = TagsForArea.query({areaId: id});
           tagsForArea.$promise.then(function (data) {
+
             if (data.length > 0) {
               Data.tagsForArea = data;
             }
           });
           var categoriesForArea = CategoryByArea.query({areaId: id});
           categoriesForArea.$promise.then(function (categories) {
+
             if (categories.length > 0) {
               Data.categoriesForArea = categories;
             }

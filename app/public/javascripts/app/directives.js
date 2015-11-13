@@ -1047,10 +1047,11 @@ taggerDirectives.directive('contentTypeSelector', [ function() {
           return Data.typesForCollection
         },
         function (newValue) {
+          console.log(newValue);
           if (newValue.length > 0) {
             var objArray = [];
             for (var i = 0; i < newValue.length; i++) {
-              objArray[i] = {id: newValue[i].itemContent.id, name: newValue[i].itemContent.name};
+              objArray[i] = {id: newValue[i].ItemContent.id, name: newValue[i].ItemContent.name};
             }
             $scope.typesForCollection = objArray;
           } else {
@@ -1118,7 +1119,7 @@ taggerDirectives.directive('subjectSelector', [ function() {
     '             <label>Add Tags</label>' +
     '             <md-chips ng-model="tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-on-append="addTag($chip)" md-on-remove="removeTag($chip)">' +
     '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTags(searchText)" md-item-text="item.tag">' +
-    '                 <span md-highlight-text="searchText"> {{item.tag.name}} </span>' +
+    '                 <span md-highlight-text="searchText"> {{item.Tag.name}} </span>' +
     '               </md-autocomplete>' +
     '               <md-chip-template>' +
     '                 <span> {{$chip.name}} </span>' +
@@ -1179,7 +1180,7 @@ taggerDirectives.directive('subjectSelector', [ function() {
         var result = CollectionTagTargetAdd.query(
           {
             collId: Data.currentCollectionIndex,
-            tagId: chip.tag.id
+            tagId: chip.Tag.id
           }
         );
         result.$promise.then(function (data) {
@@ -1243,7 +1244,7 @@ taggerDirectives.directive('subjectSelector', [ function() {
           if (newValue.length > 0) {
             var objArray = [];
             for (var i = 0; i < newValue.length; i++) {
-              objArray[i] = {id: newValue[i].id, name: newValue[i].name};
+              objArray[i] = {id: newValue[i].Tag.id, name: newValue[i].Tag.name};
             }
             $scope.tagsForCollection = objArray;
 
@@ -1272,7 +1273,7 @@ taggerDirectives.directive('subjectSelector', [ function() {
       function createFilterFor(query) {
         var regex = new RegExp(query, 'i');
         return function filterFn(tagItem) {
-          if (tagItem.tag.name.match(regex) !== null) {
+          if (tagItem.Tag.name.match(regex) !== null) {
             return true;
           }
           return false;
@@ -1384,8 +1385,11 @@ taggerDirectives.directive('searchOptionSummary', function() {
           var types =
             SearchOptionType.query({areaId: Data.currentAreaIndex});
           types.$promise.then(function (data) {
-
+                 console.log('search options') ;
+            console.log(data);
             for (var i = 0; i < data.length; i++) {
+              console.log(data[i]);
+              console.log(data[i].repoType);
               if (data[i].repoType === 'DEFAULT') {
                 $scope.default = data[i].count;
               } else if (data[i].repoType === 'SEARCH') {
@@ -1455,6 +1459,8 @@ taggerDirectives.directive('collectionTypeSummary', function() {
           var types =
             CollectionTypeCount.query({areaId: Data.currentAreaIndex});
           types.$promise.then(function (data) {
+            console.log('collectin types');
+            console.log(data);
             for (var i = 0; i < data.length; i++) {
               if (data[i].ctype === 'dig') {
                 $scope.digCount = data[i].count;
@@ -1528,7 +1534,7 @@ taggerDirectives.directive('collectionSummary', [function() {
           $scope.collections.$promise.then(function (data) {
             Data.collectionsTotal = data.length;
             for (var i = 0; i < data.length; i++) {
-              if (data[i].collection.restricted !== false) {
+              if (data[i].Collection.restricted !== false) {
                 restrictedCount++;
               }
             }

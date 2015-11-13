@@ -46,6 +46,8 @@
             );
           categoryCount.$promise.then(
             function (categories) {
+              console.log('categories chart');
+              console.log(categories);
               var catCount = 0;
               var data = [];
               for (var i = 0; i < categories.length; i++) {

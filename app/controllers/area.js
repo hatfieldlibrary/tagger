@@ -2,7 +2,7 @@
 
 var async = require('async');
 
-exports.overview = function(req, res) {
+exports.overview = function (req, res) {
 
   res.render('areaOverview', {
     title: 'Areas',
@@ -12,43 +12,43 @@ exports.overview = function(req, res) {
   });
 };
 
-exports.byId = function(req, res) {
+exports.byId = function (req, res) {
 
   var areaId = req.params.id;
 
-  db.Area.find( {
+  db.Area.find({
     where: {
       id: areaId
     },
     order: [['title', 'ASC']]
-  }).then( function(tags) {
+  }).then(function (tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(tags));
 
   });
 };
 
-exports.list = function(req, res) {
+exports.list = function (req, res) {
 
-  db.Area.findAll( {
+  db.Area.findAll({
     order: [['position', 'ASC']]
-  }).then( function(tags) {
+  }).then(function (tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(tags));
 
   });
 };
 
-exports.add =function (req, res) {
+exports.add = function (req, res) {
 
   var title = req.body.title;
 
   db.Area.findAll()
-    .then(function(result) {
+    .then(function (result) {
       addArea(result.length + 1)
     })
     .error(function (err) {
@@ -59,11 +59,11 @@ exports.add =function (req, res) {
     db.Area.create({
       title: title,
       position: position
-    }).then(function(result) {
+    }).then(function (result) {
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({ status: 'success' }));
-    }).error(function(err) {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success'}));
+    }).error(function (err) {
       console.log(err);
     });
   }
@@ -89,12 +89,12 @@ exports.update = function (req, res) {
       id: {
         eq: id
       }
-    }).then(function(result) {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({ status: 'then', id: result.id }));
-    });
+    }).then(function (result) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'then', id: result.id}));
+  });
 };
 
 /**
@@ -109,11 +109,24 @@ exports.update = function (req, res) {
 exports.reorder = function (req, res) {
 
   var areas = req.body.areas;
+  var areaCount = areas.length();
 
-  var chainer = new db.Sequelize.Utils.QueryChainer();
-  for (var i = 0; i < areas.length; i++) {
-    chainer.add(
-      db.Area.update(
+  /**
+   * Promise method that returns the count value if the
+   * limit condition has not been reached, or the
+   */
+  var promiseFor = Promise.method(function (condition, action, value) {
+    if (!condition(value)) return value;
+    return action(value).then(promiseFor.bind(null, condition, action));
+  });
+
+  promiseFor(function (count) {
+      // Test for limit (condition)
+      return count < areaCount;
+    },
+    // Do update (action)
+    function (count) {
+      return db.Area.update(
         {
           // position attribute based on current array index
           position: i + 1
@@ -121,22 +134,53 @@ exports.reorder = function (req, res) {
         {
           id: areas[i].id
         })
-    );
-  }
-
-  chainer.run()
-    .then(function() {
+        .then(function (res) {
+          // Return the incremented count value
+          return ++count;
+        });
+    },
+    // initialize count value
+    0).then(
+    // called Promise method after limit is reached.
+    function () {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({ status: 'success'}))
-    }).error(function(err) {
-      console.log(err);
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success'}))
     })
+    .error(function (err) {
+      console.log(err);
+    });
 
+  /*
+
+   var chainer = new db.Sequelize.Utils.QueryChainer();
+   for (var i = 0; i < areas.length; i++) {
+   chainer.add(
+   db.Area.update(
+   {
+   // position attribute based on current array index
+   position: i + 1
+   },
+   {
+   id: areas[i].id
+   })
+   );
+   }
+
+   chainer.run()
+   .then(function() {
+   // JSON response
+   res.setHeader('Content-Type', 'application/json');
+   res.setHeader('Access-Control-Allow-Origin','*');
+   res.end(JSON.stringify({ status: 'success'}))
+   }).error(function(err) {
+   console.log(err);
+   })
+   */
 };
 
-exports.delete = function (req , res) {
+exports.delete = function (req, res) {
 
   var id = req.body.id;
 
@@ -144,11 +188,11 @@ exports.delete = function (req , res) {
     id: {
       eq: id
     }
-  }).then(function(result) {
+  }).then(function (result) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify({ status: 'success'}));
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'success'}));
   });
 };
 

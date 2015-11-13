@@ -5,7 +5,7 @@
 
 var async = require('async');
 
-exports.overview = function(req, res) {
+exports.overview = function (req, res) {
 
   res.render('contentOverview', {
     title: 'Categories',
@@ -15,44 +15,40 @@ exports.overview = function(req, res) {
   });
 };
 
-exports.byId = function( req, res) {
+exports.byId = function (req, res) {
 
   var id = req.params.id;
 
   db.ItemContent.find({
-    where: {
-      id: {
-        eq: id
-      }
-    }
-  }).success( function(type) {
+    where: id
+  }).then(function (type) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(type));
-  }).error(function(err) {
+  }).error(function (err) {
     console.log(err);
   });
 
 };
 
-exports.list = function(req, res) {
+exports.list = function (req, res) {
 
   db.ItemContent.findAll({
-    attributes: ['id','name'],
+    attributes: ['id', 'name'],
     order: [['name', 'ASC']]
-  }).success(function(types) {
+  }).then(function (types) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(types));
-  }).error(function(err) {
+  }).error(function (err) {
     console.log(err);
   });
 
 };
 
-exports.countByArea = function(req, res) {
+exports.countByArea = function (req, res) {
 
   var areaId = req.params.areaId;
 
@@ -60,16 +56,21 @@ exports.countByArea = function(req, res) {
     'join Collections on AreaTargets.CollectionId = Collections.id left join ItemContentTargets ' +
     'on ItemContentTargets.CollectionId = Collections.id left join ItemContents on ' +
     'ItemContentTargets.ItemContentId = ItemContents.id ' +
-    'where AreaTargets.AreaId = ' + areaId + ' group by ItemContents.id order by ' +
-    'count DESC').then(function(types) {
+    'where AreaTargets.AreaId = ? group by ItemContents.id order by ' +
+    'count DESC',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
+  ).then(function (types) {
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(types));
   });
 
 };
 
-exports.add = function( req, res) {
+exports.add = function (req, res) {
 
   var name = req.body.title;
 
@@ -97,13 +98,14 @@ exports.add = function( req, res) {
       }
       if (result.check === null) {
         // Add new content type
-        db.ItemContent.create({name: name
-        }).success(function (result) {
-          // JSON response
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Access-Control-Allow-Origin','*');
-          res.end(JSON.stringify({status: 'success', id: result.id}));
-        })
+        db.ItemContent.create({
+          name: name
+        }).then(function (result) {
+            // JSON response
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.end(JSON.stringify({status: 'success', id: result.id}));
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -111,12 +113,11 @@ exports.add = function( req, res) {
       } else {
         // JSON response
         res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin','*');
+        res.setHeader('Access-Control-Allow-Origin', '*');
         res.end(JSON.stringify({status: 'failure'}));
 
       }
     }
-
   );
 };
 
@@ -135,14 +136,14 @@ exports.update = function (req, res) {
       id: {
         eq: id
       }
-    }).success(function() {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({status: 'success'}))
-    }).error(function(err) {
-      console.log(err);
-    });
+    }).then(function () {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'success'}))
+  }).error(function (err) {
+    console.log(err);
+  });
 };
 
 exports.delete = function (req, res) {
@@ -154,16 +155,16 @@ exports.delete = function (req, res) {
       id: {
         eq: contentId
       }
-    }).success(function() {
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify({status: 'success'}));
+    }).then(function () {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'success'}));
 
-    }).
-    error(function(err) {
-      console.log(err);
-    });
+  }).
+  error(function (err) {
+    console.log(err);
+  });
 
 };
 

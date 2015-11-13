@@ -65,8 +65,8 @@ exports.tagByArea = function (req, res) {
       AreaId: areaId
     },
 
-    attributes: [[db.Tag, 'name'], ['TagId']],
-    order: [db.Tag, ['name', 'ASC']],
+    attributes: ['"Tags.name"', 'TagId'],
+    order: [[db.Tag, 'name', 'ASC']],
     include: [db.Tag]
   }).then( function(tags) {
     // JSON response
@@ -79,11 +79,16 @@ exports.tagByArea = function (req, res) {
 };
 
 exports.tagByAreaCount = function (req, res) {
+
   var areaId = req.params.areaId;
 
   db.sequelize.query('SELECT name, COUNT(*) as count from TagTargets left join Tags on ' +
     'TagTargets.TagId = Tags.id left join TagAreaTargets on TagAreaTargets.TagId = Tags.id  ' +
-    'WHERE TagAreaTargets.AreaId = ' + areaId + ' group by TagTargets.TagId order by Tags.name'
+    'WHERE TagAreaTargets.AreaId = ? group by TagTargets.TagId order by Tags.name',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
   ).then(function (tags) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');

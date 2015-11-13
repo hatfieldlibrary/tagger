@@ -36,7 +36,11 @@ exports.categoryCountByArea = function(req, res) {
   db.sequelize.query('select Categories.title, COUNT(*) as count from AreaTargets left join ' +
     'Collections on AreaTargets.CollectionId = Collections.id left join CategoryTargets on ' +
     'CategoryTargets.CollectionId = Collections.id left join Categories on CategoryTargets.CategoryId = Categories.id ' +
-    'where AreaTargets.AreaId = ' + areaId + ' group by Categories.id order by count DESC;'
+    'where AreaTargets.AreaId = ? group by Categories.id order by count DESC;',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
   ).then(function(categories) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
