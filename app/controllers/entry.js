@@ -1,4 +1,7 @@
 'use strict';
+/**
+ * Created by mspalti on 5/30/14.
+ */
 
 var async = require('async');
 

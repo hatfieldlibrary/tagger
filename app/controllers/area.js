@@ -2,15 +2,6 @@
 
 var async = require('async');
 
-exports.overview = function (req, res) {
-
-  res.render('areaOverview', {
-    title: 'Areas',
-    user: req.user.displayName,
-    picture: req.user._json.picture,
-    areaId: req.user.areaId
-  });
-};
 
 /**
  * Retrieves area information by area id.

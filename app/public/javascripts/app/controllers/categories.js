@@ -1,4 +1,3 @@
-
 (function() {
 
   'use strict';
@@ -46,7 +45,6 @@
 
       /** @type {string} */
       vm.deleteMessage = 'templates/deleteCategoryMessage.html';
-
 
       /**
        * Show the $mdDialog.

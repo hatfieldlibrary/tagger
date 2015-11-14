@@ -52,7 +52,9 @@ exports.addTarget = function (req, res) {
               TagId: tagId,
               AreaId: areaId
             }
-          }).complete(callback)
+          }).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -102,7 +104,9 @@ function addArea(tagId, areaId, res) {
             TagId: tagId,
             AreaId: areaId
           }
-        ).complete(callback)
+        ).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -115,7 +119,9 @@ function addArea(tagId, areaId, res) {
               TagId: tagId
             },
           attributes: ['AreaId']
-          }).complete(callback)
+          }).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -167,7 +173,9 @@ exports.removeTarget = function (req, res) {
             TagId: tagId,
             AreaId: areaId
           }
-        ).complete(callback)
+        ).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -181,7 +189,9 @@ exports.removeTarget = function (req, res) {
             }
           },
           {attributes: ['AreaId']}
-        ).complete(callback)
+        ).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });

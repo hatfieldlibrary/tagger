@@ -2,20 +2,6 @@
 
 var async = require('async');
 
-/**
- * Renders the collection group (category) overview page.
- * @param req
- * @param res
- */
-exports.overview = function(req, res) {
-  console.log(req.user);
-  res.render('categoryOverview', {
-    title: 'Categories',
-    user: req.user.displayName,
-    picture: req.user._json.picture,
-    areaId: req.user.areaId
-  });
-};
 
 /**
  * Retrieves the list of all collection groups.

@@ -66,7 +66,6 @@ taggerServices.factory('d3Service', [
     scriptTag.onload = onScriptLoad;
     var s = $document[0].getElementsByTagName('body')[0];
     s.appendChild(scriptTag);
-
     return {
       d3: function () {
         return d.promise;
@@ -80,35 +79,41 @@ taggerServices.factory('d3Service', [
  * ngResource services
  */
 
-// USERS
-
+/**
+ * Maps to controller: users.list
+ */
 taggerServices.factory('UserList', ['$resource',
   function ($resource) {
     return $resource(host + 'users/list');
   }
 ]);
-
+/**
+ * Maps to controller: users.add
+ */
 taggerServices.factory('UserAdd', ['$resource',
   function ($resource) {
     return $resource(host + 'users/add');
   }
 ]);
-
+/**
+ * Maps to controller: users.delete
+ */
 taggerServices.factory('UserDelete', ['$resource',
   function ($resource) {
     return $resource(host + 'users/delete');
   }
 ]);
-
+/**
+ * Maps to controller: users.update
+ */
 taggerServices.factory('UserUpdate', ['$resource',
   function ($resource) {
     return $resource(host + 'users/update');
   }
 ]);
-
-
-// COLLECTION
-
+/**
+ * Maps to controller: collection.repoTypeByArea
+ */
 taggerServices.factory('SearchOptionType', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/repoTypeByArea/:areaId', {}, {
@@ -116,7 +121,9 @@ taggerServices.factory('SearchOptionType', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.countCTypesByArea
+ */
 taggerServices.factory('CollectionTypeCount', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/count/types/byArea/:areaId', {}, {
@@ -124,7 +131,9 @@ taggerServices.factory('CollectionTypeCount', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.browseTypesByArea
+ */
 taggerServices.factory('CollectionLinkCount', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/count/linkTypes/byArea/:areaId', {}, {
@@ -132,7 +141,9 @@ taggerServices.factory('CollectionLinkCount', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.list
+ */
 taggerServices.factory('CollectionsByArea', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/show/list/:areaId', {}, {
@@ -140,7 +151,9 @@ taggerServices.factory('CollectionsByArea', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.byId
+ */
 taggerServices.factory('CollectionById', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/byId/:id', {}, {
@@ -148,26 +161,33 @@ taggerServices.factory('CollectionById', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.add
+ */
 taggerServices.factory('CollectionAdd', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/add');
   }
 ]);
-
+/**
+ * Maps to controller: collection.delete
+ */
 taggerServices.factory('CollectionDelete', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/delete');
   }
 ]);
-
-
+/**
+ * Maps to controller: collection.update
+ */
 taggerServices.factory('CollectionUpdate', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/update');
   }
 ]);
-
+/**
+ * Maps to controller: collection.areas
+ */
 taggerServices.factory('AreasForCollection', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/areas/:collId', {}, {
@@ -175,7 +195,9 @@ taggerServices.factory('AreasForCollection', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.tagsForCollection
+ */
 taggerServices.factory('TagsForCollection', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/tags/:collId', {}, {
@@ -183,7 +205,9 @@ taggerServices.factory('TagsForCollection', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.typesForCollection
+ */
 taggerServices.factory('TypesForCollection', ['$resource',
   function ($resource) {
     return $resource(host + 'collection/types/:collId', {}, {
@@ -191,7 +215,9 @@ taggerServices.factory('TypesForCollection', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.addAreaTarget
+ */
 taggerServices.factory('AreaTargetAdd', ['$resource',
 
   function Resource($resource) {
@@ -200,14 +226,18 @@ taggerServices.factory('AreaTargetAdd', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.removeAreaTarget
+ */
 taggerServices.factory('AreaTargetRemove', ['$resource',
   function Resource($resource) {
     return $resource(host + 'collection/:collId/remove/area/:areaId', {}, {
       query: {method: 'GET', isArray: false}
     });
   }]);
-
+/**
+ * Maps to controller: collection.addTagTarget
+ */
 taggerServices.factory('CollectionTagTargetAdd', ['$resource',
   function Resource($resource) {
     return $resource(host + 'collection/:collId/add/tag/:tagId', {}, {
@@ -215,21 +245,27 @@ taggerServices.factory('CollectionTagTargetAdd', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: collection.removeTagTarget
+ */
 taggerServices.factory('CollectionTagTargetRemove', ['$resource',
   function Resource($resource) {
     return $resource(host + 'collection/:collId/remove/tag/:tagId', {}, {
       query: {method: 'GET', isArray: false}
     });
   }]);
-
+/**
+ * Maps to controller: collection.removeTypeTaget
+ */
 taggerServices.factory('CollectionTypeTargetRemove', ['$resource',
   function Resource($resource) {
     return $resource(host + 'collection/:collId/remove/type/:typeId', {}, {
       query: {method: 'GET', isArray: false}
     });
   }]);
-
+/**
+ * Maps to controller: collection.addTypeTarget
+ */
 taggerServices.factory('CollectionTypeTargetAdd', ['$resource',
   function Resource($resource) {
     return $resource(host + 'collection/:collId/add/type/:typeId', {}, {
@@ -237,9 +273,11 @@ taggerServices.factory('CollectionTypeTargetAdd', ['$resource',
     });
   }]);
 
+// AREAS
 
-// AREA
-
+/**
+ * Maps to controller: areas.list
+ */
 taggerServices.factory('AreaList', ['$resource',
   function ($resource) {
     return $resource(host + 'areas', {}, {
@@ -247,7 +285,9 @@ taggerServices.factory('AreaList', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: areas.byId
+ */
 taggerServices.factory('AreaById', ['$resource',
   function ($resource) {
     return $resource(host + 'area/byId/:id', {}, {
@@ -255,26 +295,33 @@ taggerServices.factory('AreaById', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: areas.add
+ */
 taggerServices.factory('AreaAdd', ['$resource',
   function ($resource) {
     return $resource(host + 'area/add');
   }
 ]);
-
+/**
+ * Maps to controller: areas.delete
+ */
 taggerServices.factory('AreaDelete', ['$resource',
   function ($resource) {
     return $resource(host + 'area/delete');
   }
 ]);
-
+/**
+ * Maps to controller: areas.reorder
+ */
 taggerServices.factory('ReorderAreas', ['$resource',
   function($resource) {
     return $resource(host + 'area/reorder');
   }
 ]);
-
-
+/**
+ * Maps to controller: areas.update
+ */
 taggerServices.factory('AreaUpdate', ['$resource',
   function ($resource) {
     return $resource(host + 'area/update');
@@ -283,6 +330,9 @@ taggerServices.factory('AreaUpdate', ['$resource',
 
 // CATEGORY
 
+/**
+ * Maps to controller: category.byId
+ */
 taggerServices.factory('Category', ['$resource',
   function ($resource) {
     return $resource(host + 'category/byId/:id', {}, {
@@ -290,7 +340,9 @@ taggerServices.factory('Category', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: category.list
+ */
 taggerServices.factory('CategoryList', ['$resource',
   function ($resource) {
     return $resource(host + 'category/show/list', {}, {
@@ -298,33 +350,43 @@ taggerServices.factory('CategoryList', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: category.listByArea
+ */
 taggerServices.factory('CategoryByArea', ['$resource',
   function ($resource) {
     return $resource(host + 'category/byArea/:areaId', {}, {
       query: {method: 'GET', isArray: true}
     })
   }]);
-
+/**
+ * Maps to controller: category.categoryCountByArea
+ */
 taggerServices.factory('CategoryCountByArea', ['$resource',
   function ($resource) {
     return $resource(host + 'category/count/:areaId', {}, {
       query: {method: 'GET', isArray: true}
     })
   }]);
-
+/**
+ * Maps to controller: category.update
+ */
 taggerServices.factory('CategoryUpdate', ['$resource',
   function ($resource) {
     return $resource(host + 'category/update');
   }
 ]);
-
+/**
+ * Maps to controller: category.add
+ */
 taggerServices.factory('CategoryAdd', ['$resource',
   function ($resource) {
     return $resource(host + 'category/add');
   }
 ]);
-
+/**
+ * Maps to controller: category.delete
+ */
 taggerServices.factory('CategoryDelete', ['$resource',
   function ($resource) {
     return $resource(host + 'category/delete');
@@ -333,6 +395,9 @@ taggerServices.factory('CategoryDelete', ['$resource',
 
 // CONTENT TYPE
 
+/**
+ * Maps to controller: content.countByArea
+ */
 taggerServices.factory('ContentTypeCount', ['$resource',
   function ($resource) {
     return $resource(host + 'content/byArea/count/:areaId', {}, {
@@ -340,7 +405,9 @@ taggerServices.factory('ContentTypeCount', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: content.byId
+ */
 taggerServices.factory('ContentType', ['$resource',
   function ($resource) {
     return $resource(host + 'content/byId/:id', {}, {
@@ -348,7 +415,9 @@ taggerServices.factory('ContentType', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: content.list
+ */
 taggerServices.factory('ContentTypeList', ['$resource',
   function ($resource) {
     return $resource(host + 'content/show/list', {}, {
@@ -356,13 +425,17 @@ taggerServices.factory('ContentTypeList', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: content.add
+ */
 taggerServices.factory('ContentTypeAdd', ['$resource',
   function ($resource) {
     return $resource(host + 'content/add');
   }
 ]);
-
+/**
+ * Maps to controller: content.delete
+ */
 taggerServices.factory('ContentTypeDelete', ['$resource',
   function ($resource) {
     return $resource(host + 'content/delete');
@@ -376,21 +449,27 @@ taggerServices.factory('ContentTypeUpdate', ['$resource',
 ]);
 
 // TAG
-
+/**
+ * Maps to controller: tags.tagByAreaCount
+ */
 taggerServices.factory('TagCountForArea', ['$resource',
   function Resource($resource) {
     return $resource(host + 'tags/count/byArea/:areaId', {}, {
       query: {method: 'GET', isArray: true}
     });
   }]);
-
+/**
+ * Maps to controller: tags.tagByArea
+ */
 taggerServices.factory('TagsForArea', ['$resource',
   function Resource($resource) {
     return $resource(host + 'tags/byArea/:areaId', {}, {
       query: {method: 'GET', isArray: true}
     });
   }]);
-
+/**
+ * Maps to controller: tags.byId
+ */
 taggerServices.factory('TagById', ['$resource',
   function ($resource) {
     return $resource(host + 'tag/byId/:id', {}, {
@@ -398,7 +477,9 @@ taggerServices.factory('TagById', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: tags.list
+ */
 taggerServices.factory('TagList', ['$resource',
   function ($resource) {
     return $resource(host + 'tag/show/list', {}, {
@@ -406,19 +487,25 @@ taggerServices.factory('TagList', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: tags.add
+ */
 taggerServices.factory('TagAdd', ['$resource',
   function ($resource) {
     return $resource(host + 'tag/add');
   }
 ]);
-
+/**
+ * Maps to controller: tags.delete
+ */
 taggerServices.factory('TagDelete', ['$resource',
   function ($resource) {
     return $resource(host + 'tag/delete');
   }
 ]);
-
+/**
+ * Maps to controller: tags.update
+ */
 taggerServices.factory('TagUpdate', ['$resource',
   function ($resource) {
     return $resource(host + 'tag/update');
@@ -426,6 +513,10 @@ taggerServices.factory('TagUpdate', ['$resource',
 ]);
 
 // Tag area services
+
+/**
+ * Maps to controller: tags.addTarget
+ */
 taggerServices.factory('TagTargetAdd', ['$resource',
 
   function Resource($resource) {
@@ -434,14 +525,18 @@ taggerServices.factory('TagTargetAdd', ['$resource',
     });
   }
 ]);
-
+/**
+ * Maps to controller: tags.removeTarget
+ */
 taggerServices.factory('TagTargetRemove', ['$resource',
   function Resource($resource) {
     return $resource(host + 'tag/:tagId/remove/area/:areaId', {}, {
       query: {method: 'GET', isArray: false}
     });
   }]);
-
+/**
+ * Maps to controller: tags.getAreaTarget
+ */
 taggerServices.factory('TagTargets', ['$resource',
   function Resource($resource) {
     return $resource(host + 'tag/targets/byId/:tagId', {}, {

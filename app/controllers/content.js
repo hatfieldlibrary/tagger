@@ -1,20 +1,10 @@
 'use strict';
+
 /**
- * Created by mspalti on 8/1/14.
+ * Retrieves content type by id
+ * @param req
+ * @param res
  */
-
-var async = require('async');
-
-exports.overview = function (req, res) {
-
-  res.render('contentOverview', {
-    title: 'Categories',
-    user: req.user.displayName,
-    picture: req.user._json.picture,
-    areaId: req.user.areaId
-  });
-};
-
 exports.byId = function (req, res) {
 
   var id = req.params.id;
@@ -34,6 +24,11 @@ exports.byId = function (req, res) {
 
 };
 
+/**
+ * Retrieves list of all content types
+ * @param req
+ * @param res
+ */
 exports.list = function (req, res) {
 
   db.ItemContent.findAll({
@@ -50,6 +45,12 @@ exports.list = function (req, res) {
 
 };
 
+/**
+ * Returns name and frequency for content types in a single
+ * area for use in dashboard.
+ * @param req
+ * @param res
+ */
 exports.countByArea = function (req, res) {
 
   var areaId = req.params.areaId;
@@ -72,6 +73,11 @@ exports.countByArea = function (req, res) {
 
 };
 
+/**
+ * Adds new content type. First checks to see if it exists.
+ * @param req
+ * @param res
+ */
 exports.add = function (req, res) {
 
   var name = req.body.title;
@@ -86,7 +92,9 @@ exports.add = function (req, res) {
               name:  name
             }
           }
-        ).complete(callback)
+        ).then(function(result) {
+          callback(null, result)
+        })
           .error(function (err) {
             console.log(err);
           });
@@ -120,7 +128,11 @@ exports.add = function (req, res) {
     }
   );
 };
-
+/**
+ * Updates a content type.
+ * @param req
+ * @param res
+ */
 exports.update = function (req, res) {
 
   var id = req.body.id;
@@ -145,6 +157,11 @@ exports.update = function (req, res) {
   });
 };
 
+/**
+ * Deletes a content type.
+ * @param req
+ * @param res
+ */
 exports.delete = function (req, res) {
 
   var contentId = req.body.id;

@@ -1,16 +1,18 @@
 'use strict';
-
-// load modules
+/**
+ * Welcome to Tagger.
+ */
 angular.module('taggerApp', [
 
+    'taggerContext',
     'ngMaterial',
     'ngRoute',
     'ngFileUpload',
     'dndLists',
     'taggerControllers',
     'taggerServices',
-    'taggerDirectives',
-    'taggerContext'
+    'taggerDirectives'
+
 
   ]
   )
@@ -54,10 +56,10 @@ angular.module('taggerApp', [
   var customDecorator = function ($delegate) {
     var d3Service = $delegate;
     d3Service.d3().then(function (d3) {
-      // build our custom functions on the d3
-      // object here
+      // this space available for building custom functions
+      // on the d3 object.
     });
-    return d3Service; // important to return the service
+    return d3Service;
   };
 
   $provide.decorator('d3Service', customDecorator);

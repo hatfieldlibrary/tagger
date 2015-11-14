@@ -8,21 +8,6 @@ var async = require('async');
 
 
 /**
- * Render tag overview page.
- * @param req
- * @param res
- */
-exports.overview = function(req, res) {
-
-  res.render('tagOverview', {
-    title: 'Tags',
-    user: req.user.displayName,
-    picture: req.user._json.picture,
-    areaId: req.user.areaId
-  });
-};
-
-/**
  * Retrieves a list of all tags.
  * @param req
  * @param res
@@ -145,7 +130,9 @@ exports.add = function( req, res) {
               name: name
             }
           }
-        ).complete(callback)
+        ).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });

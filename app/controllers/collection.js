@@ -4,22 +4,6 @@ var async = require('async');
 
 
 /**
- * The overview page.  Renders overview.jade.
- * @param req
- * @param res
- */
-exports.overview = function (req, res) {
-
-  res.render('/partials/collectionOverview', {
-    title: 'Overview',
-    user: req.user.displayName,
-    picture: req.user._json.picture,
-    areaId: req.user.areaId
-  });
-
-};
-
-/**
  * Returns ctype (item type) counts for the overview
  * dashboard.
  * @param req
@@ -258,7 +242,9 @@ exports.addTagTarget = function (req, res) {
               CollectionId: collId,
               TagId: tagId
             }
-          }).complete(callback)
+          }).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -404,7 +390,7 @@ function addArea(collId, areaId, res) {
             CollectionId: collId,
             AreaId: areaId
           }
-        ).then(function(result) {
+        ).then(function (result) {
             callback(null, result);
           })
           .error(function (err) {
@@ -420,9 +406,9 @@ function addArea(collId, areaId, res) {
             }
           },
           {attributes: ['AreaId']}
-        ).then(function(result) {
-          callback(null, result);
-        })
+        ).then(function (result) {
+            callback(null, result);
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -845,7 +831,7 @@ exports.updateImage = function (req, res, config) {
   /**
    * Updates the data base with new image information.
    * @param id
-     */
+   */
   function updateDb(id) {
     db.Collection.update(
       {
@@ -1034,49 +1020,6 @@ exports.collectionById = function (req, res) {
 };
 
 /**
- * Returns a JSON list of queries retrieved from the eXist
- * database host.  The list contains
- * @param req
- * @param res
- */
-exports.browseList = function (req, res) {
-
-  var http = require('http');
-  //var collection = req.params.collection;
-
-  var options = {
-    headers: {
-      accept: 'application/json'
-    },
-    // since this Node app is already serving as proxy, there
-    // is no need to proxy again through libmedia
-    host: 'exist.willamette.edu',
-    port: 8080,
-    path: '/exist/apps/METSALTO/api/BrowseList.xquery',
-    method: 'GET'
-  };
-
-  var callback = function (response) {
-
-    var str = '';
-    response.on('data', function (chunk) {
-      str += chunk;
-    });
-    response.on('end', function () {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(str);
-    });
-  };
-
-  var request = http.request(options, callback);
-  request.on('error', function (e) {
-    console.log(e);
-  });
-  request.end();
-};
-
-/**
  * Retrieves list of collection by area ID for the public API.
  * @param req
  * @param res
@@ -1129,6 +1072,50 @@ exports.collectionsBySubject = function (req, res) {
   });
 };
 
+
+/**
+ * Returns a JSON list of queries retrieved from the eXist
+ * database host.  The list contains
+ * @param req
+ * @param res
+ */
+exports.browseList = function (req, res) {
+
+  var http = require('http');
+  //var collection = req.params.collection;
+
+  var options = {
+    headers: {
+      accept: 'application/json'
+    },
+    // since this Node app is already serving as proxy, there
+    // is no need to proxy again through libmedia
+    host: 'exist.willamette.edu',
+    port: 8080,
+    path: '/exist/apps/METSALTO/api/BrowseList.xquery',
+    method: 'GET'
+  };
+
+  var callback = function (response) {
+
+    var str = '';
+    response.on('data', function (chunk) {
+      str += chunk;
+    });
+    response.on('end', function () {
+
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(str);
+    });
+  };
+
+  var request = http.request(options, callback);
+  request.on('error', function (e) {
+    console.log(e);
+  });
+  request.end();
+};
 
 
 

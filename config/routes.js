@@ -2,7 +2,7 @@ module.exports = function(app,config,passport){
 
   'use strict';
 
-  var login = require('../app/controllers/login');
+  var entry = require('../app/controllers/entry');
   var tag = require('../app/controllers/tags');
   var tagTarget = require('../app/controllers/tagTarget.js');
   var area = require('../app/controllers/area');
@@ -21,7 +21,7 @@ module.exports = function(app,config,passport){
   // TAGGER ROUTES
 
   // AUTHENTICATION
-  app.get('/login', login.login);
+  app.get('/login', entry.login);
 
   // Use passport.authenticate() as middleware. The first step in Google authentication
   // redirects the user to google.com.  After authorization, Google
@@ -41,7 +41,6 @@ module.exports = function(app,config,passport){
       failureRedirect: '/login' }));
 
   // COLLECTIONS
-  app.get('/admin/collections', ensureAuthenticated, collection.overview);
   app.use('/rest/collection/byId/:id', ensureAuthenticated, collection.byId);
   app.use('/rest/collection/show/list/:areaId', ensureAuthenticated, collection.list);
   app.use('/rest/collection/tags/:collId', collection.tagsForCollection); // public
@@ -64,7 +63,6 @@ module.exports = function(app,config,passport){
   app.get('/rest/collection/count/linkTypes/byArea/:areaId', ensureAuthenticated, collection.browseTypesByArea);
 
   // AREAS
-  app.get('/admin/area', ensureAuthenticated, area.overview);
   app.use('/rest/area/byId/:id', area.byId);  // used by public and admin views, no authentication
   app.use('/rest/areas',         area.list);  // used by public and admin views, no authentication
   app.post('/rest/area/add', ensureAuthenticated, area.add);
@@ -73,7 +71,6 @@ module.exports = function(app,config,passport){
   app.post('/rest/area/reorder', ensureAuthenticated, area.reorder);
 
   // CATEGORIES
-  app.get('/admin/category', ensureAuthenticated, category.overview);
   app.get('/rest/category/byId/:id', ensureAuthenticated, category.byId);
   app.get('/rest/category/show/list', ensureAuthenticated, category.list);
   app.get('/rest/category/byArea/:areaId', ensureAuthenticated, category.listByArea);
@@ -83,7 +80,6 @@ module.exports = function(app,config,passport){
   app.post('/rest/category/delete', ensureAuthenticated, category.delete);
 
   // CONTENT TYPES
-  app.get('/admin/content', ensureAuthenticated, content.overview);
   app.use('/rest/content/byId/:id', ensureAuthenticated, content.byId);
   app.use('/rest/content/show/list', ensureAuthenticated, content.list);
   app.get('/rest/content/byArea/count/:areaId', ensureAuthenticated, content.countByArea);
@@ -92,7 +88,6 @@ module.exports = function(app,config,passport){
   app.post('/rest/content/update', ensureAuthenticated, content.update);
 
   // TAGS
-  app.get('/admin/tag', ensureAuthenticated, tag.overview);
   app.use('/rest/tag/byId/:id', ensureAuthenticated, tag.byId);
   app.use('/rest/tag/show/list', ensureAuthenticated, tag.list);
   app.use('/rest/tags/byArea/:areaId', ensureAuthenticated, tag.tagByArea);
@@ -105,7 +100,6 @@ module.exports = function(app,config,passport){
   app.get('/rest/tag/:tagId/remove/area/:areaId', ensureAuthenticated, tagTarget.removeTarget);
 
   // USERS
-  app.get('/admin/users', ensureAuthenticated, users.overview);
   app.use('/rest/users/list', ensureAuthenticated, users.list);
   app.post('/rest/users/add', ensureAuthenticated, users.add);
   app.post('/rest/users/delete', ensureAuthenticated, users.delete);

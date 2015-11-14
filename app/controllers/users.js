@@ -1,21 +1,6 @@
 'use strict;'
 
 /**
- * Renders the user administration page.
- * @param req
- * @param res
- */
-overview = function(req, res) {
-
-  res.render('usersOverview', {
-    title: 'Users',
-    user: req.user.displayName,
-    picture: req.user._json.picture,
-    areaId: req.user.areaId
-  });
-};
-
-/**
  * Retrieves list of current users.
  * @param req
  * @param res
