@@ -582,6 +582,9 @@ exports.update = function (req, res) {
   var restricted = req.body.restricted;
   var category = req.body.category;
 
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
   async.series({
       updateCollection: function (callback) {
         db.Collection.update({
@@ -597,12 +600,15 @@ exports.update = function (req, res) {
             restricted: restricted
           },
           {
-            id: {
-              eq: id
+            where: {
+              id: id
             }
           }).then(function (result) {
           callback(null, result);
-        })
+        }).error(function (err) {
+          callback(err, null);
+          console.log(err);
+        });
       },
       checkCategory: function (callback) {
         db.CategoryTarget.find({
@@ -613,15 +619,15 @@ exports.update = function (req, res) {
             callback(null, result);
           })
           .error(function (err) {
+            callback(err, null);
             console.log(err);
           });
       }
     },
     function (err, result) {
-      if (err !== null) {
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Access-Control-Allow-Origin', '*');
+      if (err !== undefined && err !== null) {
         res.end(JSON.stringify({status: 'failed'}));
+        console.log(err);
       }
       // If no category exists for this collection,
       // add new entry.
@@ -629,8 +635,6 @@ exports.update = function (req, res) {
         db.CategoryTarget.create({CollectionId: id, CategoryId: category})
           .then(function () {
             // JSON response
-            res.setHeader('Content-Type', 'application/json');
-            res.setHeader('Access-Control-Allow-Origin', '*');
             res.end(JSON.stringify({status: 'success'}));
 
           }).error(function (err) {
@@ -642,13 +646,11 @@ exports.update = function (req, res) {
             CategoryId: category
           },
           {
-            CollectionId: {
-              eq: id
+            where: {
+              CollectionId: id
             }
           }).then(function () {
           // JSON response
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Access-Control-Allow-Origin', '*');
           res.end(JSON.stringify({status: 'success'}));
 
         }).error(function (err) {
@@ -1074,46 +1076,61 @@ exports.collectionsBySubject = function (req, res) {
 
 
 /**
- * Returns a JSON list of queries retrieved from the eXist
- * database host.  The list contains
+ * Returns a JSON list of objects retrieved from the eXist
+ * database host for the public API.  The objects contain the
+ * query term (title) and count.
+ *
+ * {
+ *   item: {
+ *     title: "1906",
+ *     count: "4"
+ * }
+ *
  * @param req
  * @param res
  */
 exports.browseList = function (req, res) {
 
   var http = require('http');
-  //var collection = req.params.collection;
+  var collection = req.params.collection;
 
   var options = {
     headers: {
       accept: 'application/json'
     },
-    // since this Node app is already serving as proxy, there
-    // is no need to proxy again through libmedia
+    // Since this Node app is already serving as proxy, there's
+    // no need to proxy again through a public host like libmedia.
     host: 'exist.willamette.edu',
     port: 8080,
-    path: '/exist/apps/METSALTO/api/BrowseList.xquery',
+    path: '/exist/apps/METSALTO/api/BrowseList.xquery?collection=' + collection,
     method: 'GET'
   };
 
-  var callback = function (response) {
+  // The eXist collections API returns a list of objects.
+  var request = http.request(options, handleResponse);
+
+  request.on('error', function (e) {
+    console.log(e);
+    request.end();
+  });
+
+  // If no error, handle response.
+  function handleResponse(response) {
 
     var str = '';
     response.on('data', function (chunk) {
+      // Add data as it returns.
       str += chunk;
     });
-    response.on('end', function () {
 
+    response.on('end', function () {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(str);
+
     });
   };
 
-  var request = http.request(options, callback);
-  request.on('error', function (e) {
-    console.log(e);
-  });
   request.end();
 };
 

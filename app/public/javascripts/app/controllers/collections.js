@@ -105,6 +105,7 @@
 
         });
         update.$promise.then(function (data) {
+          console.log(data);
           if (data.status === 'success') {
             vm.collectionList = CollectionsByArea.query(
               {
