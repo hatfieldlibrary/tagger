@@ -113,13 +113,13 @@ function addArea(tagId, areaId, res) {
 
       },
       areaList: function (callback) {
-        db.TagAreaTarget.findAll( {
+        db.TagAreaTarget.findAll({
 
-            where: {
-              TagId: tagId
-            },
+          where: {
+            TagId: tagId
+          },
           attributes: ['AreaId']
-          }).then(function (result) {
+        }).then(function (result) {
             callback(null, result)
           })
           .error(function (err) {
@@ -157,40 +157,45 @@ exports.removeTarget = function (req, res) {
       // Remove current associations between the tag and collections in the area.
       removeSubjects: function (callback) {
         db.sequelize.query('delete tt from TagTargets tt Inner Join Tags t on t.id = tt.TagId ' +
-          'inner join TagAreaTargets tat on t.id = tat.TagId inner join Areas a on tat.AreaId = a.id ' +
-          'inner join AreaTargets at on a.id=at.AreaId inner join Collections c on at.CollectionId = c.id ' +
-          'where tat.AreaId = ' + areaId + ' and tt.TagId = ' + tagId),
+            'inner join TagAreaTargets tat on t.id = tat.TagId inner join Areas a on tat.AreaId = a.id ' +
+            'inner join AreaTargets at on a.id=at.AreaId inner join Collections c on at.CollectionId = c.id ' +
+            'where tat.AreaId = ' + areaId + ' and tt.TagId = ' + tagId,
           {
             replacements: [areaId, tagId],
-            type: db.Sequelize.QueryTypes.SELECT
-          }
-            .then(callback)
+            type: db.Sequelize.QueryTypes.DELETE
+          })
+          .then(function (result) {
+            callback(null, result);
+          })
       },
       // Remove the tag from the area.
       delete: function (callback) {
         db.TagAreaTarget.destroy(
           {
-            TagId: tagId,
-            AreaId: areaId
+            where: {
+              TagId: tagId,
+              AreaId: areaId
+            }
           }
         ).then(function (result) {
-            callback(null, result)
+            callback(null, result);
           })
           .error(function (err) {
             console.log(err);
           });
-      },
-      // Get the updated tag list for the area
+      }
+      ,
+// Get the updated tag list for the area
       areaList: function (callback) {
         db.TagAreaTarget.findAll(
           {
             where: {
               TagId: tagId
-            }
-          },
-          {attributes: ['AreaId']}
+            },
+            attributes: ['AreaId']
+          }
         ).then(function (result) {
-            callback(null, result)
+            callback(null, result);
           })
           .error(function (err) {
             console.log(err);
@@ -206,12 +211,14 @@ exports.removeTarget = function (req, res) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(
         {
-        status: 'success',
-        areaTargets: result.areaList,
-        removedTags: result.removeSubjects
+          status: 'success',
+          areaTargets: result.areaList,
+          removedTags: result.removeSubjects
         }));
     }
-  );
+  )
+  ;
 
 
-};
+}
+;

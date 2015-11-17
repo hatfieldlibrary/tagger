@@ -182,8 +182,8 @@ exports.update = function (req, res) {
       name: name
     },
     {
-      id: {
-        eq: id
+      where: {
+        id: id
       }
     }).then(function() {
       // JSON response
@@ -205,7 +205,9 @@ exports.delete = function (req , res) {
   var id = req.body.id;
 
   db.Tag.destroy({
-    id: id
+    where: {
+      id: id
+    }
   }).then(function() {
     // JSON response
     res.setHeader('Content-Type', 'application/json');

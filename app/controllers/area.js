@@ -98,8 +98,8 @@ exports.update = function (req, res) {
       description: description
     },
     {
-      id: {
-        eq: id
+      where: {
+        id: id
       }
     }).then(function (result) {
     // JSON response
@@ -119,7 +119,7 @@ exports.update = function (req, res) {
 exports.reorder = function (req, res) {
 
   var areas = req.body.areas;
-  var areaCount = areas.length();
+  var areaCount = areas.length;
 
   /**
    * Promise method that returns the count value if the
@@ -142,7 +142,9 @@ exports.reorder = function (req, res) {
           position: i + 1
         },
         {
-          id: areas[i].id
+          where: {
+            id: areas[i].id
+          }
         })
         .then(function (res) {
           // Return the incremented count value

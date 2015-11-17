@@ -1,5 +1,9 @@
 'use strict';
 
+
+var async = require('async');
+
+
 /**
  * Retrieves content type by id
  * @param req
@@ -145,7 +149,9 @@ exports.update = function (req, res) {
       icon: icon
     },
     {
-      id:  id
+      where: {
+        id: id
+      }
     }
   ).then(function () {
     // JSON response
@@ -168,8 +174,8 @@ exports.delete = function (req, res) {
 
   db.ItemContent.destroy(
     {
-      id: {
-        eq: contentId
+      where: {
+        id: contentId
       }
     }).then(function () {
     // JSON response

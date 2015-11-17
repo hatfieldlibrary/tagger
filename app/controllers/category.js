@@ -144,8 +144,8 @@ exports.update = function(req, res) {
       areaId: areaId
     },
     {
-      id: {
-        eq: id
+      where: {
+        id: id
       }
     }).success(function() {
       // JSON response
@@ -168,10 +168,10 @@ exports.delete = function(req, res) {
   var catId = req.body.id;
 
   db.Category.destroy({
-    id: {
-      eq: catId
+    where: {
+      id: catId
     }
-  }).success(function() {
+  }).then(function() {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');

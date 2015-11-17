@@ -67,7 +67,7 @@
       vm.userAreaId = Data.userAreaId;
 
       /** @type {Array.string} */
-      vm.urlLabels = ['Show entire collection URL', 'Show a selection URL'];
+      vm.urlLabels = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
 
       /** @type {string} */
       vm.browseType = vm.urlLabels[0];
@@ -130,9 +130,12 @@
 
         var col = CollectionById.query({id: id});
         col.$promise.then(function(data) {
-          console.log(data);
           vm.collection = data;
           vm.thumbnailImage = data.image;
+          // Set the browse options label, ouch, looks like a directive..
+          if (data.browseType == 'opts') {
+            vm.browseType = vm.urlLabels[1];
+          }
 
         });
         var tags = TagsForCollection

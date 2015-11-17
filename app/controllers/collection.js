@@ -337,7 +337,9 @@ exports.addAreaTarget = function (req, res) {
               CollectionId: collId,
               AreaId: areaId
             }
-          }).complete(callback)
+          }).then(function (result) {
+            callback(null, result)
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -403,9 +405,9 @@ function addArea(collId, areaId, res) {
           {
             where: {
               CollectionId: collId
-            }
-          },
-          {attributes: ['AreaId']}
+            },
+            attributes: ['AreaId']
+          }
         ).then(function (result) {
             callback(null, result);
           })
@@ -460,9 +462,9 @@ exports.removeAreaTarget = function (req, res) {
           {
             where: {
               CollectionId: collId
-            }
-          },
-          {attributes: ['AreaId']}
+            },
+            attributes: ['AreaId']
+          }
         ).then(function (result) {
             callback(null, result);
           })
@@ -840,7 +842,9 @@ exports.updateImage = function (req, res, config) {
         image: imageName
       },
       {
-        id: id
+        where: {
+          id: id
+        }
       }
       /*jshint unused:false*/
     ).then(function (err, result) {

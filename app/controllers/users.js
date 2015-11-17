@@ -87,8 +87,8 @@ exports.update = function(req, res) {
       area: area
     },
     {
-      id: {
-        eq: id
+      where: {
+        id: id
       }
     }).then(function() {
       // JSON response
