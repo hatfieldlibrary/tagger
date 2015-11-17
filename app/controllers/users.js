@@ -57,8 +57,8 @@ exports.delete = function(req, res) {
   var id = req.body.id;
 
   db.Users.destroy({
-    id: {
-      eq: id
+    where: {
+      id: id
     }
   }).then(function() {
     // JSON response

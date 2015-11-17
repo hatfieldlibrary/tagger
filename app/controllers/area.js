@@ -1,7 +1,8 @@
 'use strict';
 
 var async = require('async');
-
+// depends on bluebird promise
+var Promise = require("bluebird");
 
 /**
  * Retrieves area information by area id.
@@ -105,7 +106,7 @@ exports.update = function (req, res) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'then', id: result.id}));
+    res.end(JSON.stringify({status: 'success', id: result.id}));
   });
 };
 
@@ -113,6 +114,7 @@ exports.update = function (req, res) {
  * Updates area position to new value based on the
  * order of the new array passed in via POST. The new position
  * can be used to order query results for clients (order by position).
+ * Requires bluebird Promise library.
  * @param req
  * @param res
  */
@@ -120,13 +122,17 @@ exports.reorder = function (req, res) {
 
   var areas = req.body.areas;
   var areaCount = areas.length;
+  console.log('area count ' + areaCount);
+  console.log(Promise.method);
 
   /**
    * Promise method that returns the count value if the
-   * limit condition has not been reached, or the
+   * limit condition has not been reached.
    */
   var promiseFor = Promise.method(function (condition, action, value) {
+    // limit reached
     if (!condition(value)) return value;
+    // continue with action
     return action(value).then(promiseFor.bind(null, condition, action));
   });
 
@@ -139,11 +145,11 @@ exports.reorder = function (req, res) {
       return db.Area.update(
         {
           // position attribute based on current array index
-          position: i + 1
+          position: count + 1
         },
         {
           where: {
-            id: areas[i].id
+            id: areas[count].id
           }
         })
         .then(function (res) {
@@ -177,8 +183,8 @@ exports.delete = function (req, res) {
   var id = req.body.id;
 
   db.Area.destroy({
-    id: {
-      eq: id
+    where: {
+      id: id
     }
   }).then(function (result) {
     // JSON response
