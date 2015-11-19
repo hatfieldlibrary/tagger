@@ -23,15 +23,19 @@ module.exports = function(sequelize, DataTypes) {
       },
       url: {
         type: DataTypes.STRING(255),
-        allowNull: false
+        allowNull: true
       },
+      /**
+       * Indicates the type of collection browsing option
+       * (static link or pull down menu)
+       */
       browseType: {
         type: DataTypes.STRING(4),
         allowNull: true
       },
       description: {
         type: DataTypes.STRING(4096),
-        allowNull: false
+        allowNull: true
       },
       dates: {
         type: DataTypes.STRING(60),
@@ -41,18 +45,38 @@ module.exports = function(sequelize, DataTypes) {
         type: DataTypes.STRING(60),
         allowNull: true
       },
+      /**
+       * Indicates the collection type (item,
+       * collection, or finding aid.
+       */
       ctype: {
         type: DataTypes.STRING(3),
         allowNull: true
       },
+      /**
+       * Indicates whether the data source provides search query access,
+       * a direct link (canned query), or both.
+       */
       repoType: {
         type: DataTypes.STRING(7),
-        defaultValue: 'DEFAULT',
-        allowNull: false
+        //defaultValue: 'DEFAULT',
+        allowNull: true
       },
+      /**
+       * Indicates whether the collection is public access or restricted.
+       */
       restricted: {
         type: DataTypes.BOOLEAN,
         defaultValue: true
+      },
+      /**
+       * Indicates whether the collection is published by setting
+       * the flag to true.  As of 10/20/2015, this is unused but available
+       * for future use.
+       */
+      published: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {
@@ -70,7 +94,8 @@ module.exports = function(sequelize, DataTypes) {
             'ctype':this.getDataValue('ctype'),
             'repoType':this.getDataValue('repoType'),
             'categoryId':this.getDataValue('categoryId'),
-            'restricted': this.getDataValue('restricted')
+            'restricted': this.getDataValue('restricted'),
+            'published': this.getDataValue('published')
           };
         }
       },

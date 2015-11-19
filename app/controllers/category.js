@@ -1,169 +1,187 @@
 'use strict';
 
-var async = require('async');
 
+/**
+ * Retrieves the list of all collection groups.
+ * @param req
+ * @param res
+ */
+exports.list = function(req, res) {
 
-exports.create = function(req, res) {
+  db.Category.findAll({
+    attributes: ['id','title'],
+    order: [['title', 'ASC']]
+  }).then(function(categories) {
 
-  var catName = req.body.title;
-  var catUrl = req.body.url;
-  var secondUrl = req.body.secondUrl;
-  var catDesc = req.body.description;
-  // First create the new category. Then retrieve the
-  // updated category list and pass it to the view.
-  async.series (
-    {
-      create: function (callback) {
-        db.Category.create({
-          title: catName,
-          url: catUrl,
-          secondaryUrl: secondUrl,
-          description: catDesc,
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function (callback) {
-        db.Category.findAll(
-          {
-            attributes: ['id','title', 'url','secondaryUrl', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      }
-    },
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.render('categoryIndex', {
-        title: 'Categories',
-        categories: result.home
-      });
-    }
-  );
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(categories));
+  }).error(function(err) {
+    console.log(err);
+  });
+
 };
 
-exports.update = function(req, res) {
+/**
+ * Returns collection group title and usage count for dashboard.
+ * @param req
+ * @param res
+ */
+exports.categoryCountByArea = function(req, res) {
 
-  var catName = req.body.title;
-  var catUrl = req.body.url;
-  var secondUrl = req.body.secondUrl;
-  var catDesc = req.body.description;
-  var catLink = req.body.linkLabel;
-  var catId = req.body.id;
+  var areaId = req.params.areaId;
 
-  // First update the collection. Then retrieve the updated
-  // collection list and pass it to the view.
-  async.series (
+  db.sequelize.query('select Categories.title, COUNT(*) as count from AreaTargets left join ' +
+    'Collections on AreaTargets.CollectionId = Collections.id left join CategoryTargets on ' +
+    'CategoryTargets.CollectionId = Collections.id left join Categories on CategoryTargets.CategoryId = Categories.id ' +
+    'where AreaTargets.AreaId = ? group by Categories.id order by count DESC;',
     {
-      update:  function (callback) {
-        db.Category.update({
-            title: catName,
-            url: catUrl,
-            linkLabel: catLink,
-            secondaryUrl: secondUrl,
-            description: catDesc,
-          },
-          {
-            id: {
-              eq: catId
-            }
-          }).complete(callback);
-      },
-      home: function (callback) {
-        db.Category.findAll(
-          {
-            attributes: ['id','title', 'url','linkLabel', 'secondaryUrl', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback);
-      }
-    },
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.render('categoryIndex', {
-        title: 'Categories',
-        categories: result.home
-      });
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
     }
-  );
-};
-
-
-exports.delete = function(req, res) {
-
-  var catId = req.params.id;
-  // First delete the collection. Then retrieve the updated
-  // collection list and pass it to the view.
-  async.series (
-    {
-      delete: function(callback) {
-        db.Category.destroy({
-          id: {
-            eq: catId
-          }
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function(callback) {
-        db.Category.findAll(
-          {
-            attributes: ['id','title', 'url', 'secondaryUrl', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      }
-    }, function(err, result) {
-      if (err) { console.log(err); }
-      res.render('categoryIndex', {
-        title: 'Categories',
-        categories: result.home
-      });
-    }
-  );
-};
-
-exports.addCategoryTarget = function (req, res) {
-
-  var catId = req.body.catId;
-  var collId = req.body.collId;
-
-  async.series (
-    {
-      dropCategoryTarget: function(callback) {
-        db.CategoryTarget.destroy({
-          CollectionId: {
-            eq: collId
-          }
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      addCategoryTarget: function(callback) {
-        db.CategoryTarget.create({
-          CollectionId: collId,
-          CategoryId: catId
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      }
-
-    },
-    /*jshint unused:false */
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.redirect('/admin/form/collection/update/' + collId);
+  ).then(function(categories) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify(categories));
     });
 
+};
+
+/**
+ * Retrieves list of collection groups by area.
+ * @param req
+ * @param res
+ */
+exports.listByArea = function (req, res) {
+
+  var areaId = req.params.areaId;
+
+  db.Category.findAll( {
+    where: {
+      areaId: areaId
+    },
+    order: [['title', 'ASC']]
+  }).then( function(categories) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(categories));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+/**
+ * Retrieves single collection group information by category id.
+ * @param req
+ * @param res
+ */
+exports.byId = function( req, res) {
+
+  var categoryId = req.params.id;
+
+  db.Category.find({
+    where: {
+      id:  categoryId
+    }
+
+  }).then( function(category) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(category));
+  }).error(function(err) {
+    console.log(err);
+  });
 
 };
+
+/**
+ * Adds a new collection group with title.
+ * @param req
+ * @param res
+ */
+exports.add = function(req, res ) {
+
+  var title = req.body.title;
+
+  db.Category.create({
+    title: title
+  }).then(function(result) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({status: 'success', id: result.id}));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+/**
+ * Updates collection group.
+ * @param req
+ * @param res
+ */
+exports.update = function(req, res) {
+
+  var title = req.body.title;
+  var url = req.body.url;
+  var description = req.body.description;
+  var linkLabel = req.body.linkLabel;
+  var id = req.body.id;
+  var areaId = req.body.areaId;
+  db.Category.update({
+      title: title,
+      url: url,
+      linkLabel: linkLabel,
+      description: description,
+      areaId: areaId
+    },
+    {
+      where: {
+        id: id
+      }
+    }).then(function() {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({status: 'success'}));
+    }).error(function(err) {
+      console.log(err);
+    });
+
+};
+
+/**
+ * Deletes collection group.
+ * @param req
+ * @param res
+ */
+exports.delete = function(req, res) {
+
+  var catId = req.body.id;
+
+  db.Category.destroy({
+    where: {
+      id: catId
+    }
+  }).then(function() {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify({ status: 'success', id: catId }));
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+
+
+
+
+
+

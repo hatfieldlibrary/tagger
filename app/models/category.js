@@ -30,23 +30,35 @@ module.exports = function(sequelize, DataTypes) {
       },
       description: {
         type: DataTypes.STRING(4096),
-        allowNull: false
+        allowNull: true
+      },
+      areaId: {
+        type: DataTypes.STRING(6),
+        allowNull: true
       }
-    },  {
+    }, {
       getterMethods: {
-        getCollectionObject: function() {
+        getCollectionObject: function () {
           return {
             'id': this.getDataValue('id'),
             'title': this.getDataValue('title'),
             'url': this.getDataValue('url'),
             'secondaryUrl': this.getDataValue('secondaryUrl'),
-            'desc': this.getDataValue('description')
+            'desc': this.getDataValue('description'),
+            'area': this.getDataValue('area')
           };
         }
       },
       setterMethods: {
-        name: function(val) {
+        name: function (val) {
           this.setDataValue('title', val);
+        }
+      }
+    },
+    {
+      classMethods: {
+        associate: function(models) {
+          Category.hasMany((models.CategoryTarget));
         }
       }
 

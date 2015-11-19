@@ -1,10 +1,13 @@
-"use strict";
+'use strict';
 
 var server;
 
 var express = require('express'),
   http = require('http'),
-  passport = require('passport');
+  passport = require('passport'),
+  /* jshint unused:false */
+  multiparty = require('multiparty');
+
 
 global.db = require('./app/models');
 var config = require('./config/environment');
@@ -18,14 +21,42 @@ require('./config/authenticate')(app, config, passport);
 // configure routes
 require('./config/routes')(app, config, passport);
 
+function startServer() {
+
+  // stop annoying error message when testing.
+  if (server !== undefined) {
+    server.close();
+  }
+
+  // start server
+  server = http.createServer(app).listen(config.port, function () {
+
+    if (config.nodeEnv !== 'development') {
+      try {
+        console.log('Old User ID: ' + process.getuid() + ', Old Group ID: ' + process.getgid());
+        process.setgid(config.gid);
+        process.setuid(config.uid);
+        console.log('New User ID: ' + process.getuid() + ', New Group ID: ' + process.getgid());
+        console.log('Express server listening on port ' + config.port);
+      } catch (err) {
+        console.log('Refusing to keep the process alive as root.');
+        process.exit(1);
+      }
+    } else {
+      console.log('Running with User Id: ' + process.getuid());
+      console.log('Express server listening on port ' + config.port);
+    }
+  });
+
+}
 
 // Catch 404 and forward to error handler. Any request
 // not handled by express or routes configuration will
 // invoke this middleware.
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  console.log("404");
+app.use(function (req, res, next) {
+  var err = new Error('Not Found: ' + req.originalUrl);
   err.status = 404;
+  err.request = req.originalUrl;
   next(err);
 });
 
@@ -33,7 +64,8 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
-  app.use(function(err, req, res, next) {
+  /* jshint unused:false   */
+  app.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(err.status || 500);
     res.render('error', {
@@ -45,7 +77,7 @@ if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(err.status || 500).end();
   res.render('error', {
@@ -63,47 +95,19 @@ if (config.nodeEnv !== 'test') {
   db
     .sequelize
     .sync(config.sync)
-    .complete(function(err) {
+    .error(function (err) {
       if (err) {
-        throw err[0]
-      } else {
-        // after database sync, start Express server
-        startServer();
+        throw err[0];
       }
-    });
+    }).then(function () {
+    startServer();
+
+  });
 }
 else {
   // Doing integration tests. No need to sync.
   startServer();
 }
 
-function startServer() {
-
-  // stop annoying error message when testing.
-  if (server !== undefined) {
-    server.close();
-  }
-
-  // start server
-  server = http.createServer(app).listen(config.port, function() {
-
-    if (config.nodeEnv !== 'development') {
-      try {
-        console.log('Old User ID: ' + process.getuid() + ', Old Group ID: ' + process.getgid());
-        process.setgid(config.gid);
-        process.setuid(config.uid);
-        console.log('New User ID: ' + process.getuid() + ', New Group ID: ' + process.getgid());
-        console.log('Express server listening on port ' + config.port);
-      } catch (err) {
-        console.log('Refusing to keep the process alive as root.');
-        process.exit(1);
-      }
-    }  else {
-      console.log('Running with User Id: ' + process.getuid());
-      console.log('Express server listening on port ' + config.port)
-    }
-  })
-
-}
 
 

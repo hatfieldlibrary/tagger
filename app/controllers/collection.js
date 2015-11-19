@@ -2,582 +2,768 @@
 
 var async = require('async');
 
-var processCollectionResult = function(coll, res) {
 
-  var count = coll.count;
-  var collList = [],
-    chainer = new db.Sequelize.Utils.QueryChainer();
+/**
+ * Returns ctype (item type) counts for the overview
+ * dashboard.
+ * @param req
+ * @param res
+ */
+exports.countCTypesByArea = function (req, res) {
 
-  // chain queries to retrieve other tags associated with each collection
-  coll.rows.forEach(function(entry) {
-
-    var tmpColl = entry.collection.getCollectionObject;
-    var collId = entry.CollectionId;
-    var temp = {};
-    chainer.add(
-      db.TagTarget.findAll({
-        where: {
-          CollectionId: {
-            eq: collId
-          }
-        },
-        order: [['name', 'ASC']],
-        include: [db.Tag]
-      }).success(function(tags) {
-        temp.id = tmpColl.id;
-        temp.name = tmpColl.title;
-        temp.description = tmpColl.desc;
-        temp.url = tmpColl.url;
-        temp.browseType = tmpColl.browseType;
-        temp.image = tmpColl.image;
-        temp.dates = tmpColl.dates;
-        temp.items = tmpColl.items;
-        temp.collType = tmpColl.ctype;
-        temp.tags = tags;
-      }).error(function(err) {
-        console.log(err);
-      })
-    );
-    chainer.add(
-      db.ItemContentTarget.findAll({
-        where: {
-          CollectionId: {
-            eq: collId
-          }
-        },
-        order: [['name', 'ASC']],
-        include: [db.ItemContent]
-
-      }).success(function(media) {
-        temp.itemTypes = media;
-        collList.push(temp );
-      }).error(function(err) {
-        console.log(err);
-      })
-    );
-  });
-  chainer.run()
-    .success(function() {
-
-      var result = [];
-      result[0] = count;
-      result[1] = collList;
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(result));
-
-    })
-    .error(function(err) {
-      console.log(err);
-    });
-};
-
-exports.collectionsByArea = function (req, res) {
-
-  var areaId = req.params.id;
-  db.AreaTarget.findAll({
-    where:
-    {
-      AreaId: {
-        eq: areaId
-      }
-    },
-    order: [['title', 'ASC']],
-    include: [db.Collection]
-
-  }).success( function(collections) {
-    // JSON response
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(collections));
-
-  }).error(function(err) {
-    console.log(err);
-  });
-};
-
-exports.collectionsBySubject = function (req, res) {
-
-  var subjectId = req.params.id;
   var areaId = req.params.areaId;
 
-  db.TagTarget.findAll({
-    where:
+  db.sequelize.query('SELECT ctype, COUNT(*) as count FROM AreaTargets ' +
+    'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
+    'WHERE AreaTargets.AreaId = ? GROUP BY ctype',
     {
-      TagId: {
-        eq: subjectId
-      }
-    },
-    order: [['name', 'ASC']],
-    include: [
-      { model: db.Collection},
-      { model: db.Tag,
-        where: {
-          areaId: {
-            eq: areaId
-          }
-        }
-      }]
-
-  }).success( function(collections) {
-
-    // JSON response
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
+  ).then(function (types) {
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.end(JSON.stringify(collections));
-
-  }).error(function(err) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(types));
+  }).error(function (err) {
     console.log(err);
   });
 };
 
-/*
- exports.collectionById = function(req, res) {
-
- var collId = req.params.id;
-
- db.Collection.find( {
- where: {
- id: {
- eq: collId
- }
- },
- include: [db.TagTarget]
- }).success( function(coll) {
- processCollectionResult(coll, res);
-
- });
- };
+/**
+ * Gets browse type (search option types) by area for overview dashboard.
+ * @param req
+ * @param res
  */
+exports.browseTypesByArea = function (req, res) {
 
-exports.collectionById = function(req, res) {
+  var areaId = req.params.areaId;
 
-  var chainer = new db.Sequelize.Utils.QueryChainer();
-  var collId = req.params.id;
-  var result = {
-    collection: {},
-    category: {},
-    contentTypes: []
-  };
-
-  chainer.add(
-    db.Collection.find(
-      {
-        where: {
-          id: {
-            eq: collId
-          }
-        }
-      }
-    ).success(function(collection) {
-        result.collection.title = collection.title;
-        result.collection.url = collection.url;
-        result.collection.description = collection.description;
-        result.collection.image = collection.image;
-        result.collection.dates = collection.dates;
-        result.collection.items = collection.items;
-        result.collection.browseType = collection.browseType;
-        result.collection.collType = collection.ctype;
-        result.collection.searchType = collection.repoType;
-      })
-      .error(function (err) {
-        console.log(err);
-      })
-  );
-  chainer.add(
-    db.CategoryTarget.find(
-      {
-        where: {
-          CollectionId: {
-            eq: collId
-          }
-        },
-        include: [db.Category]
-      }
-    ).success(function(category) {
-        if (category === null) {
-          result.category.title = '';
-          result.category.description = '';
-        } else if (category.category  === null) {
-          result.category.title = '';
-          result.category.description = '';
-        }else {
-          result.category.title = category.category.title;
-          result.category.description  = category.category.description;
-          result.category.url = category.category.url;
-          result.category.linkLabel = category.category.linkLabel;
-        }
-
-      })
-      .error(function (err) {
-        console.log(err);
-      }
-    )
-  );
-  chainer.add(
-    db.ItemContentTarget.findAll(
-      {
-        where: {
-          CollectionId: {
-            eq: collId
-          }
-        },
-        include: [db.ItemContent]
-      }
-    ).success(function(types) {
-        result.contentTypes = types;
-      })
-      .error(function (err) {
-        console.log(err);
-      })
-  );
-  chainer.run()
-    .success(function() {
+  db.sequelize.query('select Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
+    'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = ? group by Collections.browseType',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }).then(
+    function (collections) {
 
       // JSON response
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(result));
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(collections));
 
-    })
-    .error(function(err) {
-      console.log(err);
-    });
+    }).error(function (err) {
+    console.log(err);
+  });
 };
 
+/**
+ * Returns repoType (search option) counts for the overview
+ * dashboard.
+ * @param req
+ * @param res
+ */
+exports.repoTypeByArea = function (req, res) {
 
-exports.collectionByTagId = function(req, res) {
+  var areaId = req.params.areaId;
 
-  var tagId = req.params.id;
-  // retrieve collections with matching TagId
-  db.TagTarget.findAndCountAll({
-    where:
+  db.sequelize.query('SELECT repoType, COUNT(*) as count FROM AreaTargets ' +
+    'LEFT JOIN Collections ON AreaTargets.CollectionId = Collections.id ' +
+    'WHERE AreaTargets.AreaId = ? GROUP BY repoType',
     {
-      TagId: {
-        eq: tagId
-      }
-    },
-    order: [['title', 'ASC']],
-    include: [db.Collection]
-
-  }).success( function(coll) {
-    processCollectionResult(coll, res);
-
-  }).error(function(err) {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
+  ).then(function (types) {
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(types));
+  }).error(function (err) {
     console.log(err);
   });
-
 };
 
-exports.collectionByTypeId = function (req, res) {
+/**
+ * Retrieves the collections by area id for the administrative
+ * collection panel.
+ * @param req
+ * @param res
+ */
+exports.list = function (req, res) {
 
-  var typeId = req.params.id;
-  db.ItemContentTarget.findAndCountAll({
+  var areaId = req.params.areaId;
+
+  db.AreaTarget.findAll({
     where: {
-      ItemContentId: {
-        eq: typeId
-      }
+      AreaId: areaId
     },
-
+    order: [[db.Collection, 'title', 'ASC']],
     include: [db.Collection]
-  }).success (function(coll) {
-    processCollectionResult(coll,res);
-  }).error(function(err){
-    console.log(err);
-  });
 
-};
-
-exports.allCollections = function (req, res) {
-  db.Collection.findAll({
-    attributes: ['id','title'],
-    order:[['title', 'ASC']]
-  }).success( function(collections) {
+  }).then(function (collections) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin','*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(collections));
 
-  }).error(function(err) {
+  }).error(function (err) {
     console.log(err);
   });
 };
 
-// Returns a JSON representation of the DSpace API communities
-// response.
-exports.getDspaceCollections = function (req, res ) {
+/**
+ * Retrieves areas by collection id for the administrative
+ * collections panel.
+ * @param req
+ * @param res
+ */
+exports.areas = function (req, res) {
 
-  var http = require('http');
+  var collId = req.params.collId;
 
-  var options = {
-    headers: {
-      accept: 'application/json'
-    },
-    host: 'dspace.willamette.edu',
-    port: 8080,
-    path: '/rest/communities',
-    method: 'GET'
-  };
-  var callback = function(response) {
-    var str = '';
-    response.on('data', function(chunk) {
-      str += chunk;
-    });
-    response.on('end', function() {
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(str);
-    });
-  };
-  var request = http.request(options, callback);
-  request.on('error', function (e) {
-    console.log('Problem with request: ' + e);
+  db.AreaTarget.findAll({
+    where: {
+      CollectionId: collId
+    }
+  }).then(function (areas) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(areas));
+  }).error(function (err) {
+    console.log(err);
   });
-  request.end();
 
 };
 
+/**
+ * Adds a content type to the collection metadata after first
+ * checking whether the association already exists.
+ * @param req
+ * @param res
+ */
+exports.addTypeTarget = function (req, res) {
 
+  var collId = req.params.collId;
+  var typeId = req.params.typeId;
 
-
-// This is not currently in use.  The fuction returns
-// a JSON representation fo the contentdm api response.
-exports.getEadBySubject = function(req, res) {
-
-  var http = require('http');
-  var field = req.params.fld;
-  var sub = req.params.id;
-
-  var options = {
-    host:  'condm.willamette.edu',
-    port:  '81',
-    path:  '/dmwebservices/index.php?q=dmQuery/eads/' + field + '^' + sub + '^exact^and!/descri!bdate!title!creato/nosort/75/1/1/0/0/geogra!bdate!/json',
-    method: 'GET'
-  };
-
-  var callback = function(response) {
-    var str = '';
-
-    response.on('data', function (chunk) {
-      str += chunk;
-    });
-
-    response.on('end', function () {
-      var json = JSON.parse(str);
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(json.records));
-    });
-  };
-
-  var request = http.request(options, callback);
-  request.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });
-  request.end();
-};
-
-
-exports.create = function(req, res) {
-
-  var collName = req.body.name;
-  var collUrl = req.body.url;
-  var collBrowseType = req.body.browseType;
-  var collDesc = req.body.description;
-  var collDates = req.body.dates;
-  var collItems = req.body.items;
-  var collType = req.body.ctype;
-  var categoryId = req.body.categoryId;
-  var restricted = req.body.restricted;
-  // First create the new collection. Then retrieve the
-  // updated collection list and pass it to the view.
-  async.series (
-    {
-      create: function (callback) {
-        db.Collection.create({
-          title: collName,
-          url: collUrl,
-          browseType: collBrowseType,
-          description: collDesc,
-          dates: collDates,
-          items: collItems,
-          ctype: collType,
-          categoryId: categoryId,
-          restricted: restricted
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function (callback) {
-        db.Collection.findAll(
+  async.series ({
+      check: function (callback) {
+        db.ItemContentTarget.find(
           {
-            attributes: ['id','title', 'url', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
+            where: {
+              CollectionId: collId,
+              ItemContentId: typeId
+            }
+          }).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
             console.log(err);
           });
       }
     },
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.render('index', {
-        title: 'Collections',
-        collections: result.home
-      });
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      if (result.check === null) {
+
+        db.ItemContentTarget.create(
+          {
+            CollectionId: collId,
+            ItemContentId: typeId
+          }
+        ).then(function () {
+          // JSON response
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.end(JSON.stringify({status: 'success'}));
+        }).error(function (e) {
+          console.log(e);
+        });
+
+      } else {
+
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'exists'}));
+
+      }
+
     }
   );
 };
 
-exports.update = function(req, res) {
+/**
+ * Removes a content type association from the collection.
+ * @param req
+ * @param res
+ */
+exports.removeTypeTarget = function (req, res) {
 
-  var collName = req.body.name;
-  var collUrl = req.body.url;
-  var collBrowseType = req.body.browseType;
-  var collDesc = req.body.description;
-  var collId = req.body.id;
-  var collDates = req.body.dates;
-  var collItems = req.body.items;
-  var collType = req.body.ctype;
+  var collId = req.params.collId;
+  var typeId = req.params.typeId;
+
+  db.ItemContentTarget.destroy(
+    {
+      where: {
+        ItemContentId: typeId,
+        CollectionId: collId
+      }
+    }
+  ).then(function () {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'success'}));
+  }).error(function (e) {
+    console.log(e);
+  });
+
+};
+
+/**
+ * Add a subject tag to the collection after first checking
+ * whether the association already exists.
+ * @param req
+ * @param res
+ */
+exports.addTagTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var tagId = req.params.tagId;
+
+  async.series(
+    {
+      check: function (callback) {
+
+        db.TagTarget.find(
+          {
+            where: {
+              CollectionId: collId,
+              TagId: tagId
+            }
+          }).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function (err, result) {
+
+      if (err) {
+        console.log(err);
+      }
+      // if new, add target
+      if (result.check === null) {
+
+        db.TagTarget.create(
+          {
+            CollectionId: collId,
+            TagId: tagId
+          }
+        ).then(function () {
+          // JSON response
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.end(JSON.stringify({status: 'success'}));
+        }).error(function (e) {
+          console.log(e);
+        });
+
+      } else {
+
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'exists'}));
+
+      }
+
+    });
+
+};
+
+/**
+ * Removes a subject tag from the collection.
+ * @param req
+ * @param res
+ */
+exports.removeTagTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var tagId = req.params.tagId;
+
+  db.TagTarget.destroy(
+    {
+      where: {
+        TagId: tagId,
+        CollectionId: collId
+      }
+    }
+  ).then(function () {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'success'}));
+  }).error(function (e) {
+    console.log(e);
+  });
+
+};
+
+/**
+ * Adds a collection to a collection area.
+ * @param collId    the collection id
+ * @param areaId    the area id
+ * @param res
+ */
+function addArea(collId, areaId, res) {
+
+  async.series(
+    {
+      create: function (callback) {
+        db.AreaTarget.create(
+          {
+            CollectionId: collId,
+            AreaId: areaId
+          }
+        ).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+
+      },
+      areaList: function (callback) {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: collId
+            },
+            attributes: ['AreaId']
+          }
+        ).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+
+    }
+  );
+}
+
+/**
+ * Adds collection to a collection area after first
+ * checking for a existing associatoin then returns
+ * new area list.
+ * @param req
+ * @param res
+ */
+exports.addAreaTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var areaId = req.params.areaId;
+
+  async.series(
+    {
+      // Check to see if tag is already associated
+      // with area.
+      check: function (callback) {
+
+        db.AreaTarget.find(
+          {
+            where: {
+              CollectionId: collId,
+              AreaId: areaId
+            }
+          }).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      // if new
+      if (result.check === null) {
+
+        addArea(collId, areaId, res);
+
+      }
+      // if not new, just return the current list.
+      else {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: collId
+            }
+          },
+          {attributes: ['AreaId']}
+        ).then = function (areas) {
+          // JSON response
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          res.end(JSON.stringify({status: 'exists', areaTargets: areas}));
+        };
+      }
+
+    });
+
+};
+
+/**
+ * Removes the association between a collection and a collection
+ * area.  Returns new area list after completion.
+ * @param req
+ * @param res
+ */
+exports.removeAreaTarget = function (req, res) {
+
+  var collId = req.params.collId;
+  var areaId = req.params.areaId;
+
+  async.series(
+    {
+      create: function (callback) {
+        db.AreaTarget.destroy({
+          where: {
+            AreaId: areaId,
+            CollectionId: collId
+          }
+
+        }).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+      },
+      areaList: function (callback) {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: collId
+            },
+            attributes: ['AreaId']
+          }
+        ).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+
+    });
+};
+
+/**
+ * Retrieves data for a single collection by collection id.
+ * @param req
+ * @param res
+ */
+exports.byId = function (req, res) {
+
+  var collId = req.params.id;
+
+  async.parallel({
+      getCollection: function (callback) {
+        db.Collection.find(
+          {
+            where: {
+              id: collId
+            }
+          }).then(function (result) {
+          callback(null, result);
+        });
+      },
+      getCategory: function (callback) {
+        db.CategoryTarget.find(
+          {
+            where: {
+              CollectionId: collId
+            }
+          }).then(function (result) {
+          callback(null, result);
+        });
+      },
+      getAreas: function (callback) {
+        db.AreaTarget.findAll({
+          where: {
+            CollectionId: collId
+          }
+        }).then(function (result) {
+          callback(null, result);
+        });
+      }
+    },
+    function (err, result) {
+      if (err !== null) {
+        console.log(err);
+      }
+
+      var response = {};
+      var areas = [];
+      if (result.getCollection !== null) {
+        response.id = result.getCollection.id;
+        response.title = result.getCollection.title;
+        response.description = result.getCollection.description;
+        response.dates = result.getCollection.dates;
+        response.items = result.getCollection.items;
+        response.ctype = result.getCollection.ctype;
+        response.url = result.getCollection.url;
+        response.browseType = result.getCollection.browseType;
+        response.repoType = result.getCollection.repoType;
+        response.image = result.getCollection.image;
+        response.restricted = result.getCollection.restricted;
+      }
+
+      if (result.getCategory !== null) {
+        response.category = result.getCategory.CategoryId;
+      }
+      if (result.getAreas !== null) {
+        for (var i = 0; i < result.getAreas.length; i++) {
+          areas[0] = result.getAreas[i].AreaId;
+        }
+        response.areas = areas;
+      }
+
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(response));
+    });
+};
+
+
+/**
+ * Updates metadata and associations for a single collection.
+ * @param req
+ * @param res
+ */
+exports.update = function (req, res) {
+
+  var id = req.body.id;
+  var title = req.body.title;
+  var url = req.body.url;
+  var browseType = req.body.browseType;
+  var description = req.body.description;
+  var dates = req.body.dates;
+  var items = req.body.items;
+  var ctype = req.body.ctype;
   var repoType = req.body.repoType;
   var restricted = req.body.restricted;
-  //var categoryId = req.body.categoryId;
-  var areas = req.body.areas;
+  var category = req.body.category;
 
-  // First update the collection. Then retrieve the updated
-  // collection list and pass it to the view.
-  async.series (
-    {
-      update:  function (callback) {
-        console.log('update ' +repoType);
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  async.series({
+      updateCollection: function (callback) {
         db.Collection.update({
-            title: collName,
-            url: collUrl,
-            browseType: collBrowseType,
-            description: collDesc,
-            dates: collDates,
-            items: collItems,
-            ctype: collType,
+
+            title: title,
+            url: url,
+            browseType: browseType,
+            description: description,
+            dates: dates,
+            items: items,
+            ctype: ctype,
             repoType: repoType,
             restricted: restricted
           },
           {
-            id: {
-              eq: collId
+            where: {
+              id: id
             }
-          }).complete(callback);
+          }).then(function (result) {
+          callback(null, result);
+        }).error(function (err) {
+          callback(err, null);
+          console.log(err);
+        });
       },
-      // these two tasks in the series are needed
-      // because we update area and category targets
-      // from within the collection update UI. They
-      // probably could and should be moved when the
-      // tagger UI is updated.
-      dropAreaTargets: function(callback) {
-        db.AreaTarget.destroy({
-          CollectionId: {
-            eq: collId
+      checkCategory: function (callback) {
+        db.CategoryTarget.find({
+          where: {
+            CollectionId: id
           }
-        }).complete(callback)
-          .error(function(err) {
+        }).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            callback(err, null);
             console.log(err);
           });
-      },
-      addAreaTargets: function(callback) {
-        var newTargets = [];
-        for (var i = 0; i < areas.length; i++) {
-          newTargets[i] = { AreaId: areas[i], CollectionId: collId };
-        }
-        console.log(newTargets);
-        db.AreaTarget.bulkCreate(
-          newTargets
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      /*dropCategoryTarget: function(callback) {
-        db.CategoryTarget.destroy({
-          CollectionId: {
-            eq: collId
-          }
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      addCategoryTarget: function(callback) {
-        db.CategoryTarget.create({
-          CollectionId: collId,
-          CategoryId: categoryId
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },  */
-      home: function (callback) {
-        db.Collection.findAll(
-          {
-            attributes: ['id','title', 'url', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback);
       }
     },
-    function(err, result) {
-      if (err) { console.log(err); }
-      res.render('index', {
-        title: 'Collections',
-        collections: result.home
-      });
-    }
-  );
-};
-
-
-exports.delete = function(req, res) {
-
-  var collId = req.params.id;
-  // First delete the collection. Then retrieve the updated
-  // collection list and pass it to the view.
-  async.series (
-    {
-      delete: function(callback) {
-        db.Collection.destroy({
-          id: {
-            eq: collId
-          }
-        }).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function(callback) {
-        db.Collection.findAll(
-          {
-            attributes: ['id','title', 'url', 'description'],
-            order: [['title', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
+    function (err, result) {
+      if (err !== undefined && err !== null) {
+        res.end(JSON.stringify({status: 'failed'}));
+        console.log(err);
       }
-    }, function(err, result) {
-      if (err) { console.log(err); }
-      res.render('index', {
-        title: 'Collections',
-        collections: result.home
-      });
+      // If no category exists for this collection,
+      // add new entry.
+      if (result.checkCategory === null) {
+        db.CategoryTarget.create({CollectionId: id, CategoryId: category})
+          .then(function () {
+            // JSON response
+            res.end(JSON.stringify({status: 'success'}));
+
+          }).error(function (err) {
+          console.log(err);
+        });
+        // If category does exist, update to the current value.
+      } else {
+        db.CategoryTarget.update({
+            CategoryId: category
+          },
+          {
+            where: {
+              CollectionId: id
+            }
+          }).then(function () {
+          // JSON response
+          res.end(JSON.stringify({status: 'success'}));
+
+        }).error(function (err) {
+          console.log(err);
+        });
+      }
+    });
+
+};
+
+/**
+ * Deletes a collection.
+ * @param req
+ * @param res
+ */
+exports.delete = function (req, res) {
+
+  var id = req.body.id;
+
+  db.Collection.destroy({
+    where: {
+      id: id
     }
-  );
+  }).then(function () {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'success'}));
+  }).error(function (err) {
+    console.log(err);
+  });
 };
 
 
+/**
+ * Adds a new collection with title field metadata
+ * and creates the collection association with the
+ * collection area.
+ * @param req
+ * @param res
+ */
+exports.add = function (req, res) {
+
+
+  var title = req.body.title;
+  var areaId = req.body.areaId;
+  var newCollectionId;
+
+
+  async.series({
+      addCollection: function (callback) {
+        db.Collection.create({
+          title: title
+        }).then(function (coll) {
+          newCollectionId = coll.id;
+          callback(null, coll);
+        }).error(function (err) {
+          console.log(err);
+        });
+      },
+      addArea: function (callback) {
+        db.AreaTarget.create({
+          CollectionId: newCollectionId,
+          AreaId: areaId
+        }).then(function (result) {
+          callback(null, result);
+        }).error(function (err) {
+          console.log(err);
+        });
+      },
+      collections: function (callback) {
+        db.AreaTarget.findAll({
+          where: {
+            AreaId: areaId
+          },
+          include: [db.Collection],
+          order: [[db.Collection, 'title', 'ASC']]
+        }).then(function (colls) {
+          callback(null, colls);
+        }).error(function (err) {
+          console.log(err);
+        });
+      }
+    }, function (err, results) {
+      if (err !== null) {
+        console.log(err);
+      }
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success', id: newCollectionId, collections: results.collections}));
+    }
+  );
+
+};
+
+
+/**
+ * Image upload. Reads multipart form data and creates
+ * thumbnail image. Writes thumbnail and full size image to
+ * directories in the configuration's image path directory.
+ * @param req
+ * @param res
+ * @param config
+ */
 exports.updateImage = function (req, res, config) {
+
+  //https://github.com/danialfarid/ng-file-upload
+  // https://github.com/danialfarid/ng-file-upload/wiki/node.js-example
 
   // paths for imagemagick and image dirctory
   var convert = config.convert,
@@ -598,65 +784,77 @@ exports.updateImage = function (req, res, config) {
   var id;
   form.parse(req, function (err, fields, files) {
 
-    console.log(files.image);
+    if (files.file !== undefined) {
+      // read in the temp file from the upload
+      fs.readFile(files.file[0].path, function (err, data) {
+        if (err !== null) {
+          console.log(err);
+          res.end();
+        }
+        imageName = files.file[0].originalFilename;
+        id = fields.id;
+        if (!imageName) {
+          res.redirect('/');
+          res.end();
 
-    // read in the temp file from the upload
-    fs.readFile(files.image[0].path, function (err, data) {
+        } else {
+          // use imagemagick to transform the full image to thumbnail.
+          // write to thumb directory
+          var fullPath = imagePath + '/full/' + imageName;
+          var thumbPath = imagePath + '/thumb/' + imageName;
 
-      imageName = files.image[0].originalFilename;
-      id = fields.id;
-      console.log(imageName);
-      if (!imageName) {
-        console.log('Image name not defined');
-        res.redirect('/');
-        res.end();
+          fs.writeFile(fullPath, data, function (err) {
+            if (err) {
+              console.log(err);
+              res.end();
+            }
+            else {
+              magick.resize({
+                  srcPath: fullPath,
+                  dstPath: thumbPath,
+                  width: 200
 
-      } else {
-        // use imagemagick to transform the full image to thumbnail.
-        // write to thumb directory
-        var fullPath = imagePath + '/full/' + imageName;
-        var thumbPath = imagePath + '/thumb/' + imageName;
-        console.log(fullPath);
-
-        fs.writeFile(fullPath, data, function (err) {
-          if (err) {
-            console.log(err);
-            res.redirect('/admin');
-          }
-          else {
-            console.log('ImageMagick at work');
-            magick.resize({
-                srcPath: fullPath,
-                dstPath: thumbPath,
-                width:   200
-
-              },
-              /*jshint unused:false */
-              function(err, stdout, stderr){
-                if (err) { console.log(err); }
-                // update database even if the conversion fails
-                updateDb(id);
-              });
-          }
-        });
-      }
-    });
+                },
+                /*jshint unused:false */
+                function (err, stdout, stderr) {
+                  if (err) {
+                    console.log(err);
+                  }
+                  // update database even if the conversion fails
+                  updateDb(id);
+                });
+            }
+          });
+        }
+      });
+    } else {
+      res.end();
+    }
   });
 
+
+  /**
+   * Updates the data base with new image information.
+   * @param id
+   */
   function updateDb(id) {
-    db.Collection.update({
+    db.Collection.update(
+      {
         image: imageName
       },
       {
-        id: {
-          eq: id
+        where: {
+          id: id
         }
       }
       /*jshint unused:false*/
-    ).success(function(err, result) {
-        res.redirect('/admin/form/collection/update/'+id);
+    ).then(function (err, result) {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'success'}));
       }
-    ).error(function(err) {
+    ).error(function (err) {
         console.log(err);
       }
     );
@@ -664,238 +862,272 @@ exports.updateImage = function (req, res, config) {
   }
 };
 
-exports.addTag = function(req, res) {
 
-  var tagId = req.body.tagid;
-  var collId = req.body.collid;
-  // only add tag if not already attached to the collection
-  db.TagTarget.find(
+/**
+ * Retrieves the tags associated with a single collection. Used by
+ * both admin interface and public REST API.
+ * @param req
+ * @param res
+ */
+exports.tagsForCollection = function (req, res) {
+
+  var collId = req.params.collId;
+
+  db.TagTarget.findAll(
     {
       where: {
-        CollectionId: {
-          eq: collId
-        },
-        TagId: {
-          eq: tagId
-        }
-      }
-    }
-  ).success(function(result)
-    {
-      console.log(result);
-      if (result === null) {
-        db.TagTarget.create({
-          CollectionId: collId,
-          TagId: tagId
-          /*jshint unused:false*/
-        }).success(function (result) {
-            res.redirect('/admin/form/collection/update/' + collId);
-          }
-        ).error(function(err) {
-            console.log(err);
-          }
-        );
-      }
-      else {
-        res.redirect('/admin/form/collection/update/' + collId);
-      }
-    }
-  ).error(function(err) {
-      console.log(err);
-    }
-  );
+        CollectionId: collId
+      },
+      include: [db.Tag],
+      attributes: ['"Tags.name"', 'id']
+    }).then(function (tags) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(tags));
+
+  }).error(function (err) {
+    console.log(err);
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify({status: 'failed'}));
+  });
+
 };
 
+/**
+ * Retrieves the types associated with a single collection.  Used by
+ * both admin interface and public REST API.
+ * @param req
+ * @param res
+ */
+exports.typesForCollection = function (req, res) {
 
-exports.addArea = function(req, res) {
+  var collId = req.params.collId;
 
-  var areaId = req.body.areaid;
-  var collId = req.body.collid;
-  // only add tag if not already attached to the collection
-  db.AreaTarget.find(
+  db.ItemContentTarget.findAll(
     {
       where: {
-        CollectionId: {
-          eq: collId
-        },
-        areaId: {
-          eq: areaId
-        }
-      }
+        CollectionId: collId
+      },
+      include: [db.ItemContent]
     }
-  ).success(function(result)
-    {
-      console.log(result);
-      if (result === null) {
-        db.AreaTarget.create({
-          collectionId: collId,
-          areaId: areaId
-          /*jshint unused:false*/
-        }).success(function (result) {
-            res.redirect('/admin/form/collection/update/' + collId);
-          }
-        ).error(function(err) {
-            console.log(err);
-          }
-        );
-      }
-      else {
-        res.redirect('/admin/form/collection/update/' + collId);
-      }
-    }
-  ).error(function(err) {
+  ).then(function (types) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(types));
+    })
+    .error(function (err) {
       console.log(err);
-    }
-  );
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'failed'}));
+    });
+
 };
 
-exports.removeTag = function(req, res) {
-  var collId = req.params.collid;
-  var tagId = req.params.tagid;
-  db.TagTarget.destroy({
-    CollectionId: {
-      eq: collId
-    },
-    TagId: {
-      eq: tagId
-    }
-    /*jshint unused:false*/
-  }).success(function(result) {
-    res.redirect('/admin/form/collection/update/'+collId);
-  }).error(function(err) {
+/**
+ * Retreives a list of all collections for the public API.
+ * @param req
+ * @param res
+ */
+exports.allCollections = function (req, res) {
+  db.Collection.findAll({
+    attributes: ['id', 'title'],
+    order: [['title', 'ASC']]
+  }).then(function (collections) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(collections));
+
+  }).error(function (err) {
     console.log(err);
+
   });
 };
 
+/**
+ * Retrieves single collection information for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionById = function (req, res) {
 
-exports.removeType = function(req, res) {
-  var collId = req.params.collid;
-  var typeId = req.params.type;
-  db.ItemContentTarget.destroy({
-    CollectionId: {
-      eq: collId
-    },
-    ItemContentId: {
-      eq: typeId
-    }
-    /*jshint unused:false*/
-  }).success(function(result) {
-    res.redirect('/admin/form/collection/update/'+collId);
-  }).error(function(err) {
-    console.log(err);
-  });
-};
+  var collId = req.params.id;
 
-exports.removeArea = function(req, res) {
-  var collId = req.params.collid;
-  var areaId = req.params.areaid;
-  db.AreaTarget.destroy({
-    collectionId: {
-      eq: collId
-    },
-    areaId: {
-      eq: areaId
-    }
-    /*jshint unused:false*/
-  }).success(function(result) {
-    res.redirect('/admin/form/collection/update/'+collId);
-  }).error(function(err) {
-    console.log(err);
-  });
-};
-
-
-exports.addType = function(req, res) {
-
-  var typeId = req.body.typeid;
-  var collId = req.body.collid;
-  // only add tag if not already attached to the collection
-  db.ItemContentTarget.find(
-    {
-      where: {
-        CollectionId: {
-          eq: collId
-        },
-        ItemContentId: {
-          eq: typeId
-        }
-      }
-    }
-  ).success(function(result)
-    {
-      console.log(result);
-      if (result === null) {
-        db.ItemContentTarget.create({
-          CollectionId: collId,
-          ItemContentId: typeId
-          /*jshint unused:false*/
-        }).success(function (result) {
-            res.redirect('/admin/form/collection/update/' + collId);
+  async.series({
+      collection: function (callback) {
+        db.Collection.find(
+          {
+            where: {
+              id: collId
+            }
+          }).then(function (data) {
+          callback(null, data);
+        }).error(function (err) {
+          console.log(err);
+        });
+      },
+      categories: function (callback) {
+        db.CategoryTarget.find(
+          {
+            where: {
+              CollectionId: collId
+            },
+            include: [db.Category]
+          }).then(function (data) {
+          callback(null, data);
+        }).error(function (err) {
+          console.log(err);
+        });
+      },
+      itemTypes: function (callback) {
+        db.ItemContentTarget.findAll(
+          {
+            where: {
+              CollectionId: collId
+            },
+            include: [db.ItemContent]
           }
-        ).error(function(err) {
-            console.log(err);
-          }
-        );
+        ).then(function (data) {
+          callback(null, data);
+        }).error(function (err) {
+          console.log(err);
+        });
       }
-      else {
-        res.redirect('/admin/form/collection/update/' + collId);
+
+    },
+    function (err, result) {
+      if (err !== null) {
+        console.log(err);
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify({status: 'failed'}));
+      } else {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.end(JSON.stringify(result));
       }
-    }
-  ).error(function(err) {
-      console.log(err);
-    }
-  );
+    });
+
 };
 
-exports.removeTag = function(req, res) {
-  var collId = req.params.collid;
-  var tagId = req.params.tagid;
-  db.TagTarget.destroy({
-    CollectionId: {
-      eq: collId
-    },
-    TagId: {
-      eq: tagId
-    }
-    /*jshint unused:false*/
-  }).success(function(result) {
-    res.redirect('/admin/form/collection/update/'+collId);
-  }).error(function(err) {
+/**
+ * Retrieves list of collection by area ID for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsByArea = function (req, res) {
+
+  var areaId = req.params.id;
+
+  db.sequelize.query('Select * from Collections c LEFT JOIN AreaTargets at on c.id=at.CollectionId where at.AreaId = ? order by c.title',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }).then(
+    function (collections) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(collections));
+
+    }).error(function (err) {
     console.log(err);
   });
 };
 
-exports.browseList = function(req, res) {
+/**
+ * Retrieves a list of collections by subject and area for the public API.
+ * @param req
+ * @param res
+ */
+exports.collectionsBySubject = function (req, res) {
+
+  var subjectId = req.params.id;
+  var areaId = req.params.areaId;
+
+  db.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
+    'on tt.CollectionId = c.id LEFT JOIN AreaTargets at on c.id=at.CollectionId where tt.TagId = ? and at.AreaId = ?' +
+    'order by c.title',
+    {
+      replacements: [subjectId, areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }).then(
+    function (collections) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(collections));
+
+    }).error(function (err) {
+    console.log(err);
+  });
+};
+
+
+/**
+ * Returns a JSON list of objects retrieved from the eXist
+ * database host for the public API.  The objects contain the
+ * query term (title) and count.
+ *
+ * {
+ *   item: {
+ *     title: "1906",
+ *     count: "4"
+ * }
+ *
+ * @param req
+ * @param res
+ */
+exports.browseList = function (req, res) {
 
   var http = require('http');
-  //var collection = req.params.collection;
+  var collection = req.params.collection;
 
   var options = {
     headers: {
       accept: 'application/json'
     },
-    // since this Node app is already serving as proxy, there
-    // is no need to proxy again through libmedia
+    // Since this Node app is already serving as proxy, there's
+    // no need to proxy again through a public host like libmedia.
     host: 'exist.willamette.edu',
     port: 8080,
-    path: '/exist/apps/METSALTO/api/BrowseList.xquery',
+    path: '/exist/apps/METSALTO/api/BrowseList.xquery?collection=' + collection,
     method: 'GET'
   };
-  var callback = function(response) {
+
+
+  // If no error, handle response.
+  function handleResponse(response) {
 
     var str = '';
-    response.on('data', function(chunk) {
+    response.on('data', function (chunk) {
+      // Add data as it returns.
       str += chunk;
     });
-    response.on('end', function() {
+
+    response.on('end', function () {
       res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(str);
+
     });
-  };
-  var request = http.request(options, callback);
+  }
+  // The eXist collections API returns a list of objects.
+  var request = http.request(options, handleResponse);
+
   request.on('error', function (e) {
-    console.log('Problem with request: ' + e);
+    console.log(e);
+    request.end();
   });
+
+
   request.end();
 };
+
+
+

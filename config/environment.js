@@ -20,9 +20,11 @@ var config = {
       port: 3306,
       dialect: 'mysql'
     },
+    sync: { force: false },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
+    adminPath: '/views',
     modulePath: '/public/modules/acom/app',
     resourcePath: '/public/modules/acom/app',
     googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
@@ -47,6 +49,7 @@ var config = {
       port: 3306,
       dialect: 'mysql'
     },
+    sync: { force: false },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
@@ -74,6 +77,7 @@ var config = {
       port: 3306,
       dialect: 'mysql'
     },
+    sync: { force: true },
     convert: '/usr/local/bin/convert',
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/var/taggerImages',
@@ -90,6 +94,7 @@ var config = {
     app: {
       name: 'acomtags'
     },
+    sync: { force: false },
     uid: 'node',
     gid: 'node',
     port: 3001,

@@ -1,7 +1,7 @@
 {
-  "name": "Academic-Commons",
-  "description": "The Willamette University Academic Commons public site and administration.",
-  "version": "0.0.2",
+  "name": "Tagger",
+  "description": "Tagger provides and adminstrative UI and REST interface for subject tags and other collection metadata.",
+  "version": "0.1.0",
   "homepage": "",
   "author": {
     "name": "Michael Spalti ",
@@ -12,7 +12,6 @@
     "url": ""
   },
   "dependencies": {
-    "angular": "^1.3.3",
     "async": "~0.9.0",
     "body-parser": "~1.0.0",
     "connect-redis": "^2.1.0",
@@ -33,7 +32,7 @@
     "passport": "^0.2.1",
     "passport-google-oauth": "^0.1.5",
     "redis": "~0.12.1",
-    "sequelize": "~1.7.5",
+    "sequelize": "^3.13.0",
     "static-favicon": "~1.0.0"
   },
   "devDependencies": {
@@ -52,13 +51,13 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-env": "~0.4.1",
     "grunt-express-server": "~0.4.17",
+    "grunt-jade-usemin": "^1.1.0",
     "grunt-karma": "^0.9.0",
     "grunt-mocha": "^0.4.13",
     "grunt-modernizr": "^0.6.0",
     "grunt-newer": "^0.7.0",
     "grunt-open": "~0.2.3",
     "grunt-sass": "^1.0.0",
-    "grunt-usemin": "^2.6.2",
     "jshint": "~2.5.1",
     "jshint-stylish": "~0.2.0",
     "karma": "^0.12.24",

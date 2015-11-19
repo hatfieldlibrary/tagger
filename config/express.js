@@ -21,6 +21,7 @@ module.exports = function(app, config) {
   app.use('/img', express.static(config.root + '/public/images'));
   app.use('/javascripts', express.static(config.root + '/public/javascripts'));
   app.use('/javascripts/vendor', express.static(config.root + '/public/javascripts/vendor'));
+  app.use('/admin/templates', express.static(config.root + '/public/templates'));
   app.use('/stylesheets', express.static( config.root + '/public/stylesheets'));
   // collection images
   app.use('/resources/img', express.static(config.taggerImageDir));
@@ -42,7 +43,10 @@ module.exports = function(app, config) {
   // setup the access logger
   var accessLogStream = fs.createWriteStream('/var/log/tagger/public/access.log', {flags: 'a'});
   app.use(logger('combined', {stream: accessLogStream}));
+  // for parsing the body of urlencoded post requests
   app.use(bodyParser.urlencoded({ extended: true }));
+  // angularjs posts data as json so using the json parser, too.
+  app.use(bodyParser.json());
   app.use(cookieParser());
 
 

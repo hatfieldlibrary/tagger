@@ -6,37 +6,133 @@
 
 var async = require('async');
 
-exports.create = function(req, res) {
 
-  var tagName = req.body.name;
-  var tagUrl = req.body.url;
-  var areaId = req.body.areaId;
+/**
+ * Retrieves a list of all tags.
+ * @param req
+ * @param res
+ */
+exports.list = function (req, res) {
+
+  db.Tag.findAll({
+    order: [['name', 'ASC']]
+
+  }).then(function (tags) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.end(JSON.stringify(tags));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+
+};
+
+/**
+ * Retrieves tag information by tag id.
+ * @param req
+ * @param res
+ */
+exports.byId = function(req, res) {
+
+  var id = req.params.id;
+
+  db.Tag.find( {
+    where: {
+      id:  id
+    },
+    order: [['name', 'ASC']]
+  }).then( function(tag) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(tag));
+
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+/**
+ * Retrieves list of tags assoicated with an area. Query
+ * by area id.
+ * @param req
+ * @param res
+ */
+exports.tagByArea = function (req, res) {
 
 
-  // async not really required here
+  var areaId = req.params.areaId;
+
+  db.TagAreaTarget.findAll( {
+    where: {
+      AreaId: areaId
+    },
+
+    attributes: ['"Tags.name"', 'TagId'],
+    order: [[db.Tag, 'name', 'ASC']],
+    include: [db.Tag]
+  }).then( function(tags) {
+    // JSON response
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin','*');
+    res.end(JSON.stringify(tags));
+  }).error(function(err) {
+    console.log(err);
+  });
+};
+
+
+/**
+ * Retrieves tag name and use count by area id.
+ * @param req
+ * @param res
+ */
+exports.tagByAreaCount = function (req, res) {
+
+  var areaId = req.params.areaId;
+
+  db.sequelize.query('SELECT name, COUNT(*) as count from TagTargets left join Tags on ' +
+    'TagTargets.TagId = Tags.id left join TagAreaTargets on TagAreaTargets.TagId = Tags.id  ' +
+    'WHERE TagAreaTargets.AreaId = ? group by TagTargets.TagId order by Tags.name',
+    {
+      replacements: [areaId],
+      type: db.Sequelize.QueryTypes.SELECT
+    }
+  ).then(function (tags) {
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(tags));
+    }).error(function(err) {
+      console.log(err);
+    });
+};
+
+
+/**
+ * Adds a new tag.  First checks to see if tag with this name already
+ * exists.
+ * @param req
+ * @param res
+ */
+exports.add = function( req, res) {
+
+  var name = req.body.name;
+
   async.parallel (
     {
+      // Check to see if content type already exists.
       check: function (callback) {
         db.Tag.find(
           {
             where: {
-              name: {
-                eq: tagName
-              },
-              areaId: {
-                eq: areaId
-              }
+              name: name
             }
           }
-        ).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
-      },
-      areas: function (callback) {
-        db.Area.findAll({
-          attributes: ['id', 'title']
-        }).complete(callback)
+        ).then(function (result) {
+            callback(null, result);
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -47,227 +143,103 @@ exports.create = function(req, res) {
         console.log(err);
       }
       if (result.check === null) {
-        console.log('creating tag');
-        db.Tag.create(
-          {
-            name: tagName,
-            url: tagUrl,
-            areaId: areaId
-            /*jshint unused:false*/
-          }).success(function (items) {
-            db.Tag.findAll()
-              .success(function (tags) {
-                res.render('tagIndex', {
-                  title: 'Tags',
-                  tags: tags,
-                  areas: result.areas,
-                  exists: false
-
-                });
-              }).error(function (err) {
-                console.log(err);
-              });
-          })
+        // Add new content type
+        db.Tag.create({name: name
+        }).then(function (result) {
+          // JSON response
+          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Access-Control-Allow-Origin','*');
+          res.end(JSON.stringify({status: 'success', id: result.id}));
+        })
           .error(function (err) {
             console.log(err);
           });
-      } else {
-        db.Tag.findAll()
-          .success(function (tags) {
-            res.render('tagIndex', {
-              title: 'Tags',
-              tags: tags,
-              areas: result.areas,
-              exists: true
-            });
-          }).error(function (err) {
-            console.log(err);
-          });
-      }
 
+      } else {
+        // JSON response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Access-Control-Allow-Origin','*');
+        res.end(JSON.stringify({status: 'failure'}));
+
+      }
     }
 
   );
 };
 
+/**
+ * Update the tag name.
+ * @param req
+ * @param res
+ */
+exports.update = function (req, res) {
 
-exports.getTagInfo = function(req, res) {
+  var id = req.body.id;
+  var name = req.body.name;
 
-  var tagId = req.params.id;
-  db.Tag.find({
-    where: {
-      id: {
-        eq: tagId
-
+  db.Tag.update(
+    {
+      name: name
+    },
+    {
+      where: {
+        id: id
       }
+    }).then(function() {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin','*');
+      res.end(JSON.stringify({status: 'success'}));
+    }).error(function(err) {
+      console.log(err);
+    });
+};
+
+/**
+ * Delete the tag.
+ * @param req
+ * @param res
+ */
+exports.delete = function (req , res) {
+
+  var id = req.body.id;
+
+  db.Tag.destroy({
+    where: {
+      id: id
     }
-  }).success(function(result) {
+  }).then(function() {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
-    // if query yields null result return this in response
-    if (result !== null) {
-      res.end(JSON.stringify(result.getContentObject));
-    } else {
-      res.end(JSON.stringify(result));
-    }
-  }).error(function(err) {
-    console.log(err);
+    res.end(JSON.stringify({ status: 'success'}));
   });
-
 };
 
 
-exports.tagUpdate = function (req, res) {
-
-  var tagId = req.body.id;
-  var tagName = req.body.name;
-  var tagUrl = req.body.url;
-  var areaId = req.body.areaId;
-  async.series (
-    {
-      update: function (callback) {
-        db.Tag.update(
-          {
-            name: tagName,
-            url: tagUrl,
-            areaId: areaId
-          },
-          {
-            id: {
-              eq: tagId
-            }
-          }).complete(callback);
-      },
-      tags: function(callback) {
-        db.Tag.findAll(
-          {
-            order: [['name', 'ASC']]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      areas: function (callback) {
-        db.Area.findAll({
-          attributes: ['id', 'title']
-        }).complete(callback)
-          .error(function (err) {
-            console.log(err);
-          });
-      }
-    },
-    function (err, result) {
-      res.render('tagIndex', {
-        title: 'Tags',
-        tags: result.tags,
-        areas: result.areas
-      });
-    }
-  );
-};
-
-exports.delete = function (req, res) {
-
-  var tagId = req.params.id;
-  async.series (
-    {
-      delete: function(callback)  {
-        db.Tag.destroy(
-          {
-            id: {
-              eq: tagId
-            }
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      },
-      home: function(callback) {
-        db.Tag.findAll(
-          {
-            order: [
-              ['name', 'ASC']
-            ]
-          }
-        ).complete(callback)
-          .error(function(err) {
-            console.log(err);
-          });
-      }
-    },
-    function (err, result) {
-      res.render('tagIndex', {
-        title: 'Tags',
-        tags: result.home
-      });
-    }
-  );
-};
-
-exports.getSubjects = function(req, res) {
-
-  db.Tag.findAll(
-    {
-      where: 'type = \'sub\'',
-      order: 'name ASC'
-    }
-  )
-    .success(function(result) {
-
-      var arr = [];
-      for  (var i = 0; i < result.length; i++) {
-        var tmp =  result[i].getContentObject;
-        arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id, url: tmp.url };
-      }
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin','*');
-      res.end(JSON.stringify(arr));
-
-    }).error(function(err) {
-      console.log(err);
-    });
-
-};
-
-exports.tagList = function(req, res) {
-
-  db.Tag.findAll()
-    .success(function(result) {
-
-      var arr = [];
-      for  (var i = 0; i < result.length; i++) {
-        var tmp =  result[i].getContentObject;
-        arr[i] = { label: tmp.name, value : tmp.name, id: tmp.id, url: tmp.url };
-      }
-      res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify(arr));
-    }).error(function(err) {
-      console.log(err);
-    });
-
-};
-
+/**
+ * Retrieves a list of subjects by area for the public API.
+ * @param req
+ * @param res
+ */
 exports.subjectsByArea = function(req, res) {
 
-  var areaId = req.params.id;
-
-  db.Tag.findAll( {
+  var id = req.params.id;
+  db.TagAreaTarget.findAll( {
     where: {
-      areaId: {
-        eq: areaId
-      }
+      AreaId: id
     },
-    attributes: ['id','name'],
-    order: [['name', 'ASC']]
-  }).success( function(tags) {
+    include: [db.Tag],
+    attributes: ['"Tags.name"', 'TagId'],
+    order: [[db.Tag, 'name', 'ASC']]
+
+  }).then( function(tags) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
     res.end(JSON.stringify(tags));
-
+  }).error(function(err) {
+    console.log(err);
   });
 };
 

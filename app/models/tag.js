@@ -19,18 +19,13 @@ module.exports =  function(sequelize, DataTypes) {
             url: {
               type: DataTypes.STRING(255),
               allowNull: true
-            },
-            areaId: {
-              type: DataTypes.INTEGER(2),
-              allowNull: true
             }
         },  {
             getterMethods: {
                 getContentObject: function() {
                     return {'id': this.getDataValue('id'),
                       'name': this.getDataValue('name'),
-                      'url': this.getDataValue('url'),
-                      'areaId': this.getDataValue('areaId')
+                      'url': this.getDataValue('url')
                     };
                 }
             },
