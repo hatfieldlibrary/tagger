@@ -1,4 +1,4 @@
-'use strict;'
+'use strict';
 
 /**
  * Retrieves list of current users.

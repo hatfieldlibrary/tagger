@@ -1,6 +1,61 @@
-'use strict;'
+'use strict';
 
 var async = require('async');
+
+
+/**
+ * Local function for adding association between tag and area.
+ * @param tagId   the id of the tag
+ * @param areaId   the id of the area
+ * @param res      response object
+ */
+function addArea(tagId, areaId, res) {
+
+
+  async.series(
+    {
+      create: function (callback) {
+        db.TagAreaTarget.create(
+          {
+            TagId: tagId,
+            AreaId: areaId
+          }
+        ).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+
+      },
+      areaList: function (callback) {
+        db.TagAreaTarget.findAll({
+
+          where: {
+            TagId: tagId
+          },
+          attributes: ['AreaId']
+        }).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+
+    }
+  );
+}
 
 /**
  * Retrieves list of subject tags associated with a a
@@ -53,7 +108,7 @@ exports.addTarget = function (req, res) {
               AreaId: areaId
             }
           }).then(function (result) {
-            callback(null, result)
+            callback(null, result);
           })
           .error(function (err) {
             console.log(err);
@@ -78,7 +133,7 @@ exports.addTarget = function (req, res) {
           // JSON response
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Access-Control-Allow-Origin', '*');
-          res.end(JSON.stringify({status: 'exists', areaTargets: areas}))
+          res.end(JSON.stringify({status: 'exists', areaTargets: areas}));
         }).error(function (err) {
           console.log(err);
         });
@@ -87,60 +142,6 @@ exports.addTarget = function (req, res) {
     });
 };
 
-/**
- * Local function for adding association between tag and area.
- * @param tagId   the id of the tag
- * @param areaId   the id of the area
- * @param res      response object
- */
-function addArea(tagId, areaId, res) {
-
-
-  async.series(
-    {
-      create: function (callback) {
-        db.TagAreaTarget.create(
-          {
-            TagId: tagId,
-            AreaId: areaId
-          }
-        ).then(function (result) {
-            callback(null, result)
-          })
-          .error(function (err) {
-            console.log(err);
-          });
-
-      },
-      areaList: function (callback) {
-        db.TagAreaTarget.findAll({
-
-          where: {
-            TagId: tagId
-          },
-          attributes: ['AreaId']
-        }).then(function (result) {
-            callback(null, result)
-          })
-          .error(function (err) {
-            console.log(err);
-          });
-      }
-    },
-
-    function (err, result) {
-      console.log(result);
-      if (err) {
-        console.log(err);
-      }
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
-
-    }
-  );
-}
 
 /**
  * Removes an association between a subject tag and an area.
@@ -166,7 +167,7 @@ exports.removeTarget = function (req, res) {
           })
           .then(function (result) {
             callback(null, result);
-          })
+          });
       },
       // Remove the tag from the area.
       delete: function (callback) {
@@ -183,8 +184,7 @@ exports.removeTarget = function (req, res) {
           .error(function (err) {
             console.log(err);
           });
-      }
-      ,
+      },
 // Get the updated tag list for the area
       areaList: function (callback) {
         db.TagAreaTarget.findAll(

@@ -120,8 +120,6 @@
 
     var areas = req.body.areas;
     var areaCount = areas.length;
-    console.log('area count ' + areaCount);
-    console.log(Promise.method);
 
     /**
      * Promise method that returns the count value if the

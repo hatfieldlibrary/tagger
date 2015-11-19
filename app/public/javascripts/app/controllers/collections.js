@@ -2,6 +2,8 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
+
   /**
    * Controller for managing collections.
    */
@@ -66,7 +68,7 @@
       /** @type {number} */
       vm.userAreaId = Data.userAreaId;
 
-      vm.noCollectionMessage = "No collections for this area.";
+      vm.noCollectionMessage = 'No collections for this area.';
 
       /** @type {Array.string} */
       vm.urlLabels = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
@@ -83,7 +85,7 @@
        * @param message  html template to display in dialog
        */
       vm.showDialog = function ($event, message) {
-        TaggerDialog($event, message);
+        new TaggerDialog($event, message);
       };
 
       /**
@@ -114,9 +116,9 @@
               }
             );
             // Toast upon success
-            TaggerToast("Collection Updated");
+            new TaggerToast('Collection Updated');
           }
-        })
+        });
 
       };
 
@@ -134,7 +136,7 @@
           vm.collection = data;
           vm.thumbnailImage = data.image;
           // Set the browse options label, ouch, looks like a directive..
-          if (data.browseType == 'opts') {
+          if (data.browseType === 'opts') {
             vm.browseType = vm.urlLabels[1];
           }
 
@@ -208,10 +210,10 @@
        * Watch for updates to the list of areas.
        */
       $scope.$watch(function () {
-          return Data.areas
+          return Data.areas;
         },
         function (newValue) {
-          if (newValue != $scope.areas) {
+          if (newValue !== $scope.areas) {
             vm.areas = newValue;
           }
         }
@@ -222,7 +224,7 @@
        * Watch for updates to the thumbnail image.
        */
       $scope.$watch(function () {
-          return Data.currentThumbnailImage
+          return Data.currentThumbnailImage;
         },
         function (newValue) {
           if (newValue !== null) {
@@ -236,7 +238,7 @@
        * id. Update the selected collection information.
        */
       $scope.$watch(function () {
-          return Data.currentCollectionIndex
+          return Data.currentCollectionIndex;
         },
         function (newValue) {
           if (newValue !== null) {
@@ -250,7 +252,7 @@
        * list. Update the collectionList field in response.
        */
       $scope.$watch(function () {
-          return Data.collections
+          return Data.collections ;
         },
         function () {
           vm.collectionList = Data.collections;
@@ -261,7 +263,7 @@
        * Watch for updates to the collection category list
        * that is associated with the collection area.
        */
-      $scope.$watch(function() {return Data.categories},
+      $scope.$watch(function() {return Data.categories;},
         function(newValue) {
           if (newValue.length > 0) {
             vm.categoryList =

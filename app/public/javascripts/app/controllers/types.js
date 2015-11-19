@@ -2,6 +2,8 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
+
   /**
    * Controller for content types (e.g. image, document, etc.)
    */
@@ -51,7 +53,7 @@
        * @param message  html to display in dialog
        */
       vm.showDialog = function ($event, message) {
-        TaggerDialog($event, message);
+        new TaggerDialog($event, message);
 
       };
 
@@ -82,16 +84,16 @@
           if (data.status === 'success') {
             Data.contentTypes = ContentTypeList.query();
             // Toast upon success
-            TaggerToast("Content Type Updated");
+            new TaggerToast('Content Type Updated');
           }
-        })
+        });
 
       };
 
       /**
        * Watch for changes in the content type list.
        */
-      $scope.$watch(function() { return Data.contentTypes },
+      $scope.$watch(function() { return Data.contentTypes; },
         function(newValue) {
           if (newValue !== null) {
             vm.contentTypes = newValue;

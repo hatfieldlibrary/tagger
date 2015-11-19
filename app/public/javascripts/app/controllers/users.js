@@ -2,6 +2,8 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
+
   /**
    * User management controller.
    */
@@ -75,28 +77,28 @@
        */
       vm.updateUser = function(id, name, email, area) {
         if (id === null) {
-          var result = UserAdd.save(
+          var update = UserAdd.save(
             {
               name: name,
               email: email,
               area: area
             });
-          result.$promise.then(function() {
-            if (result.status === 'success') {
-              TaggerToast('User Added');
+          update.$promise.then(function() {
+            if (update.status === 'success') {
+              new TaggerToast('User Added');
               setUsers();
             }
           });
         } else {
-          var result = UserUpdate.save(
+          var save = UserUpdate.save(
             {id: id,
               name: name,
               email: email,
               area: area
             });
-          result.$promise.then(function() {
-            if (result.status === 'success') {
-              TaggerToast('User Updated');
+          save.$promise.then(function() {
+            if (save.status === 'success') {
+              new TaggerToast('User Updated');
               setUsers();
             }
           });
@@ -111,7 +113,7 @@
         var result = UserDelete.save({id: id});
         result.$promise.then(function() {
           if (result.status === 'success') {
-            TaggerToast('User Deleted');
+            new TaggerToast('User Deleted');
             setUsers();
           }
         });
@@ -123,7 +125,7 @@
        * an area list padded with the Administrator user
        * category.
        */
-      $scope.$watch(function() { return Data.areas },
+      $scope.$watch(function() { return Data.areas; },
         function(newValue) {
           if (newValue.length > 0) {
             vm.areaList[0] = {id: 0, name: 'Administrator'};

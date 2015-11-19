@@ -2,6 +2,8 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
+
   /**
    * Controller for collection categories management.
    */
@@ -53,7 +55,7 @@
        * @param message  html to display in dialog
        */
       vm.showDialog = function($event, message) {
-        TaggerDialog($event, message);
+        new TaggerDialog($event, message);
 
       };
 
@@ -88,9 +90,9 @@
           if (data.status === 'success') {
             vm.categories = CategoryList.query();
             // Toast upon success
-            TaggerToast("Category Updated");
+            new TaggerToast('Category Updated');
           }
-        })
+        });
 
       };
 
@@ -99,7 +101,7 @@
        * and update the view model. The array changes
        * with add/delete calls to DialogController.
        */
-      $scope.$watch(function() { return Data.categories },
+      $scope.$watch(function() { return Data.categories; },
         function(newValue) {
           if (newValue !== null) {
             vm.categories = newValue;
@@ -114,7 +116,7 @@
        * Watch for changes in the value of the shared category id
        * and reset the view model category.
        */
-      $scope.$watch(function() { return Data.currentCategoryIndex },
+      $scope.$watch(function() { return Data.currentCategoryIndex; },
         function(newValue) {
           if (newValue !== null) {
               vm.resetCategory(Data.currentCategoryIndex);
@@ -127,7 +129,7 @@
        * Watch for changes in the shared areas array and update
        * the view model.
        */
-      $scope.$watch(function() { return Data.areas },
+      $scope.$watch(function() { return Data.areas; },
         function(newValue) {
           vm.areas = newValue;
 

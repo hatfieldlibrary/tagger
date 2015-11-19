@@ -20,7 +20,6 @@ var taggerApp = angular.module('taggerApp', [
 // in the global scope.
 (function () {
 
-  'use strict';
 
   /**
    * Set the host URL and port for the Tagger API service. The restHost AngularJs
@@ -37,7 +36,7 @@ var taggerApp = angular.module('taggerApp', [
    */
   var host = 'http://localhost:3000';
   var path = 'rest';
-  taggerApp.value('restHost', host + "/" + path + "/");
+  taggerApp.value('restHost', host + '/' + path + '/');
 
 
 // configure the route provider
@@ -74,9 +73,9 @@ var taggerApp = angular.module('taggerApp', [
 
     }
   ).config(['$provide', function ($provide) {
-      // d3
       var customDecorator = function ($delegate) {
         var d3Service = $delegate;
+        /*jshint unused: false*/
         d3Service.d3().then(function (d3) {
           // this space available for building custom functions
           // on the d3 object.

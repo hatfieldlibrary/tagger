@@ -1,10 +1,11 @@
-"use strict";
+'use strict';
 
 var server;
 
 var express = require('express'),
   http = require('http'),
   passport = require('passport'),
+  /* jshint unused:false */
   multiparty = require('multiparty');
 
 
@@ -20,6 +21,34 @@ require('./config/authenticate')(app, config, passport);
 // configure routes
 require('./config/routes')(app, config, passport);
 
+function startServer() {
+
+  // stop annoying error message when testing.
+  if (server !== undefined) {
+    server.close();
+  }
+
+  // start server
+  server = http.createServer(app).listen(config.port, function () {
+
+    if (config.nodeEnv !== 'development') {
+      try {
+        console.log('Old User ID: ' + process.getuid() + ', Old Group ID: ' + process.getgid());
+        process.setgid(config.gid);
+        process.setuid(config.uid);
+        console.log('New User ID: ' + process.getuid() + ', New Group ID: ' + process.getgid());
+        console.log('Express server listening on port ' + config.port);
+      } catch (err) {
+        console.log('Refusing to keep the process alive as root.');
+        process.exit(1);
+      }
+    } else {
+      console.log('Running with User Id: ' + process.getuid());
+      console.log('Express server listening on port ' + config.port);
+    }
+  });
+
+}
 
 // Catch 404 and forward to error handler. Any request
 // not handled by express or routes configuration will
@@ -35,6 +64,7 @@ app.use(function (req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development' || app.get('env') === 'runlocal') {
+  /* jshint unused:false   */
   app.use(function (err, req, res, next) {
     console.error(err.stack);
     res.status(err.status || 500);
@@ -67,7 +97,7 @@ if (config.nodeEnv !== 'test') {
     .sync(config.sync)
     .error(function (err) {
       if (err) {
-        throw err[0]
+        throw err[0];
       }
     }).then(function () {
     startServer();
@@ -79,33 +109,5 @@ else {
   startServer();
 }
 
-function startServer() {
-
-  // stop annoying error message when testing.
-  if (server !== undefined) {
-    server.close();
-  }
-
-  // start server
-  server = http.createServer(app).listen(config.port, function () {
-
-    if (config.nodeEnv !== 'development') {
-      try {
-        console.log('Old User ID: ' + process.getuid() + ', Old Group ID: ' + process.getgid());
-        process.setgid(config.gid);
-        process.setuid(config.uid);
-        console.log('New User ID: ' + process.getuid() + ', New Group ID: ' + process.getgid());
-        console.log('Express server listening on port ' + config.port);
-      } catch (err) {
-        console.log('Refusing to keep the process alive as root.');
-        process.exit(1);
-      }
-    } else {
-      console.log('Running with User Id: ' + process.getuid());
-      console.log('Express server listening on port ' + config.port)
-    }
-  })
-
-}
 
 

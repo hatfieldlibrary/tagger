@@ -110,7 +110,6 @@ exports.add = function(req, res ) {
   db.Category.create({
     title: title
   }).then(function(result) {
-    console.log(result);
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');

@@ -27,6 +27,7 @@ module.exports = function (grunt) {
       dev: {
         options: {
           script: 'server.js',
+          /*jshint camelcase: false */
           node_env: 'development',
           debug: true
         }
@@ -34,6 +35,7 @@ module.exports = function (grunt) {
       runlocal: {
         options: {
           script:'server.js',
+          /*jshint camelcase: false */
           node_env: 'runlocal',
           debug: true
         }
@@ -41,6 +43,7 @@ module.exports = function (grunt) {
       prod: {
         options: {
           script: 'server.js',
+          /*jshint camelcase: false */
           node_env: 'production',
           debug: false
         }
@@ -48,6 +51,7 @@ module.exports = function (grunt) {
       test: {
         options: {
           script: 'server.js',
+          /*jshint camelcase: false */
           node_env: 'test',
           debug: true
         }
@@ -115,23 +119,23 @@ module.exports = function (grunt) {
       options: {
         jshintrc: '.jshintrc',
         reporter: require('jshint-stylish'),
-        all: [
+
+      },
+      test: {
+    //    options: {
+    //      jshintrc: 'app/test/.jshintrc'
+    //    },
+    //    src: ['app/test/*.js']
+      },
+      client: {
+        src: [
           'Gruntfile.js',
-          '<%= public %>/javascripts/**/*.js',
+          '<%= app %>/controllers/**/*.js',
+          '<%= app %>/models/**/**/*.js',
+          '<%= public %>/javascripts/app/**/*.js',
           '<%= config %>/**/*.js',
           './server.js'
         ]
-      },
-      test: {
-        options: {
-          jshintrc: 'app/test/.jshintrc'
-        },
-        src: ['app/test/*.js']
-      },
-      client: {
-        options: {
-          jshintrc: '.jshintrc'
-        }
       }
     },
 
@@ -154,7 +158,7 @@ module.exports = function (grunt) {
         } , {
           expand: true,
           flatten: false,
-          cwd:'<%= public %>/app',
+          cwd:'<%= public %>',
           src: ['fonts/**'],
           dest: '<%= dist %>'
         }, {
@@ -190,7 +194,7 @@ module.exports = function (grunt) {
           '<%= app %>/bower_components/ng-file-upload/ng-file-upload.min.js',
           '<%= app %>/bower_components/d3/d3.js',
         ],
-        dest: '<%= dist %>/javascripts/vendor/main.js'
+        dest: '<%= public %>/javascripts/vendor/main.js'
       }
     },
 
@@ -222,22 +226,24 @@ module.exports = function (grunt) {
       }
     },
 
-    useminPrepare: {
-      jade: ['<%= public %>/views/header.jade', '<%= public %>/views/js-load.jade'],
-      options: {
-        dest: '<%= dist %>'
-      }
-    },
+   // useminPrepare: {
+   //   jade: ['<%= public %>/views/header.jade', '<%= public %>/views/js-load.jade'],
+   //   options: {
+   //     dest: '<%= dist %>'
+  //    }
+  //  },
 
     jadeUsemin: {
       scripts: {
         options: {
+          dirs: ['<%= public %>'],
           tasks: {
             js: [ 'uglify'],
             css: [ 'cssmin']
           }
         },
-        files: [{src: '<%= dist %>/views/js-load.jade'}, {src: '<%= dist %>/views/header.jade'}]
+        cwd:'<%= public %>',
+        files: [{src: '<%= app %>/views/js-load.jade'}]
       }
      // jade: ['<%= dist %>/**/*.jade'],
      /// css: ['<%= dist %>/stylesheets/**/*.css'],
@@ -322,22 +328,22 @@ module.exports = function (grunt) {
 
   });
 
-  grunt.loadNpmTasks('grunt-newer');
+ // grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-express-server');
   grunt.config.requires('watch.js.files');
  // grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-concat');
+ // grunt.loadNpmTasks('grunt-contrib-clean');
+ // grunt.loadNpmTasks('grunt-contrib-copy');
+ // grunt.loadNpmTasks('grunt-contrib-cssmin');
+ // grunt.loadNpmTasks('grunt-contrib-concat');
+ // grunt.loadNpmTasks('grunt-contrib-uglify');
+ // grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-jade-usemin');
-  grunt.loadNpmTasks('grunt-bower-install');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
+ // grunt.loadNpmTasks('grunt-jade-usemin');
+ // grunt.loadNpmTasks('grunt-bower-install');
+ // grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-modernizr');
   grunt.loadNpmTasks('grunt-mocha');
@@ -390,19 +396,23 @@ module.exports = function (grunt) {
       'watch'
     ]);
   });
+
+  /**
+   * To publish the application, copy the entire project
+   * directory to the server.  You can manually remove development
+   * dependencies if you like. See Readme for more details.
+   *
+   * But, it's still a good idea to validate.
+   */
   grunt.registerTask('publish', [
-    'useminPrepare',
-   // 'compile-sass',
-    'clean:dist',
-    'concat',
-    'validate-js',
-    'modernizr:dist',
-  //  'bower-install',
-    'copy:client',
- //   'newer:imagemin',
-    'cssmin',
-   // 'uglify',
-    'jadeUsemin'
+
+    'validate-js'
+
+  ]);
+
+  grunt.registerTask('validate', [
+
+    'validate-js'
 
     ]);
 

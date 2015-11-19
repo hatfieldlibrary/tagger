@@ -6,6 +6,8 @@
 
   'use strict';
 
+  /*globals taggerDirectives*/
+
 
   /**
    * Directive used to detect when a DOM element is ready.
@@ -19,10 +21,10 @@
           $scope.$apply(function () {
             var func = $parse(attrs.elemReady);
             func($scope);
-          })
-        })
+          });
+        });
       }
-    }
+    };
 
   });
 
@@ -63,6 +65,7 @@
         '   {{tagName}}' +
         '</div>',
 
+        /* jshint unused:false  */
         link: function (scope, elem, attrs) {
 
           var removeMessage = 'templates/removeTagFromAreaMessage.html';
@@ -101,7 +104,7 @@
               message = addMessage;
             }
 
-            TaggerDialog($event, message, scope.tagId);
+            new TaggerDialog($event, message, scope.tagId);
 
           };
 
@@ -153,7 +156,7 @@
             });
 
         }
-      }
+      };
     }
 
   ]);
@@ -254,7 +257,7 @@
             message = addMessage;
           }
 
-          TaggerDialog($event, message);
+          new TaggerDialog($event, message);
 
         };
 
@@ -273,7 +276,7 @@
          * when the current tag id changes.
          */
         $scope.$watch(function () {
-            return Data.currentTagIndex
+            return Data.currentTagIndex;
           },
           function (newValue) {
             if (newValue !== null) {
@@ -287,14 +290,14 @@
          * area list on change.
          */
         $scope.$watch(function () {
-            return Data.areas
+            return Data.areas;
           },
           function (newValue) {
             $scope.areas = newValue;
           });
 
       }
-    }
+    };
 
   }]);
 
@@ -370,15 +373,15 @@
             // already a target, then delete the area target.
             if (findArea(areaId, $scope.areaTargets)) {
               if ($scope.areaTargets.length === 1) {
-                TaggerToast('Cannot remove area.  Collections must belong to at least one area.');
+                new TaggerToast('Cannot remove area.  Collections must belong to at least one area.');
 
               } else {
                 var result = AreaTargetRemove.query({collId: Data.currentCollectionIndex, areaId: areaId});
                 result.$promise.then(function (data) {
-                  if (data.status == 'success') {
+                  if (data.status === 'success') {
                     $scope.areaTargets = result.areaTargets;
                     $rootScope.$broadcast('removedFromArea');
-                    TaggerToast('Collection removed from area.')
+                    new TaggerToast('Collection removed from area.');
                   }
                 });
               }
@@ -386,11 +389,11 @@
             // If the area id of the selected item is
             // not a target already, add a new area target.
             else {
-              var result = AreaTargetAdd.query({collId: Data.currentCollectionIndex, areaId: areaId});
-              result.$promise.then(function (data) {
-                if (data.status == 'success') {
-                  $scope.areaTargets = result.areaTargets;
-                  TaggerToast('Collection added to Area.')
+              var add = AreaTargetAdd.query({collId: Data.currentCollectionIndex, areaId: areaId});
+              add.$promise.then(function (data) {
+                if (data.status === 'success') {
+                  $scope.areaTargets = add.areaTargets;
+                  new TaggerToast('Collection added to Area.');
                 }
               });
             }
@@ -403,7 +406,7 @@
          * associated with the new collection.
          */
         $scope.$watch(function () {
-            return Data.currentCollectionIndex
+            return Data.currentCollectionIndex;
           },
           function (newValue) {
             if (newValue !== null) {
@@ -417,14 +420,14 @@
          * view model.
          */
         $scope.$watch(function () {
-            return Data.areas
+            return Data.areas;
           },
           function (newValue) {
             $scope.areas = newValue;
           }
         );
       }
-    }
+    };
 
   }]);
 
@@ -477,9 +480,6 @@
                             Data) {
 
 
-        /** @type {queryTypes} */
-        $scope.queryTypes = queryTypes;
-
         /** {Object} */
         $scope.selectedItem = null;
 
@@ -497,6 +497,19 @@
 
         /** @type {Array.<Object>} */
         $scope.typesForCollection = [];
+
+        /**
+         * Returns filter
+         * @param query {string} term
+         * @returns {*}
+         */
+        function queryTypes(query) {
+          return query ? $scope.globalTypes.filter(createFilterFor(query)) : [];
+
+        }
+
+        /** @type {queryTypes} */
+        $scope.queryTypes = queryTypes;
 
 
         /**
@@ -517,11 +530,11 @@
             }
           );
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Content Type Added');
+            if (data.status === 'success') {
+              new TaggerToast('Content Type Added');
 
             } else {
-              TaggerToast('WARNING: Unable to add content type!');
+              new TaggerToast('WARNING: Unable to add content type!');
 
             }
           });
@@ -545,10 +558,10 @@
           );
 
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Content Type Removed');
+            if (data.status === 'success') {
+              new TaggerToast('Content Type Removed');
             } else {
-              TaggerToast('WARNING: Unable to remove content type!');
+              new TaggerToast('WARNING: Unable to remove content type!');
             }
           });
         };
@@ -558,7 +571,7 @@
          * Watch for changes to the list of content t
          */
         $scope.$watch(function () {
-            return Data.typesForCollection
+            return Data.typesForCollection;
           },
           function (newValue) {
             if (newValue.length > 0) {
@@ -589,20 +602,9 @@
           };
         }
 
-        /**
-         * Returns filter
-         * @param query {string} term
-         * @returns {*}
-         */
-        function queryTypes(query) {
-          return query ? $scope.globalTypes.filter(createFilterFor(query)) : [];
-
-        }
-
       }
 
-
-    }
+    };
 
   }]);
 
@@ -653,11 +655,6 @@
                             Data) {
 
 
-        /**
-         * Filter for the md-autocomplete component.
-         * @type {queryTags}
-         */
-        $scope.queryTags = queryTags;
 
         /** @type {number} */
         $scope.selectedItem = null;
@@ -678,6 +675,23 @@
         $scope.tagsForCollection = [];
 
         /**
+         * Returns filter.
+         * @param query
+         * @returns {*}
+         */
+        function queryTags(query) {
+          return query ? $scope.tagsForArea.filter(createFilterFor(query)) : [];
+
+        }
+
+        /**
+         * Filter for the md-autocomplete component.
+         * @type {queryTags}
+         */
+        $scope.queryTags = queryTags;
+
+
+        /**
          * Function called when appending a chip.  The
          * function adds an new subject association for
          * the current collection via db call. Toasts on
@@ -694,12 +708,12 @@
             }
           );
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Subject Tag Added');
+            if (data.status === 'success') {
+              new TaggerToast('Subject Tag Added');
 
             } else {
+              new TaggerToast('WARNING: Unable to add subject tag!');
               return {};
-              TaggerToast('WARNING: Unable to add subject tag!');
 
             }
           });
@@ -722,10 +736,10 @@
             }
           );
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Subject Tag Removed');
+            if (data.status === 'success') {
+              new TaggerToast('Subject Tag Removed');
             } else {
-              TaggerToast('WARNING: Unable to remove subject tag!');
+              new TaggerToast('WARNING: Unable to remove subject tag!');
             }
           });
         };
@@ -736,7 +750,7 @@
          * the collection area.
          */
         $scope.$watch(function () {
-            return Data.tagsForArea
+            return Data.tagsForArea;
           },
           function (newValue) {
             $scope.tagsForArea = newValue;
@@ -748,7 +762,7 @@
          * this collection.
          */
         $scope.$watch(function () {
-            return Data.tagsForCollection
+            return Data.tagsForCollection;
           },
           function (newValue) {
             if (newValue.length > 0) {
@@ -769,7 +783,7 @@
          * On change, update the tag list for the current area.
          */
         $scope.$watch(function () {
-            return Data.tags
+            return Data.tags;
           },
           function () {
             $scope.tagsForArea = TagsForArea.query({areaId: Data.currentAreaIndex});
@@ -792,18 +806,10 @@
           };
         }
 
-        /**
-         * Returns filter.
-         * @param query
-         * @returns {*}
-         */
-        function queryTags(query) {
-          return query ? $scope.tagsForArea.filter(createFilterFor(query)) : [];
 
-        }
       }
 
-    }
+    };
 
   }
 
@@ -844,7 +850,7 @@
         init();
 
         $scope.$watch(function () {
-            return Data.currentAreaIndex
+            return Data.currentAreaIndex;
           },
           function (newValue, oldValue) {
             if (newValue !== oldValue) {
@@ -852,7 +858,7 @@
             }
           });
       }
-    }
+    };
 
   });
 
@@ -891,7 +897,7 @@
         $scope.browse = 0;
 
         function init() {
-          if (Data.currentAreaIndex != null) {
+          if (Data.currentAreaIndex !== null) {
             var types =
               SearchOptionType.query({areaId: Data.currentAreaIndex});
             types.$promise.then(function (data) {
@@ -912,7 +918,7 @@
         init();
 
         $scope.$watch(function () {
-            return Data.currentAreaIndex
+            return Data.currentAreaIndex;
           },
           function (newValue, oldValue) {
             if (newValue !== undefined) {
@@ -922,7 +928,7 @@
             }
           });
       }
-    }
+    };
   });
 
   /**
@@ -982,7 +988,7 @@
         init();
 
         $scope.$watch(function () {
-            return Data.currentAreaIndex
+            return Data.currentAreaIndex;
           },
           function (newValue, oldValue) {
             if (newValue !== undefined) {
@@ -992,7 +998,7 @@
             }
           });
       }
-    }
+    };
   });
 
 
@@ -1052,7 +1058,7 @@
         init();
 
         $scope.$watch(function () {
-            return Data.currentAreaIndex
+            return Data.currentAreaIndex;
           },
           function (newValue, oldValue) {
             if (newValue !== oldValue) {
@@ -1060,7 +1066,7 @@
             }
           });
       }
-    }
+    };
 
   }]);
 
@@ -1112,7 +1118,7 @@
         init();
 
         $scope.$watch(function () {
-            return Data.currentAreaIndex
+            return Data.currentAreaIndex;
           },
           function (newValue, oldValue) {
             if (newValue !== oldValue) {
@@ -1120,7 +1126,7 @@
             }
           });
       }
-    }
+    };
 
   }]);
 
@@ -1132,13 +1138,13 @@
     return {
       restrict: 'E',
       scope: {
-        imgname: "@"
+        imgname: '@'
       },
       template: '<img style="max-width: 120px;" ng-src="{{thumbnailsrc}}">',
       link: function ($scope) {
 
         $scope.$watch(function () {
-            return $scope.imgname
+            return $scope.imgname;
           },
           function (newValue) {
             if (newValue.length > 0) {
@@ -1149,7 +1155,7 @@
           });
       }
 
-    }
+    };
   });
 
 

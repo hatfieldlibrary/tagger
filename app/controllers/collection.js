@@ -245,7 +245,7 @@ exports.addTagTarget = function (req, res) {
               TagId: tagId
             }
           }).then(function (result) {
-            callback(null, result)
+            callback(null, result);
           })
           .error(function (err) {
             console.log(err);
@@ -394,7 +394,7 @@ exports.addAreaTarget = function (req, res) {
               AreaId: areaId
             }
           }).then(function (result) {
-            callback(null, result)
+            callback(null, result);
           })
           .error(function (err) {
             console.log(err);
@@ -425,7 +425,7 @@ exports.addAreaTarget = function (req, res) {
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Access-Control-Allow-Origin', '*');
           res.end(JSON.stringify({status: 'exists', areaTargets: areas}));
-        }
+        };
       }
 
     });
@@ -710,7 +710,7 @@ exports.add = function (req, res) {
           title: title
         }).then(function (coll) {
           newCollectionId = coll.id;
-          callback(null, coll)
+          callback(null, coll);
         }).error(function (err) {
           console.log(err);
         });
@@ -792,7 +792,6 @@ exports.updateImage = function (req, res, config) {
           res.end();
         }
         imageName = files.file[0].originalFilename;
-        console.log(fields);
         id = fields.id;
         if (!imageName) {
           res.redirect('/');
@@ -924,7 +923,7 @@ exports.typesForCollection = function (req, res) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify({status: 'failed'}));
-    })
+    });
 
 };
 
@@ -941,13 +940,10 @@ exports.allCollections = function (req, res) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'failed'}));
+    res.end(JSON.stringify(collections));
 
   }).error(function (err) {
     console.log(err);
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify(collections));
 
   });
 };
@@ -959,13 +955,7 @@ exports.allCollections = function (req, res) {
  */
 exports.collectionById = function (req, res) {
 
-  // var chainer = new db.Sequelize.Utils.QueryChainer();
   var collId = req.params.id;
-  var result = {
-    collection: {},
-    category: {},
-    contentTypes: []
-  };
 
   async.series({
       collection: function (callback) {
@@ -975,11 +965,10 @@ exports.collectionById = function (req, res) {
               id: collId
             }
           }).then(function (data) {
-          callback(null, data)
+          callback(null, data);
         }).error(function (err) {
           console.log(err);
         });
-        ;
       },
       categories: function (callback) {
         db.CategoryTarget.find(
@@ -989,11 +978,10 @@ exports.collectionById = function (req, res) {
             },
             include: [db.Category]
           }).then(function (data) {
-          callback(null, data)
+          callback(null, data);
         }).error(function (err) {
           console.log(err);
         });
-        ;
       },
       itemTypes: function (callback) {
         db.ItemContentTarget.findAll(
@@ -1004,7 +992,7 @@ exports.collectionById = function (req, res) {
             include: [db.ItemContent]
           }
         ).then(function (data) {
-          callback(null, data)
+          callback(null, data);
         }).error(function (err) {
           console.log(err);
         });
@@ -1012,7 +1000,7 @@ exports.collectionById = function (req, res) {
 
     },
     function (err, result) {
-      if (err != null) {
+      if (err !== null) {
         console.log(err);
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
@@ -1112,13 +1100,6 @@ exports.browseList = function (req, res) {
     method: 'GET'
   };
 
-  // The eXist collections API returns a list of objects.
-  var request = http.request(options, handleResponse);
-
-  request.on('error', function (e) {
-    console.log(e);
-    request.end();
-  });
 
   // If no error, handle response.
   function handleResponse(response) {
@@ -1135,7 +1116,15 @@ exports.browseList = function (req, res) {
       res.end(str);
 
     });
-  };
+  }
+  // The eXist collections API returns a list of objects.
+  var request = http.request(options, handleResponse);
+
+  request.on('error', function (e) {
+    console.log(e);
+    request.end();
+  });
+
 
   request.end();
 };

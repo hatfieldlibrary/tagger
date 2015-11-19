@@ -3,6 +3,8 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
+
   /**
    * Layout controller for updating the collection area.
    * This controller initializes and updates the singleton
@@ -56,13 +58,11 @@
       /** @type {number} */
       vm.userAreaId = 0;
 
-      vm.toggleLeft = buildDelayedToggler('left');
-
-
       /**
        * Supplies a function that will continue to operate until the
        * time is up.
        */
+      /*jshint unused: false*/
       function debounce(func, wait, context) {
         var timer;
 
@@ -86,13 +86,14 @@
           $mdSidenav(navID)
             .toggle()
             .then(function () {
-              $log.debug("toggle " + navID + " is done");
+              $log.debug('toggle ' + navID + ' is done');
             });
         }, 200);
       }
 
+      vm.toggleLeft = buildDelayedToggler('left');
+
       var init = function() {
-        alert('init');
         var areas = AreaList.query();
         /**
          * Upon resolution, set the area data and call
@@ -100,9 +101,7 @@
          */
         areas.$promise.then(function (data) {
 
-;
           vm.areas = data;
-          alert(vm.areas);
           Data.areas = data;
 
           Data.areaLabel = data[0].title;
@@ -158,14 +157,13 @@
             Data.categories = data;
             Data.currentCategoryIndex = data[0].id;
           });
-               alert();
+
           // Initialize global tags.
           var tags = TagList.query();
           tags.$promise.then(function (data) {
-            alert();
             if (data.length > 0) {
               Data.tags = data;
-              Data.currentTagIndex = data[0].id
+              Data.currentTagIndex = data[0].id;
             }
           });
 
@@ -239,11 +237,11 @@
        * the id of the first area in the current
        * area list.
        */
-      $scope.$watch(function() { return Data.userAreaId },
-        function(newValue, oldValue) {
+      $scope.$watch(function() { return Data.userAreaId; },
+        function(newValue) {
           vm.userAreaId = newValue;
           var id = '';
-          if (newValue == 0) {
+          if (newValue === 0) {
             init();
           }
           else {

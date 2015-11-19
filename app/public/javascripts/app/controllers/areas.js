@@ -3,6 +3,8 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
+
   /**
    * The controller for collection area management.
    */
@@ -56,7 +58,7 @@
        * @param message  html to display in dialog
        */
       vm.showDialog = function($event, message) {
-        TaggerDialog($event, message);
+        new TaggerDialog($event, message);
       };
 
 
@@ -97,9 +99,9 @@
               Data.areas = data;
             });
             // Toast upon success
-            TaggerToast("Area Updated");
+            new TaggerToast('Area Updated"');
           }
-        })
+        });
 
       };
 
@@ -135,7 +137,7 @@
               Data.areas = data;
               Data.currentAreaIndex = data[0].id;
             });
-            TaggerToast("Area order updated.");
+            new TaggerToast('Area order updated.');
           }
         });
       }
@@ -145,7 +147,7 @@
        * and removed in a dialog controller.  They can also
        * be reordered by the view model (see above).
        */
-      $scope.$watch(function() { return Data.areas },
+      $scope.$watch(function() { return Data.areas; },
         function(newValue) {
           vm.areas = newValue;
         }
@@ -155,7 +157,7 @@
        * Watch for changes in the shared area index
        * and reset the area in the view model.
        */
-      $scope.$watch(function() { return Data.currentAreaIndex},
+      $scope.$watch(function() { return Data.currentAreaIndex;},
         function(newValue) {
           vm.resetArea(newValue);
         });

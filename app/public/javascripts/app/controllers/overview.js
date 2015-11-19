@@ -4,6 +4,9 @@
   /**
    * Controller for the area overview page.
    */
+
+  /*globals taggerControllers*/
+
   taggerControllers.controller('OverviewCtrl', [
 
     '$scope',
@@ -57,7 +60,7 @@
               for (var i = 0; i < categories.length; i++) {
                 catCount = catCount + categories[i].count;
               }
-              for (var i = 0; i < categories.length; i++) {
+              for (i = 0; i < categories.length; i++) {
                 data[i] = {title: categories[i].title, value: categories[i].count};
               }
               vm.categoryCounts = {
@@ -80,7 +83,7 @@
               for (var i = 0; i < types.length; i++) {
                 count = count + types[i].count;
               }
-              for (var i = 0; i < types.length; i++) {
+              for (i = 0; i < types.length; i++) {
                 data[i] = {title: types[i].name, value: types[i].count};
               }
               vm.typeCounts = {
@@ -104,7 +107,7 @@
        * Watch for updates to the area label.  Assures changes in LayoutCtrl
        * are registered here.
        */
-      $scope.$watch(function() { return Data.areaLabel},
+      $scope.$watch(function() { return Data.areaLabel;},
         function() {
           vm.areaLabel = Data.areaLabel;
         });
@@ -113,7 +116,7 @@
        * Watch for changes in the shared area id and initialize
        * the view model.
        */
-      $scope.$watch(function() {return Data.currentAreaIndex},
+      $scope.$watch(function() {return Data.currentAreaIndex;},
         function(newValue, oldValue){
           if (newValue !== oldValue) {
             init();
@@ -124,7 +127,7 @@
        * Watch for changes in the search option type total.  Update
        * local variable and view model's collectionTypeMatch variable..
        */
-      $scope.$watch(function() {return Data.searchOptionsTotal},
+      $scope.$watch(function() {return Data.searchOptionsTotal;},
 
         function(newValue, oldValue) {
           if (newValue !== oldValue) {
@@ -142,7 +145,7 @@
        * Watch for changes in the collection type total.  Update
        * local variable and view model's collectionTypeMatch variable..
        */
-      $scope.$watch(function() {return Data.collectionTypeTotal},
+      $scope.$watch(function() {return Data.collectionTypeTotal;},
 
         function(newValue, oldValue) {
           if (newValue !== oldValue) {
@@ -161,7 +164,7 @@
        * Watch for changes in the collection links total.  Update
        * local variable and view model's collectionLinkMatch variable.
        */
-      $scope.$watch(function() {return Data.collectionLinksTotal},
+      $scope.$watch(function() {return Data.collectionLinksTotal;},
 
         function(newValue, oldValue) {
           if (newValue !== oldValue) {
@@ -178,7 +181,7 @@
        * Watch for changes in the collections total.  Update
        * local variable and view model's collectionTypeMatch variable..
        */
-      $scope.$watch(function() {return Data.collectionsTotal},
+      $scope.$watch(function() {return Data.collectionsTotal;},
 
         function(newValue, oldValue) {
           if (newValue !== oldValue) {

@@ -114,6 +114,7 @@ module.exports = function (app, config, passport) {
     }
   ));
 
+  /* jshint unused: false */
   app.isAuthenticated = function (req, res, next) {
     if (req.isAthenticated()) {
       return true;

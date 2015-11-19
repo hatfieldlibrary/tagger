@@ -97,7 +97,7 @@ exports.add = function (req, res) {
             }
           }
         ).then(function(result) {
-          callback(null, result)
+          callback(null, result);
         })
           .error(function (err) {
             console.log(err);
@@ -158,7 +158,7 @@ exports.update = function (req, res) {
     // JSON response
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.end(JSON.stringify({status: 'success'}))
+    res.end(JSON.stringify({status: 'success'}));
   }).error(function (err) {
     console.log(err);
   });

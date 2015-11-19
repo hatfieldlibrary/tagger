@@ -5,6 +5,8 @@
 
   'use strict';
 
+  /*globals taggerServices*/
+
   /**
    * Using the Angular Material mdToast
    * directive throughout the application.
@@ -21,7 +23,7 @@
        * The factory returns the configured Toast object literal
        * that takes a message content parameter.
        * @param content  the message to show in the toast.
-         */
+       */
       function toast(content) {
 
         var toastPosition = {
@@ -66,31 +68,6 @@
     function (UpLoad,
               $rootScope,
               $mdDialog) {
-
-      /**
-       * Function returns an object literal for a function that
-       * configures an $mdDialog directory with input params.
-       * (The event param is used by the $mdDialog to set the
-       * starting location of the dialog animation.)
-       *
-       * @param $event  the AngularJs event object
-       * @param message  the template defining the dialog content
-       */
-      var showDialog = function ($event, message) {
-
-        var parentEl = angular.element(document.body);
-
-        // Show a dialog with the specified options.
-        $mdDialog.show({
-          parent: parentEl,
-          targetEvent: $event,
-          templateUrl: message,
-          controller: DialogController
-        });
-
-      };
-
-      return showDialog;
 
 
       /**
@@ -165,7 +142,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              TaggerToast("Tag Deleted");
+              new TaggerToast('Tag Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
               $scope.getTagList(null);
@@ -188,8 +165,8 @@
             }
           );
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Tag Added area.');
+            if (data.status === 'success') {
+              new TaggerToast('Tag Added area.');
               // Broadcast successful deletion with the updated area list.
               // Not using the shared context and a  watch for this update.
               // Using event emitter communicates the update information without
@@ -211,8 +188,8 @@
             }
           );
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Tag removed from Area.');
+            if (data.status === 'success') {
+              new TaggerToast('Tag removed from Area.');
               // Broadcast successful deletion with the updated area list.
               // Not using the shared context and a  watch for this update.
               // Using event emitter communicates the update information without
@@ -237,8 +214,8 @@
             }
           );
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Tag Added area.');
+            if (data.status === 'success') {
+              new TaggerToast('Tag Added area.');
               $scope.getTagList(data.id);
               $scope.closeDialog();
             }
@@ -256,8 +233,8 @@
             }
           );
           result.$promise.then(function (data) {
-            if (data.status == 'success') {
-              TaggerToast('Tag removed from Area.');
+            if (data.status === 'success') {
+              new TaggerToast('Tag removed from Area.');
               $scope.getTagList(data.id);
               // broadcast successful deletion.
 
@@ -279,7 +256,7 @@
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
-              TaggerToast("Tag Added");
+              new TaggerToast('Tag Added');
               // After area update succeeds, update the view.
               $scope.getTagList(data.id);
               //    $scope.closeDialog();
@@ -316,13 +293,13 @@
          * Delete collection area from Tagger.  Used by administrative view.
          * @param id
          */
-        $scope.deleteArea = function (id) {
+        $scope.deleteArea = function () {
 
           var result = AreaDelete.save({id: Data.currentAreaIndex});
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              TaggerToast("Area Deleted");
+              new TaggerToast('Area Deleted');
               // after retrieving new area list, we need
               // to update the areas currently in view.
               $scope.getAreaList(null);
@@ -344,7 +321,7 @@
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
-              TaggerToast("Area Added");
+              new TaggerToast('Area Added');
               // After area update succeeds, update the view.
               $scope.getAreaList(data.id);
               $scope.closeDialog();
@@ -388,7 +365,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              TaggerToast("Category Deleted");
+              new TaggerToast('Category Deleted');
               // After retrieving new category list, we need
               // to update the category currently in view.
               // This method is designed to take an id
@@ -416,7 +393,7 @@
           result.$promise.then(function (data) {
 
             if (data.status === 'success') {
-              TaggerToast("Category Added");
+             new  TaggerToast('Category Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
@@ -458,14 +435,14 @@
          * Deletes a content type from Tagger.
          * @param id
          */
-        $scope.deleteContentType = function (id) {
+        $scope.deleteContentType = function () {
 
           var result = ContentTypeDelete.save({id: Data.currentContentIndex});
 
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              TaggerToast("Content Type Deleted");
+              new TaggerToast('Content Type Deleted');
               // After retrieving new content type list, we need
               // to update the content types currently in view.
               // This method is designed to take an id
@@ -517,7 +494,7 @@
 
             if (data.status === 'success') {
 
-              TaggerToast("Content Type Added");
+              new TaggerToast('Content Type Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
@@ -542,7 +519,7 @@
 
             if (data.status === 'success') {
 
-              TaggerToast("Collection Added");
+              new TaggerToast('Collection Added');
               // Update the category list. The
               // id parameter will be used to select
               // the newly added category for editing.
@@ -563,7 +540,7 @@
           result.$promise.then(function (data) {
             if (data.status === 'success') {
 
-              TaggerToast("Collection Deleted");
+              new TaggerToast('Collection Deleted');
               // After retrieving new category list, we need
               // to update the category currently in view.
               // Given a null id parameter, the getCollectionList
@@ -615,6 +592,7 @@
         $scope.uploadImage = function (file) {
 
           if (file !== undefined) {
+            /* jshint unused: false */
             Upload.upload({
               url: '/admin/collection/image',
               file: file,
@@ -626,13 +604,42 @@
               Data.currentThumbnailImage = config.file.name;
               $scope.closeDialog();
               console.log('file ' + config.file.name + 'uploaded. Response: ' + data);
+
             }).error(function (data, status, headers, config) {
               console.log('error status: ' + status);
-            })
+            });
           }
-        }
+        };
 
       }
+
+
+      /**
+       * Function returns an object literal for a function that
+       * configures an $mdDialog directory with input params.
+       * (The event param is used by the $mdDialog to set the
+       * starting location of the dialog animation.)
+       *
+       * @param $event  the AngularJs event object
+       * @param message  the template defining the dialog content
+       */
+      var showDialog = function ($event, message) {
+
+        var parentEl = angular.element(document.body);
+
+        // Show a dialog with the specified options.
+        $mdDialog.show({
+          parent: parentEl,
+          targetEvent: $event,
+          templateUrl: message,
+          controller: DialogController
+        });
+
+      };
+
+      return showDialog;
+
+
 
     }]);
 

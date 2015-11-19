@@ -5,6 +5,9 @@
 
   'use strict';
 
+  /*globals taggerDirectives*/
+  /*jshint quotmark: false */
+
   /**
    * This comparison function looks for inequality in
    * the inputs and returns true if found.  The input
@@ -50,8 +53,7 @@
         // Two arrays of equal length. Evaluate the array of objects.
         // Return return inequality if anything does not match.
         for (var i = 0; i < newValue.length; i++) {
-          if (newValue[i].title !== oldValue[i].title
-            || newValue[i].value !== oldValue[i].value) {
+          if (newValue[i].title !== oldValue[i].title || newValue[i].value !== oldValue[i].value) {
             return true;
           }
         }
@@ -65,13 +67,11 @@
       }
       // Otherwise, compare the contents of two objects and return inequality
       // if they do not match.
-      return (newValue.title !== oldValue.title
-      && newValue.value !== oldValue.value);
+      return (newValue.title !== oldValue.title && newValue.value !== oldValue.value);
 
     }
 
   }
-
 
 
   taggerDirectives.directive('d3Bar', [
@@ -79,6 +79,9 @@
     '$window',
     '$timeout',
     'd3Service',
+
+    /*globals d3*/
+    /* jshint unused:false */
 
     function ($window, $timeout, d3Service) {
       return {
@@ -105,13 +108,13 @@
 
           // initialize on data change
           scope.$watch(function (scope) {
-              return scope.data
+              return scope.data;
             },
             function (newValue) {
 
               if (newValue !== undefined) {
                 if (newValue.length > 0) {
-                  scope.data;
+                  //scope.data;
                   ele.ready(function () {
                     prepareContainer();
                     setDimens();
@@ -141,12 +144,14 @@
           var setDimens = function () {
 
 
-            margin = {top: 20, right: 20, bottom: 30, left: 40},
-              width = containerEl.offsetWidth - margin.left - margin.right,
-              height = containerEl.offsetHeight - margin.top - margin.bottom;
+            margin = {top: 20, right: 20, bottom: 30, left: 40};
+
+            width = (containerEl.offsetWidth - margin.left - margin.right);
+
+            height = (containerEl.offsetHeight - margin.top - margin.bottom);
 
             x = d3.scale.ordinal()
-              .rangeRoundBands([0, width], .1);
+              .rangeRoundBands([0, width], 0.1);
 
             y = d3.scale.linear()
               .range([height, 0]);
@@ -228,7 +233,7 @@
             return d;
           }
         }
-      }
+      };
     }
   ]);
 
@@ -305,7 +310,7 @@
                 title: values[i].title,
                 value: values[i].value / total,
                 count: values[i].value
-              }
+              };
             }
 
             return data;
@@ -328,7 +333,7 @@
 
             // initialize on data change
             scope.$watch(function (scope) {
-                return scope.data
+                return scope.data;
               },
               function (newValue, oldValue) {
                 if (newValue !== oldValue) {
@@ -430,8 +435,6 @@
                   drawDetailedInformation(d.data, labelsEl);
                 });
 
-              drawChartCenter();
-
               function drawChartCenter() {
                 var centerContainer = pie.append('g')
                   .attr('class', 'pieChart--center');
@@ -455,6 +458,8 @@
                   .attr('r', radius - 65)
                   .attr('fill', '#fff');
               }
+
+              drawChartCenter();
 
               /**
                * This counter variable provides the index

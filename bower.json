@@ -1,5 +1,5 @@
 {
-  "name": "academic_commons",
+  "name": "Tagger",
   "dependencies": {
     "angular": "~1.4.4",
     "angular-animate": "~1.4.4",
@@ -9,7 +9,6 @@
     "angular-route": "~1.4.4",
     "d3": "~3.5.6",
     "font-awesome": "~4.1",
-    "foundation": "zurb/bower-foundation#5.4.7",
     "jasmine": "~2.0.0",
     "ng-file-upload": "~7.2.1",
     "ng-file-upload-shim": "~7.2.1",

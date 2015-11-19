@@ -3,6 +3,8 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
+
   /**
    * Controller for the user profile display.
    */

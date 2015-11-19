@@ -3,6 +3,7 @@
 
   'use strict';
 
+  /*globals taggerControllers*/
 
   /**
    * Controller for managing subject tags.
@@ -64,7 +65,7 @@
        * @param message  html to display in dialog
        */
       vm.showDialog = function ($event, message) {
-        TaggerDialog($event, message);
+        new TaggerDialog($event, message);
       };
 
       /**
@@ -95,9 +96,9 @@
             vm.tags =TagList.query();
 
             // Toast upon success
-            TaggerToast("Tag Updated");
+            new TaggerToast('Tag Updated');
           }
-        })
+        });
 
       };
 
@@ -106,10 +107,9 @@
        * should pick up area context changes and the updated tag list
        * after adding or deleting a tag.
        */
-      $scope.$watch(function() { return Data.tags },
+      $scope.$watch(function() { return Data.tags; },
         function(newValue) {
           if (newValue !== null) {
-            alert('new tags');
             vm.tags = newValue;
             if (newValue.length > 0) {
               vm.userAreaId = Data.userAreaId;
@@ -121,7 +121,6 @@
       );
 
     }]);
-
 
 
 })();
