@@ -17,9 +17,8 @@ module.exports = function (grunt) {
     pkg: grunt.file.readJSON('package.json'),
     app:    'app',
     config: 'config',
-    client: 'app/public/modules/acom',
-    dist:   'app/public/modules/acom/dist',
     public: 'app/public',
+    dist: 'dist',
 
     express: {
       options: {
@@ -59,7 +58,7 @@ module.exports = function (grunt) {
 
     open: {
       server: {
-        url: 'http://localhost:<%= express.options.port %>/commons'
+        url: 'http://localhost:<%= express.options.port %>/admin/'
       }
     },
 
@@ -68,40 +67,27 @@ module.exports = function (grunt) {
         files: ['test/*.js'],
         tasks: ['env:test', 'mochaTest']
       },
-      js: {
-        files: [
-          'public/js/*.js',
-        ],
-        options: {
-          livereload: ReloadPort
-        }
-      },
       jade: {
         files: ['<%= app %>/views/**/*.jade'],
         options: {
           livereload: ReloadPort
         }
       },
-      grunt: {
-        files: ['Gruntfile.js'],
-        tasks: ['sass']
-      },
-      sass: {
-        files: '<%= public %>/scss/**/*.scss',
-        tasks: ['sass']
+      js: {
+        files: [
+          '<%= public %>/javascripts/**/*.js',
+        ],
+        options: {
+          livereload: ReloadPort
+        }
       },
       module: {
         files: [
           // admin
-          '<%= public %>/stylesheets/{,*//*}*.css',
-          '<%= public %>/javascripts/{,*//*}*.js',
-          // public view
-          '<%= client %>/app/**/*.html',
-          '<%= client %>/app/js/**/*.js',
-          '<%= client %>/app/*.css',
-          '<%= client %>/app/**/*.{jpg,gif,svg,jpeg,png}',
+         // '<%= public %>/stylesheets/{,*//*}*.css',
+         // '<%= public %>/javascripts/{,*//*}*.js',
           // exclude bower components
-          '!<%= client %>/app/bower_components/**'
+         // '!<%= client %>/app/bower_components/**'
         ],
         // tasks: ['newer:jshint','express:dev', 'wait'],
         options: {
@@ -111,7 +97,7 @@ module.exports = function (grunt) {
       },
       express: {
         files: [
-          '!<%= client %>/**/*.js',
+          '!<%= public %>/**/*.js',
           '<%= app %>/**/*.js',
           'config/*.js',
           'server.js',
@@ -131,40 +117,24 @@ module.exports = function (grunt) {
         reporter: require('jshint-stylish'),
         all: [
           'Gruntfile.js',
-          '<%= app %>/js/**/*.js',
-          '<%= config %>/js/**/*.js',
-          '<%= client %>/app/js/**/*.js',
+          '<%= public %>/javascripts/**/*.js',
+          '<%= config %>/**/*.js',
           './server.js'
         ]
       },
       test: {
         options: {
-          jshintrc: '<%= client %>/test/.jshintrc'
+          jshintrc: 'app/test/.jshintrc'
         },
-        src: ['<%= client %>/test/*.js']
+        src: ['app/test/*.js']
       },
       client: {
         options: {
           jshintrc: '.jshintrc'
-        },
-        src: [
-          'app/controllers/*.js',
-          'app/models/*.js',
-          'config/*.js',
-          '<%= client %>/app/js/*.js'
-        ]
+        }
       }
     },
 
-    htmlmin: {
-      dist: {
-        files: [{
-          expand: true,
-          src: '<%= client %>/app/**/*.html',
-          dest: '<%= dist %>'
-        }]
-      }
-    },
 
     clean: {
       server: '.tmp',
@@ -178,29 +148,29 @@ module.exports = function (grunt) {
       client: {
         files: [{
           expand: true,
-          cwd:'<%= client %>/app',
-          src: ['js/*.js','info/**','images/**','*.txt', '**/*.html', '!**/*.scss', '!bower_components/**'],
+          cwd:'<%= public %>/app',
+          src: ['js/*.js', '**/*.html'],
           dest: '<%= dist %>'
         } , {
           expand: true,
           flatten: false,
-          cwd:'<%= client %>/app',
+          cwd:'<%= public %>/app',
           src: ['fonts/**'],
           dest: '<%= dist %>'
         }, {
           expand: true,
           flatten: true,
-          cwd:'<%= client %>/app',
-          src: ['bower_components/modernizr/modernizr.js' ],
-          dest: '<%= dist %>/js/vendor',
+          src: ['app/javascripts/vendor/modernizr.optimized.js' ],
+          dest: '<%= dist %>/javascripts/vendor',
           filter: 'isFile'
-        }, {
+        }/*,
+          {
             expand: true,
             flatten: false,
             cwd:'<%= client %>/app',
             src: ['css/font-awesome/**','css/i/**','css/icomoon/**','css/materialize/**' ],
             dest: '<%= dist %>'
-          }
+          }   */
         ]
       }
     },
@@ -209,16 +179,18 @@ module.exports = function (grunt) {
       server: {
         flatten: true,
         src: [
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.accordian.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.dropdown.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.offcanvas.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.tab.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.topbar.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.tooltip.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.equalizer.js',
-          '<%= app %>/bower_components/foundation/js/foundation/foundation.magellan.js'],
-        dest: '<%= app %>/public/javascripts/vendor/foundation.js'
+          '<%= app %>/bower_components/angular/angular.min.js',
+          '<%= app %>/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
+          '<%= app %>/bower_components/angular-animate/angular-animate.min.js',
+          '<%= app %>/bower_components/angular-route/angular-route.js',
+          '<%= app %>/bower_components/angular-resource/angular-resource.js',
+          '<%= app %>/bower_components/angular-aria/angular-aria.min.js',
+          '<%= app %>/bower_components/angular-material/angular-material.js',
+          '<%= app %>/bower_components/ng-file-upload-shim/ng-file-upload-shim.min.js',
+          '<%= app %>/bower_components/ng-file-upload/ng-file-upload.min.js',
+          '<%= app %>/bower_components/d3/d3.js',
+        ],
+        dest: '<%= dist %>/javascripts/vendor/main.js'
       }
     },
 
@@ -251,18 +223,27 @@ module.exports = function (grunt) {
     },
 
     useminPrepare: {
-      html: ['<%= client %>/app/index.html'],
+      jade: ['<%= public %>/views/header.jade', '<%= public %>/views/js-load.jade'],
       options: {
         dest: '<%= dist %>'
       }
     },
 
-    usemin: {
-      html: ['<%= dist %>/**/*.html', '!<%= app %>/bower_components/**'],
-      css: ['<%= dist %>/css/**/*.css'],
-      options: {
-        dirs: ['<%= dist %>']
+    jadeUsemin: {
+      scripts: {
+        options: {
+          tasks: {
+            js: [ 'uglify'],
+            css: [ 'cssmin']
+          }
+        },
+        files: [{src: '<%= dist %>/views/js-load.jade'}, {src: '<%= dist %>/views/header.jade'}]
       }
+     // jade: ['<%= dist %>/**/*.jade'],
+     /// css: ['<%= dist %>/stylesheets/**/*.css'],
+     // options: {
+     //   dirs: ['<%= dist %>']
+     // }
     },
 
     bowerInstall: {
@@ -275,8 +256,7 @@ module.exports = function (grunt) {
           'modernizr',
           'font-awesome',
           'jquery-placeholder',
-          'jquery.cookie',
-          'foundation'
+          'jquery.cookie'
         ]
       }
     },
@@ -305,30 +285,11 @@ module.exports = function (grunt) {
       }
     },
 
-    sass: {
-      options: {
-        sourceMap: true,
-        includePaths: [
-          '<%= public %>/modules/scss/**/*.scss']
-      },
-      dist: {
-        options: {
-          outputStyle: 'compressed'
-        },
-        files: [{
-          expand: true,
-          cwd: '<%= public %>/modules/scss',
-          src: ['**/*.scss'],
-          dest: '<%= client %>/app/css',
-          ext: '.css'
-        }]
-      }
-    },
     modernizr: {
 
       dist: {
-        devFile: '<%= app %>/bower_components/modernizr/modernizr.js',
-        outputFile: '<%= client %>/app/js/plugins/modernizr.optimized.js',
+        devFile: 'app/bower_components/modernizr/modernizr.js',
+        outputFile: 'app/javascripts/vendor/modernizr.optimized.js',
         extra: {
           shiv: true,
           printshiv: false,
@@ -350,9 +311,8 @@ module.exports = function (grunt) {
         tests: [],
         parseFiles: true,
         files: {
-          src: ['<%= client %>/app/js/**/*.js',
-            '<%= client %>/app/css/**/*.css',
-            '<%= public %>/sass/**/*.scss'
+          src: [
+
           ]
         },
         matchCommunityTests: false,
@@ -365,7 +325,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-newer');
   grunt.loadNpmTasks('grunt-express-server');
   grunt.config.requires('watch.js.files');
-  grunt.loadNpmTasks('grunt-sass');
+ // grunt.loadNpmTasks('grunt-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -375,7 +335,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-jade-usemin');
   grunt.loadNpmTasks('grunt-bower-install');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-karma');
@@ -403,11 +363,11 @@ module.exports = function (grunt) {
   grunt.registerTask('test', ['karma']);
   grunt.registerTask('bower-install', ['bowerInstall']);
   grunt.registerTask('validate-js', ['jshint']);
-  grunt.registerTask('compile-sass', ['sass']);
+ // grunt.registerTask('compile-sass', ['sass']);
   grunt.registerTask('develop', function () {
     grunt.task.run([
       'clean:server',
-      'compile-sass',
+      //'compile-sass',
       //'concat:serverlibs',
       //'concat:serverfoundation',
       // Uncomment the following uglify task if you
@@ -432,17 +392,17 @@ module.exports = function (grunt) {
   });
   grunt.registerTask('publish', [
     'useminPrepare',
-    'compile-sass',
+   // 'compile-sass',
     'clean:dist',
     'concat',
     'validate-js',
     'modernizr:dist',
-    'bower-install',
+  //  'bower-install',
     'copy:client',
-    'newer:imagemin',
+ //   'newer:imagemin',
     'cssmin',
-    'uglify',
-    'usemin',
+   // 'uglify',
+    'jadeUsemin'
 
     ]);
 

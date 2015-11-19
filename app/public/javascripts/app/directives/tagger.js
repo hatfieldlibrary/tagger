@@ -269,53 +269,6 @@
         });
 
         /**
-         * Update by associating adding or removing the association of
-         * a tag with the provided content area.
-         * @param areaId id of the area to be added or removed
-         */
-        $scope.update = function (areaId) {
-
-          if ($scope.areaTargets !== undefined) {
-
-            // If the area id is a already associated with tag,
-            // remove that association
-            if (findArea(areaId, $scope.areaTargets)) {
-
-              var result = TagTargetRemove.query(
-                {
-                  tagId: Data.currentTagIndex,
-                  areaId: areaId
-                }
-              );
-              result.$promise.then(function (data) {
-                if (data.status == 'success') {
-                  $scope.areaTargets = result.areaTargets;
-                  TaggerToast('Tag removed from area.')
-                }
-              });
-            }
-            // If the area id is a not associated with tag,
-            // remove that association
-            else {
-
-              var result = TagTargetAdd.query(
-                {
-                  tagId: Data.currentTagIndex,
-                  areaId: areaId
-                }
-              );
-              result.$promise.then(function (data) {
-                if (data.status == 'success') {
-                  $scope.areaTargets = result.areaTargets;
-                  TaggerToast('Tag added to Area.')
-                }
-              });
-            }
-          }
-
-        };
-
-        /**
          * Watch updates the current list of area targets
          * when the current tag id changes.
          */
