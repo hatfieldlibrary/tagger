@@ -154,7 +154,9 @@ exports.addTypeTarget = function (req, res) {
               CollectionId: collId,
               ItemContentId: typeId
             }
-          }).then(callback)
+          }).then(function (result) {
+            callback(null, result);
+          })
           .error(function (err) {
             console.log(err);
           });
@@ -222,7 +224,7 @@ exports.removeTypeTarget = function (req, res) {
 };
 
 /**
- * Add a subject tag to teh collection after first checking
+ * Add a subject tag to the collection after first checking
  * whether the association already exists.
  * @param req
  * @param res
@@ -251,6 +253,7 @@ exports.addTagTarget = function (req, res) {
       }
     },
     function (err, result) {
+
       if (err) {
         console.log(err);
       }
@@ -312,6 +315,59 @@ exports.removeTagTarget = function (req, res) {
 
 };
 
+/**
+ * Adds a collection to a collection area.
+ * @param collId    the collection id
+ * @param areaId    the area id
+ * @param res
+ */
+function addArea(collId, areaId, res) {
+
+  async.series(
+    {
+      create: function (callback) {
+        db.AreaTarget.create(
+          {
+            CollectionId: collId,
+            AreaId: areaId
+          }
+        ).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+
+      },
+      areaList: function (callback) {
+        db.AreaTarget.findAll(
+          {
+            where: {
+              CollectionId: collId
+            },
+            attributes: ['AreaId']
+          }
+        ).then(function (result) {
+            callback(null, result);
+          })
+          .error(function (err) {
+            console.log(err);
+          });
+      }
+    },
+
+    function (err, result) {
+      if (err) {
+        console.log(err);
+      }
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
+
+    }
+  );
+}
 
 /**
  * Adds collection to a collection area after first
@@ -375,60 +431,6 @@ exports.addAreaTarget = function (req, res) {
     });
 
 };
-
-/**
- * Adds a collection to a collection area.
- * @param collId    the collection id
- * @param areaId    the area id
- * @param res
- */
-function addArea(collId, areaId, res) {
-
-  async.series(
-    {
-      create: function (callback) {
-        db.AreaTarget.create(
-          {
-            CollectionId: collId,
-            AreaId: areaId
-          }
-        ).then(function (result) {
-            callback(null, result);
-          })
-          .error(function (err) {
-            console.log(err);
-          });
-
-      },
-      areaList: function (callback) {
-        db.AreaTarget.findAll(
-          {
-            where: {
-              CollectionId: collId
-            },
-            attributes: ['AreaId']
-          }
-        ).then(function (result) {
-            callback(null, result);
-          })
-          .error(function (err) {
-            console.log(err);
-          });
-      }
-    },
-
-    function (err, result) {
-      if (err) {
-        console.log(err);
-      }
-      // JSON response
-      res.setHeader('Content-Type', 'application/json');
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.end(JSON.stringify({status: 'success', areaTargets: result.areaList}));
-
-    }
-  );
-}
 
 /**
  * Removes the association between a collection and a collection

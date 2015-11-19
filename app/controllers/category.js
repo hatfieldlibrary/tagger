@@ -1,7 +1,5 @@
 'use strict';
 
-var async = require('async');
-
 
 /**
  * Retrieves the list of all collection groups.
@@ -147,7 +145,7 @@ exports.update = function(req, res) {
       where: {
         id: id
       }
-    }).success(function() {
+    }).then(function() {
       // JSON response
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');

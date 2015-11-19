@@ -68,8 +68,7 @@
       };
 
       /**
-       * Reset the tag to the selected tag id. If the id is
-       * non-null, set this to be the new current context tag id.
+       * Get the tag by ID. If the id is null, defaults to the currentTagIndex (id)
        * @param id the id of the newly chosen tag
        */
       vm.resetTag = function(id) {
@@ -79,6 +78,7 @@
         }
         vm.tag = TagById.query({id:  Data.currentTagIndex});
       };
+
 
       /**
        * Updates tag information and retrieves new
@@ -109,19 +109,16 @@
       $scope.$watch(function() { return Data.tags },
         function(newValue) {
           if (newValue !== null) {
+            alert('new tags');
             vm.tags = newValue;
             if (newValue.length > 0) {
-
               vm.userAreaId = Data.userAreaId;
-
                 vm.resetTag(Data.currentTagIndex);
 
             }
           }
         }
       );
-
-
 
     }]);
 

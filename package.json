@@ -1,7 +1,7 @@
 {
-  "name": "Academic-Commons",
-  "description": "The Willamette University Academic Commons public site and administration.",
-  "version": "0.0.2",
+  "name": "Tagger",
+  "description": "Tagger provides and adminstrative UI and REST interface for subject tags and other collection metadata.",
+  "version": "0.1.0",
   "homepage": "",
   "author": {
     "name": "Michael Spalti ",
@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "async": "~0.9.0",
-    "bluebird": "^3.0.5",
     "body-parser": "~1.0.0",
     "connect-redis": "^2.1.0",
     "cookie-parser": "~1.0.1",

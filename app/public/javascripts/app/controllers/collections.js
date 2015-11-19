@@ -48,7 +48,7 @@
       vm.categoryList = [];
 
       /** @type {number} */
-      vm.collectionId = 0;
+      vm.collectionId = -1;
 
       /** @type {string} */
       vm.thumbnailImage = '';
@@ -66,6 +66,8 @@
       /** @type {number} */
       vm.userAreaId = Data.userAreaId;
 
+      vm.noCollectionMessage = "No collections for this area.";
+
       /** @type {Array.string} */
       vm.urlLabels = ['Add the collection URL, e.g.: http://host.domain.edu/wombats?type=hungry', 'Add the collection name for select option, e.g. wallulah'];
 
@@ -78,7 +80,7 @@
        * Show the $mdDialog.
        * @param $event click event object (location of event used as
        *                    animation starting point)
-       * @param message  html to display in dialog
+       * @param message  html template to display in dialog
        */
       vm.showDialog = function ($event, message) {
         TaggerDialog($event, message);
@@ -105,7 +107,6 @@
 
         });
         update.$promise.then(function (data) {
-          console.log(data);
           if (data.status === 'success') {
             vm.collectionList = CollectionsByArea.query(
               {
@@ -162,12 +163,10 @@
       };
 
       /**
-       * Using event to notify when a collection is removed from a
-       * collection area. The removal is done by one of the
-       * controllers below, so perhaps a variable or object in the
-       * parent scope could be used instead. There is no need to
-       * update the shared Data service, although that's another
-       * possibility.
+       * Listens for event emitted after the collection has
+       * been removed from and area.  This updates the collection
+       * list in the current view in the event that the collection
+       * was removed from the area currently in view.
        *
        * Updates the collection list on event.
        */

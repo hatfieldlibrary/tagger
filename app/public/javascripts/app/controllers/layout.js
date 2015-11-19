@@ -92,16 +92,19 @@
       }
 
       var init = function() {
+        alert('init');
         var areas = AreaList.query();
         /**
          * Upon resolution, set the area data and call
          * the context initialization method setContext()
          */
         areas.$promise.then(function (data) {
-                       console.log('area query');
-          console.log(data);
+
+;
           vm.areas = data;
+          alert(vm.areas);
           Data.areas = data;
+
           Data.areaLabel = data[0].title;
           vm.currentId = data[0].id;
           // Initialize current area to first item
@@ -142,28 +145,25 @@
       };
 
       /**
-       * Initializes the shared Data context.
+       * Initializes the shared Data context with global
+       * values not specific to the area.
        * @param id   the area id
        */
       function setContext(id) {
-
-        updateAreaContext(id);
 
         if (id !== null && id !== undefined) {
           // Initialize global categories.
           var categories = CategoryList.query();
           categories.$promise.then(function (data) {
-            console.log('set context');
-            console.log(data);
             Data.categories = data;
             Data.currentCategoryIndex = data[0].id;
           });
-
+               alert();
           // Initialize global tags.
           var tags = TagList.query();
           tags.$promise.then(function (data) {
+            alert();
             if (data.length > 0) {
-
               Data.tags = data;
               Data.currentTagIndex = data[0].id
             }
@@ -172,7 +172,6 @@
           // Initialize global content types
           var types = ContentTypeList.query();
           types.$promise.then(function (data) {
-            console.log(data);
             if (data.length > 0) {
               Data.contentTypes = data;
               Data.currentContentIndex = data[0].id;
@@ -181,10 +180,13 @@
           });
         }
 
+        updateAreaContext(id);
+
       }
 
       /**
-       * Updates the shared Data context.
+       * Updates the shared Data context with new area information for
+       * collections, tags and content groups.
        * @param id   the area id
        */
       function updateAreaContext(id) {
@@ -197,27 +199,31 @@
             if (data !== undefined) {
 
               if (data.length > 0) {
+                // Set the new collection information.
                 Data.collections = data;
                 Data.currentCollectionIndex = data[0].Collection.id;
                 Data.tagsForCollection =
                   TagsForCollection.query({collId: Data.currentCollectionIndex});
                 Data.typesForCollection =
                   TypesForCollection.query({collId: Data.currentCollectionIndex});
+              }  else {
+                // No collections for area.  Reset.
+                Data.collections = [];
+                Data.currentCollectionIndex = -1;
               }
             }
 
           });
-          // Set subject tags for area.
+          // Get subject tags for area.
           var tagsForArea = TagsForArea.query({areaId: id});
           tagsForArea.$promise.then(function (data) {
-
             if (data.length > 0) {
               Data.tagsForArea = data;
             }
           });
+          // Get collection groups for area.
           var categoriesForArea = CategoryByArea.query({areaId: id});
           categoriesForArea.$promise.then(function (categories) {
-
             if (categories.length > 0) {
               Data.categoriesForArea = categories;
             }
@@ -237,7 +243,7 @@
         function(newValue, oldValue) {
           vm.userAreaId = newValue;
           var id = '';
-          if (newValue === 0) {
+          if (newValue == 0) {
             init();
           }
           else {

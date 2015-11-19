@@ -22,6 +22,7 @@ taggerContext.factory('Data', function () {
     contentTypesForArea: [],
     tags: [],
     currentTagIndex: null,
+    currentTagAreaId: null,
     collections: [],
     initialCollection: {},
     collectionsTotal: 0,

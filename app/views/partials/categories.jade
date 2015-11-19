@@ -31,12 +31,16 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
               |  information about the current collection and related collections.
             div(flex)
             div(flex)
-              md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCategory()") Update Category
+              md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCategory()") Update Group
             div(flex)
                 p &nbsp;
             md-input-container
               label Collection Name
               input(type="text", ng-model="vm.category.title")
+            md-input-container
+              label Area (mandatory)
+              md-select(ng-model="vm.category.areaId" placeholder="Select an Area (mandatory)")
+                md-option(ng-repeat="area in vm.areas" ng-value="area.id" ng-selected="area.id") {{area.title}}
             md-input-container
               label Description  &nbsp;
                 span(class="md-subhead md-default") maxuimum characters 450 (current {{vm.category.description.length}})
@@ -47,10 +51,7 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
             md-input-container
               label URL
               input(type="text", ng-model="vm.category.url")
-            md-input-container
-              label Area
-              md-select(ng-model="vm.category.areaId" placeholder="Select an Area")
-                md-option(ng-repeat="area in vm.areas" ng-value="area.id" ng-selected="area.id") {{area.title}}
+
 
   md-content( layout="column" flex="25")
 

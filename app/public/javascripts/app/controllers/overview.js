@@ -38,6 +38,12 @@
 
         if (Data.currentAreaIndex !== null) {
 
+          // initialize count checks
+          vm.collectionSearchMatch = (collectionTotal === searchOptionsTotal);
+          vm.collectionTypeMatch = (collectionTotal === collectionTypeTotal);
+          vm.collectionLinksMatch = (collectionTotal === collectionLinksTotal);
+
+
           var categoryCount =
             CategoryCountByArea.query(
               {
@@ -46,8 +52,6 @@
             );
           categoryCount.$promise.then(
             function (categories) {
-              console.log('categories chart');
-              console.log(categories);
               var catCount = 0;
               var data = [];
               for (var i = 0; i < categories.length; i++) {
@@ -60,7 +64,7 @@
                 total: catCount,
                 data: data
               };
-              console.log('setting new categories ' + vm.categoryCounts.total);
+
             });
 
           var contentTypeCount =
@@ -83,12 +87,12 @@
                 total: count,
                 data: data
               };
-              console.log('setting new types ' + vm.typeCounts.total);
+
             });
 
           var subs = TagCountForArea.query({areaId: Data.currentAreaIndex});
           subs.$promise.then(function (data) {
-            console.log('setting new areas in controller');
+
             vm.subjects = data;
           });
 

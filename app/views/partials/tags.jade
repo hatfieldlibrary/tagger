@@ -1,4 +1,4 @@
-md-content(class="transparent" layout="row", style="overflow: auto;" layout-align="start start", flex="100", ng-controller="TagCtrl as vm")
+md-content(class="transparent" layout="column", layout-gt-md="row" style="overflow: auto;" layout-align="start start", flex="100", ng-controller="TagCtrl as vm")
   md-card.flex(flex="100" flex-gt-md="75" style="height: 900px;")
     div(ng-if="vm.tags.$resolved")
     md-toolbar.md_primary
@@ -13,7 +13,7 @@ md-content(class="transparent" layout="row", style="overflow: auto;" layout-alig
     md-card-content
       div(layout="row", layout-align="start start")
         div(flex="20" )
-          md-button(ng-show="vm.userAreaId==0" class="md-raised md-accent" style="margin-top: 15px;" ng-click="vm.showDialog($event, vm.addMessage)") Add Tag
+          md-button(ng-show="vm.userAreaId==0" class="md-raised md-accent responsive-button" style="margin-top: 15px;" ng-click="vm.showDialog($event, vm.addMessage)") Add Tag
           div(layout="column", style="height:750px;")
             md-content(flex ng-show="vm.userAreaId==0")
               md-list
@@ -23,7 +23,7 @@ md-content(class="transparent" layout="row", style="overflow: auto;" layout-alig
                       div(class="list-group-item-text md-subhead layout-fill") {{tag.name}}
                         div.md-ripple-container
                   md-divider
-        md-content(layout="column" layout-padding flex="100" flex-gt-md="80" style="padding-left: 20px;")
+        md-content(layout="column" layout-padding flex="80" flex-gt-md="80" style="padding-left: 20px;")
           div(flex="80" class="md-subhead grey-text")
             span(ng-show="vm.userAreaId==0") Collections can be associated with one or more #[em Subject Tags]. A single Subject Tag can be used across multiple Areas. (A Tag must be assigned to at least one Area.)
             div(style="width: 70%;" ng-show="vm.userAreaId > 0") Add or remove #[em Subject Tags} from your collection area. Note that when you add a tag it may immediately appear in the public display. If you add a tag, be sure to use it by linking it to one or more of your collections.
@@ -39,6 +39,6 @@ md-content(class="transparent" layout="row", style="overflow: auto;" layout-alig
             md-content(flex )
               md-list
                 md-list-item(ng-repeat="tag in vm.tags")
-                  toggle-tag-area-button(flex="100" tag-id="{{tag.id}}", tag-name="{{tag.name}}" , area-id="vm.currentAreaIndex")
-  md-content(class="transparent"  flex="20")
+                  toggle-tag-area-button(flex="100" tag-id="{{tag.id}}", tag-name="{{tag.name}}" , area-id="vm.currentAreaIndex", ng-click="showDialog($event, vm.deleteMessage)")
+  md-content(class="transparent"  flex="100" flex-gt-md="25")
     tag-area-selector(flex ng-show="vm.userAreaId==0")
