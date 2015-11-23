@@ -25,13 +25,12 @@ md-content(class="transparent" layout="column", layout-gt-md="row", layout-align
                       div(class="list-group-item-text md-subhead layout-fill") {{col.Collection.title}}
                         div.md-ripple-container
                   md-divider
-          md-content(ng-if="vm.collectionId > -1" layout-padding flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff;" class="transparent")
+          md-content(ng-if="vm.collectionId > -1" layout-padding layout="column" flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff;" class="transparent")
             div(flex="85" class="md-subhead grey-text")
               span Values must be provided for ALL of the information below, with the exception of coverage dates and item counts, which can be blank.  You can use the default image if none is available. A minimum of one content type and one subject tag should be provided.
             div(flex)
-            md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCollection()") Update
+            md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCollection()") Update Collection
             div(flex)
-              p &nbsp;
             md-input-container
               label Collection Name
               input(type="text", ng-model="vm.collection.title")
@@ -92,8 +91,8 @@ md-content(class="transparent" layout="column", layout-gt-md="row", layout-align
             md-content(layout="column" layout-gt-md="row" flex)
               div(flex="5" )
                 i(class="material-icons" style="margin-top: 20px;color: rgb(63,81,181);") arrow_forward
-              div(flex="95")
-                md-input-container
+              md-content(flex="95")
+                md-input-container(style="width:100%")
                   label {{vm.browseType}}
                   input(type="text", ng-model="vm.collection.url")
           md-content(ng-if="vm.collectionId == -1" layout-padding flex="80" style="padding: 55px;padding-top: 30px;border: 1px solid #ccc;background: #fff;" class="transparent")

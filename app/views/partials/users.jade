@@ -12,15 +12,15 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
       md-card-content
 
       md-list(flex="100")
-        md-list-item(class="md-2-line", flex="100" ng-repeat="user in vm.users")
+        md-list-item(class="md-2-line", layout="row" flex="100" ng-repeat="user in vm.users")
 
           div(flex="5")
           div(flex="25")
             md-input-container
-              input(type="text", ng-model="user.name" aria-label="User name")
+              input(size="40" type="text", ng-model="user.name" aria-label="User name")
           div(flex="25")
             md-input-container
-              input(type="text", ng-model="user.email" aria-label="User email")
+              input(size="40" type="text", ng-model="user.email" aria-label="User email")
           div(flex="25")
             md-input-container
               md-select(ng-model="user.area" aria-label="Area")

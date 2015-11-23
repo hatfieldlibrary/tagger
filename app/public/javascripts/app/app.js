@@ -4,11 +4,11 @@
  */
 var taggerApp = angular.module('taggerApp', [
 
-  'taggerContext',
   'ngMaterial',
   'ngRoute',
   'ngFileUpload',
   'dndLists',
+  'taggerContext',
   'taggerControllers',
   'taggerServices',
   'taggerDirectives'

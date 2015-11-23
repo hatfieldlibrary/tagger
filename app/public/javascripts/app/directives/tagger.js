@@ -195,7 +195,7 @@
       '   </md-toolbar>' +
       '   <md-card-content>' +
       '      <div layout="column" class="md-subhead">Select the Areas in which this Tag will appear.' +
-      '        <md-container>' +
+      '        <md-container layout="column">' +
       '           <md-checkbox ng-repeat="area in areas" aria-label="Areas" value="area.id" ng-checked="isChosen(area.id)" ng-click="showDialog($event, area.id)">{{area.title}}</md-checkbox>' +
       '        </md=container>' +
       '      </div>' +
@@ -308,7 +308,7 @@
     return {
       restrict: 'E',
       scope: {},
-      template: '<md-card>' +
+      template: '<md-content class="transparent"><md-card>' +
       '  <md-toolbar class="md-primary">' +
       '   <div class="md-toolbar-tools">' +
       '     <i class="material-icons"> public </i>' +
@@ -317,12 +317,12 @@
       '   </md-toolbar>' +
       '   <md-card-content>' +
       '      <div layout="column" class="md-subhead">Select the Areas in which this Collection will appear.' +
-      '        <md-container>' +
+      '        <md-container layout="column">' +
       '           <md-checkbox ng-repeat="area in areas" aria-label="Areas" value="area.id" ng-checked=isChosen(area.id) ng-click="update(area.id)">{{area.title}}</md-checkbox>' +
       '        </md=container>' +
       '      </div>' +
       '   </md-content>' +
-      '</md-card>',
+      '</md-card></md-content>',
       controller: function ($rootScope,
                             $scope,
                             AreasForCollection,
@@ -455,7 +455,7 @@
       '         <div layout="column" class="chips">' +
       '           <md-container>' +
       '             <label>Add Type</label>' +
-      '             <md-chips ng-model="typesForCollection" md-autocomplete-snap="" md-require-match="true" md-on-append="addType($chip)" md-on-remove="removeType($chip)">' +
+      '             <md-chips ng-model="typesForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addType($chip)" md-on-remove="removeType($chip)">' +
       '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTypes(searchText)" md-item-text="item.tag">' +
       '                 <span md-highlight-text="searchText"> {{item.name}} </span>' +
       '               </md-autocomplete>' +
@@ -631,7 +631,7 @@
       '         <div layout="column" class="chips">' +
       '           <md-container>' +
       '             <label>Add Tags</label>' +
-      '             <md-chips ng-model="tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-on-append="addTag($chip)" md-on-remove="removeTag($chip)">' +
+      '             <md-chips ng-model="tagsForCollection" md-autocomplete-snap="" md-require-match="true" md-transform-chip="addTag($chip)" md-on-remove="removeTag($chip)">' +
       '               <md-autocomplete md-selected-item="selectedItem" md-min-length="1" md-search-text="searchText" md-no-cache="true" md-items="item in queryTags(searchText)" md-item-text="item.tag">' +
       '                 <span md-highlight-text="searchText"> {{item.Tag.name}} </span>' +
       '               </md-autocomplete>' +
@@ -692,10 +692,8 @@
 
 
         /**
-         * Function called when appending a chip.  The
-         * function adds an new subject association for
-         * the current collection via db call. Toasts on
-         * success.
+         * Function called when appending a chip.  Adds a new subject association
+         * for the collection. Toasts response from the service.
          * @param chip  {Object} $chip
          * @returns {{id: *, name: *}}
          */

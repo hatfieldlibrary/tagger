@@ -28,10 +28,8 @@ md-content(class="transparent" layout="column", layout-gt-md="row" style="overfl
             span(ng-show="vm.userAreaId==0") Collections can be associated with one or more #[em Subject Tags]. A single Subject Tag can be used across multiple Areas. (A Tag must be assigned to at least one Area.)
             div(style="width: 70%;" ng-show="vm.userAreaId > 0") Add or remove #[em Subject Tags} from your collection area. Note that when you add a tag it may immediately appear in the public display. If you add a tag, be sure to use it by linking it to one or more of your collections.
               |  If you delete a tag from this collection area, all references to it will be removed from your collections.
-            div(flex)
-              md-button(ng-show="vm.userAreaId==0" class="md-raised md-accent" style="float:right;" ng-click="vm.updateTag()") Update Tag
-            div(flex)
-              p &nbsp;
+
+          md-button(ng-show="vm.userAreaId==0" class="md-raised md-accent" ng-click="vm.updateTag()") Update Tag
           md-input-container(ng-show="vm.userAreaId==0")
             label Tag Name
             input(type="text", ng-model="vm.tag.name")

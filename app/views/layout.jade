@@ -20,8 +20,7 @@ html
           span(flex)
           md-list(ng-if="vm.userAreaId === 0")
             md-list-item(ng-style="{'display':'inline'}")
-              span.md-subhead Area: &nbsp;
-                md-input-container(class="md-no-float" style="display:inline-block")
+                md-input-container(class="md-no-float")
                   md-select(ng-model="vm.areas" placeholder="Select Area")
                     md-option(ng-repeat="area in vm.areas" ng-selected="vm.currentId == area.id" ng-click="vm.updateArea(area.id, $index)") {{area.title}}
           md-container(ng-if="vm.userAreaId > 0")

@@ -1,7 +1,7 @@
 
 md-content(class="transparent" layout="row", layout-align="start start", flex, ng-controller="CategoryCtrl as vm")
   md-content(class="transparent" layout="column" flex="100" flex-gt-lg="75")
-    md-card.flex(flex, style="height: 990px;")
+    md-card.flex
       div(ng-if="vm.category.$resolved")
       md-toolbar.md_primary
         .md-toolbar-tools
@@ -25,15 +25,11 @@ md-content(class="transparent" layout="row", layout-align="start start", flex, n
                         div(class="list-group-item-text md-subhead layout-fill") {{cat.title}}
                           div.md-ripple-container
                     md-divider
-          md-content(layout-padding flex="80" style="padding-left: 20px;")
+          md-content(layout-padding flex="80" layout="column" style="padding-left: 20px;")
             div(layout-padding flex="100" class="md-subhead grey-text")
               span Collections can belong to a single #[em Collection Group]. A Collection Group provides specific
               |  information about the current collection and related collections.
-            div(flex)
-            div(flex)
-              md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCategory()") Update Group
-            div(flex)
-                p &nbsp;
+            md-button(class="md-raised md-accent" style="float:right;" ng-click="vm.updateCategory()") Update Group
             md-input-container
               label Collection Name
               input(type="text", ng-model="vm.category.title")
