@@ -1,6 +1,6 @@
 #  Tagger
 
-Tagger is an AngularJs, Express, NodeJs application that persists data in a MariaDb relational database.  It provides a public REST API for creating clients that provide
+Tagger is an AngularJs, Express, NodeJs application that persists data in a MariaDb relational database.  It includes a public REST API for creating clients that use
 information about the collections managed in Tagger.
 
 ## Area Overview
