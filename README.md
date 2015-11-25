@@ -4,10 +4,10 @@ Tagger is an AngularJs, Express, NodeJs application that persists data in a Mari
 information about the collections managed in Tagger.
 
 ## Area Overview
-![Area Overview Page](images/docs/overview.png "Area Overview Page")
+![Area Overview Page](app/public/images/docs/overview.png "Area Overview Page")
 
 ## Collections Page
-![Collections Page](images/docs/collections.png "Collections Page")
+![Collections Page](app/public/images/docs/collections.png "Collections Page")
 
 ### Setup
 
