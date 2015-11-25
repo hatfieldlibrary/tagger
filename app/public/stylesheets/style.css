@@ -35,7 +35,11 @@ body {
     margin-left: 0px;
   }
 }
-
+.large-button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
 .nav-item-dimens {
   padding-left: 5px !important;
   min-height: 47px !important;

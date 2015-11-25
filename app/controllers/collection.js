@@ -641,7 +641,7 @@ exports.update = function (req, res) {
             // JSON response
             res.end(JSON.stringify({status: 'success'}));
 
-          }).error(function (err) {
+          }).catch(function (err) {
           console.log(err);
         });
         // If category does exist, update to the current value.
@@ -653,13 +653,15 @@ exports.update = function (req, res) {
             where: {
               CollectionId: id
             }
-          }).then(function () {
-          // JSON response
-          res.end(JSON.stringify({status: 'success'}));
+          }).then(
+          function () {
+            // JSON response
+            res.end(JSON.stringify({status: 'success'}));
 
-        }).error(function (err) {
-          console.log(err);
-        });
+          }).catch(
+          function (err) {
+            console.log(err);
+          });
       }
     });
 
@@ -683,7 +685,7 @@ exports.delete = function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify({status: 'success'}));
-  }).error(function (err) {
+  }).catch(function (err) {
     console.log(err);
   });
 };
@@ -711,7 +713,7 @@ exports.add = function (req, res) {
         }).then(function (coll) {
           newCollectionId = coll.id;
           callback(null, coll);
-        }).error(function (err) {
+        }).catch(function (err) {
           console.log(err);
         });
       },
@@ -721,8 +723,8 @@ exports.add = function (req, res) {
           AreaId: areaId
         }).then(function (result) {
           callback(null, result);
-        }).error(function (err) {
-          console.log(err);
+        }).catch(function (err) {
+          callback(err);
         });
       },
       collections: function (callback) {
@@ -734,12 +736,12 @@ exports.add = function (req, res) {
           order: [[db.Collection, 'title', 'ASC']]
         }).then(function (colls) {
           callback(null, colls);
-        }).error(function (err) {
-          console.log(err);
+        }).catch(function (err) {
+          callback(err);
         });
       }
     }, function (err, results) {
-      if (err !== null) {
+      if (err) {
         console.log(err);
       }
       // JSON response
@@ -785,49 +787,54 @@ exports.updateImage = function (req, res, config) {
   form.parse(req, function (err, fields, files) {
 
     if (files.file !== undefined) {
-      // read in the temp file from the upload
-      fs.readFile(files.file[0].path, function (err, data) {
-        if (err !== null) {
-          console.log(err);
-          res.end();
-        }
-        imageName = files.file[0].originalFilename;
-        id = fields.id;
-        if (!imageName) {
-          res.redirect('/');
-          res.end();
+      try {
+        // read in the temp file from the upload
+        fs.readFile(files.file[0].path, function (err, data) {
+          if (err !== null) {
+            console.log(err);
+            res.end();
+          }
+          imageName = files.file[0].originalFilename;
+          id = fields.id;
+          if (!imageName) {
+            res.redirect('/');
+            res.end();
 
-        } else {
-          // use imagemagick to transform the full image to thumbnail.
-          // write to thumb directory
-          var fullPath = imagePath + '/full/' + imageName;
-          var thumbPath = imagePath + '/thumb/' + imageName;
+          } else {
+            // use imagemagick to transform the full image to thumbnail.
+            // write to thumb directory
+            var fullPath = imagePath + '/full/' + imageName;
+            var thumbPath = imagePath + '/thumb/' + imageName;
+            fs.writeFile(fullPath, data, function (err) {
+              if (err) {
+                console.log(err);
+                res.end();
+              }
+              else {
+                magick.resize({
+                    srcPath: fullPath,
+                    dstPath: thumbPath,
+                    width: 200
 
-          fs.writeFile(fullPath, data, function (err) {
-            if (err) {
-              console.log(err);
-              res.end();
-            }
-            else {
-              magick.resize({
-                  srcPath: fullPath,
-                  dstPath: thumbPath,
-                  width: 200
+                  },
+                  /*jshint unused:false */
+                  function (err, stdout, stderr) {
+                    if (err) {
+                      console.log(err);
+                    }
+                    // update database even if the conversion fails
+                    updateDb(id);
+                  });
+              }
+            });
+          }
 
-                },
-                /*jshint unused:false */
-                function (err, stdout, stderr) {
-                  if (err) {
-                    console.log(err);
-                  }
-                  // update database even if the conversion fails
-                  updateDb(id);
-                });
-            }
-          });
-        }
-      });
+        });
+      } catch (err) {
+        console.log(err);
+      }
     } else {
+      console.log('No image files were received. Aborting upload.')
       res.end();
     }
   });
@@ -848,13 +855,13 @@ exports.updateImage = function (req, res, config) {
         }
       }
       /*jshint unused:false*/
-    ).then(function (err, result) {
+    ).then(function (result) {
         // JSON response
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.end(JSON.stringify({status: 'success'}));
       }
-    ).error(function (err) {
+    ).catch(function (err) {
         console.log(err);
       }
     );
@@ -886,7 +893,7 @@ exports.tagsForCollection = function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(tags));
 
-  }).error(function (err) {
+  }).catch(function (err) {
     console.log(err);
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -918,7 +925,7 @@ exports.typesForCollection = function (req, res) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(types));
     })
-    .error(function (err) {
+    .catch(function (err) {
       console.log(err);
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin', '*');
@@ -942,7 +949,7 @@ exports.allCollections = function (req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(collections));
 
-  }).error(function (err) {
+  }).catch(function (err) {
     console.log(err);
 
   });
@@ -959,31 +966,41 @@ exports.collectionById = function (req, res) {
 
   async.series({
       collection: function (callback) {
+
         db.Collection.find(
           {
             where: {
               id: collId
             }
-          }).then(function (data) {
-          callback(null, data);
-        }).error(function (err) {
-          console.log(err);
-        });
+          }).then(
+          function (data) {
+            callback(null, data);
+          }).catch(
+          function (err) {
+            // trigger  error callback
+            callback(err);
+          });
+
       },
       categories: function (callback) {
+
         db.CategoryTarget.find(
           {
             where: {
               CollectionId: collId
             },
             include: [db.Category]
-          }).then(function (data) {
-          callback(null, data);
-        }).error(function (err) {
-          console.log(err);
-        });
+          }).then(
+          function (data) {
+            callback(null, data);
+          }).catch(
+          function (err) {
+            callback(err);
+          });
+
       },
       itemTypes: function (callback) {
+
         db.ItemContentTarget.findAll(
           {
             where: {
@@ -991,27 +1008,29 @@ exports.collectionById = function (req, res) {
             },
             include: [db.ItemContent]
           }
-        ).then(function (data) {
-          callback(null, data);
-        }).error(function (err) {
-          console.log(err);
-        });
+        ).then(
+          function (data) {
+            callback(null, data);
+          }).catch(
+          function (err) {
+            callback(err);
+          });
       }
-
     },
     function (err, result) {
-      if (err !== null) {
+      if (err) {
         console.log(err);
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
-        res.end(JSON.stringify({status: 'failed'}));
+        res.end(JSON.stringify({status: 'failed', reason: err}));
       } else {
         // JSON response
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.end(JSON.stringify(result));
       }
-    });
+    }
+  );
 
 };
 
@@ -1035,7 +1054,7 @@ exports.collectionsByArea = function (req, res) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(collections));
 
-    }).error(function (err) {
+    }).catch(function (err) {
     console.log(err);
   });
 };
@@ -1063,7 +1082,7 @@ exports.collectionsBySubject = function (req, res) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.end(JSON.stringify(collections));
 
-    }).error(function (err) {
+    }).catch(function (err) {
     console.log(err);
   });
 };
@@ -1117,6 +1136,7 @@ exports.browseList = function (req, res) {
 
     });
   }
+
   // The eXist collections API returns a list of objects.
   var request = http.request(options, handleResponse);
 

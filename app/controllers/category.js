@@ -92,7 +92,7 @@ exports.byId = function( req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
     res.end(JSON.stringify(category));
-  }).error(function(err) {
+  }).catch(function(err) {
     console.log(err);
   });
 
@@ -114,7 +114,7 @@ exports.add = function(req, res ) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
     res.end(JSON.stringify({status: 'success', id: result.id}));
-  }).error(function(err) {
+  }).catch(function(err) {
     console.log(err);
   });
 
@@ -149,7 +149,7 @@ exports.update = function(req, res) {
       res.setHeader('Content-Type', 'application/json');
       res.setHeader('Access-Control-Allow-Origin','*');
       res.end(JSON.stringify({status: 'success'}));
-    }).error(function(err) {
+    }).catch(function(err) {
       console.log(err);
     });
 
@@ -173,7 +173,7 @@ exports.delete = function(req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin','*');
     res.end(JSON.stringify({ status: 'success', id: catId }));
-  }).error(function(err) {
+  }).catch(function(err) {
     console.log(err);
   });
 
