@@ -1,5 +1,6 @@
 var path = require('path'),
   rootPath = path.normalize(__dirname + '/../app' ),
+  credentials = require('./credentials');
   env = process.env.NODE_ENV || 'development';
 
 var config = {
@@ -9,13 +10,13 @@ var config = {
     app: {
       name: 'acomtags'
     },
-    uid: 'mspalti',
-    gid: 'staff',
+    uid: credentials.develuid,
+    gid: credentials.develgid,
     port: 3000,
     mysql: {
       db: 'acomtags_development',
-      user: 'mspalti',
-      password: 'coffee',
+      user: credentials.develdbuser,
+      password: credentials.develdbpassword,
       host: 'localhost',
       port: 3306,
       dialect: 'mysql'
@@ -25,8 +26,8 @@ var config = {
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
     adminPath: '/views',
-    googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-    googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+    googleClientId: credentials.googleClientId,
+    googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
     nodeEnv: env
   },
@@ -36,13 +37,13 @@ var config = {
     app: {
       name: 'acomtags'
     },
-    uid: 'mspalti',
-    gid: 'staff',
+    uid: credentials.develuid,
+    gid: credentials.develgid,
     port: 3000,
     mysql: {
       db: 'acomtags_development',
-      user: 'mspalti',
-      password: 'coffee',
+      user: credentials.develdbuser,
+      password: credentials.develdbpassword,
       host: 'localhost',
       port: 3306,
       dialect: 'mysql'
@@ -52,8 +53,8 @@ var config = {
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/usr/local/taggerImages',
     adminPath: '/views',
-    googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-    googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+    googleClientId: credentials.googleClientId,
+    googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
     nodeEnv: env
   },
@@ -63,13 +64,13 @@ var config = {
     app: {
       name: 'acomtags'
     },
-    uid: 'mspalti',
-    gid: 'staff',
+    uid: credentials.develuid,
+    gid: credentials.develgid,
     port: 3000,
     mysql: {
       db: 'acomtags_test',
-      user: 'mspalti',
-      password: 'coffee',
+      user: credentials.develdbuser,
+      password: credentials.develdbpassword,
       host: 'localhost',
       port: 3306,
       dialect: 'mysql'
@@ -79,8 +80,8 @@ var config = {
     identify: '/usr/local/bin/identify',
     taggerImageDir: '/var/taggerImages',
     adminPath: '/views',
-    googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-    googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
+    googleClientId: credentials.googleClientId,
+    googleClientSecret: credentials.googleClientSecret,
     googleCallback: 'http://localhost:3000/auth/google/callback',
     nodeEnv: env
   },
@@ -91,15 +92,15 @@ var config = {
       name: 'acomtags'
     },
     sync: { force: false },
-    uid: 'node',
-    gid: 'node',
+    uid: credentials.uid,
+    gid: credentials.gid,
     port: 3000,
     redisPort: 6379,
     mysql: {
       db: 'acomtags',
-      user: 'tagger',
-      password: 'c0fFee12',
-      host: 'libdb.willamette.edu',
+      user: credentials.user,
+      password: credentials.password,
+      host: credentials.productiondbhost,
       port: 3306,
       dialect: 'mariadb'
     },
@@ -107,9 +108,9 @@ var config = {
     identify: '/usr/bin/identify',
     taggerImageDir: '/var/taggerImages',
     adminPath: '/views',
-    googleClientId: '85240803633-enf8ou7eg3cvu77c7qv6ns86v733mse2.apps.googleusercontent.com',
-    googleClientSecret: 'x9zgRgnwRJaSk_r8LlQX2Lji',
-    googleCallback: 'http://libapps.willamette.edu:3000/auth/google/callback',
+    googleClientId: credentials.googleClientId,
+    googleClientSecret: credentials.googleClientSecret,
+    googleCallback: credentials.googleCallback,
     nodeEnv: env
   }
 };
