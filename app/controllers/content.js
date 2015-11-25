@@ -22,7 +22,7 @@ exports.byId = function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(type));
-  }).error(function (err) {
+  }).catch(function (err) {
     console.log(err);
   });
 
@@ -43,7 +43,7 @@ exports.list = function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(types));
-  }).error(function (err) {
+  }).catch(function (err) {
     console.log(err);
   });
 
@@ -99,8 +99,8 @@ exports.add = function (req, res) {
         ).then(function(result) {
           callback(null, result);
         })
-          .error(function (err) {
-            console.log(err);
+          .catch(function (err) {
+            callback(err);
           });
       }
     },
@@ -118,12 +118,11 @@ exports.add = function (req, res) {
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.end(JSON.stringify({status: 'success', id: result.id}));
           })
-          .error(function (err) {
+          .catch(function (err) {
             console.log(err);
           });
 
       } else {
-
         // JSON response
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
@@ -159,7 +158,7 @@ exports.update = function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify({status: 'success'}));
-  }).error(function (err) {
+  }).catch(function (err) {
     console.log(err);
   });
 };
@@ -185,7 +184,7 @@ exports.delete = function (req, res) {
     res.end(JSON.stringify({status: 'success'}));
 
   }).
-  error(function (err) {
+  catch(function (err) {
     console.log(err);
   });
 

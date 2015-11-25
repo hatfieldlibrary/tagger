@@ -57,7 +57,7 @@
       .then(function (result) {
         addArea(result.length + 1);
       })
-      .error(function (err) {
+      .catch(function (err) {
         console.log(err);
       });
 
@@ -69,7 +69,7 @@
         res.setHeader('Content-Type', 'application/json');
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.end(JSON.stringify({status: 'success'}));
-      }).error(function (err) {
+      }).catch(function (err) {
         console.log(err);
       });
     }
@@ -164,7 +164,7 @@
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.end(JSON.stringify({status: 'success'}));
       })
-      .error(function (err) {
+      .catch(function (err) {
         console.log(err);
       });
 

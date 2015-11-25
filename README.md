@@ -1,10 +1,13 @@
-# AngularJS - Express Collection Tagger
+#  Tagger
 
-The Express application associates tags with collection information.  It includes a REST API for retrieving tag and collection information via JSON.
-Two additional REST services are included: one for retrieving items from CONTENTdm and a second for retreiving communities from DSpace.
+Tagger is an AngularJs, Express, NodeJs application that persists data in a MariaDb relational database.  It provides a public REST API for creating clients that provide
+information about the collections managed in Tagger.
 
-The public AngularJS module is the Academic Commons web site.
+## Area Overview
+![Area Overview Page](images/docs/overview.png "Area Overview Page")
 
+## Collections Page
+![Collections Page](images/docs/collections.png "Collections Page")
 
 ### Setup
 

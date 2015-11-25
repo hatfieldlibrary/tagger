@@ -78,7 +78,7 @@ exports.getAreaTargets = function (req, res) {
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.end(JSON.stringify(areas));
-  }).error(function (err) {
+  }).catch(function (err) {
     console.log(err);
   });
 };
@@ -110,12 +110,15 @@ exports.addTarget = function (req, res) {
           }).then(function (result) {
             callback(null, result);
           })
-          .error(function (err) {
-            console.log(err);
+          .catch(function (err) {
+            callback(err);
           });
       }
     },
     function (err, result) {
+      if(err) {
+        console.log(err);
+      }
       // if new
       if (result.check === null) {
         addArea(tagId, areaId, res);
@@ -134,7 +137,7 @@ exports.addTarget = function (req, res) {
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Access-Control-Allow-Origin', '*');
           res.end(JSON.stringify({status: 'exists', areaTargets: areas}));
-        }).error(function (err) {
+        }).catch(function (err) {
           console.log(err);
         });
       }

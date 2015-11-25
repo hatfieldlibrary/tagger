@@ -104,22 +104,24 @@
           vm.areas = data;
           Data.areas = data;
 
-          Data.areaLabel = data[0].title;
-          vm.currentId = data[0].id;
-          // Initialize current area to first item
-          // in the data array.
+          if (data.length > 0) {
+            Data.areaLabel = data[0].title;
+            vm.currentId = data[0].id;
+            // Initialize current area to first item
+            // in the data array.
 
-          if (Data.currentAreaIndex === null) {
-            Data.currentAreaIndex = data[0].id;
+            if (Data.currentAreaIndex === null) {
+              Data.currentAreaIndex = data[0].id;
 
-          }
-          if (Data.userAreaId === 0) {
-            if (Data.areas.length > 0) {
-              Data.currentAreaIndex = Data.areas[0].id;
             }
+            if (Data.userAreaId === 0) {
+              if (Data.areas.length > 0) {
+                Data.currentAreaIndex = Data.areas[0].id;
+              }
+            }
+            getAreaLabel(Data.currentAreaIndex);
+            setContext(Data.currentAreaIndex);
           }
-          getAreaLabel(Data.currentAreaIndex);
-          setContext(Data.currentAreaIndex);
 
         });
       };
