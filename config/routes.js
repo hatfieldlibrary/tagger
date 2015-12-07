@@ -89,7 +89,7 @@ module.exports = function(app,config,passport){
 
   // TAGS
   app.use('/rest/tag/byId/:id', ensureAuthenticated, tag.byId);
-  app.use('/rest/tag/show/list', ensureAuthenticated, tag.list);
+  app.use('/rest/tag/show/list', tag.list);
   app.use('/rest/tags/byArea/:areaId', ensureAuthenticated, tag.tagByArea);
   app.post('/rest/tag/add', ensureAuthenticated, tag.add);
   app.post('/rest/tag/delete', ensureAuthenticated, tag.delete);
@@ -111,6 +111,7 @@ module.exports = function(app,config,passport){
   app.use('/rest/collections/all',          collection.allCollections);
   app.use('/rest/collection/byArea/:id',    collection.collectionsByArea);
   app.use('/rest/collection/bySubject/:id/area/:areaId', collection.collectionsBySubject);
+  app.use('/rest/collection/bySubject/:id', collection.allCollectionsBySubject);
   app.use('/rest/subjects/byArea/:id',      tag.subjectsByArea);
   app.use('/rest/collection/tags/:id',   collection.tagsForCollection);
   app.use('/rest/collection/types/:id',   collection.typesForCollection);

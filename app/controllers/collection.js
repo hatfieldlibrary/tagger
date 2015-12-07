@@ -38,7 +38,7 @@ exports.browseTypesByArea = function (req, res) {
 
   var areaId = req.params.areaId;
 
-  db.sequelize.query('select Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
+  db.sequelize.query('SELECT Collections.browseType, COUNT(Collections.id) as count from AreaTargets ' +
     'join Collections on AreaTargets.CollectionId=Collections.id where AreaTargets.AreaId = ? group by Collections.browseType',
     {
       replacements: [areaId],
@@ -834,7 +834,7 @@ exports.updateImage = function (req, res, config) {
         console.log(err);
       }
     } else {
-      console.log('No image files were received. Aborting upload.')
+      console.log('No image files were received. Aborting upload.');
       res.end();
     }
   });
@@ -940,8 +940,8 @@ exports.typesForCollection = function (req, res) {
  * @param res
  */
 exports.allCollections = function (req, res) {
+
   db.Collection.findAll({
-    attributes: ['id', 'title'],
     order: [['title', 'ASC']]
   }).then(function (collections) {
     // JSON response
@@ -1075,6 +1075,31 @@ exports.collectionsBySubject = function (req, res) {
     {
       replacements: [subjectId, areaId],
       type: db.Sequelize.QueryTypes.SELECT
+    }).then(
+    function (collections) {
+      // JSON response
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.end(JSON.stringify(collections));
+
+    }).catch(function (err) {
+    console.log(err);
+  });
+};
+
+/**
+ * Retrieves collections by subject (from all areas)
+ */
+exports.allCollectionsBySubject = function (req, res) {
+
+  var subjectId = req.params.id;
+
+  db.sequelize.query('Select * from TagTargets tt LEFT JOIN Tags t on tt.TagId = t.id LEFT JOIN Collections c ' +
+    'on tt.CollectionId = c.id where tt.TagId = ? order by c.title',
+    {
+      replacements: [subjectId],
+      type: db.Sequelize.QueryTypes.SELECT
+
     }).then(
     function (collections) {
       // JSON response
