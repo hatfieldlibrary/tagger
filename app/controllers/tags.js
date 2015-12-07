@@ -62,7 +62,6 @@ exports.byId = function(req, res) {
  */
 exports.tagByArea = function (req, res) {
 
-
   var areaId = req.params.areaId;
 
   db.TagAreaTarget.findAll( {
