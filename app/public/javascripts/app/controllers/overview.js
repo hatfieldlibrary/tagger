@@ -104,16 +104,19 @@
       };
 
       /**
-       * Watch for updates to the area label.  Assures changes in LayoutCtrl
-       * are registered here.
+       * Watch for updates to the area label.  Assures that initialization and
+       * area context switches are recognized.
        */
       $scope.$watch(function() { return Data.areaLabel;},
-        function() {
-          vm.areaLabel = Data.areaLabel;
+        function(newValue) {
+          if (newValue.length > 0) {
+            console.log('new area label ' + newValue);
+            vm.areaLabel = newValue;
+          }
         });
 
       /**
-       * Watch for changes in the shared area id and initialize
+       * Watch for changes in the current area id and initialize
        * the view model.
        */
       $scope.$watch(function() {return Data.currentAreaIndex;},

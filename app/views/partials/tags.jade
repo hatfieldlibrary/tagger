@@ -1,13 +1,14 @@
 md-content(class="transparent" layout="column", layout-gt-md="row" style="overflow: auto;" layout-align="start start", flex="100", ng-controller="TagCtrl as vm")
   md-card.flex(flex="100" flex-gt-md="75" style="height: 900px;")
-    div(ng-if="vm.tags.$resolved")
+
     md-toolbar.md_primary
       .md-toolbar-tools
         span(flex="20")
           i.material-icons link
           span.md-subhead &nbsp;TAGS
         span(flex="70")
-          h2.md-display-2 {{vm.tag.name}}
+          h2(ng-if="vm.userAreaId==0").md-display-2 {{vm.tag.name}}
+          h2(ng-if="vm.userAreaId>0").md-display-2 {{vm.areaLabel}}
         span(flex)
         md-button(ng-show="vm.userAreaId==0" class="md-warn md-raised md-fab md-mini" aria-label="Delete Tag" ng-click="vm.showDialog($event, vm.deleteMessage)") <i class="material-icons">delete</i>
 
