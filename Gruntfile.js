@@ -360,13 +360,13 @@ module.exports = function (grunt) {
       done();
     }, 500);
   });
-  grunt.registerTask('serverTest', function() {
-     grunt.task.run([
-      'env:test',
-      'mocha'
-    ]);
-  });
-  grunt.registerTask('test', ['karma']);
+  //grunt.registerTask('serverTest', function() {
+  //   grunt.task.run([
+  //    'env:test',
+  //    'mocha'
+  //  ]);
+  //});
+  //grunt.registerTask('test', ['karma']);
   grunt.registerTask('bower-install', ['bowerInstall']);
   grunt.registerTask('validate-js', ['jshint']);
  // grunt.registerTask('compile-sass', ['sass']);
@@ -388,14 +388,14 @@ module.exports = function (grunt) {
       'watch'
     ]);
   });
-  grunt.registerTask('runlocal', function() {
-    grunt.task.run([
-      'clean:server',
-      'express:runlocal',
-      'open',
-      'watch'
-    ]);
-  });
+  //grunt.registerTask('runlocal', function() {
+  //  grunt.task.run([
+  //    'clean:server',
+  //    'express:runlocal',
+  //    'open',
+  //    'watch'
+  //  ]);
+  //});
 
   /**
    * To publish the application, copy the entire project

@@ -56,8 +56,8 @@
           tagName: '@'
         },
         template: '<div style="width: 20%;float:left;">' +
-        '   <md-button class="{{buttonClass}} md-raised md-fab md-mini"  ng-click="showDialog($event, tagId);">' +
-        '     <i class="material-icons">{{buttonIcon}}</i>' +
+        '   <md-button class="{{buttonClass}} md-raised"  ng-click="showDialog($event, tagId);">' +
+        '     {{buttonText}}' +
         '     <div class="md-ripple-container"></div>' +
         '   </md-button>' +
         '</div>' +
@@ -119,10 +119,12 @@
             if (findArea(Data.currentAreaIndex, targetList)) {
               scope.buttonClass = 'md-warn';
               scope.buttonIcon = 'clear';
+              scope.buttonText = 'Remove';
               scope.textClass = 'grey-label';
             } else {
               scope.textClass = 'grey-item';
               scope.buttonClass = 'md-accent';
+              scope.buttonText = 'Add';
               scope.buttonIcon = 'add';
             }
           };

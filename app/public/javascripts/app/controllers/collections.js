@@ -155,6 +155,7 @@
 
       };
 
+
       /**
        * Sets vm.browseType string for choosing the URL label.
        * @param type array index
@@ -188,6 +189,7 @@
       $scope.$watch(function() {
          return Data.currentAreaIndex;
       }, function(newValue, oldValue) {
+
 
         if (newValue !== oldValue) {
           var cats = CategoryByArea.query({areaId: newValue});

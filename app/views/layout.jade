@@ -10,7 +10,7 @@ html
     base(href="/admin/")
 
   body(ng-cloak ng-controller="LayoutCtrl as vm")
-    div(layout-fill)&attributes({layout:"column"})
+    div(layout-fill)&attributes({layout: "column"})
       md-toolbar()
         div.md-toolbar-tools
           md-button(class="md-icon-button", style="padding-top: 8px;", aria-label="Settings" ng-click="vm.toggleLeft()",  hide-gt-md="true")
@@ -20,12 +20,13 @@ html
           span(flex)
           md-list(ng-if="vm.userAreaId === 0")
             md-list-item(ng-style="{'display':'inline'}")
-                md-input-container(class="md-no-float")
-                  md-select(ng-model="vm.areas" placeholder="Select Area")
-                    md-option(ng-repeat="area in vm.areas" ng-selected="vm.currentId == area.id" ng-click="vm.updateArea(area.id, $index)") {{area.title}}
+              md-input-container(class="md-no-float")
+                md-select(ng-model="vm.areas" placeholder="Select Area")
+                  md-option(ng-repeat="area in vm.areas" ng-selected="vm.currentId == area.id" ng-click="vm.updateArea(area.id, $index)") {{area.title}}
           md-container(ng-if="vm.userAreaId > 0")
             span.md-subhead Area: &nbsp;  {{vm.areaLabel}}
       div(layout="row" flex class="view-container")
+
         if user
           md-sidenav(style="height: 650px" class="md-sidenav-left transparent", flex="5", md-component-id="left", md-is-locked-open="$mdMedia('gt-md')")
             md-toolbar(class="md-default-theme")
@@ -33,10 +34,17 @@ html
                 md-card-content(style="padding-left: 12px;")
                   md-list
                     md-list-item.contact-item
+
+                      // Passport login provides picture from Google profile
                       img.md-avatar(src="#{picture}")
+
                     md-list-item(ng-controller="AuthorizedCtrl as vm")
+                      // The user and areaId are also from passport login.
+                      // Passing the areaId to the controller will initialize
+                      // the application context.
                       div.md-subhead #{user}
                         .md-caption(elem-ready="vm.getRole(#{areaId})") {{vm.role}}
+
             md-content.transparent
               md-list
                 md-list-item(hide-gt-md="true")
