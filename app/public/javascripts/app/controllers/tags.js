@@ -57,16 +57,13 @@
 
       vm.areaLabel = Data.areaLabel;
 
-      var init = function() {
-        vm.userAreaId = Data.userAreaId;
-        vm.tags = Data.tags;
-        vm.tag = Data.tags[0];
-        if (vm.tag) {
-          vm.currentTag = vm.tag.id;
-        }
-      };
 
-      init();
+      vm.userAreaId = Data.userAreaId;
+      vm.tags = Data.tags;
+      vm.tag = Data.tags[0];
+      if (vm.tag) {
+        vm.currentTag = vm.tag.id;
+      }
 
       /**
        * Watch for updates to the area label.  Assures changes in LayoutCtrl

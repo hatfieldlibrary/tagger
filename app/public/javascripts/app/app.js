@@ -9,6 +9,7 @@ var taggerApp = angular.module('taggerApp', [
   'ngFileUpload',
   'dndLists',
   'taggerContext',
+  'taggerEnvironment',
   'taggerControllers',
   'taggerServices',
   'taggerDirectives'
@@ -19,19 +20,6 @@ var taggerApp = angular.module('taggerApp', [
 // This will prevent things like host and path existing
 // in the global scope.
 (function () {
-
-
-  /**
-   * Set the host URL and port for the Tagger API service. The restHost AngularJs
-   * Value will be injected into ngResource factories. See services/tagger.js.
-   */
-   // choose development or production
-    var host = 'http://localhost:3000',
-    path = 'rest';
-   // var host = 'http://libapps.willamette.edu:3000',
-   // path = 'rest';
-
-  taggerApp.value('restHost', host + '/' + path + '/');
 
 
 // configure the route provider
