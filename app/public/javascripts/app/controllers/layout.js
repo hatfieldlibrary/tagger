@@ -111,7 +111,7 @@
 
             if (newValue !== oldValue) {
 
-             var areas = AreaList.query();
+              var areas = AreaList.query();
 
               areas.$promise.then(function (data) {
 
@@ -140,11 +140,26 @@
        * Convenience method for initialization.
        */
       function initializeApp(userAreaId) {
-        // The area label for views.
-        getAreaLabel(userAreaId);
+
+        vm.areaLabel = getAreaLabel(userAreaId);
+        Data.areaLabel = vm.areaLabel;
         // Continue initialization.
         setContext(userAreaId);
       };
+
+
+      /**
+       * Look up area label at initialization.
+       * @param id  the area id
+       */
+      function getAreaLabel(id) {
+        for (var i = 0; i < Data.areas.length; i++) {
+          if (Data.areas[i].id === id) {
+            return Data.areas[i].title;
+          }
+        }
+        return;
+      }
 
       /**
        * Update the current area.
@@ -153,10 +168,13 @@
        *          current area array
        */
       vm.updateArea = function (id, index) {
-        // update area id after user input
-        Data.currentAreaIndex = id;
-        Data.areaLabel = Data.areas[index].title;
-        updateAreaContext(id);
+        if (Data.userAreaId === 0) { // admin user
+          // update area id after user input
+          Data.currentAreaIndex = id;
+          Data.areaLabel = Data.areas[index].title;
+          updateAreaContext(id);
+        }
+
 
       };
 
@@ -268,8 +286,11 @@
       $scope.$watch(function () {
           return Data.areas;
         },
-        function (newValue) {
-          if (newValue.length > 0) {
+        function (newValue, oldValue) {
+          // Verify that the list is being update rather
+          // than initialized for the first time.
+          if (oldValue.length > 0) {
+            console.log('got new area list');
             vm.currentId = Data.areas[0].id;
             vm.areas = newValue;
             Data.areaLabel = Data.areas[0].title;
@@ -279,20 +300,6 @@
 
         });
 
-
-      /**
-       * Look up area label.
-       * @param id  the area id
-       */
-      function getAreaLabel(id) {
-        for (var i = 0; i < Data.areas.length; i++) {
-          if (Data.areas[i].id === id) {
-            Data.areaLabel = Data.areas[i].title;
-            vm.areaLabel = Data.areas[i].title;
-            return;
-          }
-        }
-      }
 
       /**
        * Administrators will be assigned to the non-existing
