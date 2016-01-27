@@ -35,15 +35,8 @@
 
       var vm = this;
 
-      /** @type {Array.<Object>} */
-      vm.tags = [];
-
-      /** @type {Object} */
-      vm.tag = {};
-
       /** @type {number} */
       vm.currentTag = 10000;
-
 
       /** @type {number} */
       vm.userAreaId = Data.userAreaId;
@@ -55,13 +48,20 @@
       /** @type {string} */
       vm.deleteMessage = 'templates/deleteTagMessage.html';
 
+      /** @type {string} */
       vm.areaLabel = Data.areaLabel;
 
-
+      /** @type {number} */
       vm.userAreaId = Data.userAreaId;
+
+      /** @type {Array.<Object>} */
       vm.tags = Data.tags;
+
+      /** @type {Object} */
       vm.tag = Data.tags[0];
+
       if (vm.tag) {
+        /** @type {number} */
         vm.currentTag = vm.tag.id;
       }
 

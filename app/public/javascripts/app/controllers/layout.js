@@ -91,20 +91,60 @@
       vm.toggleLeft = buildDelayedToggler('left');
 
       /**
-       * Initialize the areas.
+       * Watches for update to the user's area. Data.userAreaId should change
+       * only when the app is loaded.  The value is obtained in the Passport
+       * OAUTH login procedure and is used here to initialize state.
        */
-      var init = function () {
-        var areas = AreaList.query();
+      $scope.$watch(function () {
+          return Data.userAreaId;
+        },
+        function (newValue, oldValue) {
 
-        areas.$promise.then(function (data) {
+          // In initial state, userAreaId is null (object).
+          if (typeof(newValue) === 'number') {
 
-          vm.areas = data;
-          Data.areas = data;
+            console.log('initializing the application');
 
+            // The userAreaId can be zero (administrator).
+            // Set the view model user area id before continuing.
+            vm.userAreaId = newValue;
+
+            if (newValue !== oldValue) {
+
+             var areas = AreaList.query();
+
+              areas.$promise.then(function (data) {
+
+                vm.areas = data;
+                Data.areas = data;
+
+                // Assure we have a non-zero area id.
+                // For the admin user, this method will
+                // return the id of the first area.
+                var actualId = setAreaId(newValue);
+
+                // Continue updating the context using
+                // the area id.
+                Data.currentAreaIndex = actualId;
+                vm.currentId = actualId;
+                initializeApp(actualId)
+
+              });
+
+            }
+          }
 
         });
+
+      /**
+       * Convenience method for initialization.
+       */
+      function initializeApp(userAreaId) {
+        // The area label for views.
+        getAreaLabel(userAreaId);
+        // Continue initialization.
+        setContext(userAreaId);
       };
-      init();
 
       /**
        * Update the current area.
@@ -217,48 +257,6 @@
           });
         }
       }
-
-      /**
-       * Sets the view model's user id and
-       * initializes the application state for
-       * the corresponding area. If the user id
-       * is 0 (the administrator) initialize context using
-       * the id of the first area in the current
-       * area list.
-       */
-      $scope.$watch(function () {
-          return Data.userAreaId;
-        },
-        function (newValue, oldValue) {
-
-          // In initial state, userAreaId is null (object).
-          if (typeof(newValue) === 'number') {
-
-            // The userAreaId can be zero (administrator).
-            // Capture it here.
-            vm.userAreaId = newValue;
-
-            if (newValue !== oldValue) {
-
-              // Assure we have a non-zero area id.
-              // For the admin user, this method will
-              // return the id of the first area.
-              newValue = setAreaId(newValue);
-              // Continue updating the context using
-              // the area id.
-              Data.currentAreaIndex = newValue;
-              vm.currentId = newValue;
-              if (Data.areas.length > 0) {
-                // The area label for views.
-                getAreaLabel(newValue);
-                // Continue initialization.
-                setContext(newValue);
-
-              }
-            }
-          }
-
-        });
 
 
       /**
