@@ -2,7 +2,9 @@
 md-content(class="transparent" layout="column", layout-gt-md="row", layout-align="start start",  ng-controller="CollectionCtrl as vm")
   md-content( layout="column" flex="100" flex-gt-md="75" class="transparent")
     md-card.flex(flex, class="primary-content" style="background: #EAEAE6;")
+
       div(ng-if="vm.collectionList.$resolved")
+
       md-toolbar.md_primary
         .md-toolbar-tools
           span(flex="25")

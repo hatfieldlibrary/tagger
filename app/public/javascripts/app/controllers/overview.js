@@ -103,6 +103,8 @@
         }
       };
 
+      vm.areaLabel = Data.areaLabel;
+      console.log('Overview area label ' + vm.areaLabel)
       /**
        * Watch for updates to the area label.  Assures changes in LayoutCtrl
        * are registered here.
@@ -110,6 +112,7 @@
       $scope.$watch(function() { return Data.areaLabel;},
         function() {
           vm.areaLabel = Data.areaLabel;
+          console.log('overview area label changed to ' + vm.areaLabel);
         });
 
       /**

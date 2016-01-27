@@ -25,14 +25,17 @@
        * @param areaId the current area id
        */
       vm.getRole = function (areaId) {
+
+        console.log('area id is ' + areaId);
+
         // update the app state
         Data.userAreaId = areaId;
         // set the string
         vm.role = getUserRole(areaId);
         // set area default for non-admin user
-        if (areaId > 0) {
+       // if (areaId > 0) {
           Data.currentAreaIndex = areaId;
-        }
+        //}
       };
 
       /**

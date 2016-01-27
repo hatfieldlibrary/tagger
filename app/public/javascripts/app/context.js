@@ -34,7 +34,7 @@ taggerContext.factory('Data', function () {
     tagsForArea: [],
     tagsForCollection: [],
     typesForCollection: [],
-    userAreaId: 0
+    userAreaId: null
   };
 });
 

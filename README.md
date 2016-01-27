@@ -107,7 +107,9 @@ The AngularJS application is compiled using `grunt publish` and copied to the `d
 
 ### Production
 
-First, make sure nodejs is installed on the server. It's wise to use the identical nodejs version that you are using in your development environment.
+The procedure for deploying the application is basic and a bit cumbersome.  We are on the lookout for a better strategy.
+
+First, the prerequisites: make sure nodejs is installed on the server. It's wise to use the identical nodejs version that you are using in your development environment.
 
 You need to decide how to manage the application runtime on your server. Currently, we use the `forever` CLI to launch and keep the Express application online. Install `forever` globally as follows:
 
@@ -120,7 +122,8 @@ Create a `node` user on the system. Next, verify that your init.d startup script
 The following deployment assumes that you have previously built and tested the application on your development machine. 
 
    1. Copy the project to a location on the server. If you know what you are doing, you can omit unnecessary development files.
-   2. Edit the details of the production environment in `config/environment.js`, including database access credentials, paths, and Google OAUTH2 credentials. 
+   2. Edit the details of the production environment in `config/credentials.js` and `config/environment.js`, including database access credentials, paths, and Google OAUTH2 credentials.
+   3. Update the AngularJs app (app.js) to use the correct host and path to REST the services.
    3. Set the owner and group for project all files (including .* files) to the `node` user.  
    4. Start `forever` via the init.d script (e.g. /sbin/service acomtagger start). If you are updating an existing installation, you should stop `forever` before replacing code and start again after the changes are made.
 

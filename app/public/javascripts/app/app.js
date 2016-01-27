@@ -24,18 +24,13 @@ var taggerApp = angular.module('taggerApp', [
   /**
    * Set the host URL and port for the Tagger API service. The restHost AngularJs
    * Value will be injected into ngResource factories. See services/tagger.js.
-   *
-   * -- example for localhost
-   * host = 'http://localhost:3000'
-   * path = 'rest'
-   *
-   * -- example production host
-   * host = 'http://libmedia.willamette.edu'
-   * path = 'acomrest2'
-   *
    */
-  var host = 'http://localhost:3000';
-  var path = 'rest';
+   // choose development or production
+    var host = 'http://localhost:3000',
+    path = 'rest';
+   // var host = 'http://libapps.willamette.edu:3000',
+   // path = 'rest';
+
   taggerApp.value('restHost', host + '/' + path + '/');
 
 

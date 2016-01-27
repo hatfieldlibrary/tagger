@@ -1,5 +1,4 @@
-
-(function() {
+(function () {
 
   'use strict';
 
@@ -27,22 +26,20 @@
     'TagList',
     'TagsForArea',
     'Data',
-    function(
-
-      $scope,
-      $timeout,
-      $mdSidenav,
-      $log,
-      AreaList,
-      CollectionsByArea,
-      TagsForCollection,
-      TypesForCollection,
-      CategoryList,
-      CategoryByArea,
-      ContentTypeList,
-      TagList,
-      TagsForArea,
-      Data ) {
+    function ($scope,
+              $timeout,
+              $mdSidenav,
+              $log,
+              AreaList,
+              CollectionsByArea,
+              TagsForCollection,
+              TypesForCollection,
+              CategoryList,
+              CategoryByArea,
+              ContentTypeList,
+              TagList,
+              TagsForArea,
+              Data) {
 
       var vm = this;
 
@@ -50,7 +47,7 @@
       vm.currentIndex = 0;
 
       /** @type {Array.<Object>} */
-      vm.areas = [{title:'a', id:0}];
+      vm.areas = [{title: 'a', id: 0}];
 
       /** @type {number} */
       vm.currentId = 0;
@@ -70,7 +67,7 @@
           var context = $scope,
             args = Array.prototype.slice.call(arguments);
           $timeout.cancel(timer);
-          timer = $timeout(function() {
+          timer = $timeout(function () {
             timer = undefined;
             func.apply(context, args);
           }, wait || 10);
@@ -82,7 +79,7 @@
        * report completion in console
        */
       function buildDelayedToggler(navID) {
-        return debounce(function() {
+        return debounce(function () {
           $mdSidenav(navID)
             .toggle()
             .then(function () {
@@ -93,38 +90,21 @@
 
       vm.toggleLeft = buildDelayedToggler('left');
 
-      var init = function() {
+      /**
+       * Initialize the areas.
+       */
+      var init = function () {
         var areas = AreaList.query();
-        /**
-         * Upon resolution, set the area data and call
-         * the context initialization method setContext()
-         */
+
         areas.$promise.then(function (data) {
 
           vm.areas = data;
           Data.areas = data;
 
-          if (data.length > 0) {
-            Data.areaLabel = data[0].title;
-            vm.currentId = data[0].id;
-            // Initialize current area to first item
-            // in the data array.
-
-            if (Data.currentAreaIndex === null) {
-              Data.currentAreaIndex = data[0].id;
-
-            }
-            if (Data.userAreaId === 0) {
-              if (Data.areas.length > 0) {
-                Data.currentAreaIndex = Data.areas[0].id;
-              }
-            }
-            getAreaLabel(Data.currentAreaIndex);
-            setContext(Data.currentAreaIndex);
-          }
 
         });
       };
+      init();
 
       /**
        * Update the current area.
@@ -132,7 +112,7 @@
        * @param index the position of the area in the
        *          current area array
        */
-      vm.updateArea = function(id, index) {
+      vm.updateArea = function (id, index) {
         // update area id after user input
         Data.currentAreaIndex = id;
         Data.areaLabel = Data.areas[index].title;
@@ -140,7 +120,11 @@
 
       };
 
-      vm.setCurrentIndex = function(index) {
+      /**
+       * Set the selected option index.
+       * @param index
+       */
+      vm.setCurrentIndex = function (index) {
         vm.currentIndex = index;
 
       };
@@ -152,7 +136,8 @@
        */
       function setContext(id) {
 
-        if (id !== null && id !== undefined) {
+        if (typeof(id) === 'number') {
+
           // Initialize global categories.
           var categories = CategoryList.query();
           categories.$promise.then(function (data) {
@@ -164,6 +149,7 @@
           var tags = TagList.query();
           tags.$promise.then(function (data) {
             if (data.length > 0) {
+
               Data.tags = data;
               Data.currentTagIndex = data[0].id;
             }
@@ -178,9 +164,10 @@
             }
 
           });
-        }
 
-        updateAreaContext(id);
+          updateAreaContext(id);
+
+        }
 
       }
 
@@ -191,7 +178,7 @@
        */
       function updateAreaContext(id) {
 
-        if (id !== null && id !== undefined) {
+        if (typeof(id) === 'number') {
           // Set collections for area collections.
           var collections = CollectionsByArea.query({areaId: id});
           collections.$promise.then(function (data) {
@@ -206,7 +193,7 @@
                   TagsForCollection.query({collId: Data.currentCollectionIndex});
                 Data.typesForCollection =
                   TypesForCollection.query({collId: Data.currentCollectionIndex});
-              }  else {
+              } else {
                 // No collections for area.  Reset.
                 Data.collections = [];
                 Data.currentCollectionIndex = -1;
@@ -235,23 +222,40 @@
        * Sets the view model's user id and
        * initializes the application state for
        * the corresponding area. If the user id
-       * is 0 (administrator) initialize using
+       * is 0 (the administrator) initialize context using
        * the id of the first area in the current
        * area list.
        */
-      $scope.$watch(function() { return Data.userAreaId; },
-        function(newValue) {
-          vm.userAreaId = newValue;
-          var id = '';
-          if (newValue === 0) {
-            init();
-          }
-          else {
-            id = newValue;
-            // For non-administrative user, initialize current area to the
-            // user's area id.
-            Data.currentAreaIndex = id;
-            vm.currentId = id;
+      $scope.$watch(function () {
+          return Data.userAreaId;
+        },
+        function (newValue, oldValue) {
+
+          // In initial state, userAreaId is null (object).
+          if (typeof(newValue) === 'number') {
+
+            // The userAreaId can be zero (administrator).
+            // Capture it here.
+            vm.userAreaId = newValue;
+
+            if (newValue !== oldValue) {
+
+              // Assure we have a non-zero area id.
+              // For the admin user, this method will
+              // return the id of the first area.
+              newValue = setAreaId(newValue);
+              // Continue updating the context using
+              // the area id.
+              Data.currentAreaIndex = newValue;
+              vm.currentId = newValue;
+              if (Data.areas.length > 0) {
+                // The area label for views.
+                getAreaLabel(newValue);
+                // Continue initialization.
+                setContext(newValue);
+
+              }
+            }
           }
 
         });
@@ -263,15 +267,17 @@
        * area is added or deleted, or when the position
        * attribute of the area is changed.
        */
-      $scope.$watch(function() { return Data.areas; },
-        function(newValue) {
-            if (newValue.length > 0) {
-              vm.currentId = Data.areas[0].id;
-              vm.areas = newValue;
-              Data.areaLabel = Data.areas[0].title;
-              updateAreaContext(vm.currentId);
-              $scope.$apply();
-            }
+      $scope.$watch(function () {
+          return Data.areas;
+        },
+        function (newValue) {
+          if (newValue.length > 0) {
+            vm.currentId = Data.areas[0].id;
+            vm.areas = newValue;
+            Data.areaLabel = Data.areas[0].title;
+            updateAreaContext(vm.currentId);
+            $scope.$apply();
+          }
 
         });
 
@@ -287,6 +293,22 @@
             vm.areaLabel = Data.areas[i].title;
             return;
           }
+        }
+      }
+
+      /**
+       * Administrators will be assigned to the non-existing
+       * area id of zero.  This method assigns a real area
+       * id to the administrator session, otherwise returns
+       * the area id for the collection manager.
+       * @param id
+       * @returns {*}
+       */
+      function setAreaId(id) {
+        if (id === 0) {
+          return Data.areas[0].id;
+        } else {
+          return id;
         }
       }
 

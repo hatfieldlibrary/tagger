@@ -36,17 +36,14 @@
       var vm = this;
 
       /** @type {Array.<Object>} */
-      vm.tags = Data.tags;
+      vm.tags = [];
 
       /** @type {Object} */
-      vm.tag = Data.tags[0];
+      vm.tag = {};
 
       /** @type {number} */
-      if (vm.tag) {
-        vm.currentTag = vm.tag.id;
-      } else {
-        vm.currentTag = 10000;
-      }
+      vm.currentTag = 10000;
+
 
       /** @type {number} */
       vm.userAreaId = Data.userAreaId;
@@ -57,6 +54,29 @@
 
       /** @type {string} */
       vm.deleteMessage = 'templates/deleteTagMessage.html';
+
+      vm.areaLabel = Data.areaLabel;
+
+      var init = function() {
+        vm.userAreaId = Data.userAreaId;
+        vm.tags = Data.tags;
+        vm.tag = Data.tags[0];
+        if (vm.tag) {
+          vm.currentTag = vm.tag.id;
+        }
+      };
+
+      init();
+
+      /**
+       * Watch for updates to the area label.  Assures changes in LayoutCtrl
+       * are registered here.
+       */
+      $scope.$watch(function() { return Data.areaLabel;},
+        function() {
+          vm.areaLabel = Data.areaLabel;
+        });
+
 
       /**
        * Show the $mdDialog.
@@ -80,12 +100,12 @@
         vm.tag = TagById.query({id:  Data.currentTagIndex});
       };
 
-
       /**
        * Updates tag information and retrieves new
        * tag list upon success.
        */
       vm.updateTag = function() {
+
         var success = TagUpdate.save({
           id: vm.tag.id,
           name: vm.tag.name
@@ -112,7 +132,6 @@
           if (newValue !== null) {
             vm.tags = newValue;
             if (newValue.length > 0) {
-              vm.userAreaId = Data.userAreaId;
                 vm.resetTag(Data.currentTagIndex);
 
             }
